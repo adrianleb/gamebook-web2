@@ -96,18 +96,18 @@
       "action": "choose",
       "choiceIndex": 0,
       "description": "Continue to resolution",
-      "targetSceneId": "sc_1_0_005"
+      "targetSceneId": "sc_1_0_900"
     }
   ],
   "endingCriteria": {
     "flagsSet": ["key_acquired", "location_booth_visited"],
     "inventoryContains": ["booth_key"],
-    "currentSceneId": "sc_1_0_005",
+    "currentSceneId": "sc_1_0_900",
     "minSteps": 6
   },
   "softlockDetection": {
     "maxSceneRevisits": 3,
     "maxStepsWithoutProgress": 15,
-    "exemptScenes": ["sc_1_0_005"]
+    "exemptScenes": ["sc_1_0_900"]
   }
 }

@@ -47,13 +47,13 @@
       "action": "choose",
       "choiceIndex": 0,
       "description": "Continue to resolution scene",
-      "targetSceneId": "sc_1_0_005"
+      "targetSceneId": "sc_1_0_900"
     },
     {
       "action": "checkpoint",
       "description": "Reached resolution - ending achieved",
       "assertions": {
-        "currentSceneId": "sc_1_0_005",
+        "currentSceneId": "sc_1_0_900",
         "flagsSet": ["game_started", "path_direct"],
         "visitedCount": { "sc_1_0_001": 1, "sc_1_0_002": 1 }
       }
@@ -61,13 +61,13 @@
   ],
   "endingCriteria": {
     "flagsSet": ["path_direct"],
-    "currentSceneId": "sc_1_0_005",
+    "currentSceneId": "sc_1_0_900",
     "minSteps": 3,
     "maxSteps": 5
   },
   "softlockDetection": {
     "maxSceneRevisits": 3,
     "maxStepsWithoutProgress": 15,
-    "exemptScenes": ["sc_1_0_005"]
+    "exemptScenes": ["sc_1_0_900"]
   }
 }

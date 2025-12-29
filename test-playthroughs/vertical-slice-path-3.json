@@ -88,6 +88,6 @@
   "softlockDetection": {
     "maxSceneRevisits": 3,
     "maxStepsWithoutProgress": 15,
-    "exemptScenes": ["sc_1_0_005"]
+    "exemptScenes": ["sc_1_0_900"]
   }
 }
