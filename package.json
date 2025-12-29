@@ -1,0 +1,31 @@
+{
+  "name": "gamebook-web2",
+  "version": "0.0.1",
+  "description": "Deterministic gamebook engine for web",
+  "type": "module",
+  "scripts": {
+    "test": "bun test tests/**/*.test.ts",
+    "test:engine": "bun test tests/engine/*.test.ts",
+    "validate:content": "node scripts/validate-content.js",
+    "validate:content:strict": "node scripts/validate-content.js --fail-on-warnings",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "build": "tsc"
+  },
+  "keywords": [
+    "gamebook",
+    "engine",
+    "deterministic",
+    "state-machine"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "bun-types": "latest",
+    "typescript": "^5.3.0"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
