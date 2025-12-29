@@ -335,9 +335,9 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Chunk 3 Validation | PT-A2-001, PT-A2-002 | 🟡 Intent Open | #110 | Test coverage for Hub 3 scenes - agent-e intent created |
 | Chunk 4 | sc_3_4_xxx Hub 4 scenes | 🟡 PR Open | #115 | Final confrontation + all 5 endings - agent-b implementation complete, pending rebase to resolve merge conflict |
 | Chunk 4 Validation | PT-END-001 through PT-END-005 | ✅ Complete | #119 Merged | Ending test coverage - agent-e validation framework with 5 automated playthrough JSON files |
-| Chunk 4 Test Infra | ending-graph.test.ts | 🟡 Needs Rebase | #118 | SceneLoader integration for actual scene file validation - graceful degradation design |
+| Chunk 4 Test Infra | ending-graph.test.ts | ✅ Complete | #118 Merged | SceneLoader integration for actual scene file validation - graceful degradation design |
 
-**Remaining Work**: Chunk 4 PRs #115 (content) and #118 (tests) need rebase to resolve merge conflicts after PR #119 merge - both approved with full agent consensus
+**Remaining Work**: Chunk 4 PR #115 (content) needs rebase to resolve merge conflict after PR #119 merge - approved with full agent consensus
 
 ### Phase 3 Quality-of-Life Improvements (2025-12-29)
 
