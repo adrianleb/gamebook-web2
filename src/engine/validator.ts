@@ -20,12 +20,18 @@ import type {
   ItemId,
   FlagName,
 } from './types.js';
+import { ReachabilityValidator } from './reachability-validator.js';
 
 /**
  * Content validator class.
  * Validates manifest structure and scene integrity.
  */
 export class ContentValidator {
+  private reachabilityValidator: ReachabilityValidator;
+
+  constructor() {
+    this.reachabilityValidator = new ReachabilityValidator();
+  }
   /**
    * Validate manifest structure and references.
    *
@@ -191,6 +197,16 @@ export class ContentValidator {
   ): ValidationError[] {
     const errors: ValidationError[] = [];
 
+    // Handle null/undefined conditions
+    if (!condition || typeof condition !== 'object') {
+      errors.push({
+        type: 'schema-error',
+        sceneId,
+        message: 'Condition must be an object',
+      });
+      return errors;
+    }
+
     if (!condition.type) {
       errors.push({
         type: 'schema-error',
@@ -295,6 +311,16 @@ export class ContentValidator {
   ): ValidationError[] {
     const errors: ValidationError[] = [];
 
+    // Handle null/undefined effects
+    if (!effect || typeof effect !== 'object') {
+      errors.push({
+        type: 'schema-error',
+        sceneId,
+        message: 'Effect must be an object',
+      });
+      return errors;
+    }
+
     if (!effect.type) {
       errors.push({
         type: 'schema-error',
@@ -389,30 +415,18 @@ export class ContentValidator {
    * Returns scenes that cannot be reached from the starting scene.
    *
    * @param manifest - Manifest to analyze
+   * @param scenes - Map of scene ID to scene data (optional, for full analysis)
    * @returns Array of unreachable scenes
    */
-  checkReachability(manifest: GameManifest): UnreachableScene[] {
-    const unreachable: UnreachableScene[] = [];
-
-    if (!manifest.startingScene) {
-      return unreachable;
+  checkReachability(manifest: GameManifest, scenes?: Map<SceneId, SceneData>): UnreachableScene[] {
+    if (!scenes) {
+      // Without scene data, we can't do reachability analysis
+      // Return empty for backward compatibility
+      return [];
     }
 
-    // Build adjacency list
-    const adj = new Map<SceneId, SceneId[]>();
-    const allScenes = new Set(Object.keys(manifest.sceneIndex));
-
-    for (const sceneId of allScenes) {
-      adj.set(sceneId, []);
-    }
-
-    // Note: This requires loading all scenes, which we can't do without the loader
-    // For now, we'll mark this as TODO and implement a version that works with manifest only
-
-    // TODO: Implement full reachability check with scene loader
-    // For now, just return empty - scenes will be validated during load
-
-    return unreachable;
+    const result = this.reachabilityValidator.analyze(manifest, scenes);
+    return result.unreachableScenes;
   }
 
   /**

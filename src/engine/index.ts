@@ -80,6 +80,13 @@ export type { SceneLoaderOptions } from './scene-loader.js';
 // Validator
 export { ContentValidator, contentValidator } from './validator.js';
 
+// Reachability validator
+export { ReachabilityValidator, reachabilityValidator } from './reachability-validator.js';
+export type {
+  ReachabilityResult,
+  TraversalOptions,
+} from './reachability-validator.js';
+
 // SaveManager for game persistence
 export { SaveManager, SaveError, SAVE_FORMAT_VERSION } from './save-manager.js';
 export type {
