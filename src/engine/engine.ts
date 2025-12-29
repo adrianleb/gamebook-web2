@@ -129,6 +129,8 @@ export class Engine {
   private contentPath: string;
   private saveManager: SaveManager | null;
   private disableAutosave: boolean;
+  /** Load guard flag to prevent state mutations during async scene load (per agent-e Intent #93) */
+  private isLoadingState = false;
 
   constructor(options: EngineOptions = {}) {
     this.contentPath = options.contentPath ?? './content';
@@ -388,6 +390,86 @@ export class Engine {
   }
 
   /**
+   * Load state from GameState object.
+   * Integrates with SaveManager for save menu functionality.
+   * Per agent-e (Intent #93): Implements fail-safe rollback on scene load failure.
+   *
+   * @param gameState - Validated GameState from SaveManager (already validated)
+   * @throws Error if scene reload fails (state is rolled back)
+   */
+  async loadState(gameState: GameState): Promise<void> {
+    // Load guard: prevent concurrent state loads (per agent-e)
+    if (this.isLoadingState) {
+      throw new Error('Cannot load state while another load is in progress');
+    }
+
+    // Store previous state for rollback (per agent-e's fail-safe recommendation)
+    const previousState = this.deepCloneState(this.state);
+    const previousScene = this.currentScene;
+
+    this.isLoadingState = true;
+
+    try {
+      // Validate content version (SaveManager already validated, but double-check)
+      if (gameState.contentVersion !== this.state.contentVersion) {
+        throw new Error(
+          `Content version mismatch: save is ${gameState.contentVersion}, current is ${this.state.contentVersion}`
+        );
+      }
+
+      // Assign new state (direct assignment since SaveManager already validated)
+      // Deep clone to prevent external mutations affecting engine state
+      this.state = this.deepCloneState(gameState);
+
+      // Emit state change event for UI (per agent-e: all scope update)
+      this.emitEvent({
+        type: 'state-changed',
+        path: 'state',
+        oldValue: previousState,
+        newValue: this.state,
+        timestamp: Date.now(),
+        renderScope: 'all',
+        urgency: 'immediate',
+        checkpoint: 'scene-transition',
+      });
+
+      // Reload current scene (async operation - may fail)
+      if (this.state.currentSceneId) {
+        await this.loadScene(this.state.currentSceneId, true);
+      }
+
+      console.log('[Engine] State loaded successfully:', {
+        sceneId: this.state.currentSceneId,
+        timestamp: new Date(this.state.timestamp).toISOString(),
+      });
+    } catch (error) {
+      // Rollback to previous state on scene load failure (per agent-e)
+      console.error('[Engine] Scene load failed, rolling back state:', error);
+      this.state = previousState;
+      this.currentScene = previousScene;
+
+      // Re-emit event to show rollback to UI
+      this.emitEvent({
+        type: 'state-changed',
+        path: 'state',
+        oldValue: gameState,
+        newValue: this.state,
+        timestamp: Date.now(),
+        renderScope: 'all',
+        urgency: 'immediate',
+        checkpoint: 'scene-transition',
+      });
+
+      throw new Error(
+        `Failed to load scene: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
+    } finally {
+      // Always release load guard (per agent-e)
+      this.isLoadingState = false;
+    }
+  }
+
+  /**
    * Load state from JSON string.
    * Validates version compatibility.
    *
@@ -462,8 +544,10 @@ export class Engine {
 
   /**
    * Reset engine to initial state.
+   * Per agent-e (Intent #93): Clears load guard and UI state.
    */
   async reset(): Promise<void> {
+    this.isLoadingState = false; // Clear load guard (per agent-e)
     this.state = this.createInitialState();
     this.currentScene = null;
     await this.initialize();
@@ -503,6 +587,27 @@ export class Engine {
       inventory: new Map(),
       factions: {},
       ...overrides,
+    };
+  }
+
+  /**
+   * Deep clone GameState for rollback (per agent-e Intent #93).
+   * Preserves Set and Map structures through JSON serialization.
+   *
+   * @param state - State to clone
+   * @returns Deep cloned state
+   */
+  private deepCloneState(state: GameState): GameState {
+    const serialized = {
+      ...state,
+      flags: Array.from(state.flags),
+      inventory: Array.from(state.inventory.entries()),
+    };
+    const cloned = JSON.parse(JSON.stringify(serialized));
+    return {
+      ...cloned,
+      flags: new Set(cloned.flags),
+      inventory: new Map(cloned.inventory),
     };
   }
 
