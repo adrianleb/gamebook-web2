@@ -1,547 +1,522 @@
 # TEST_PLAYTHROUGHS.md
 
-Canonical test playthrough scripts for The Understage gamebook adaptation.
+## Overview
 
-## Purpose
+This document contains canonical playthrough scripts for testing and validation. Each playthrough defines:
+- Entry point and expected path through scenes
+- State assertions at checkpoints (stats, flags, inventory)
+- Expected behaviors for mechanics (inventory gating, stat checks, save/load)
+- Regression test points for catching bugs
 
-This document defines:
-- **Playthrough templates** covering critical paths through all 3 acts and 5 endings
-- **QA gate checklists** for vertical slice and content complete milestones
-- **Save/load regression test points** for state persistence validation
-- **Mechanics coverage** to validate inventory gating, stat checks, flags, and branching
+**Purpose:** These scripts serve as both manual testing guides and the specification for automated headless runner tests (see agent-c's headless runner implementation).
 
-## Philosophy
+---
 
-> "Start with structure, fill in as content is implemented."
+## Playthrough Script Format
 
-Per agent-b feedback, this document provides **templates** for playthrough scripts that will be filled in with concrete scene IDs and choices as content is implemented. The focus is on **mechanics coverage** (inventory gating, stat checks, flags) rather than exact text reproduction.
+Each playthrough script follows this structure:
 
-Per agent-c feedback, playthrough scripts document **save points** at:
-- Scene transitions (after scene loads, before choices)
-- After stat changes (effects applied)
-- Before complex condition checks (for regression testing)
+```yaml
+playthrough_id: "PT-001"
+name: "Descriptive Name"
+description: "What this path tests and why it matters"
 
-## Test Format
+entry_point: "sc_1_0_001"
+expected_endings: ["resolution_x", "resolution_y"]
 
-### Playthrough Script Template
-
-Each playthrough follows this structure:
-
-```markdown
-## [Name] Playthrough
-
-**Route:** [Description of path through game]
-**Ending:** [Which ending this reaches]
-**Mechanics Covered:** [inventory gating, stat checks, flags, etc.]
-**Estimated Scenes:** [Approximate number]
-
-### Initial State
-- **Archetype:** [Script/Stage Presence/Improv distribution]
-- **Scene:** `sc_#_#_###` (starting scene)
-
-### Steps
-| Step | Scene ID | Choice | Expected State | Save Point |
-|------|----------|--------|----------------|------------|
-| 1 | `sc_#_#_###` | [choice text] | stats: {...}, flags: [...], inventory: [...] | ✅ |
-| 2 | `sc_#_#_###` | [choice text] | stats: {...}, flags: [...], inventory: [...] | ✅ |
-
-### Validation
-- [ ] Reaches ending without errors
-- [ ] All choices valid for given state
-- [ ] Save/load at each save point preserves state
-- [ ] No softlocks (choices always available unless gated by design)
+steps:
+  - scene: "sc_1_0_001"
+    action: "Choose '{choice_label}'"
+    checkpoint: true
+    expected_state:
+      stats: { health: 10, courage: 5 }
+      flags: { game_started: true }
+      inventory: []
+      current_scene: "sc_1_0_002"
 ```
 
-### Expected State Format
+### Schema Definitions
 
-Per agent-c's engine RFC, state snapshots use:
-
+#### State Assertion Schema
 ```json
 {
-  "step": 1,
-  "sceneId": "sc_act1_hub_alley",
-  "choiceIndex": 0,
-  "expectedState": {
-    "stats": { "script": 50, "stagePresence": 30, "improv": 40 },
-    "flags": ["MET_DIRECTOR"],
-    "inventory": ["key_greenroom"]
-  }
+  "stats": {
+    "health": 10,      // 0-10 range
+    "courage": 5,      // 0-10 range
+    "insight": 3       // 0-10 range
+  },
+  "flags": {
+    "game_started": true,
+    "location_booth_visited": true
+  },
+  "inventory": [
+    "booth_key",
+    "wings_pass"
+  ],
+  "factions": {
+    "preservationist": 1    // 0-10 range
+  },
+  "current_scene": "sc_1_0_002"
+}
+```
+
+#### Checkpoint Types
+- **save_point**: State snapshot for save/load regression testing
+- **softlock_check**: Verify at least one valid choice exists
+- **mechanic_test**: Verify specific mechanic (inventory gating, stat check)
+
+---
+
+## Vertical Slice Playthroughs
+
+The following playthroughs test the Phase 2 Vertical Slice (Act 1 Hub 0: The Prompter's Booth).
+
+### PT-VS-001: Direct Route (Baseline Navigation)
+
+**Tests:** Choice navigation, basic scene transitions, no gating mechanics
+
+**Entry Point:** `sc_1_0_001` (The Booth Awakens)
+
+**Path:**
+```
+sc_1_0_001 ─[Choose: "Go to the wings"]──> sc_1_0_002 ─[Choose: "Continue forward"]──> resolution_direct
+```
+
+**Steps:**
+
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_1_0_001 | (Starting state) | ✅ save_point | `game_started=false`, health=10, courage=5, inventory=[] |
+| 2 | sc_1_0_001 | Choose "Go to the wings" | ✅ softlock_check | Choice enabled (no requirements) |
+| 3 | sc_1_0_002 | (Arrived) | ✅ save_point | `path_direct=true`, has "wings_pass", health=10 |
+| 4 | sc_1_0_002 | Choose "Continue forward" | ✅ softlock_check | Choice enabled |
+| 5 | resolution_direct | (End state) | ✅ mechanic_test | Reached resolution, no errors |
+
+**Final State Assertions:**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "location_booth_visited": true,
+    "path_direct": true
+  },
+  "inventory": ["wings_pass"],
+  "factions": { "preservationist": 0 }
+}
+```
+
+**Regression Checkpoints:** Steps 1, 3, 5
+
+---
+
+### PT-VS-002: Inventory-Gated Route
+
+**Tests:** Inventory gating, disabled choice hints, item acquisition
+
+**Entry Point:** `sc_1_0_001` (The Booth Awakens)
+
+**Path:**
+```
+sc_1_0_001 ─[Choose: "Talk to Maren"]──> sc_1_0_004 ─[Receive key]──> sc_1_0_001 ─[Choose: "Unlock the door"]──> sc_1_0_003
+```
+
+**Steps:**
+
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_1_0_001 | (Starting state) | ✅ save_point | `game_started=false`, inventory=[] |
+| 2 | sc_1_0_001 | Hover "Unlock the door" | ✅ mechanic_test | Choice **disabled**, hint: "Requires booth_key" |
+| 3 | sc_1_0_001 | Choose "Talk to Maren" | ✅ softlock_check | Choice enabled |
+| 4 | sc_1_0_004 | (Arrived, dialogue) | ✅ save_point | `met_maren=true` |
+| 5 | sc_1_0_004 | Receive "booth_key" | ✅ mechanic_test | Inventory now contains "booth_key" |
+| 6 | sc_1_0_004 | Choose "Return to booth" | ✅ softlock_check | Choice enabled |
+| 7 | sc_1_0_001 | (Returned) | ✅ save_point | `met_maren=true`, has "booth_key" |
+| 8 | sc_1_0_001 | Hover "Unlock the door" | ✅ mechanic_test | Choice **enabled** (now has key) |
+| 9 | sc_1_0_001 | Choose "Unlock the door" | ✅ softlock_check | Transitions to sc_1_0_003 |
+| 10 | sc_1_0_003 | (Arrived at threshold) | ✅ save_point | Has "booth_key", at threshold scene |
+
+**Final State Assertions:**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "location_booth_visited": true,
+    "met_maren": true
+  },
+  "inventory": ["booth_key"],
+  "factions": { "preservationist": 0 },
+  "current_scene": "sc_1_0_003"
+}
+```
+
+**Critical Mechanics Validated:**
+- Disabled choice shows hint text ("Requires booth_key")
+- Acquiring item enables previously disabled choice
+- Inventory panel updates immediately on item acquisition
+
+**Regression Checkpoints:** Steps 1, 4, 7, 10
+
+---
+
+### PT-VS-003: Stat Check Success Path
+
+**Tests:** Stat check mechanics (courage >= 5), success branch
+
+**Entry Point:** `sc_1_0_001` (The Booth Awakens)
+
+**Prerequisites:** Must have `booth_key` (combine with PT-VS-002 steps 1-7)
+
+**Path:**
+```
+sc_1_0_001 ─[With booth_key, courage=5]──> sc_1_0_003 ─[Courage check: SUCCESS]──> resolution_crossing_success
+```
+
+**Steps:**
+
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_1_0_001 | (Has booth_key, courage=5) | ✅ save_point | inventory=["booth_key"], courage=5 |
+| 2 | sc_1_0_001 | Choose "Unlock the door" | ✅ softlock_check | Choice enabled (has key) |
+| 3 | sc_1_0_003 | (At threshold, courage check) | ✅ mechanic_test | Courage check: 5 >= 5 = **SUCCESS** |
+| 4 | sc_1_0_003 | (Success branch) | ✅ save_point | `crossing_succeeded=true`, faction+1 |
+| 5 | resolution_crossing_success | (End state) | ✅ mechanic_test | Reached success resolution |
+
+**Final State Assertions:**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "location_booth_visited": true,
+    "met_maren": true,
+    "crossing_succeeded": true
+  },
+  "inventory": ["booth_key"],
+  "factions": { "preservationist": 1 }
+}
+```
+
+**Critical Mechanics Validated:**
+- Stat check evaluation (courage >= 5)
+- Success branch execution
+- Faction modification on success
+
+**Regression Checkpoints:** Steps 1, 3, 4
+
+---
+
+### PT-VS-004: Stat Check Failure Path
+
+**Tests:** Stat check mechanics, failure branch, health penalty
+
+**Entry Point:** `sc_1_0_001` (The Booth Awakens)
+
+**Prerequisites:** Must have `booth_key`, courage < 5 (manually set for testing)
+
+**Path:**
+```
+sc_1_0_001 ─[With booth_key, courage=3]──> sc_1_0_003 ─[Courage check: FAILURE]──> resolution_crossing_failure
+```
+
+**Steps:**
+
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_1_0_001 | (Has booth_key, courage=3) | ✅ save_point | inventory=["booth_key"], courage=3 |
+| 2 | sc_1_0_001 | Choose "Unlock the door" | ✅ softlock_check | Choice enabled (has key) |
+| 3 | sc_1_0_003 | (At threshold, courage check) | ✅ mechanic_test | Courage check: 3 >= 5 = **FAILURE** |
+| 4 | sc_1_0_003 | (Failure branch) | ✅ save_point | `crossing_failed=true`, health-1 |
+| 5 | resolution_crossing_failure | (End state) | ✅ mechanic_test | Reached failure resolution |
+
+**Final State Assertions:**
+```json
+{
+  "stats": { "health": 9, "courage": 3, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "location_booth_visited": true,
+    "met_maren": true,
+    "crossing_failed": true
+  },
+  "inventory": ["booth_key"],
+  "factions": { "preservationist": 0 }
+}
+```
+
+**Critical Mechanics Validated:**
+- Stat check evaluation failure condition
+- Failure branch execution
+- Health stat modification (penalty)
+
+**Regression Checkpoints:** Steps 1, 3, 4
+
+---
+
+## Save/Load Regression Tests
+
+These playthroughs specifically test state persistence across save/load operations.
+
+### PT-SL-001: Scene Transition Save Point
+
+**Tests:** Saving during scene transition, state restoration
+
+**Entry Point:** `sc_1_0_001` (The Booth Awakens)
+
+**Steps:**
+
+| Step | Scene | Action | Expected State After Load |
+|------|-------|--------|---------------------------|
+| 1 | sc_1_0_001 | Choose "Go to the wings" | Transition to sc_1_0_002 |
+| 2 | sc_1_0_002 | **SAVE to Slot 1** | Save file created |
+| 3 | sc_1_0_002 | Choose "Continue forward" | Reach resolution |
+| 4 | resolution | **LOAD from Slot 1** | Back at sc_1_0_002 |
+| 5 | sc_1_0_002 | Verify state | `path_direct=true`, has "wings_pass", health=10 |
+
+**State Snapshot (Slot 1):**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "location_booth_visited": true,
+    "path_direct": true
+  },
+  "inventory": ["wings_pass"],
+  "factions": { "preservationist": 0 },
+  "current_scene": "sc_1_0_002",
+  "scene_history": ["sc_1_0_001"]
+}
+```
+
+**Validation Points:**
+- [ ] Current scene is sc_1_0_002
+- [ ] All flags match snapshot
+- [ ] All stats match snapshot
+- [ ] All inventory items match snapshot
+- [ ] Can continue from saved state (no softlock)
+
+---
+
+### PT-SL-002: Complex State Save Point
+
+**Tests:** Saving with complex state (items, flags, factions)
+
+**Entry Point:** sc_1_0_001 (after completing PT-VS-003)
+
+**Steps:**
+
+| Step | Scene | Action | Expected State After Load |
+|------|-------|--------|---------------------------|
+| 1 | resolution_success | **SAVE to Slot 2** | Save file created |
+| 2 | resolution_success | **LOAD from Slot 2** | Back at resolution_success |
+| 3 | resolution_success | Verify state | All complex state preserved |
+
+**State Snapshot (Slot 2):**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "location_booth_visited": true,
+    "met_maren": true,
+    "crossing_succeeded": true
+  },
+  "inventory": ["booth_key"],
+  "factions": { "preservationist": 1 },
+  "current_scene": "resolution_crossing_success",
+  "scene_history": ["sc_1_0_001", "sc_1_0_004", "sc_1_0_001", "sc_1_0_003"]
 }
 ```
 
 ---
 
-# Playthrough Templates
+## Softlock Detection Tests
 
-## Act 1 Templates
+These playthroughs test for softlock conditions (scenes with no valid choices).
 
-### The Pursuer Route to First Crossing
+### PT-LOCK-001: Hub Scene Always Has Exit
 
-**Route:** Direct conflict path - pursue the mystery aggressively
-**Ending:** Any (routes to all endings branch from Act 1)
-**Mechanics Covered:**
-- Stat checks (Script vs. Stage Presence)
-- Choice branching with immediate consequences
-- Flag setting for Act 2 gating
+**Tests:** Hub scenes maintain at least one valid choice
 
-**Estimated Scenes:** ~20-25
+**Entry Point:** `sc_1_0_001` (The Booth Awakens)
 
-### The Preservationist Route through Archives
+**Test Procedure:**
+1. At sc_1_0_001, verify at least 3 choices are available
+2. Disable each choice one by one (by manipulating state)
+3. Verify that at least one choice remains enabled at all times
+4. Expected: "Go to the wings" is always enabled (no requirements)
 
-**Route:** Investigation path - gather information before acting
-**Ending:** Favors "The Revised Draft" or "The Archivist"
-**Mechanics Covered:**
-- Inventory gating (requires finding key items)
-- Multi-step puzzle chains
-- Faction alignment tracking
-
-**Estimated Scenes:** ~25-30
-
-### The Improviser Route to Green Room
-
-**Route:** Charisma/social path - talk way through problems
-**Ending:** Favors "The Breakout Legend" or "The Ghost Light"
-**Mechanics Covered:**
-- Stat checks (Improv vs. opposition)
-- Relationship flags affecting later choices
-- Scene revisit mechanics with changed state
-
-**Estimated Scenes:** ~20-25
-
-## Act 2 Templates
-
-### Green Room Deep Dive
-
-**Route:** Focus on behind-the-scenes mechanics
-**Prerequisites:** High Stage Presence, `FOUND_GREEN_ROOM_KEY`
-**Mechanics Covered:**
-- Conditional scene availability based on inventory
-- State-dependent choice labels
-- Archive search checks (stat + item combination)
-
-**Estimated Scenes:** ~30-35
-
-### Archives Investigation Path
-
-**Route:** Uncover the theater's history
-**Prerequisites:** `RESEARCH_STARTED` flag, Script stat
-**Mechanics Covered:**
-- Flag chains (unlocks scenes across hubs)
-- Time-pressure choices (limited attempts)
-- Knowledge gating (flags required for certain choices)
-
-**Estimated Scenes:** ~25-30
-
-### Confrontation Hub Approach
-
-**Route:** Direct confrontation with antagonist
-**Prerequisites:** High combat stats, specific inventory
-**Mechanics Covered:**
-- Stat-check-or-lose scenarios
-- Inventory consumption (one-use items)
-- Branching death states
-
-**Estimated Scenes:** ~15-20
-
-## Act 3 Templates
-
-### The Revised Draft Ending
-
-**Route:** Rewrite the ending through knowledge and preparation
-**Prerequisites:**
-- Flags: `UNCOVERED_TRUTH`, `GATHERED_ALL_EVIDENCE`
-- Inventory: `ORIGINAL_SCRIPT`, `DIRECTOR_KEY`
-- Stats: Script ≥ 60
-
-**Mechanics Covered:**
-- Complex condition gating (AND/OR requirements)
-- Final stat check with difficulty scaling
-- Ending-specific state snapshot
-
-**Estimated Scenes:** ~15-20
-
-### The Archivist Ending (Scholarship)
-
-**Route:** Document and preserve rather than change
-**Prerequisites:**
-- Flags: `DOCUMENTED_EVERYTHING`, `REJECTED_CONFRONTATION`
-- Inventory: `ARCHIVE_KEY`, `THEATER_HISTORY`
-- Stats: Script ≥ 70
-
-**Mechanics Covered:**
-- Knowledge validation checks
-- Inventory combination requirements
-- Passive victory condition (avoid combat)
-
-**Estimated Scenes:** ~10-15
-
-### The Breakout Legend Ending (Show Must Go On)
-
-**Route:** Perform your way out
-**Prerequisites:**
-- Flags: `IMPROVISED_SOLUTION`, `SAVED_CAST`
-- Inventory: `PROP_SWORD`, `COSTUME_BACKSTAGE`
-- Stats: Stage Presence ≥ 70, Improv ≥ 60
-
-**Mechanics Covered:**
-- Performance stat checks
-- Multi-item combination usage
-- Time-sensitive choices
-
-**Estimated Scenes:** ~15-20
-
-### The Ghost Light Ending (Mystery)
-
-**Route:** Accept the supernatural, become part of it
-**Prerequisites:**
-- Flags: `ACKNOWLEDGED_GHOST`, `LEFT_WORLD_BEHIND`
-- Inventory: None (must abandon all items)
-- Stats: Balanced across all three
-
-**Mechanics Covered:**
-- Inventory clearing mechanics
-- Balanced stat requirements
-- Surrender-based ending path
-
-**Estimated Scenes:** ~10-15
-
-### The Final Curtain (Bad Ending)
-
-**Route:** Fail to prepare or make wrong choices
-**Prerequisites:** Any failure state
-**Mechanics Covered:**
-- Death state validation
-- Failure flag setting
-- No-save continuation (or restart from checkpoint)
-
-**Estimated Scenes:** Variable
+**Invalid States to Test:**
+- Empty inventory: Should still have 2+ choices available
+- Low courage (0): Should still have 2+ choices available
+- All flags false: Should still have 2+ choices available
 
 ---
 
-# QA Gates
+### PT-LOCK-002: Gated Scene Softlock Prevention
 
-## Vertical Slice Complete
+**Tests:** Gated scenes don't softlock if requirements aren't met
 
-**Definition:** One complete playable path from start to first Act transition with all core mechanics functional.
+**Entry Point:** `sc_1_0_001` → attempt to enter `sc_1_0_003` without key
 
-### Checklist
-
-#### Core Mechanics
-- [ ] **One complete playthrough path** from opening scene to Act 1 climax
-- [ ] **All choice types working:**
-  - [ ] Simple (no conditions)
-  - [ ] Stat-gated (condition: stat ≥ threshold)
-  - [ ] Inventory-gated (condition: has item)
-  - [ ] Flag-gated (condition: flag is set)
-- [ ] **Save/load at each scene transition** preserves all state
-- [ ] **No softlocks** (player always has at least one available choice)
-- [ ] **Stat check coverage:** at least one of each type
-  - [ ] Stat-only check
-  - [ ] Combined stat check (stat + item)
-  - [ ] Opposed stat check (stat vs. enemy)
-
-#### Content Validation
-- [ ] **JSON syntax valid** for all content files
-  ```bash
-  cat content/manifest.json | jq .
-  cat content/stats.json | jq .
-  cat content/items.json | jq .
-  ```
-- [ ] **Scene ID format consistency** (all follow `sc_ACT_HUB_SEQ` format)
-  ```bash
-  grep -E "sc_[0-9]_[0-9]_[0-9]{3}" content/manifest.json
-  ```
-- [ ] **All scene links valid** (no references to non-existent scenes)
-- [ ] **Starting scene accessible** from manifest
-
-#### Engine/Runtime
-- [ ] **Headless runner executes** Act 1 playthrough without errors
-- [ ] **State change events fire** and are loggable
-- [ ] **Condition evaluation logged** for debugging
-- [ ] **Effect application deterministic** (same inputs → same outputs)
-
-#### UI/UX
-- [ ] **Choices display** with disabled state + hints for gated options
-- [ ] **Inventory visible** and updates in real-time
-- [ ] **Stats visible** and changes are shown
-- [ ] **Keyboard navigation** works (arrows/WSAD, Enter to select)
-
-#### Save/Load
-- [ ] **LocalStorage save slots** (min 3) functional
-- [ ] **Autosave triggers** on scene transition
-- [ ] **Export/import** save as JSON works
-- [ ] **Save file validation** (rejects corrupted/invalid saves)
-
-### Automated Tests
-- [ ] **Headless runner** completes Act 1 path in <5 seconds
-- [ ] **State roundtrip test** (save → load → verify state matches)
-- [ ] **Link validator** detects no broken scene references
+**Test Procedure:**
+1. At sc_1_0_001 without "booth_key"
+2. Attempt to select "Unlock the door" choice
+3. Expected: Choice is disabled with hint "Requires booth_key"
+4. Verify: At least 2 other choices remain available
 
 ---
 
-## Content Complete
+## Edge Case Tests
 
-**Definition:** All 5 endings reachable, all content implemented and validated.
+### PT-EDGE-001: Empty Inventory Navigation
 
-### Checklist
+**Tests:** Game is playable with empty inventory
 
-#### Ending Coverage
-- [ ] **All 5 endings reachable** via intentional play
-  - [ ] The Revised Draft
-  - [ ] The Archivist
-  - [ ] The Breakout Legend
-  - [ ] The Ghost Light
-  - [ ] The Final Curtain (bad ending)
-- [ ] **Ending requirements documented** (stat thresholds, flags, inventory)
-- [ ] **Ending state snapshots saved** for regression testing
-
-#### Path Coverage
-- [ ] **3+ canonical paths** fully documented with scene IDs
-- [ ] **Each major hub** has at least one playthrough through it
-- [ ] **Branch convergence points** tested (routes rejoin correctly)
-
-#### Content Integrity
-- [ ] **100% link validation** (no broken scene references)
-  ```bash
-  # Run link validator script
-  npm run validate:links
-  ```
-- [ ] **No unreachable scenes** (or explicitly tagged with justification)
-  ```bash
-  npm run validate:unreachable
-  ```
-- [ ] **No orphaned content** (items/stats defined but unused)
-
-#### Mechanics Coverage
-- [ ] **All stat check types** tested across playthroughs
-- [ ] **All inventory items** obtainable and usable
-- [ ] **Flag chains validated** (multi-step unlock sequences)
-- [ ] **Conditional choices tested** (gated paths work correctly)
-
-#### Save/Load Regression
-- [ ] **Save/load at critical points** tested:
-  - [ ] Before each Act transition
-  - [ ] Before each ending
-  - [ ] After major state changes (boss fights, key items)
-- [ ] **Version 1.0 save compatibility** (saves from earlier versions load)
-- [ ] **State snapshot regression** (known good states still valid)
-
-#### Softlock Prevention
-- [ ] **No softlocks detected** (zero scenes with zero available choices)
-  ```bash
-  npm run validate:softlocks
-  ```
-- [ ] **Death states explicit** (bad endings are intentional, not bugs)
-- [ ] **Recovery options** (player can undo or retry after failure)
-
-#### Performance
-- [ ] **First load** completes in <10 seconds on reasonable connection
-- [ ] **Scene transitions** complete in <2 seconds
-- [ ] **Save/load operations** complete in <1 second
+**Procedure:**
+1. Start new game (inventory empty)
+2. Attempt only paths that don't require items
+3. Expected: Can reach resolution via "Go to the wings" path
 
 ---
 
-# Save/Load Regression Testing
+### PT-EDGE-002: Minimum Stats Navigation
 
-## Critical Save Points
+**Tests:** Game is playable with minimum stat values
 
-Per agent-c feedback, save points must be tested at:
+**Procedure:**
+1. Start new game with courage=0 (manually set for testing)
+2. Navigate through direct path (PT-VS-001)
+3. Expected: Can reach resolution without stat check issues
 
-### 1. Scene Transitions
-**When:** After new scene loads, before displaying choices
-**Why:** Tests scene loading, state persistence across boundaries
-**Validation:**
+---
+
+### PT-EDGE-003: Maximum Stats Navigation
+
+**Tests:** Game is playable with maximum stat values
+
+**Procedure:**
+1. Start new game with all stats=10
+2. Navigate through stat check path (PT-VS-003)
+3. Expected: Stat check passes, appropriate success branch
+
+---
+
+## Headless Runner Integration
+
+For automated testing, these playthrough scripts map to executable JSON files in `tests/playthroughs/`.
+
+### JSON Playthrough Format
+
 ```json
 {
-  "sceneId": "sc_1_1_010",
-  "state": {
-    "stats": {...},
-    "flags": [...],
-    "inventory": [...]
-  }
+  "playthrough_id": "PT-VS-001",
+  "name": "Direct Route (Baseline Navigation)",
+  "entry_point": "sc_1_0_001",
+  "steps": [
+    {
+      "step": 1,
+      "scene": "sc_1_0_001",
+      "action": "choose",
+      "choice_label": "Go to the wings",
+      "checkpoint": true,
+      "assertions": {
+        "stats": { "health": 10, "courage": 5, "insight": 3 },
+        "flags": { "game_started": true, "location_booth_visited": true },
+        "inventory": ["wings_pass"],
+        "current_scene": "sc_1_0_002"
+      }
+    }
+  ]
 }
 ```
-- [ ] Scene loads correctly after save/load
-- [ ] All choices available as expected for state
-- [ ] No state corruption from transition
 
-### 2. After Stat Changes
-**When:** After any effect modifies stats
-**Why:** Tests effect application, stat serialization
-**Validation:**
-```json
-{
-  "before": { "script": 50 },
-  "after": { "script": 60 },
-  "effect": { "type": "stat", "stat": "script", "value": 10 }
-}
-```
-- [ ] Stat changes applied correctly
-- [ ] Stat overflow/underflow handled (min/max enforced)
-- [ ] Conditional choices update based on new stats
-
-### 3. Before Complex Conditions
-**When:** Before scenes with multi-factor checks
-**Why:** Tests condition evaluation logic, AND/OR nesting
-**Validation:**
-```json
-{
-  "conditions": {
-    "and": [
-      { "flag": "MET_DIRECTOR" },
-      { "stat": "script", "op": "gte", "value": 50 },
-      { "has": "key_greenroom" }
-    ]
-  }
-}
-```
-- [ ] Complex conditions evaluate correctly
-- [ ] AND logic (all requirements must pass)
-- [ ] OR logic (at least one requirement passes)
-- [ ] NOT logic (negation works)
-
-### 4. At Act Transitions
-**When:** Before Act 1 → Act 2, Act 2 → Act 3
-**Why:** Tests state continuity across major boundaries
-**Validation:**
-- [ ] All flags persist across acts
-- [ ] Inventory persists across acts
-- [ ] Stats persist across acts
-- [ ] Scene history preserved (for "remembered" choices)
-
-### 5. Before Endings
-**When:** At final choice scenes for each ending
-**Why:** Tests ending triggers, final state validation
-**Validation:**
-- [ ] Ending triggers correctly based on state
-- [ ] Ending scene displays appropriate content
-- [ ] Final state saved for "completion" tracking
-
-## Regression Test Scripts
-
-### Manual Test Procedure
-
-1. **Load save**
-2. **Verify state matches snapshot**
-3. **Make choice**
-4. **Verify result matches expectation**
-5. **Repeat for all save points**
-
-### Automated Test (via Headless Runner)
-
-```typescript
-// tests/regression/save-load.test.ts
-describe('Save/Load Regression', () => {
-  const savePoints = [
-    { sceneId: 'sc_1_1_005', step: 1 },
-    { sceneId: 'sc_1_2_015', step: 5 },
-    { sceneId: 'sc_2_1_100', step: 20 },
-    // ... all save points
-  ];
-
-  savePoints.forEach(point => {
-    it(`save/load at ${point.sceneId}`, async () => {
-      // 1. Load game to this state
-      const state = await loadState(`fixtures/save_${point.step}.json`);
-
-      // 2. Serialize to save file
-      const saveData = serializeState(state);
-
-      // 3. Load from save file
-      const loadedState = deserializeState(saveData);
-
-      // 4. Verify state matches
-      expect(loadedState).toEqual(state);
-    });
-  });
-});
-```
-
----
-
-# Smoke Tests
-
-Run before every merge to catch basic regressions.
-
-## Pre-Merge Checklist
+### Running Automated Tests
 
 ```bash
-# 1. Validate JSON syntax
-cat content/manifest.json | jq . > /dev/null
-cat content/stats.json | jq . > /dev/null
-cat content/items.json | jq . > /dev/null
+# Run all playthroughs
+npm run test:playthroughs
 
-# 2. Check scene ID format
-grep -E "sc_[0-9]_[0-9]_[0-9]{3}" content/manifest.json
+# Run specific playthrough
+npm run test:playthrough -- PT-VS-001
 
-# 3. Run link validator
-npm run validate:links
-
-# 4. Run softlock detector
-npm run validate:softlocks
-
-# 5. Run headless Act 1 playthrough
-npm run test:playthrough -- act1
-
-# 6. Run save/load regression tests
-npm run test:regression
+# Run with CI mode (junit output)
+npm run test:playthroughs -- --ci --junit-report
 ```
 
-## Expected Results
+### Softlock Detection Thresholds
 
-- All JSON files parse without errors
-- All scene IDs follow `sc_ACT_HUB_SEQ` format
-- Link validator reports 0 broken links
-- Softlock detector reports 0 softlocks
-- Headless playthrough completes without errors
-- All regression tests pass
+The headless runner uses these thresholds for detecting potential softlocks:
+
+| Threshold | Value | Description |
+|-----------|-------|-------------|
+| `maxSceneRevisits` | 3 | Max times to revisit same scene before flagging potential loop |
+| `maxStepsWithoutProgress` | 15 | Max steps without new flags/items before flagging stagnation |
 
 ---
 
-# Bug Report Template
+## QA Checklist for New Content
 
-When filing bugs found during testing, use the bug report template:
+When adding new scenes or mechanics, use this checklist:
 
-```markdown
-## Bug: [Short description]
+### Pre-Implementation
+- [ ] Scene ID follows convention (`sc_<chapter>_<slug>`)
+- [ ] All referenced scenes exist in manifest.json
+- [ ] All condition schemas match engine expectations
+- [ ] All effect schemas match engine expectations
 
-### Reproduction Steps
-1. Start new game
-2. Make choices: [...]
-3. At scene `sc_#_#_###`, choose: [...]
-4. Observe: [bug behavior]
-
-### Expected State
-- Scene: `sc_#_#_###`
-- Stats: {...}
-- Flags: [...]
-- Inventory: [...]
-
-### Actual State
-- [What actually happened]
-
-### Save File
-[Attach save JSON if applicable]
-
-### Severity
-- [ ] Critical (blocks progress)
-- [ ] Major (breaks mechanic)
-- [ ] Minor (cosmetic/edge case)
-```
+### Post-Implementation
+- [ ] Scene is reachable from starting point
+- [ ] All choices have valid `to` targets
+- [ ] Disabled choices have `disabledHint` text
+- [ ] Gated choices have appropriate condition checks
+- [ ] Effects apply correctly (flags, items, stats)
+- [ ] Playthrough script exists for new content
+- [ ] Save/load checkpoint identified for new content
+- [ ] Softlock check performed (at least one valid choice)
 
 ---
 
-# Version History
+## Appendix: State Variable Reference
+
+### Stats (0-10 range)
+| Stat | Starting | Description |
+|------|----------|-------------|
+| health | 10 | Player's health points |
+| courage | 5 | Bravery for risky actions |
+| insight | 3 | Perception and understanding |
+
+### Flags
+| Flag | Type | Purpose |
+|------|------|---------|
+| game_started | bool | Set on first scene load |
+| location_booth_visited | bool | Tracks if player visited booth |
+| path_direct | bool | Took direct path to wings |
+| crossing_succeeded | bool | Successfully crossed threshold |
+| crossing_failed | bool | Failed the crossing stat check |
+| met_maren | bool | Spoke with Maren character |
+
+### Inventory Items
+| Item ID | Display Name | Description |
+|---------|--------------|-------------|
+| booth_key | Booth Key | Unlocks the prompter's booth door |
+| wings_pass | Wings Pass | Temporary access to theatre wings |
+
+### Factions (0-10 range)
+| Faction | Starting | Description |
+|---------|----------|-------------|
+| preservationist | 0 | Faction favoring separation of worlds |
+
+---
+
+## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 0.1 | 2025-12-29 | Initial template with playthrough structure, QA gates, save/load regression points |
+| 1.0 | 2025-12-29 | Initial version with vertical slice playthroughs (PT-VS-001 through PT-VS-004) |
 
 ---
 
-**Maintained by:** agent-e (Validator - Test Lens)
-
-**Related Documents:**
-- `GANG.md` - QA & Validation Checklist section
-- `docs/MILESTONES.md` - Milestone gate definitions
-- `docs/rfcs/2024-12-29-engine-core-architecture.md` - Engine state schema and headless runner
+*This document is maintained by agent-e (Validator). Update as new content is implemented.*
