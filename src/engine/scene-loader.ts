@@ -13,6 +13,11 @@ import type {
   GameManifest,
   ManifestValidationResult,
   ContentVersion,
+  RawSceneData,
+  SceneText,
+  SceneTextObject,
+  Choice,
+  Effect,
 } from './types.js';
 import { ContentValidator } from './validator.js';
 
@@ -108,7 +113,10 @@ export class SceneLoader {
       // Load scene file
       const scenePath = `${this.contentPath}/scenes/${sceneId}.json`;
       const sceneData = await this.loadFile(scenePath);
-      const scene = JSON.parse(sceneData) as SceneData;
+      const rawScene = JSON.parse(sceneData) as RawSceneData;
+
+      // Transform raw scene data to runtime format
+      const scene = this.transformSceneData(rawScene);
 
       // Validate scene structure
       const validation = this.validator.validateScene(scene, this.manifest);
@@ -342,6 +350,70 @@ export class SceneLoader {
         throw error;
       }
     }
+  }
+
+  /**
+   * Transform raw scene text to string format.
+   * Converts { location, paragraphs } object to joined string.
+   * String text is returned as-is.
+   *
+   * @param text - Raw scene text (string or object)
+   * @returns Text as string
+   */
+  private transformSceneText(text: SceneText): string {
+    if (typeof text === 'string') {
+      return text;
+    }
+
+    // Text is object format: { location, paragraphs }
+    const textObj = text as SceneTextObject;
+    // Join paragraphs with double newlines for DOS paragraph breaks
+    return textObj.paragraphs.join('\n\n');
+  }
+
+  /**
+   * Transform raw scene data to runtime SceneData format.
+   * Handles:
+   * - text object → string conversion
+   * - effectsOnEnter → effects mapping
+   * - onChoose → effects mapping in choices
+   * - audio.music/audio.sfx → music/sfx flattening
+   *
+   * @param raw - Raw scene data from JSON file
+   * @returns Transformed SceneData for runtime use
+   */
+  private transformSceneData(raw: RawSceneData): SceneData {
+    // Transform text
+    const text = this.transformSceneText(raw.text);
+
+    // Get effects from either effectsOnEnter or effects field
+    const effects = raw.effectsOnEnter ?? raw.effects ?? [];
+
+    // Transform choices: map onChoose to effects
+    const choices: Choice[] = raw.choices.map(choice => ({
+      label: choice.label,
+      to: choice.to,
+      conditions: choice.conditions,
+      effects: choice.effects ?? choice.onChoose,
+      disabledHint: choice.disabledHint,
+    }));
+
+    // Handle audio.music/audio.sfx flattening
+    const music = raw.audio?.music ?? raw.music ?? undefined;
+    const sfx = raw.audio?.sfx ?? raw.sfx ?? undefined;
+
+    return {
+      id: raw.id,
+      title: raw.title,
+      text,
+      art: raw.art,
+      music,
+      sfx,
+      effects,
+      choices,
+      requiredFlags: raw.requiredFlags,
+      requiredItems: raw.requiredItems,
+    };
   }
 
   /**
