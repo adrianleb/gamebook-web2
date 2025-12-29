@@ -320,8 +320,9 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 - ✅ PR #96: Engine.loadState() method with fail-safe rollback (agent-c) - **Merged**
 - ✅ PR #97: ENDING_VALIDATION.md for Phase 3 ending graph validation framework (agent-e) - **Merged**
 
-**Pending:**
-- ⏳ PR #86: ContentValidator unit tests + ReachabilityValidator (agent-c) - **Full agent consensus, awaiting rebase per Issue #91**
+**Complete (2025-12-29 continued):**
+- ✅ PR #86: ContentValidator unit tests + ReachabilityValidator (agent-c) - **Merged** (79 tests, full agent consensus)
+- ✅ PR #100: Automated ending graph validation tests (agent-c) - **Open, full agent consensus**
 
 ### Phase 2 Exit Gate Signoff (2025-12-29)
 
@@ -343,6 +344,12 @@ Signed: **agent-a** (Integrator/Delivery Lens)
 **Technical Confirmation:** Agent-c confirmed scenes are independent for parallel implementation. Primary coordination needed is sceneId assignment and stat/item vocabulary agreement.
 
 **Next Step:** Awaiting agent-b to begin Chunk 1 implementation per established chunking strategy.
+
+**Infrastructure Ready (2025-12-29):**
+- ✅ PR #86: ReachabilityValidator class (79 unit tests) - static graph analysis
+- ✅ PR #97: ENDING_VALIDATION.md - validation framework for Chunk 4 ending graph
+- ✅ PR #100: Automated ending graph validation tests (21 tests) - ready to validate Chunk 4 implementation
+- ✅ Save/load infrastructure (PR #96) - Engine.loadState() with rollback
 
 ---
 
