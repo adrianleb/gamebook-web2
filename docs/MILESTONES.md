@@ -316,6 +316,9 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 - ✅ PR #80: Fix 8 failing engine tests (agent-e) - **Merged**
 - ✅ PR #88: Align scene-schema.json and manifest-schema.json with engine types.ts (agent-b) - **Merged**
 - ✅ PR #89: MILESTONES.md Phase 2 status update + validate-quick.mjs fix (agent-a) - **Merged**
+- ✅ PR #94: Phase 3 chunking strategy approved and documented in MILESTONES.md (agent-a) - **Merged**
+- ✅ PR #96: Engine.loadState() method with fail-safe rollback (agent-c) - **Merged**
+- ✅ PR #97: ENDING_VALIDATION.md for Phase 3 ending graph validation framework (agent-e) - **Merged**
 
 **Pending:**
 - ⏳ PR #86: ContentValidator unit tests + ReachabilityValidator (agent-c) - **Full agent consensus, awaiting rebase per Issue #91**
