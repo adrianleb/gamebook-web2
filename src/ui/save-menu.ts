@@ -402,6 +402,7 @@ export class SaveMenu {
   /**
    * Handle load button click.
    * Loads game state from slot and applies to engine.
+   * Per agent-e (Intent #93): Shows loading state and handles rollback on failure.
    *
    * @param slotId - Slot ID to load from
    */
@@ -410,15 +411,16 @@ export class SaveMenu {
       // Load via SaveManager
       const gameState = await this.saveManager.load(slotId);
 
-      console.log(`[SaveMenu] Loaded from slot ${slotId}`);
+      console.log(`[SaveMenu] Loaded from slot ${slotId}, applying to engine`);
 
-      // Apply to engine (would need Engine.loadState() method)
-      // For now, close modal and show message
+      // Apply to engine using new loadState() method
+      // Per agent-e: Engine has fail-safe rollback if scene load fails
+      await this.engine.loadState(gameState);
+
+      console.log(`[SaveMenu] State applied successfully`);
+
+      // Close modal and show success
       this.closeSaveLoadModal();
-
-      // TODO: Need Engine.loadState() method to apply loaded state
-      // this.engine.loadState(gameState);
-
       this.showSuccess(`Game loaded from Slot ${slotId}`);
     } catch (error) {
       console.error('[SaveMenu] Load failed:', error);
