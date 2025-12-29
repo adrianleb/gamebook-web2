@@ -897,8 +897,7 @@ When adding new scenes or mechanics, use this checklist:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.3 | 2025-12-29 | Added PT-END-001 through PT-END-005 (Act 3 Ending validation) - validates all 5 endings (sc_3_4_901 through sc_3_4_904, sc_3_4_999), faction gates (>=7), editorState requirements (defeated/persuaded/revealedTruth), and fail-state fallback ending. Updated State Variable Reference with editorState flag and all 4 factions. |
-| 1.2 | 2025-12-29 | Added PT-VS-006 (Act 2 Hub 3 Entry) and PT-VS-007 (Act 2 Climax Alliance Check) - validates sc_2_3_001 Archives Entry and sc_2_3_099 The Revelation scenes, documents all 4 faction states (preservationist, revisionist, exiter, independent), and adds faction alliance acknowledgment test variants |
+| 1.2 | 2025-12-29 | Added PT-END-001 through PT-END-005 (Act 3 Ending validation) - validates all 5 endings (sc_3_4_901 through sc_3_4_904, sc_3_4_999), faction gates (>=7), editorState requirements (defeated/persuaded/revealedTruth), and fail-state fallback ending. Updated State Variable Reference with editorState flag and all 4 factions. |
 | 1.1 | 2025-12-29 | Added PT-VS-005 (Act 1 Climax Convergence) - validates sc_1_1_099 First Crossing scene, Act 1→Act 2 transition, and new state variables (act1_complete, first_crossing_reached) |
 | 1.0 | 2025-12-29 | Initial version with vertical slice playthroughs (PT-VS-001 through PT-VS-004) |
 
