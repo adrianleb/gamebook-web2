@@ -1,0 +1,212 @@
+{
+  "$schema": "./stats-schema.json",
+  "description": "Core stat definitions for The Understage gamebook adaptation",
+  "version": "0.0.1",
+  "source": "https://github.com/adrianleb/gamebook/blob/main/docs/RULES.md",
+  "designNotes": {
+    "totalStartingPoints": 6,
+    "minimumPerStat": 1,
+    "maximumPerStat": 4,
+    "maxTotalPoints": 9,
+    "maxAdditionalPoints": 3
+  },
+  "stats": [
+    {
+      "id": "script",
+      "name": "Script",
+      "description": "Knowledge of narrative patterns, genre awareness, preparation",
+      "highStatUnlocks": [
+        "Research options",
+        "Foresight choices",
+        "Seeing through deceptions"
+      ],
+      "startingMin": 1,
+      "startingMax": 4,
+      "absoluteMax": 4,
+      "canDecrease": false
+    },
+    {
+      "id": "stage_presence",
+      "name": "Stage Presence",
+      "description": "Force of personality, dramatic timing, command of attention",
+      "highStatUnlocks": [
+        "Social confrontations",
+        "Inspiring allies",
+        "Bold entrances"
+      ],
+      "startingMin": 1,
+      "startingMax": 4,
+      "absoluteMax": 4,
+      "canDecrease": false
+    },
+    {
+      "id": "improv",
+      "name": "Improv",
+      "description": "Adaptability, quick thinking, unorthodox solutions",
+      "highStatUnlocks": [
+        "Escape routes",
+        "Creative solutions",
+        "Breaking expected patterns"
+      ],
+      "startingMin": 1,
+      "startingMax": 4,
+      "absoluteMax": 4,
+      "canDecrease": false
+    }
+  ],
+  "archetypes": [
+    {
+      "name": "The Scholar",
+      "description": "Prepared, analytical, relies on knowing the rules",
+      "distribution": {
+        "script": 3,
+        "stage_presence": 1,
+        "improv": 2
+      }
+    },
+    {
+      "name": "The Performer",
+      "description": "Charismatic, bold, leads from the front",
+      "distribution": {
+        "script": 1,
+        "stage_presence": 3,
+        "improv": 2
+      }
+    },
+    {
+      "name": "The Wildcard",
+      "description": "Unpredictable, creative, finds unexpected solutions",
+      "distribution": {
+        "script": 1,
+        "stage_presence": 2,
+        "improv": 3
+      }
+    },
+    {
+      "name": "The Director",
+      "description": "Balanced, adaptable, jack-of-all-trades",
+      "distribution": {
+        "script": 2,
+        "stage_presence": 2,
+        "improv": 2
+      }
+    }
+  ],
+  "checkThresholds": [
+    {
+      "tier": "Basic",
+      "threshold": 1,
+      "description": "Anyone can attempt (always pass if minimum stat)"
+    },
+    {
+      "tier": "Standard",
+      "threshold": 2,
+      "description": "Requires some investment"
+    },
+    {
+      "tier": "Advanced",
+      "threshold": 3,
+      "description": "Requires significant investment"
+    },
+    {
+      "tier": "Expert",
+      "threshold": 4,
+      "description": "Requires near-maximum investment"
+    }
+  ],
+  "difficultyCurve": [
+    {
+      "act": 1,
+      "expectedStats": "2-2-2 to 3-2-2",
+      "checkDistribution": {
+        "basic_standard": 0.8,
+        "advanced": 0.2,
+        "expert": 0.0
+      }
+    },
+    {
+      "act": 2,
+      "expectedStats": "3-2-2 to 3-3-2",
+      "checkDistribution": {
+        "basic_standard": 0.5,
+        "advanced": 0.4,
+        "expert": 0.1
+      }
+    },
+    {
+      "act": 3,
+      "expectedStats": "3-3-3 to 4-3-2",
+      "checkDistribution": {
+        "basic_standard": 0.3,
+        "advanced": 0.5,
+        "expert": 0.2
+      }
+    }
+  ],
+  "checkTypes": [
+    {
+      "type": "stat_check",
+      "description": "Single stat vs. threshold",
+      "format": "[STAT CHECK: {stat} {threshold}]",
+      "example": "[SCRIPT CHECK: Script 2]"
+    },
+    {
+      "type": "approach_check",
+      "description": "Multiple stats, pass if ANY meets threshold (OR)",
+      "format": "[APPROACH CHECK: {stat1} {threshold} OR {stat2} {threshold}]",
+      "example": "[APPROACH CHECK: Stage Presence 2 OR Improv 2]"
+    },
+    {
+      "type": "combined_check",
+      "description": "Multiple stats, pass if ALL meet thresholds (AND)",
+      "format": "[COMBINED CHECK: {stat1} {threshold} AND {stat2} {threshold}]",
+      "example": "[COMBINED CHECK: Script 2 AND Stage Presence 2]"
+    },
+    {
+      "type": "universal_check",
+      "description": "Any stat vs. threshold (safety valve for accessibility)",
+      "format": "[STAT CHECK: Any {threshold}]",
+      "example": "[STAT CHECK: Any 2]"
+    },
+    {
+      "type": "opposed_check",
+      "description": "Your stat vs. NPC capability value",
+      "format": "[OPPOSED: {stat} vs. {NPC Name}'s {Capability} ({value})]",
+      "example": "[OPPOSED: Stage Presence vs. The Director's Authority (3)]"
+    },
+    {
+      "type": "archive_search",
+      "description": "Tiered success (Deep Find / Standard / Partial / Lost)",
+      "format": "[ARCHIVE SEARCH: {stat} {threshold}]",
+      "tiers": {
+        "script_3+": "Deep Find - Complete information + bonus discovery",
+        "script_2": "Standard Find - Information sought",
+        "script_1": "Partial Find - Clue pointing to information",
+        "script_0": "Lost - Time passes; minor complication"
+      }
+    }
+  ],
+  "effectiveBonuses": {
+    "description": "Temporary stat bonuses from flags, items, or NPC relationships",
+    "format": "+{N} effective to {stat} for {scope}",
+    "maxEffectiveBonus": 3,
+    "examples": [
+      {
+        "name": "Narrative Advantage",
+        "bonus": "+1 effective to next check against the Editor"
+      },
+      {
+        "name": "Audience Blessing",
+        "bonus": "+2 effective to Stage Presence until confrontation ends"
+      },
+      {
+        "name": "Tactical Position",
+        "bonus": "+1 effective to first confrontation check"
+      },
+      {
+        "name": "First Draft Fragment",
+        "bonus": "+1 effective to Script during confrontation"
+      }
+    ]
+  }
+}

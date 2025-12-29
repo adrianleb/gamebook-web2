@@ -1,0 +1,338 @@
+{
+  "$schema": "./manifest-schema.json",
+  "gamebook": {
+    "title": "The Understage",
+    "source": "https://github.com/adrianleb/gamebook",
+    "version": "0.0.1",
+    "adaptationVersion": "0.0.1"
+  },
+  "structure": {
+    "acts": 3,
+    "totalNodesEstimated": 105,
+    "endings": 5
+  },
+  "startingScene": "sc_1_0_001",
+  "acts": [
+    {
+      "id": 1,
+      "title": "The Breach",
+      "theme": "Discovery, establishment, first choices",
+      "estimatedNodes": 30,
+      "hubs": [
+        {
+          "id": 0,
+          "title": "Intro / The Prompter's Booth",
+          "description": "Your base of operations—a cramped space behind the scenes of the Threshold Theatre",
+          "idRange": "sc_1_0_001 - sc_1_0_050",
+          "keyLocations": [
+            "The Booth itself (tutorial space)",
+            "The Wings (transitional space)",
+            "The Threshold Stage (breach point)"
+          ],
+          "npcs": [
+            "Maren (mentor)",
+            "The Stagehand",
+            "Breach Characters (2-3 escaped characters)"
+          ],
+          "branchPaths": [
+            {
+              "id": "pursuers",
+              "name": "The Pursuers",
+              "description": "Track escaped characters, learn through action"
+            },
+            {
+              "id": "researcher",
+              "name": "The Researcher",
+              "description": "Investigate historical records, learn through discovery"
+            },
+            {
+              "id": "negotiator",
+              "name": "The Negotiator",
+              "description": "Talk to escaped characters, learn through dialogue"
+            }
+          ],
+          "convergenceScene": "sc_1_1_099",
+          "convergenceTitle": "First Crossing"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "The Descent",
+      "theme": "Exploration, alliance-building, revelation",
+      "estimatedNodes": 60,
+      "hubs": [
+        {
+          "id": 2,
+          "title": "The Green Room",
+          "description": "A neutral space where characters from different stories can meet",
+          "idRange": "sc_2_2_001 - sc_2_2_099",
+          "keyLocations": [
+            "The Main Lounge (central meeting)",
+            "The Dressing Rooms (private conversations)",
+            "The Call Board (quests, rumors)"
+          ],
+          "npcs": [
+            "The Director",
+            "CHORUS (collective)",
+            "Genre Representatives"
+          ],
+          "branchPaths": [
+            {
+              "id": "preservationist",
+              "name": "The Preservationists",
+              "description": "Keep Understage separate from reality",
+              "faction": "preservationist"
+            },
+            {
+              "id": "revisionist",
+              "name": "The Revisionists",
+              "description": "Stories can and should be improved",
+              "faction": "revisionist"
+            },
+            {
+              "id": "exiter",
+              "name": "The Exiters",
+              "description": "Fictional beings deserve real existence",
+              "faction": "exiter"
+            },
+            {
+              "id": "independent",
+              "name": "Independent",
+              "description": "Balance between factions",
+              "faction": "independent"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "title": "The Archives",
+          "description": "Where first drafts, cut scenes, and abandoned stories are stored",
+          "idRange": "sc_2_3_001 - sc_2_3_099",
+          "keyLocations": [
+            "The Stacks (endless shelves)",
+            "The Prop Room (items from stories)",
+            "The Author's Desk (mysterious, dangerous)"
+          ],
+          "npcs": [
+            "The Understudy",
+            "Lost Pages (fragments)",
+            "The Critic"
+          ],
+          "branchPaths": [
+            {
+              "id": "investigation",
+              "name": "Investigation Paths",
+              "description": "Discover the source of disturbances"
+            }
+          ],
+          "convergenceScene": "sc_2_3_099",
+          "convergenceTitle": "The Revelation"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "The Final Act",
+      "theme": "Confrontation, sacrifice, resolution",
+      "estimatedNodes": 35,
+      "hubs": [
+        {
+          "id": 4,
+          "title": "The Mainstage",
+          "description": "The heart of the Understage—an enormous stage where all stories originated",
+          "idRange": "sc_3_4_001 - sc_3_4_099",
+          "keyLocations": [
+            "Center Stage (conflict point)",
+            "The Orchestra Pit (narrative manipulation)",
+            "The Fly System (access levels)",
+            "The Audience (not empty)"
+          ],
+          "npcs": [
+            "The Editor",
+            "All surviving major NPCs"
+          ],
+          "convergenceScene": "sc_3_4_098",
+          "convergenceTitle": "The Last Curtain Call"
+        }
+      ]
+    }
+  ],
+  "endings": [
+    {
+      "id": 1,
+      "sceneId": "sc_3_4_901",
+      "title": "The Revised Draft",
+      "description": "You take the Editor's power and choose which stories survive. Reality and Understage remain separate, but you bear the burden.",
+      "tier": "bittersweet",
+      "requirements": {
+        "faction": "revisionist",
+        "factionLevel": 7,
+        "editorState": "defeated"
+      }
+    },
+    {
+      "id": 2,
+      "sceneId": "sc_3_4_902",
+      "title": "The Open Book",
+      "description": "The boundary dissolves peacefully. Fiction and reality merge. Hopeful but uncertain.",
+      "tier": "hopeful",
+      "requirements": {
+        "faction": "exiter",
+        "factionLevel": 7,
+        "editorState": "persuaded"
+      }
+    },
+    {
+      "id": 3,
+      "sceneId": "sc_3_4_903",
+      "title": "The Closed Canon",
+      "description": "The Understage is sealed completely. Stories become static. Safe but melancholic.",
+      "tier": "melancholic",
+      "requirements": {
+        "faction": "preservationist",
+        "factionLevel": 7,
+        "editorState": "defeated"
+      }
+    },
+    {
+      "id": 4,
+      "sceneId": "sc_3_4_904",
+      "title": "The Blank Page",
+      "description": "Both Understage and its deeper threat end. Reality with no more new stories. Tragic but peaceful.",
+      "tier": "tragic",
+      "requirements": {
+        "faction": "independent",
+        "editorState": "revealedTruth"
+      }
+    },
+    {
+      "id": 5,
+      "sceneId": "sc_3_4_999",
+      "title": "The Eternal Rehearsal",
+      "description": "The conflict continues indefinitely. You remain a Prompter forever. Ambiguous.",
+      "tier": "ambiguous",
+      "requirements": {
+        "finalChoice": "failed_or_refused"
+      }
+    }
+  ],
+  "sceneIndex": {
+    "sc_1_0_001": {
+      "title": "The Booth Awakens",
+      "location": "The Prompter's Booth",
+      "act": 1,
+      "hub": 0,
+      "status": "pending",
+      "description": "Opening scene"
+    },
+    "sc_1_1_099": {
+      "title": "The First Crossing",
+      "location": "First Crossing",
+      "act": 1,
+      "hub": 1,
+      "status": "pending",
+      "description": "Act 1 Climax - First descent into Understage",
+      "mechanics": ["stat_check", "faction_preview"]
+    },
+    "sc_2_2_001": {
+      "title": "Green Room Arrival",
+      "location": "The Green Room",
+      "act": 2,
+      "hub": 2,
+      "status": "pending",
+      "description": "Hub 2 opening"
+    },
+    "sc_2_3_001": {
+      "title": "The Archives Entry",
+      "location": "The Archives",
+      "act": 2,
+      "hub": 3,
+      "status": "pending",
+      "description": "Hub 3 opening"
+    },
+    "sc_2_3_099": {
+      "title": "The Revelation",
+      "location": "The Archives",
+      "act": 2,
+      "hub": 3,
+      "status": "pending",
+      "description": "Act 2 Climax - Discover the Editor's plan",
+      "mechanics": ["discovery_chain", "alliance_check"]
+    },
+    "sc_3_4_001": {
+      "title": "Mainstage Descent",
+      "location": "The Mainstage",
+      "act": 3,
+      "hub": 4,
+      "status": "pending",
+      "description": "Act 3 Hub opening"
+    },
+    "sc_3_4_098": {
+      "title": "The Last Curtain Call",
+      "location": "The Mainstage",
+      "act": 3,
+      "hub": 4,
+      "status": "pending",
+      "description": "Final confrontation with the Editor",
+      "mechanics": ["ally_count", "multi_phase"]
+    },
+    "sc_3_4_901": {
+      "title": "The Revised Draft",
+      "location": "Ending",
+      "act": 3,
+      "hub": 4,
+      "status": "pending",
+      "description": "Ending 1 - Revisionist path",
+      "ending": true,
+      "endingId": 1
+    },
+    "sc_3_4_902": {
+      "title": "The Open Book",
+      "location": "Ending",
+      "act": 3,
+      "hub": 4,
+      "status": "pending",
+      "description": "Ending 2 - Exiter path",
+      "ending": true,
+      "endingId": 2
+    },
+    "sc_3_4_903": {
+      "title": "The Closed Canon",
+      "location": "Ending",
+      "act": 3,
+      "hub": 4,
+      "status": "pending",
+      "description": "Ending 3 - Preservationist path",
+      "ending": true,
+      "endingId": 3
+    },
+    "sc_3_4_904": {
+      "title": "The Blank Page",
+      "location": "Ending",
+      "act": 3,
+      "hub": 4,
+      "status": "pending",
+      "description": "Ending 4 - Independent path",
+      "ending": true,
+      "endingId": 4
+    },
+    "sc_3_4_999": {
+      "title": "The Eternal Rehearsal",
+      "location": "Ending",
+      "act": 3,
+      "hub": 4,
+      "status": "pending",
+      "description": "Ending 5 - Refused final choice",
+      "ending": true,
+      "endingId": 5
+    }
+  },
+  "implementationStatus": {
+    "totalScenes": 12,
+    "pending": 12,
+    "draft": 0,
+    "complete": 0,
+    "reviewed": 0
+  }
+}
