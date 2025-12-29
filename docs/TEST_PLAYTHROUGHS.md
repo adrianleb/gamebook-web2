@@ -301,6 +301,198 @@ sc_1_1_099 ─[Choose: "Cross into the Understage"]──> sc_2_2_001
 
 ---
 
+## Act 2 Hub Playthroughs
+
+The following playthroughs test Act 2 content (The Descent): Green Room (Hub 2) and Archives (Hub 3).
+
+### PT-A2-H2-001: Green Room Arrival
+
+**Tests:** NPC introductions (The Director, CHORUS), hub navigation, state flag propagation from Act 1 completion
+
+**Entry Point:** `sc_2_2_001` (Green Room Arrival)
+
+**Prerequisites:**
+- `act1_complete` flag set (arrived from sc_1_1_099 First Crossing)
+
+**Path:**
+```
+sc_1_1_099 ─[Choose: "Cross into the Understage"]──> sc_2_2_001 ─[Hub navigation choices]──> sc_2_3_001 (Archives)
+```
+
+**Steps:**
+
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_2_2_001 | (Arrived from Act 1) | ✅ save_point | `act1_complete=true`, `green_room_reached=true`, `act2_started=true` |
+| 2 | sc_2_2_001 | Verify NPC introductions | ✅ mechanic_test | The Director and CHORUS appear in scene text |
+| 3 | sc_2_2_001 | Verify hub navigation choices | ✅ softlock_check | 4 choices available: Director dialogue, Dressing Rooms, Call Board, Archives |
+| 4 | sc_2_2_001 | Hover "Head to the Archives" | ✅ mechanic_test | Choice enabled (no requirements) |
+| 5 | sc_2_2_001 | Choose "Head to the Archives" | ✅ softlock_check | Transitions to sc_2_3_001 |
+| 6 | sc_2_3_001 | (Arrived at Archives) | ✅ save_point | `green_room_reached=true` persists, `archives_reached=true`, `act2_hub3_started=true` |
+
+**Final State Assertions:**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "act1_complete": true,
+    "green_room_reached": true,
+    "act2_started": true,
+    "archives_reached": true,
+    "act2_hub3_started": true
+  },
+  "inventory": [],
+  "factions": {
+    "preservationist": 0,
+    "revisionist": 0,
+    "exiter": 0,
+    "independent": 0
+  },
+  "current_scene": "sc_2_3_001"
+}
+```
+
+**Critical Mechanics Validated:**
+- Hub opening scene introduces key NPCs (The Director, CHORUS)
+- Entry effects set state flags correctly (`green_room_reached`, `act2_started`)
+- Hub navigation offers multiple exploration choices
+- Forward transition to Archives (sc_2_3_001) works correctly
+- State flags propagate across act boundaries (`act1_complete` persists)
+
+**Regression Checkpoints:** Steps 1, 2, 6
+
+**Note:** This test validates the Act 2 Hub 2 opening. When Dressing Rooms (sc_2_2_010) and Call Board (sc_2_2_020) content is implemented, this test should be expanded to cover those exploration paths.
+
+---
+
+### PT-A2-H3-001: Archives Entry
+
+**Tests:** NPC introduction (The Understudy), hub exploration choices, state flag propagation
+
+**Entry Point:** `sc_2_3_001` (The Archives Entry)
+
+**Prerequisites:**
+- `green_room_reached` flag set (arrived from sc_2_2_001)
+
+**Path:**
+```
+sc_2_2_001 ─[Choose: "Head to the Archives"]──> sc_2_3_001 ─[Hub exploration choices]──> sc_2_3_050 (Author's Desk)
+```
+
+**Steps:**
+
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_2_3_001 | (Arrived from Green Room) | ✅ save_point | `green_room_reached=true`, `archives_reached=true`, `act2_hub3_started=true` |
+| 2 | sc_2_3_001 | Verify NPC introduction | ✅ mechanic_test | The Understudy appears in scene text |
+| 3 | sc_2_3_001 | Verify hub exploration choices | ✅ softlock_check | 5 choices available: Understudy dialogue, Stacks, Prop Room, Author's Desk, Return to Green Room |
+| 4 | sc_2_3_001 | Hover "Approach The Author's Desk" | ✅ mechanic_test | Choice enabled (no requirements) |
+| 5 | sc_2_3_001 | Choose "Approach The Author's Desk" | ✅ softlock_check | Transitions to sc_2_3_050 |
+
+**Final State Assertions:**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "act1_complete": true,
+    "green_room_reached": true,
+    "act2_started": true,
+    "archives_reached": true,
+    "act2_hub3_started": true
+  },
+  "inventory": [],
+  "factions": {
+    "preservationist": 0,
+    "revisionist": 0,
+    "exiter": 0,
+    "independent": 0
+  },
+  "current_scene": "sc_2_3_050"
+}
+```
+
+**Critical Mechanics Validated:**
+- Hub opening scene introduces key NPC (The Understudy)
+- Entry effects set state flags correctly (`archives_reached`, `act2_hub3_started`)
+- Hub navigation offers 5 exploration choices
+- Author's Desk path leads toward Act 2 climax
+- State flags persist from previous hubs (`green_room_reached`)
+
+**Regression Checkpoints:** Steps 1, 2, 3
+
+**Note:** This test validates the Act 2 Hub 3 opening. When Stacks (sc_2_3_010), Prop Room (sc_2_3_020), and Author's Desk (sc_2_3_050) content is implemented, this test should be expanded to cover those exploration paths and their discovery chains.
+
+---
+
+### PT-A2-H3-002: The Revelation (Act 2 Climax)
+
+**Tests:** Act 2 climax scene, alliance check preview, state flags for Act 3 transition, Editor reveal
+
+**Entry Point:** `sc_2_3_099` (The Revelation)
+
+**Prerequisites:**
+- `archives_reached` flag set (explored Hub 3 content)
+
+**Path:**
+```
+sc_2_3_001 ─[Explore Archives, discover truth]──> sc_2_3_099 ─[Choose: "Ascend to the Mainstage"]──> sc_3_4_001
+```
+
+**Steps:**
+
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_2_3_099 | (Arrived at climax) | ✅ save_point | `archives_reached=true` |
+| 2 | sc_2_3_099 | Verify entry effects | ✅ mechanic_test | `revelation_discovered=true`, `act2_complete=true`, `editor_revealed=true`, independent+1 |
+| 3 | sc_2_3_099 | Verify The Understudy revelation | ✅ mechanic_test | Scene text reveals Editor's Great Revision plan |
+| 4 | sc_2_3_099 | Verify alliance preview | ✅ mechanic_test | Scene mentions factions who will stand against Editor |
+| 5 | sc_2_3_099 | Hover "Ascend to the Mainstage" | ✅ mechanic_test | Choice enabled (no requirements) |
+| 6 | sc_2_3_099 | Choose "Ascend to the Mainstage (Final Act)" | ✅ softlock_check | Transitions to sc_3_4_001 |
+| 7 | sc_3_4_001 | (Arrived at Act 3) | ✅ save_point | `mainstage_ascent=true`, all previous flags persist |
+
+**Final State Assertions:**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "act1_complete": true,
+    "green_room_reached": true,
+    "act2_started": true,
+    "archives_reached": true,
+    "act2_hub3_started": true,
+    "revelation_discovered": true,
+    "act2_complete": true,
+    "editor_revealed": true,
+    "mainstage_ascent": true
+  },
+  "inventory": [],
+  "factions": {
+    "preservationist": 0,
+    "revisionist": 0,
+    "exiter": 0,
+    "independent": 1
+  },
+  "current_scene": "sc_3_4_001"
+}
+```
+
+**Critical Mechanics Validated:**
+- Act 2 climax scene reveals central conflict (Editor's Great Revision)
+- Entry effects set multiple state flags (`revelation_discovered`, `act2_complete`, `editor_revealed`)
+- Faction modification on entry (independent +1 for discovering truth)
+- Alliance preview foreshadows Act 3 confrontation
+- Forward transition to Act 3 (sc_3_4_001) works correctly
+- All state flags from previous acts persist into Act 3
+
+**Regression Checkpoints:** Steps 1, 2, 6, 7
+
+**Note:** This test validates the Act 2→Act 3 transition. The scene mentions factions (Preservationist, Revisionist, Exiter, Independent) but doesn't implement the actual alliance check—that mechanic belongs in Act 3 Hub 4 content.
+
+---
+
 ## Save/Load Regression Tests
 
 These playthroughs specifically test state persistence across save/load operations.
@@ -897,8 +1089,8 @@ When adding new scenes or mechanics, use this checklist:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.4 | 2025-12-29 | Added PT-A2-H2-001, PT-A2-H3-001, PT-A2-H3-002 (Act 2 Hub validation) - validates sc_2_2_001 Green Room Arrival (The Director, CHORUS introductions), sc_2_3_001 Archives Entry (The Understudy introduction, 5 hub exploration choices), and sc_2_3_099 The Revelation (Act 2 climax, Editor reveal, Act 3 transition). Documents state flags (green_room_reached, act2_started, archives_reached, revelation_discovered, act2_complete, editor_revealed, mainstage_ascent) and validates act boundary propagation. |
 | 1.3 | 2025-12-29 | Added PT-END-001 through PT-END-005 (Act 3 Ending validation) - validates all 5 endings (sc_3_4_901 through sc_3_4_904, sc_3_4_999), faction gates (>=7), editorState requirements (defeated/persuaded/revealedTruth), and fail-state fallback ending. Updated State Variable Reference with editorState flag and all 4 factions. |
-| 1.2 | 2025-12-29 | Added PT-VS-006 (Act 2 Hub 3 Entry) and PT-VS-007 (Act 2 Climax Alliance Check) - validates sc_2_3_001 Archives Entry and sc_2_3_099 The Revelation scenes, documents all 4 faction states (preservationist, revisionist, exiter, independent), and adds faction alliance acknowledgment test variants |
 | 1.1 | 2025-12-29 | Added PT-VS-005 (Act 1 Climax Convergence) - validates sc_1_1_099 First Crossing scene, Act 1→Act 2 transition, and new state variables (act1_complete, first_crossing_reached) |
 | 1.0 | 2025-12-29 | Initial version with vertical slice playthroughs (PT-VS-001 through PT-VS-004) |
 
