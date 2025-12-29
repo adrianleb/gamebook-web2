@@ -17,19 +17,19 @@ This document defines the five macro phases from GANG.md, with specific delivera
 | Agent | Deliverable | Status |
 |-------|-------------|--------|
 | agent-a | MILESTONES.md, PR/issue templates | ✅ Complete |
-| agent-b | content/manifest.json, SCENE_ID_CONVENTIONS.md | Pending |
-| agent-c | Engine prototype: state machine, scene loader | Pending |
-| agent-d | STYLE_GUIDE.md, UI shell prototype | Pending |
-| agent-e | TEST_PLAYTHROUGHS.md (draft) | Pending |
+| agent-b | content/manifest.json, SCENE_ID_CONVENTIONS.md | ✅ Complete |
+| agent-c | Engine prototype: state machine, scene loader | ✅ Complete |
+| agent-d | STYLE_GUIDE.md, UI shell prototype | ✅ Complete |
+| agent-e | TEST_PLAYTHROUGHS.md (draft) | ✅ Complete |
 
 ### Exit Gate
 
-- [ ] `content/manifest.json` exists with all scene IDs mapped
-- [ ] State variables documented (stats, inventory, flags)
-- [ ] All 5 endings identified with requirements
-- [ ] Engine prototype loads a test scene
-- [ ] UI shell demonstrates layout prototype
-- [ ] TEST_PLAYTHROUGHS.md has 3+ critical paths outlined
+- [x] `content/manifest.json` exists with all scene IDs mapped
+- [x] State variables documented (stats, inventory, flags) - see VERTICAL_SLICE.md
+- [x] All 5 endings identified with requirements - see manifest.json
+- [x] Engine prototype loads a test scene - headless runner implemented
+- [x] UI shell demonstrates layout prototype - DOS UI foundation complete
+- [x] TEST_PLAYTHROUGHS.md has 3+ critical paths outlined - 4 paths documented
 
 ---
 
@@ -214,11 +214,29 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 
 | Phase | Status | Blockers |
 |-------|--------|----------|
-| Phase 1: Inception | 🟡 In Progress | None |
-| Phase 2: Vertical Slice | ⚪ Not Started | Phase 1 completion |
+| Phase 1: Inception | ✅ Complete | None |
+| Phase 2: Vertical Slice | 🟡 In Progress | Awaiting PRs #67, #73 merge |
 | Phase 3: Full Content | ⚪ Not Started | Phase 2 completion |
 | Phase 4: Polish | ⚪ Not Started | Phase 3 completion |
 | Phase 5: QA & Release | ⚪ Not Started | Phase 4 completion |
+
+### Phase 2 Status Update (2025-12-29)
+
+**Complete:**
+- ✅ Vertical slice scenes (sc_1_0_001 through sc_1_0_004)
+- ✅ Resolution scenes (sc_1_0_900, sc_1_0_901, sc_1_0_902)
+- ✅ All mechanics: choice navigation, inventory gating, stat checks
+- ✅ VERTICAL_SLICE.md specification complete
+- ✅ TEST_PLAYTHROUGHS.md with 4 documented paths
+
+**In Progress:**
+- 🔄 PR #67: SaveManager autosave/export/import (agent-c)
+- 🔄 PR #73: Executable JSON playthrough files (agent-e)
+
+**Pending:**
+- ⏳ Integration testing once PRs merge
+- ⏳ Full QA gate validation
+- ⏳ Milestone signoff by agent-a
 
 ---
 
