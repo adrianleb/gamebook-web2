@@ -247,7 +247,64 @@ export interface Choice {
 }
 
 /**
+ * Raw scene text format from content files.
+ * Supports both simple string and object with location/paragraphs.
+ */
+export type SceneText = string | SceneTextObject;
+
+/**
+ * Scene text object format with location metadata and paragraphs array.
+ * The loader transforms this to a joined string for runtime use.
+ */
+export interface SceneTextObject {
+  location: string;
+  paragraphs: string[];
+}
+
+/**
+ * Raw choice format from content files.
+ * May use 'onChoose' instead of 'effects' for backwards compatibility.
+ */
+export interface RawChoice {
+  label: string;
+  to: SceneId;
+  conditions?: Condition[];
+  effects?: Effect[];
+  onChoose?: Effect[];  // Alias for effects
+  disabledHint?: string;
+}
+
+/**
+ * Raw scene data format from content files.
+ * Differs from SceneData in that text can be an object and effectsOnEnter/onChoose
+ * may be used instead of effects. The SceneLoader transforms this to SceneData.
+ */
+export interface RawSceneData {
+  id: SceneId;
+  title: string;
+  text: SceneText;
+  art?: string;
+  music?: string;
+  sfx?: string[];
+  audio?: { music?: string | null; sfx?: string[] };
+  effects?: Effect[];
+  effectsOnEnter?: Effect[];  // Alias for effects
+  choices: RawChoice[];
+  requiredFlags?: FlagName[];
+  requiredItems?: ItemId[];
+  // Additional fields from content format (ignored by engine)
+  act?: number;
+  hub?: number;
+  location?: string;
+  implementationStatus?: string;
+  metadata?: Record<string, unknown>;
+  npcs?: Array<Record<string, unknown>>;
+  flags?: Record<string, unknown>;
+}
+
+/**
  * Scene data structure loaded from content files.
+ * This is the runtime format after transformation from RawSceneData.
  */
 export interface SceneData {
   id: SceneId;
