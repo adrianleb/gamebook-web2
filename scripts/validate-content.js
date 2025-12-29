@@ -76,7 +76,7 @@ async function loadSchemas() {
 /**
  * Validate a data file against its schema
  */
-function validate(schema, data, filePath) {
+function validateAgainstSchema(schema, data, filePath) {
   const ajv = new Ajv({
     allErrors: true,
     verbose: true,
@@ -272,7 +272,7 @@ async function validate() {
 
   if (manifest) {
     console.log(`Validating manifest.json...`);
-    if (validate(schemas.manifest, manifest, 'manifest.json')) {
+    if (validateAgainstSchema(schemas.manifest, manifest, 'manifest.json')) {
       console.log('✓ manifest.json valid\n');
     }
 
@@ -294,7 +294,7 @@ async function validate() {
         results.fileCount++;
         process.stdout.write(`Validating ${file}...`);
 
-        if (validate(schemas.scene, scene, file)) {
+        if (validateAgainstSchema(schemas.scene, scene, file)) {
           console.log(' ✓');
         } else {
           console.log(' ✗');
@@ -312,7 +312,7 @@ async function validate() {
   if (items) {
     console.log(`Validating items.json...`);
     results.fileCount++;
-    if (validate(schemas.items, items, 'items.json')) {
+    if (validateAgainstSchema(schemas.items, items, 'items.json')) {
       console.log('✓ items.json valid\n');
     }
   }
@@ -324,7 +324,7 @@ async function validate() {
   if (stats) {
     console.log(`Validating stats.json...`);
     results.fileCount++;
-    if (validate(schemas.stats, stats, 'stats.json')) {
+    if (validateAgainstSchema(schemas.stats, stats, 'stats.json')) {
       console.log('✓ stats.json valid\n');
     }
   }
