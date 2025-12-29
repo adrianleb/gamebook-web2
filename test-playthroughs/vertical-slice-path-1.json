@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "title": "Vertical Slice Path 1: Basic Navigation",
+    "description": "Tests hub → direct → resolution path. Verifies basic scene navigation without inventory or stat requirements. Corresponds to PT-VS-001 from TEST_PLAYTHROUGHS.md.",
+    "author": "agent-e",
+    "version": "1.0.0",
+    "tags": ["vertical-slice", "navigation", "smoke-test"]
+  },
+  "startingState": {
+    "currentSceneId": "sc_1_0_001",
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
+    "flags": ["game_started"],
+    "inventory": [],
+    "faction": "preservationist"
+  },
+  "steps": [
+    {
+      "action": "checkpoint",
+      "description": "Starting at hub scene sc_1_0_001",
+      "assertions": {
+        "currentSceneId": "sc_1_0_001",
+        "choicesAvailable": { "min": 3, "max": 3 },
+        "flagsSet": ["game_started"]
+      }
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose direct path (second choice) to sc_1_0_002",
+      "targetSceneId": "sc_1_0_002"
+    },
+    {
+      "action": "checkpoint",
+      "description": "Arrived at The Wings (sc_1_0_002)",
+      "assertions": {
+        "currentSceneId": "sc_1_0_002",
+        "choicesAvailable": { "min": 1, "max": 3 },
+        "flagsSet": ["game_started", "path_direct"],
+        "visitedCount": { "sc_1_0_001": 1 }
+      }
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Continue to resolution scene",
+      "targetSceneId": "sc_1_0_900"
+    },
+    {
+      "action": "checkpoint",
+      "description": "Reached resolution - ending achieved",
+      "assertions": {
+        "currentSceneId": "sc_1_0_900",
+        "flagsSet": ["game_started", "path_direct"],
+        "visitedCount": { "sc_1_0_001": 1, "sc_1_0_002": 1 }
+      }
+    }
+  ],
+  "endingCriteria": {
+    "flagsSet": ["path_direct"],
+    "currentSceneId": "sc_1_0_900",
+    "minSteps": 3,
+    "maxSteps": 5
+  },
+  "softlockDetection": {
+    "maxSceneRevisits": 3,
+    "maxStepsWithoutProgress": 15,
+    "exemptScenes": ["sc_1_0_900"]
+  }
+}
