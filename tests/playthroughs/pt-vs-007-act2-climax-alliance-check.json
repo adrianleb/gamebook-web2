@@ -1,0 +1,304 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-VS-007",
+    "description": "Act 2 Climax Alliance Check (The Revelation) - Tests faction alliance acknowledgment, conditional narrative based on alignment state, Act 2→Act 3 transition preparation. This file defines 4 test variants for each faction path.",
+    "author": "agent-e",
+    "version": "1.0",
+    "variants": [
+      {
+        "id": "A",
+        "name": "High Preservationist",
+        "description": "Tests faction acknowledgment when preservationist ≥5"
+      },
+      {
+        "id": "B",
+        "name": "High Revisionist",
+        "description": "Tests faction acknowledgment when revisionist ≥5"
+      },
+      {
+        "id": "C",
+        "name": "High Exiter",
+        "description": "Tests faction acknowledgment when exiter ≥5"
+      },
+      {
+        "id": "D",
+        "name": "Balanced / Independent",
+        "description": "Tests faction acknowledgment when no dominant faction (all ≤3)"
+      }
+    ]
+  },
+  "variants": {
+    "A": {
+      "meta": {
+        "variantName": "Variant A - High Preservationist (≥5)"
+      },
+      "startingState": {
+        "flags": ["game_started", "act1_complete", "green_room_reached", "archives_reached", "act2_hub3_started"],
+        "inventory": [],
+        "stats": {
+          "health": 10,
+          "courage": 5,
+          "insight": 3
+        },
+        "factions": {
+          "preservationist": 5,
+          "revisionist": 2,
+          "exiter": 1,
+          "independent": 2
+        },
+        "currentScene": "sc_2_3_099"
+      },
+      "steps": [
+        {
+          "sequence": 1,
+          "action": "checkpoint",
+          "description": "Arrived at Revelation with high preservationist alignment",
+          "assertions": {
+            "flagsSet": ["revelation_discovered", "act2_complete", "editor_revealed"],
+            "currentScene": "sc_2_3_099",
+            "factions": {
+              "preservationist": 6,
+              "revisionist": 2,
+              "exiter": 1,
+              "independent": 2
+            },
+            "note": "independent faction increased by 1 on entry (modify-faction effect in scene)"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": "verify",
+          "description": "Verify faction narrative acknowledges Preservationist alliance",
+          "assertions": {
+            "narrativeContains": ["Preservationist", "alliance", "faction"]
+          }
+        },
+        {
+          "sequence": 3,
+          "action": "choose",
+          "choiceIndex": 0,
+          "description": "Choose 'Ascend to the Mainstage (Final Act)'",
+          "expectedScene": "sc_3_4_001",
+          "checkpoint": true,
+          "assertions": {
+            "flagsSet": ["game_started", "act1_complete", "archives_reached", "revelation_discovered", "act2_complete", "editor_revealed", "mainstage_ascent"],
+            "currentScene": "sc_3_4_001",
+            "factions": {
+              "preservationist": 6,
+              "revisionist": 2,
+              "exiter": 1,
+              "independent": 2
+            }
+          }
+        }
+      ],
+      "endingCriteria": {
+        "sceneId": "sc_3_4_001",
+        "flagsRequired": ["game_started", "act1_complete", "archives_reached", "revelation_discovered", "act2_complete", "editor_revealed", "mainstage_ascent"],
+        "inventoryRequired": [],
+        "statsRequired": {
+          "health": 10,
+          "courage": 5,
+          "insight": 3
+        },
+        "factionsRequired": {
+          "preservationist": 6,
+          "revisionist": 2,
+          "exiter": 1,
+          "independent": 2
+        }
+      }
+    },
+    "B": {
+      "meta": {
+        "variantName": "Variant B - High Revisionist (≥5)"
+      },
+      "startingState": {
+        "flags": ["game_started", "act1_complete", "green_room_reached", "archives_reached", "act2_hub3_started"],
+        "inventory": [],
+        "stats": {
+          "health": 10,
+          "courage": 5,
+          "insight": 3
+        },
+        "factions": {
+          "preservationist": 2,
+          "revisionist": 5,
+          "exiter": 1,
+          "independent": 2
+        },
+        "currentScene": "sc_2_3_099"
+      },
+      "steps": [
+        {
+          "sequence": 1,
+          "action": "checkpoint",
+          "description": "Arrived at Revelation with high revisionist alignment",
+          "assertions": {
+            "flagsSet": ["revelation_discovered", "act2_complete", "editor_revealed"],
+            "currentScene": "sc_2_3_099",
+            "factions": {
+              "preservationist": 2,
+              "revisionist": 5,
+              "exiter": 1,
+              "independent": 3
+            }
+          }
+        },
+        {
+          "sequence": 2,
+          "action": "verify",
+          "description": "Verify faction narrative acknowledges Revisionist alliance",
+          "assertions": {
+            "narrativeContains": ["Revisionist", "alliance", "faction"]
+          }
+        },
+        {
+          "sequence": 3,
+          "action": "choose",
+          "choiceIndex": 0,
+          "description": "Choose 'Ascend to the Mainstage (Final Act)'",
+          "expectedScene": "sc_3_4_001",
+          "checkpoint": true
+        }
+      ],
+      "endingCriteria": {
+        "sceneId": "sc_3_4_001",
+        "flagsRequired": ["game_started", "act1_complete", "archives_reached", "revelation_discovered", "act2_complete", "editor_revealed", "mainstage_ascent"],
+        "inventoryRequired": []
+      }
+    },
+    "C": {
+      "meta": {
+        "variantName": "Variant C - High Exiter (≥5)"
+      },
+      "startingState": {
+        "flags": ["game_started", "act1_complete", "green_room_reached", "archives_reached", "act2_hub3_started"],
+        "inventory": [],
+        "stats": {
+          "health": 10,
+          "courage": 5,
+          "insight": 3
+        },
+        "factions": {
+          "preservationist": 1,
+          "revisionist": 2,
+          "exiter": 5,
+          "independent": 2
+        },
+        "currentScene": "sc_2_3_099"
+      },
+      "steps": [
+        {
+          "sequence": 1,
+          "action": "checkpoint",
+          "description": "Arrived at Revelation with high exiter alignment",
+          "assertions": {
+            "flagsSet": ["revelation_discovered", "act2_complete", "editor_revealed"],
+            "currentScene": "sc_2_3_099",
+            "factions": {
+              "preservationist": 1,
+              "revisionist": 2,
+              "exiter": 5,
+              "independent": 3
+            }
+          }
+        },
+        {
+          "sequence": 2,
+          "action": "verify",
+          "description": "Verify faction narrative acknowledges Exiter alliance",
+          "assertions": {
+            "narrativeContains": ["Exiter", "alliance", "faction"]
+          }
+        },
+        {
+          "sequence": 3,
+          "action": "choose",
+          "choiceIndex": 0,
+          "description": "Choose 'Ascend to the Mainstage (Final Act)'",
+          "expectedScene": "sc_3_4_001",
+          "checkpoint": true
+        }
+      ],
+      "endingCriteria": {
+        "sceneId": "sc_3_4_001",
+        "flagsRequired": ["game_started", "act1_complete", "archives_reached", "revelation_discovered", "act2_complete", "editor_revealed", "mainstage_ascent"],
+        "inventoryRequired": []
+      }
+    },
+    "D": {
+      "meta": {
+        "variantName": "Variant D - Balanced / Independent (no dominant faction)"
+      },
+      "startingState": {
+        "flags": ["game_started", "act1_complete", "green_room_reached", "archives_reached", "act2_hub3_started"],
+        "inventory": [],
+        "stats": {
+          "health": 10,
+          "courage": 5,
+          "insight": 3
+        },
+        "factions": {
+          "preservationist": 3,
+          "revisionist": 2,
+          "exiter": 1,
+          "independent": 3
+        },
+        "currentScene": "sc_2_3_099"
+      },
+      "steps": [
+        {
+          "sequence": 1,
+          "action": "checkpoint",
+          "description": "Arrived at Revelation with balanced faction state (no faction ≥5)",
+          "assertions": {
+            "flagsSet": ["revelation_discovered", "act2_complete", "editor_revealed"],
+            "currentScene": "sc_2_3_099",
+            "factions": {
+              "preservationist": 3,
+              "revisionist": 2,
+              "exiter": 1,
+              "independent": 4
+            }
+          }
+        },
+        {
+          "sequence": 2,
+          "action": "verify",
+          "description": "Verify faction narrative acknowledges no dominant alliance / independent path",
+          "assertions": {
+            "narrativeContains": ["independent", "balance", "alliance"]
+          }
+        },
+        {
+          "sequence": 3,
+          "action": "choose",
+          "choiceIndex": 0,
+          "description": "Choose 'Ascend to the Mainstage (Final Act)'",
+          "expectedScene": "sc_3_4_001",
+          "checkpoint": true
+        }
+      ],
+      "endingCriteria": {
+        "sceneId": "sc_3_4_001",
+        "flagsRequired": ["game_started", "act1_complete", "archives_reached", "revelation_discovered", "act2_complete", "editor_revealed", "mainstage_ascent"],
+        "inventoryRequired": []
+      }
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "This is the CRITICAL alliance check scene per MILESTONES.md",
+    "Faction state values here determine which endings are reachable in Act 3",
+    "Faction thresholds for Act 3 endings: preservationist/revisionist/exiter ≥7 for endings 1-3, independent for ending 4",
+    "The scene uses modify-faction effect on independent (+1) on entry",
+    "All variants should complete successfully - no softlock regardless of faction state",
+    "Narrative validation (narrativeContains) requires conditional text implementation in scene"
+  ]
+}

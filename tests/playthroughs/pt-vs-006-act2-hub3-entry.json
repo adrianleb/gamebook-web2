@@ -1,0 +1,89 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-VS-006",
+    "description": "Act 2 Hub 3 Entry (The Archives) - Tests Act 2 Hub 2→Hub 3 transition, Archives entry scene, faction state initialization",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["game_started", "act1_complete", "first_crossing_reached", "green_room_reached"],
+    "inventory": [],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "currentScene": "sc_2_3_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Arrived at Archives - verify scene loaded and entry effects applied",
+      "assertions": {
+        "flagsSet": ["archives_reached", "act2_hub3_started"],
+        "currentScene": "sc_2_3_001",
+        "stats": {
+          "health": 10,
+          "courage": 5,
+          "insight": 3
+        },
+        "factions": {
+          "preservationist": 0,
+          "revisionist": 0,
+          "exiter": 0,
+          "independent": 0
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "verify",
+      "description": "Verify faction display available - all 4 factions should be visible at starting values (0)",
+      "assertions": {
+        "factions": {
+          "preservationist": 0,
+          "revisionist": 0,
+          "exiter": 0,
+          "independent": 0
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 3,
+      "description": "Choose 'Approach The Author's Desk' - direct path to Revelation",
+      "expectedScene": "sc_2_3_050",
+      "checkpoint": true,
+      "note": "Choice leads to sc_2_3_050 which should eventually lead to sc_2_3_099 The Revelation. For this test, we verify the forward path is not softlocked."
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_3_050",
+    "flagsRequired": ["game_started", "act1_complete", "green_room_reached", "archives_reached", "act2_hub3_started"],
+    "inventoryRequired": [],
+    "statsRequired": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "factionsRequired": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "This test validates Hub 2→Hub 3 scene transition (sc_2_2_001 → sc_2_3_001)",
+    "Faction values will be 0 at entry. Faction alignment happens through Act 2 Hub 2 branch path choices before reaching Hub 3.",
+    "The scene should have 5 choices: Speak with Understudy, Explore Stacks, Visit Prop Room, Approach Author's Desk, Return to Green Room"
+  ]
+}
