@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "name": "preservationist_early_path",
+    "description": "Test early Preservationist branch to first milestone. Validates conditional choices and flag tracking.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": [],
+    "stats": {
+      "lore": 5,
+      "secrecy": 3
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify starting state",
+      "assertions": {
+        "currentScene": "sc_1_0_001",
+        "stats": {
+          "lore": 5,
+          "secrecy": 3
+        },
+        "choicesAvailable": 2
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "description": "Choose the Preservationist-aligned option",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_010",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["met_stranger", "preservationist_interest"],
+        "visitedCount": {
+          "sc_1_0_001": 1
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "save_snapshot",
+      "description": "Save snapshot after first milestone for regression testing",
+      "snapshotName": "pre_milestone_1"
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "description": "Continue along Preservationist path",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_1_020",
+      "assertions": {
+        "inventoryContains": ["stranger_note"]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_1_050",
+    "flagsRequired": ["preservationist_ally"],
+    "statsRequired": {
+      "lore": 10
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "maxStepsWithoutProgress": 15,
+    "failOnDetection": true,
+    "continueOnDetection": false
+  }
+}

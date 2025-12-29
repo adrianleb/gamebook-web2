@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "name": "save_load_regression",
+    "description": "Tests save/load functionality and state round-trip. Validates that saves serialize and restore correctly.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": [],
+    "stats": {},
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "choose",
+      "description": "Make first choice",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_010",
+      "assertions": {
+        "flagsSet": ["first_choice_made"]
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "save_snapshot",
+      "description": "Save state after first choice",
+      "snapshotName": "after_first_choice"
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "description": "Make second choice",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_020",
+      "assertions": {
+        "flagsSet": ["second_choice_made"],
+        "inventoryContains": ["test_item"]
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "load_snapshot",
+      "description": "Load snapshot - should revert to state after step 1",
+      "snapshotName": "after_first_choice",
+      "assertions": {
+        "currentScene": "sc_1_0_010",
+        "flagsSet": ["first_choice_made"],
+        "flagsCleared": ["second_choice_made"],
+        "inventoryExcludes": ["test_item"]
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "choose",
+      "description": "After loading, make different choice",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_015",
+      "assertions": {
+        "flagsSet": ["alternative_path"]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_1_000"
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3
+  }
+}

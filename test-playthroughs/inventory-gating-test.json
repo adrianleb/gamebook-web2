@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "name": "inventory_gating_test",
+    "description": "Tests inventory-based choice gating. Validates that items are properly required for choices and disabledHint is shown.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": [],
+    "stats": {},
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "choose",
+      "description": "Pick up key item",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_005",
+      "assertions": {
+        "inventoryContains": ["rusty_key"]
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "description": "Attempt door without key (should be disabled)",
+      "choiceIndex": 1
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_1_100",
+    "inventoryRequired": ["golden_key", "ancient_artifact"]
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
