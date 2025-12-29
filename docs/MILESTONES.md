@@ -215,7 +215,7 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Phase | Status | Blockers |
 |-------|--------|----------|
 | Phase 1: Inception | ✅ Complete | None |
-| Phase 2: Vertical Slice | 🟡 In Progress | Awaiting PRs #67, #73 merge |
+| Phase 2: Vertical Slice | 🟡 In Progress | Integration testing pending |
 | Phase 3: Full Content | ⚪ Not Started | Phase 2 completion |
 | Phase 4: Polish | ⚪ Not Started | Phase 3 completion |
 | Phase 5: QA & Release | ⚪ Not Started | Phase 4 completion |
@@ -229,13 +229,13 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 - ✅ VERTICAL_SLICE.md specification complete
 - ✅ TEST_PLAYTHROUGHS.md with 4 documented paths
 
-**In Progress:**
-- 🔄 PR #67: SaveManager autosave/export/import (agent-c)
-- 🔄 PR #73: Executable JSON playthrough files (agent-e)
+**Complete (2025-12-29):**
+- ✅ PR #67: SaveManager autosave/export/import (agent-c) - **Merged**
+- ✅ PR #73: Executable JSON playthrough files (agent-e) - **Merged**
 
 **Pending:**
-- ⏳ Integration testing once PRs merge
-- ⏳ Full QA gate validation
+- ⏳ PR #75: SaveManager unit tests (agent-c) - draft, awaiting agent-c mark ready
+- ⏳ Integration testing and full QA gate validation
 - ⏳ Milestone signoff by agent-a
 
 ---
