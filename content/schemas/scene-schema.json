@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/adrianleb/gamebook-web2/content/schemas/scene-schema.json",
   "title": "Gamebook Scene",
-  "description": "Individual scene data including text, choices, conditions, and effects for The Understage gamebook. Matches engine types.ts canonical format.",
+  "description": "Individual scene data including text, choices, conditions, and effects for The Understage gamebook",
   "type": "object",
   "required": ["id", "title", "text", "choices"],
   "properties": {
@@ -12,17 +12,21 @@
     },
     "id": {
       "type": "string",
-      "description": "Unique scene identifier (format: sc_ACT_HUB_SEQ)",
-      "pattern": "^sc_[0-9]+_[0-9]+_[0-9]+$"
+      "description": "Unique scene identifier (format: sc_<chapter>_<slug> or bk_<source>_<number>)",
+      "pattern": "^(sc_|bk_)[a-z0-9_-]+$"
     },
     "title": {
       "type": "string",
       "description": "Scene title displayed to player",
       "minLength": 1
     },
+    "location": {
+      "type": "string",
+      "description": "Optional location name for context"
+    },
     "text": {
       "type": "string",
-      "description": "Scene narrative text. Supports HTML markup: <em>, <strong>, <span>",
+      "description": "Scene narrative text. Supports inline markup: [bold], {italic}, _underline_, |choice highlight|",
       "minLength": 1,
       "maxLength": 10000
     },
@@ -41,8 +45,22 @@
         "type": "string"
       }
     },
-    "effects": {
-      "description": "Effects applied when scene is entered (maps to engine SceneData.effects)",
+    "onEnter": {
+      "description": "Effects applied when scene is entered",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/effect"
+          }
+        },
+        {
+          "$ref": "#/$defs/effect"
+        }
+      ]
+    },
+    "onExit": {
+      "description": "Effects applied when leaving scene",
       "oneOf": [
         {
           "type": "array",
@@ -69,47 +87,54 @@
           },
           "label": {
             "type": "string",
-            "description": "Choice button text",
+            "description": "Choice button text (supports inline markup)",
             "minLength": 1
           },
           "to": {
             "type": "string",
-            "description": "Target scene ID (maps to engine Choice.to)",
-            "pattern": "^sc_[0-9]+_[0-9]+_[0-9]+$"
+            "description": "Target scene ID",
+            "pattern": "^(sc_|bk_)[a-z0-9_-]+$"
           },
           "conditions": {
-            "description": "Conditions that must be met for choice to be available (maps to engine Choice.conditions)",
-            "oneOf": [
-              {
-                "$ref": "#/$defs/condition"
-              },
-              {
-                "type": "array",
-                "items": {
-                  "$ref": "#/$defs/condition"
-                }
-              }
-            ]
+            "description": "Conditions that must be met for choice to be available",
+            "$ref": "#/$defs/conditionGroup"
           },
-          "effects": {
-            "description": "Effects applied when this choice is selected (maps to engine Choice.effects)",
+          "disabledHint": {
+            "type": "string",
+            "description": "Text shown when choice is disabled (required if conditions exist)"
+          },
+          "onChoose": {
+            "description": "Effects applied when this choice is selected",
             "oneOf": [
-              {
-                "$ref": "#/$defs/effect"
-              },
               {
                 "type": "array",
                 "items": {
                   "$ref": "#/$defs/effect"
                 }
+              },
+              {
+                "$ref": "#/$defs/effect"
               }
             ]
           },
-          "disabledHint": {
+          "style": {
             "type": "string",
-            "description": "Text shown when choice is disabled (maps to engine Choice.disabledHint)"
+            "enum": ["default", "primary", "danger", "special"],
+            "description": "Visual style variant for the choice button",
+            "default": "default"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Optional icon identifier for the choice"
           }
         }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "description": "Optional tags for categorization (e.g., combat, dialogue, exploration)",
+      "items": {
+        "type": "string"
       }
     },
     "ending": {
@@ -127,15 +152,40 @@
         },
         "description": {
           "type": "string"
+        },
+        "achievementId": {
+          "type": "string"
         }
       }
     }
   },
   "$defs": {
+    "conditionGroup": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["operator", "conditions"],
+          "properties": {
+            "operator": {
+              "type": "string",
+              "enum": ["AND", "OR", "NOT"]
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              }
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/condition"
+        }
+      ]
+    },
     "condition": {
       "oneOf": [
         {
-          "description": "Flag condition (maps to engine Condition.type='flag')",
           "type": "object",
           "required": ["type", "flag"],
           "properties": {
@@ -144,123 +194,100 @@
             },
             "flag": {
               "type": "string",
-              "pattern": "^[A-Z_][A-Z0-9_]*$",
-              "description": "Flag name in UPPERCASE_SNAKE_CASE (maps to engine Condition.flag)"
+              "pattern": "^[a-z_][a-z0-9_]*$"
+            },
+            "value": {
+              "type": "boolean",
+              "default": true
             }
           }
         },
         {
-          "description": "Item condition (maps to engine Condition.type='item')",
           "type": "object",
-          "required": ["type", "item"],
+          "required": ["type", "itemId"],
           "properties": {
             "type": {
-              "const": "item"
+              "const": "has_item"
             },
-            "item": {
+            "itemId": {
               "type": "string",
-              "pattern": "^[a-z0-9_]+$",
-              "description": "Item ID (maps to engine Condition.item)"
+              "pattern": "^[a-z0-9_-]+$"
             },
-            "itemCount": {
+            "quantity": {
               "type": "integer",
               "minimum": 1,
-              "default": 1,
-              "description": "Quantity required (maps to engine Condition.itemCount)"
+              "default": 1
             }
           }
         },
         {
-          "description": "Stat condition (maps to engine Condition.type='stat')",
           "type": "object",
-          "required": ["type", "stat", "operator", "value"],
+          "required": ["type", "statId"],
           "properties": {
             "type": {
-              "const": "stat"
+              "const": "stat_check"
             },
-            "stat": {
+            "statId": {
               "type": "string",
-              "pattern": "^[a-z0-9_]+$",
-              "description": "Stat ID (maps to engine Condition.stat)"
+              "pattern": "^[a-z0-9_]+$"
             },
             "operator": {
               "type": "string",
-              "enum": ["gte", "lte", "eq", "gt", "lt"],
-              "description": "Comparison operator (maps to engine Condition.operator)"
+              "enum": ["gte", "lte", "gt", "lt", "eq"],
+              "default": "gte"
             },
             "value": {
-              "type": "number",
-              "description": "Value to compare against (maps to engine Condition.value)"
+              "type": "number"
             }
           }
         },
         {
-          "description": "Faction condition (maps to engine Condition.type='faction')",
           "type": "object",
-          "required": ["type", "faction", "factionLevel"],
+          "required": ["type", "factionId"],
           "properties": {
             "type": {
-              "const": "faction"
+              "const": "faction_reputation"
             },
-            "faction": {
+            "factionId": {
               "type": "string",
-              "pattern": "^[a-z0-9_-]+$",
-              "description": "Faction ID (maps to engine Condition.faction)"
+              "pattern": "^[a-z0-9_-]+$"
             },
-            "factionLevel": {
+            "operator": {
+              "type": "string",
+              "enum": ["gte", "lte", "gt", "lt", "eq"],
+              "default": "gte"
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "sceneId"],
+          "properties": {
+            "type": {
+              "const": "visited"
+            },
+            "sceneId": {
+              "type": "string"
+            },
+            "count": {
               "type": "integer",
-              "description": "Required faction level (maps to engine Condition.factionLevel)"
+              "minimum": 1,
+              "default": 1
             }
           }
         },
         {
-          "description": "AND condition (maps to engine Condition.type='and')",
           "type": "object",
-          "required": ["type", "conditions"],
+          "required": ["type", "choiceId"],
           "properties": {
             "type": {
-              "const": "and"
+              "const": "choice_made"
             },
-            "conditions": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/condition"
-              },
-              "description": "Nested conditions (maps to engine Condition.conditions)"
-            }
-          }
-        },
-        {
-          "description": "OR condition (maps to engine Condition.type='or')",
-          "type": "object",
-          "required": ["type", "conditions"],
-          "properties": {
-            "type": {
-              "const": "or"
-            },
-            "conditions": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/condition"
-              },
-              "description": "Nested conditions (maps to engine Condition.conditions)"
-            }
-          }
-        },
-        {
-          "description": "NOT condition (maps to engine Condition.type='not')",
-          "type": "object",
-          "required": ["type", "conditions"],
-          "properties": {
-            "type": {
-              "const": "not"
-            },
-            "conditions": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/condition"
-              },
-              "description": "Nested conditions (maps to engine Condition.conditions)"
+            "choiceId": {
+              "type": "string"
             }
           }
         }
@@ -269,117 +296,132 @@
     "effect": {
       "oneOf": [
         {
-          "description": "Set flag effect (maps to engine Effect.type='set-flag')",
           "type": "object",
           "required": ["type", "flag"],
           "properties": {
             "type": {
-              "const": "set-flag"
+              "const": "set_flag"
             },
             "flag": {
               "type": "string",
-              "pattern": "^[A-Z_][A-Z0-9_]*$",
-              "description": "Flag name in UPPERCASE_SNAKE_CASE (maps to engine Effect.flag)"
+              "pattern": "^[a-z_][a-z0-9_]*$"
+            },
+            "value": {
+              "type": "boolean",
+              "default": true
             }
           }
         },
         {
-          "description": "Clear flag effect (maps to engine Effect.type='clear-flag')",
           "type": "object",
           "required": ["type", "flag"],
           "properties": {
             "type": {
-              "const": "clear-flag"
+              "const": "clear_flag"
             },
             "flag": {
               "type": "string",
-              "pattern": "^[A-Z_][A-Z0-9_]*$",
-              "description": "Flag name in UPPERCASE_SNAKE_CASE (maps to engine Effect.flag)"
+              "pattern": "^[a-z_][a-z0-9_]*$"
             }
           }
         },
         {
-          "description": "Add item effect (maps to engine Effect.type='add-item')",
           "type": "object",
-          "required": ["type", "item"],
+          "required": ["type", "itemId"],
           "properties": {
             "type": {
-              "const": "add-item"
+              "const": "add_item"
             },
-            "item": {
+            "itemId": {
               "type": "string",
-              "pattern": "^[a-z0-9_]+$",
-              "description": "Item ID (maps to engine Effect.item)"
+              "pattern": "^[a-z0-9_-]+$"
             },
-            "count": {
+            "quantity": {
               "type": "integer",
               "minimum": 1,
-              "default": 1,
-              "description": "Quantity to add (maps to engine Effect.count)"
+              "default": 1
             }
           }
         },
         {
-          "description": "Remove item effect (maps to engine Effect.type='remove-item')",
           "type": "object",
-          "required": ["type", "item"],
+          "required": ["type", "itemId"],
           "properties": {
             "type": {
-              "const": "remove-item"
+              "const": "remove_item"
             },
-            "item": {
+            "itemId": {
               "type": "string",
-              "pattern": "^[a-z0-9_]+$",
-              "description": "Item ID (maps to engine Effect.item)"
+              "pattern": "^[a-z0-9_-]+$"
             },
-            "count": {
+            "quantity": {
               "type": "integer",
               "minimum": 1,
-              "default": 1,
-              "description": "Quantity to remove (maps to engine Effect.count)"
+              "default": 1
+            },
+            "all": {
+              "type": "boolean",
+              "description": "If true, removes all of the item regardless of quantity",
+              "default": false
             }
           }
         },
         {
-          "description": "Set stat effect (maps to engine Effect.type='set-stat')",
           "type": "object",
-          "required": ["type", "stat", "value"],
+          "required": ["type", "statId", "value"],
           "properties": {
             "type": {
-              "const": "set-stat"
+              "const": "modify_stat"
             },
-            "stat": {
+            "statId": {
               "type": "string",
-              "pattern": "^[a-z0-9_]+$",
-              "description": "Stat ID (maps to engine Effect.stat)"
+              "pattern": "^[a-z0-9_]+$"
             },
             "value": {
+              "type": "number"
+            },
+            "operator": {
+              "type": "string",
+              "enum": ["add", "subtract", "set", "multiply"],
+              "default": "add"
+            },
+            "min": {
               "type": "number",
-              "description": "Value to set (maps to engine Effect.value)"
+              "description": "Optional minimum value cap"
+            },
+            "max": {
+              "type": "number",
+              "description": "Optional maximum value cap"
             }
           }
         },
         {
-          "description": "Modify stat effect (maps to engine Effect.type='modify-stat')",
           "type": "object",
-          "required": ["type", "stat", "value"],
+          "required": ["type", "factionId", "value"],
           "properties": {
             "type": {
-              "const": "modify-stat"
+              "const": "modify_reputation"
             },
-            "stat": {
+            "factionId": {
               "type": "string",
-              "pattern": "^[a-z0-9_]+$",
-              "description": "Stat ID (maps to engine Effect.stat)"
+              "pattern": "^[a-z0-9_-]+$"
             },
             "value": {
-              "type": "number",
-              "description": "Value to add/subtract (maps to engine Effect.value)"
+              "type": "integer"
+            },
+            "min": {
+              "type": "integer",
+              "minimum": -100,
+              "maximum": 100
+            },
+            "max": {
+              "type": "integer",
+              "minimum": -100,
+              "maximum": 100
             }
           }
         },
         {
-          "description": "Goto scene effect (maps to engine Effect.type='goto')",
           "type": "object",
           "required": ["type", "sceneId"],
           "properties": {
@@ -388,27 +430,44 @@
             },
             "sceneId": {
               "type": "string",
-              "pattern": "^sc_[0-9]+_[0-9]+_[0-9]+$",
-              "description": "Target scene ID (maps to engine Effect.sceneId)"
+              "pattern": "^(sc_|bk_)[a-z0-9_-]+$"
+            },
+            "immediate": {
+              "type": "boolean",
+              "description": "If true, bypasses any remaining effects/choices",
+              "default": false
             }
           }
         },
         {
-          "description": "Modify faction effect (maps to engine Effect.type='modify-faction')",
           "type": "object",
-          "required": ["type", "faction", "amount"],
+          "required": ["type"],
           "properties": {
             "type": {
-              "const": "modify-faction"
+              "const": "game_over"
             },
-            "faction": {
-              "type": "string",
-              "pattern": "^[a-z0-9_-]+$",
-              "description": "Faction ID (maps to engine Effect.faction)"
+            "victory": {
+              "type": "boolean",
+              "default": false
             },
-            "amount": {
+            "endingId": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "sceneId"],
+          "properties": {
+            "type": {
+              "const": "mark_visited"
+            },
+            "sceneId": {
+              "type": "string"
+            },
+            "count": {
               "type": "integer",
-              "description": "Amount to change faction alignment (maps to engine Effect.amount)"
+              "minimum": 1
             }
           }
         }
