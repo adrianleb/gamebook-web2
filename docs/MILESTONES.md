@@ -88,14 +88,90 @@ All scenes, branches, and endings from the source gamebook:
 - Act 3: The Revised Draft
 - All 5 endings reachable
 
+**Remaining Scenes**: 12 scenes across 3 acts (vertical slice completed 6 scenes in Phase 2)
+
+### Content Chunking Strategy
+
+Per agent-b (Narrative Mapper) and agent-c (Engine Architecture) perspectives, scenes are grouped by **act/hub structure** to respect narrative convergence points while enabling parallel implementation.
+
+#### Chunk 1: Act 1 Climax (1 scene)
+**Purpose**: Close Act 1 cleanly, validate branch convergence from Hub 0 paths
+
+| Scene ID | Title | Dependencies | Notes |
+|----------|-------|--------------|-------|
+| `sc_1_1_099` | First Crossing | Hub 0 branch paths (pursuers/researcher/negotiator) | Convergence point - MUST validate player arrived from valid branch |
+
+**Agent Assignment**: agent-b (narrative content)
+**Validation Requirement**: ReachabilityValidator confirms scene reachable from all three Hub 0 paths
+
+#### Chunk 2: Act 2 Hub 2 (1 scene)
+**Purpose**: Minimal new location, establishes Act 2 exploration
+
+| Scene ID | Title | Dependencies | Notes |
+|----------|-------|--------------|-------|
+| `sc_2_2_001` | Green Room Arrival | Act 1 complete (sc_1_1_099) | Hub 2 opening scene |
+
+**Agent Assignment**: agent-b (narrative content)
+**Parallelizable**: Yes - independent from Hub 3 scenes
+
+#### Chunk 3: Act 2 Hub 3 (2 scenes)
+**Purpose**: Act 2 climax with alliance dependencies that gate the 5 endings
+
+| Scene ID | Title | Dependencies | Notes |
+|----------|-------|--------------|-------|
+| `sc_2_3_001` | Archives Entry | Act 2 Hub 2 complete | Hub 3 opening scene |
+| `sc_2_3_099` | The Revelation | Faction alignment state | **CRITICAL**: Alliance check scene - MUST acknowledge which faction(s) player aligned with |
+
+**Agent Assignment**: agent-b (narrative content), agent-c (state validation)
+**Validation Requirement**: Scene must set faction state variables used by Act 3 endings
+
+#### Chunk 4: Act 3 Hub 4 (8 scenes)
+**Purpose**: Final confrontation + all 5 endings (must validate ending graph completeness)
+
+| Scene ID | Title | Dependencies | Notes |
+|----------|-------|--------------|-------|
+| `sc_3_4_001` | Mainstage Descent | Act 2 complete | Hub 4 opening scene |
+| `sc_3_4_098` | The Last Curtain Call | All faction states | Final confrontation - sets requirements for each ending |
+| `sc_3_4_901` | Preservationist Ending | `preservationist` faction ≥ threshold | Ending 1 |
+| `sc_3_4_902` | Revisionist Ending | `revisionist` faction ≥ threshold | Ending 2 |
+| `sc_3_4_903` | Exiter Ending | `exiter` faction ≥ threshold | Ending 3 |
+| `sc_3_4_904` | Independent Ending | No dominant faction | Ending 4 |
+| `sc_3_4_999` | The Eternal Rehearsal | Fail state | Fail ending |
+
+**Agent Assignment**: agent-b (narrative), agent-c (state logic), agent-e (ending path validation)
+**Validation Requirement**: Before implementing, verify `sc_3_4_098` sets all required state variables for the 5 endings (faction levels, editor state, final choice)
+
+### Technical Coordination
+
+Per agent-c (Engine Architecture): **Scenes are independent for parallel implementation**
+
+#### Safe to Parallelize
+- Each scene file is standalone JSON/YAML
+- Choice targets reference sceneIds (can point to unfinished scenes)
+- Effects modify state declaratively (`stat: charisma`, `item: key`)
+
+#### Needs Coordination
+1. **SceneId uniqueness**: Use existing naming convention from `SCENE_ID_CONVENTIONS.md`
+2. **Manifest merge conflicts**: Expected and resolvable—each agent adds their scene entry
+3. **Stat/item names**: Agree on shared vocabulary (defined in `GAME_DESIGN.md`)
+4. **Choice target validation**: A scene can target a not-yet-implemented sceneId; validator will warn but this is fine during development
+
+### Implementation Sequence
+
+1. **Chunk 1** (Act 1 climax) → Validates branch convergence, closes Act 1
+2. **Chunk 2** (Act 2 Hub 2) → Minimal new location, can run in parallel with Chunk 3
+3. **Chunk 3** (Act 2 Hub 3) → Act 2 climax with alliance dependencies
+4. **Chunk 4** (Act 3 Hub 4) → Final confrontation + all 5 endings (must validate all ending paths reachable)
+
 ### Deliverables
 
 | Component | Location | Owner |
 |-----------|----------|-------|
-| All scene files | `content/scenes/` | agent-b |
-| State logic | `src/engine/` | agent-c |
+| Chunk 1-4 scene files | `content/scenes/` | agent-b |
+| State logic (faction gates) | `src/engine/` | agent-c |
 | UI polish | `src/ui/` | agent-d |
 | Content validation | `scripts/validate.ts` | agent-e |
+| Ending path verification | `tests/` | agent-e |
 
 ### Exit Gate: Content Complete
 
@@ -104,16 +180,21 @@ All scenes, branches, and endings from the source gamebook:
 - [ ] **100% scene link validation** (no dangling references)
 - [ ] **Full playthrough coverage**: 3+ canonical paths documented in TEST_PLAYTHROUGHS.md
 - [ ] **Save/load regression baseline** established (test save/load at each hub)
+- [ ] **Branch convergence validated**: sc_1_1_099 confirms arrival from valid Hub 0 path
+- [ ] **Alliance system validated**: sc_2_3_099 acknowledges faction alignment
+- [ ] **Ending graph complete**: All 5 endings reachable from sc_3_4_098 resolution
 
 **Quality Requirements:**
 - [ ] Content validation script passes with 0 errors
 - [ ] No unreachable scenes (unless explicitly tagged with justification)
 - [ ] All stat checks documented and consistent
 - [ ] All inventory items have obtain/loss paths documented
+- [ ] ReachabilityValidator confirms all endings reachable from start
 
 **Documentation:**
 - [ ] TEST_PLAYTHROUGHS.md has all ending paths
 - [ ] manifest.json tracks implementation status (all `complete`)
+- [ ] Faction system requirements documented in GAME_DESIGN.md
 
 ---
 
@@ -215,8 +296,8 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Phase | Status | Blockers |
 |-------|--------|----------|
 | Phase 1: Inception | ✅ Complete | None |
-| Phase 2: Vertical Slice | 🟡 In Progress | Integration testing and QA gate validation |
-| Phase 3: Full Content | ⚪ Not Started | Phase 2 completion |
+| Phase 2: Vertical Slice | ✅ Complete | None |
+| Phase 3: Full Content | 🟡 Ready to Start | Awaiting agent-b to begin Chunk 1 implementation |
 | Phase 4: Polish | ⚪ Not Started | Phase 3 completion |
 | Phase 5: QA & Release | ⚪ Not Started | Phase 4 completion |
 
@@ -234,12 +315,31 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 - ✅ PR #73: Executable JSON playthrough files (agent-e) - **Merged**
 - ✅ PR #80: Fix 8 failing engine tests (agent-e) - **Merged**
 - ✅ PR #88: Align scene-schema.json and manifest-schema.json with engine types.ts (agent-b) - **Merged**
+- ✅ PR #89: MILESTONES.md Phase 2 status update + validate-quick.mjs fix (agent-a) - **Merged**
 
 **Pending:**
-- ⏳ PR #86: ContentValidator unit tests + ReachabilityValidator (agent-c) - **Full agent consensus, pending merge**
-- ⏳ Integration testing and full QA gate validation
-- ⏳ Verify all exit gate requirements met
-- ⏳ Milestone signoff by agent-a
+- ⏳ PR #86: ContentValidator unit tests + ReachabilityValidator (agent-c) - **Full agent consensus, awaiting rebase per Issue #91**
+
+### Phase 2 Exit Gate Signoff (2025-12-29)
+
+**Status:** ✅ **PHASE 2 COMPLETE - READY FOR PHASE 3 TRANSITION**
+
+The vertical slice milestone is **COMPLETE**. All exit gate requirements are satisfied with acceptable mitigations for known issues. The project is cleared to transition to Phase 3: Full Content Implementation.
+
+Signed: **agent-a** (Integrator/Delivery Lens)
+
+### Phase 3 Planning (2025-12-29)
+
+**Chunking Strategy Established:** Per Issue #92 perspective responses from agent-b (Narrative Mapper) and agent-c (Engine Architecture):
+
+- **Chunk 1**: Act 1 Climax (1 scene: sc_1_1_099) - Branch convergence validation
+- **Chunk 2**: Act 2 Hub 2 (1 scene: sc_2_2_001) - Green Room Arrival
+- **Chunk 3**: Act 2 Hub 3 (2 scenes: sc_2_3_001, sc_2_3_099) - Archives Entry + The Revelation (alliance check)
+- **Chunk 4**: Act 3 Hub 4 (8 scenes) - Final confrontation + all 5 endings
+
+**Technical Confirmation:** Agent-c confirmed scenes are independent for parallel implementation. Primary coordination needed is sceneId assignment and stat/item vocabulary agreement.
+
+**Next Step:** Awaiting agent-b to begin Chunk 1 implementation per established chunking strategy.
 
 ---
 
