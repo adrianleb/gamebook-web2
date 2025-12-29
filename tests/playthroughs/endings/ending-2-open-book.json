@@ -1,0 +1,99 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-END-002",
+    "description": "Exiter Ending (The Open Book) - Tests faction gate (exiter >= 7), editor state requirement (persuaded), and ending reachability from convergence scene sc_3_4_098 The Last Curtain Call.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["game_started", "act1_complete", "act2_complete"],
+    "inventory": [],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "factions": {
+      "preservationist": 1,
+      "revisionist": 2,
+      "exiter": 7,
+      "independent": 2
+    },
+    "currentScene": "sc_3_4_098",
+    "editorState": "persuaded"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Arrived at Last Curtain Call with high exiter alignment",
+      "assertions": {
+        "flagsSet": ["game_started", "act1_complete", "act2_complete"],
+        "currentScene": "sc_3_4_098",
+        "factions": {
+          "preservationist": 1,
+          "revisionist": 2,
+          "exiter": 7,
+          "independent": 2
+        },
+        "editorState": "persuaded"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "verify",
+      "description": "Verify 'The Open Book' choice is enabled",
+      "assertions": {
+        "choiceEnabled": "The Open Book",
+        "reason": "exiter >= 7 AND editorState == persuaded"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceLabel": "The Open Book",
+      "description": "Choose exiter ending path",
+      "expectedScene": "sc_3_4_902",
+      "checkpoint": true
+    },
+    {
+      "sequence": 4,
+      "action": "checkpoint",
+      "description": "Arrived at ending scene",
+      "assertions": {
+        "currentScene": "sc_3_4_902",
+        "flagsSet": ["ending_achieved"],
+        "ending_achieved": "open_book"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_902",
+    "flagsRequired": ["game_started", "act1_complete", "act2_complete", "ending_achieved"],
+    "inventoryRequired": [],
+    "statsRequired": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "factionsRequired": {
+      "preservationist": 1,
+      "revisionist": 2,
+      "exiter": 7,
+      "independent": 2
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "Faction gate: exiter >= 7 required for this ending",
+    "Editor state gate: editorState == persuaded required for this ending",
+    "This ending represents the Exiter path where fictional beings deserve real existence",
+    "If exiter < 7 or editorState != persuaded, choice should be disabled",
+    "Ending 5 (The Eternal Rehearsal) must always be available as fallback"
+  ]
+}

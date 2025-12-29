@@ -1,0 +1,237 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-END-005",
+    "description": "Fail-State Ending (The Eternal Rehearsal) - Tests fail-state ending that is always reachable with no blocking conditions. This is the CRITICAL fallback ending that ensures players can always complete the game.",
+    "author": "agent-e",
+    "version": "1.0",
+    "variants": [
+      {
+        "id": "A",
+        "name": "Standard Fallback",
+        "description": "Tests fail ending is always enabled regardless of state"
+      },
+      {
+        "id": "B",
+        "name": "Low Faction / Wrong State",
+        "description": "Tests fail ending when all faction endings are disabled"
+      },
+      {
+        "id": "C",
+        "name": "No EditorState Set",
+        "description": "Tests fail ending when editorState is missing"
+      }
+    ]
+  },
+  "variants": {
+    "A": {
+      "meta": {
+        "variantName": "Variant A - Standard Fallback"
+      },
+      "startingState": {
+        "flags": ["game_started", "act1_complete", "act2_complete"],
+        "inventory": [],
+        "stats": {
+          "health": 10,
+          "courage": 5,
+          "insight": 3
+        },
+        "factions": {
+          "preservationist": 2,
+          "revisionist": 2,
+          "exiter": 2,
+          "independent": 2
+        },
+        "currentScene": "sc_3_4_098"
+      },
+      "steps": [
+        {
+          "sequence": 1,
+          "action": "checkpoint",
+          "description": "Arrived at Last Curtain Call",
+          "assertions": {
+            "flagsSet": ["game_started", "act1_complete", "act2_complete"],
+            "currentScene": "sc_3_4_098"
+          }
+        },
+        {
+          "sequence": 2,
+          "action": "verify",
+          "description": "Verify 'The Eternal Rehearsal' choice is enabled",
+          "assertions": {
+            "choiceEnabled": "The Eternal Rehearsal",
+            "reason": "No requirements - always enabled"
+          }
+        },
+        {
+          "sequence": 3,
+          "action": "choose",
+          "choiceLabel": "The Eternal Rehearsal",
+          "description": "Choose fail ending path",
+          "expectedScene": "sc_3_4_999",
+          "checkpoint": true
+        },
+        {
+          "sequence": 4,
+          "action": "checkpoint",
+          "description": "Arrived at fail ending scene",
+          "assertions": {
+            "currentScene": "sc_3_4_999",
+            "flagsSet": ["ending_achieved"],
+            "ending_achieved": "eternal_rehearsal"
+          }
+        }
+      ],
+      "endingCriteria": {
+        "sceneId": "sc_3_4_999",
+        "flagsRequired": ["game_started", "act1_complete", "act2_complete", "ending_achieved"],
+        "inventoryRequired": []
+      }
+    },
+    "B": {
+      "meta": {
+        "variantName": "Variant B - Low Faction / Wrong State"
+      },
+      "startingState": {
+        "flags": ["game_started", "act1_complete", "act2_complete"],
+        "inventory": [],
+        "stats": {
+          "health": 10,
+          "courage": 5,
+          "insight": 3
+        },
+        "factions": {
+          "preservationist": 2,
+          "revisionist": 3,
+          "exiter": 2,
+          "independent": 2
+        },
+        "currentScene": "sc_3_4_098",
+        "editorState": "persuaded"
+      },
+      "steps": [
+        {
+          "sequence": 1,
+          "action": "checkpoint",
+          "description": "Arrived with low faction levels (all < 7)",
+          "assertions": {
+            "currentScene": "sc_3_4_098",
+            "factions": {
+              "preservationist": 2,
+              "revisionist": 3,
+              "exiter": 2,
+              "independent": 2
+            }
+          }
+        },
+        {
+          "sequence": 2,
+          "action": "verify",
+          "description": "Verify faction endings are disabled",
+          "assertions": {
+            "allFactionChoicesDisabled": true,
+            "reason": "All factions below threshold of 7"
+          }
+        },
+        {
+          "sequence": 3,
+          "action": "verify",
+          "description": "Verify 'The Eternal Rehearsal' is enabled",
+          "assertions": {
+            "choiceEnabled": "The Eternal Rehearsal",
+            "reason": "Always enabled as fallback"
+          }
+        },
+        {
+          "sequence": 4,
+          "action": "choose",
+          "choiceLabel": "The Eternal Rehearsal",
+          "description": "Choose fail ending",
+          "expectedScene": "sc_3_4_999",
+          "checkpoint": true
+        }
+      ],
+      "endingCriteria": {
+        "sceneId": "sc_3_4_999",
+        "flagsRequired": ["ending_achieved"]
+      }
+    },
+    "C": {
+      "meta": {
+        "variantName": "Variant C - No EditorState Set"
+      },
+      "startingState": {
+        "flags": ["game_started", "act1_complete", "act2_complete"],
+        "inventory": [],
+        "stats": {
+          "health": 10,
+          "courage": 5,
+          "insight": 3
+        },
+        "factions": {
+          "preservationist": 7,
+          "revisionist": 2,
+          "exiter": 1,
+          "independent": 2
+        },
+        "currentScene": "sc_3_4_098"
+      },
+      "steps": [
+        {
+          "sequence": 1,
+          "action": "checkpoint",
+          "description": "Arrived with high preservationist but no editorState",
+          "assertions": {
+            "currentScene": "sc_3_4_098",
+            "factions": {
+              "preservationist": 7
+            }
+          }
+        },
+        {
+          "sequence": 2,
+          "action": "verify",
+          "description": "Verify faction endings are disabled",
+          "assertions": {
+            "allFactionChoicesDisabled": true,
+            "reason": "Missing required editorState"
+          }
+        },
+        {
+          "sequence": 3,
+          "action": "verify",
+          "description": "Verify 'The Eternal Rehearsal' is enabled",
+          "assertions": {
+            "choiceEnabled": "The Eternal Rehearsal",
+            "reason": "Always enabled as fallback"
+          }
+        },
+        {
+          "sequence": 4,
+          "action": "choose",
+          "choiceLabel": "The Eternal Rehearsal",
+          "description": "Choose fail ending",
+          "expectedScene": "sc_3_4_999",
+          "checkpoint": true
+        }
+      ],
+      "endingCriteria": {
+        "sceneId": "sc_3_4_999",
+        "flagsRequired": ["ending_achieved"]
+      }
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "CRITICAL: This ending MUST always be enabled - NO blocking conditions",
+    "Serves as fallback for players who don't qualify for other endings",
+    "Valid for players who refuse to make a final choice",
+    "Ensures forward progress even with invalid state combinations",
+    "If all other endings are gated, this ending prevents softlock",
+    "Per ENDING_VALIDATION.md: This is the fail-state catch-all ending"
+  ]
+}
