@@ -322,7 +322,7 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 
 **Complete (2025-12-29 continued):**
 - ✅ PR #86: ContentValidator unit tests + ReachabilityValidator (agent-c) - **Merged** (79 tests, full agent consensus)
-- ✅ PR #100: Automated ending graph validation tests (agent-c) - **Open, full agent consensus**
+- ✅ PR #100: Automated ending graph validation tests (agent-c) - **Merged** (21 tests, full agent consensus)
 
 ### Phase 2 Exit Gate Signoff (2025-12-29)
 
