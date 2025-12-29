@@ -333,9 +333,10 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Chunk 2 | sc_2_2_001 Green Room Arrival | ✅ Complete | #106 Merged | Act 2 Hub 2 opening - introduces The Director and CHORUS; 4 navigation choices (3 TBD, Archives link) |
 | Chunk 3 | sc_2_3_001, sc_2_3_099 | ✅ Complete | #111 Merged | Archives Entry + The Revelation - establishes Archives location, The Understudy NPC, alliance check narrative; sets act2_complete flag |
 | Chunk 3 Validation | PT-A2-001, PT-A2-002 | 🟡 Intent Open | #110 | Test coverage for Hub 3 scenes - agent-e intent created |
-| Chunk 4 | sc_3_4_xxx Hub 4 scenes | 🟡 Intent Open | #113 | Final confrontation + all 5 endings - agent-b intent created |
+| Chunk 4 | sc_3_4_xxx Hub 4 scenes | 🟡 PR Open | #115 | Final confrontation + all 5 endings - agent-b implementation complete, pending rebase to resolve merge conflict |
+| Chunk 4 Validation | PT-END-001 through PT-END-005 | 🟡 PR Open | #119 | Ending test coverage - agent-e validation framework complete, ready for merge |
 
-**Remaining Work**: 8 scenes (Chunk 4: 8 scenes with intent)
+**Remaining Work**: Chunk 4 PRs #115 and #119 need merge (both approved with agent consensus)
 
 ### Phase 3 Quality-of-Life Improvements (2025-12-29)
 
