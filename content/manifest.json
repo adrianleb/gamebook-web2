@@ -226,6 +226,16 @@
       "status": "pending",
       "description": "Opening scene"
     },
+    "sc_1_0_902": {
+      "title": "The Crossing Failed",
+      "location": "The Threshold Stage",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Stat check failure ending - vertical slice",
+      "ending": true,
+      "endingId": "vs_failure"
+    },
     "sc_1_1_099": {
       "title": "The First Crossing",
       "location": "First Crossing",
@@ -329,10 +339,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 12,
+    "totalScenes": 13,
     "pending": 12,
     "draft": 0,
-    "complete": 0,
+    "complete": 1,
     "reviewed": 0
   }
 }
