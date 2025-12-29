@@ -1,0 +1,52 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_003",
+  "title": "The Threshold Stage",
+  "text": "The iron door swings open with a sound like breaking bone. Beyond lies a corridor lined with mirrors—each reflecting a version of yourself you do not remember being.\n\nAt the corridor's end: a stage. The Threshold Stage. The amber light you saw from the Wings spills across worn floorboards, catching the dust motes that spiral through the air like suspended starlight.\n\nBeyond the stage's edge, darkness absolute. The Understage awaits.\n\nYou feel it—the resistance. The boundary between worlds is not easily crossed. It demands something of you. A price. A sacrifice. The courage to step into the unknown.\n\nYour heart hammers against your ribs. This is no mere stage—it is the threshold of story itself.",
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Step into the darkness (Requires Courage 5+)",
+      "to": "sc_1_0_901",
+      "conditions": {
+        "type": "stat",
+        "stat": "courage",
+        "operator": "gte",
+        "value": 5
+      },
+      "effects": [
+        {
+          "type": "set-flag",
+          "flag": "crossing_succeeded"
+        },
+        {
+          "type": "modify-faction",
+          "faction": "preservationist",
+          "amount": 1
+        }
+      ],
+      "disabledHint": "You are not yet ready to face the unknown. Requires Courage 5+."
+    },
+    {
+      "id": "choice_2",
+      "label": "Attempt the crossing (Courage < 5)",
+      "to": "sc_1_0_902",
+      "conditions": {
+        "type": "stat",
+        "stat": "courage",
+        "operator": "lt",
+        "value": 5
+      },
+      "effects": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Turn back",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "effects": [],
+      "disabledHint": null
+    }
+  ]
+}
