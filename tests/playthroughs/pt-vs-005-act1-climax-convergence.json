@@ -1,0 +1,67 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-VS-005",
+    "description": "Act 1 Climax Convergence - Tests Act 1→Act 2 transition, convergence scene from all Hub 0 paths, state flag propagation",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["game_started", "location_booth_visited"],
+    "inventory": [],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "currentScene": "sc_1_1_099"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Arrived at First Crossing - verify scene loaded and entry effects applied",
+      "assertions": {
+        "flagsSet": ["act1_complete", "first_crossing_reached"],
+        "currentScene": "sc_1_1_099",
+        "stats": {
+          "health": 10,
+          "courage": 5,
+          "insight": 3
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Cross into the Understage - Begin Act 2'",
+      "expectedScene": "sc_2_2_001",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "act1_complete", "first_crossing_reached"],
+        "currentScene": "sc_2_2_001",
+        "stats": {
+          "health": 10,
+          "courage": 5,
+          "insight": 3
+        }
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_001",
+    "flagsRequired": ["game_started", "act1_complete", "first_crossing_reached"],
+    "inventoryRequired": [],
+    "statsRequired": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

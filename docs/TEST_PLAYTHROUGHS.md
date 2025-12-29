@@ -254,6 +254,53 @@ sc_1_0_001 ─[With booth_key, courage=3]──> sc_1_0_003 ─[Courage check: F
 
 ---
 
+### PT-VS-005: Act 1 Climax Convergence
+
+**Tests:** Act 1→Act 2 transition, convergence scene from all Hub 0 paths, state flag propagation
+
+**Entry Point:** `sc_1_1_099` (The First Crossing)
+
+**Path:**
+```
+sc_1_1_099 ─[Choose: "Cross into the Understage"]──> sc_2_2_001
+```
+
+**Steps:**
+
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_1_1_099 | (Arrived from any Hub 0 path) | ✅ save_point | Scene loaded, narrative displayed |
+| 2 | sc_1_1_099 | Verify flags set on entry | ✅ mechanic_test | `act1_complete=true`, `first_crossing_reached=true` |
+| 3 | sc_1_1_099 | Choose "Cross into the Understage - Begin Act 2" | ✅ softlock_check | Choice enabled (no requirements) |
+| 4 | sc_2_2_001 | (Arrived at Green Room) | ✅ save_point | `act1_complete=true` persists, at Act 2 scene |
+
+**Final State Assertions:**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "act1_complete": true,
+    "first_crossing_reached": true
+  },
+  "inventory": [],
+  "factions": { "preservationist": 0 },
+  "current_scene": "sc_2_2_001"
+}
+```
+
+**Critical Mechanics Validated:**
+- Convergence scene accepts arrival from any Hub 0 path (`flags.requires` is empty)
+- Entry effects set flags correctly (`act1_complete`, `first_crossing_reached`)
+- Forward transition to Act 2 works (`sc_2_2_001` is valid pending scene)
+- No softlock at convergence (single forward choice always enabled)
+
+**Regression Checkpoints:** Steps 1, 2, 4
+
+**Note:** When Hub 0 branch paths (pursuers/researcher/negotiator) are implemented, this test should be expanded to verify path-specific conditional narrative acknowledging arrival route.
+
+---
+
 ## Save/Load Regression Tests
 
 These playthroughs specifically test state persistence across save/load operations.
@@ -497,6 +544,8 @@ When adding new scenes or mechanics, use this checklist:
 | crossing_succeeded | bool | Successfully crossed threshold |
 | crossing_failed | bool | Failed the crossing stat check |
 | met_maren | bool | Spoke with Maren character |
+| act1_complete | bool | Set when reaching sc_1_1_099 First Crossing (Act 1 Climax) |
+| first_crossing_reached | bool | Set when arriving at First Crossing scene |
 
 ### Inventory Items
 | Item ID | Display Name | Description |
@@ -515,6 +564,7 @@ When adding new scenes or mechanics, use this checklist:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2025-12-29 | Added PT-VS-005 (Act 1 Climax Convergence) - validates sc_1_1_099 First Crossing scene, Act 1→Act 2 transition, and new state variables (act1_complete, first_crossing_reached) |
 | 1.0 | 2025-12-29 | Initial version with vertical slice playthroughs (PT-VS-001 through PT-VS-004) |
 
 ---
