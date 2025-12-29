@@ -18,6 +18,9 @@ import type {
   SceneTextObject,
   Choice,
   Effect,
+  EffectType,
+  Condition,
+  StatOperator,
 } from './types.js';
 import { ContentValidator } from './validator.js';
 
@@ -372,12 +375,94 @@ export class SceneLoader {
   }
 
   /**
+   * Normalize condition format from content files to engine runtime format.
+   * Handles:
+   * - Single object → array wrapping
+   * - Type aliases (has_item → item, stat_check → stat)
+   * - Field name aliases (op → operator)
+   * - null/undefined → undefined
+   *
+   * @param conditions - Raw conditions from content file (may be null, object, or array)
+   * @returns Normalized conditions array or undefined
+   */
+  private normalizeConditions(conditions: unknown): Condition[] | undefined {
+    // Handle null/undefined
+    if (conditions === null || conditions === undefined) {
+      return undefined;
+    }
+
+    // Handle array of conditions
+    if (Array.isArray(conditions)) {
+      return conditions.map(c => this.normalizeCondition(c));
+    }
+
+    // Handle single condition object - wrap in array
+    if (typeof conditions === 'object') {
+      return [this.normalizeCondition(conditions as Record<string, unknown>)];
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Normalize a single condition object to engine format.
+   * Maps content file aliases to canonical engine format.
+   *
+   * @param condition - Raw condition object
+   * @returns Normalized Condition
+   */
+  private normalizeCondition(condition: Record<string, unknown>): Condition {
+    const type = String(condition.type ?? '');
+
+    // Map type aliases to canonical types
+    const typeMap: Record<string, 'stat' | 'flag' | 'item' | 'faction' | 'and' | 'or' | 'not'> = {
+      'has_item': 'item',
+      'stat_check': 'stat',
+      'flag_check': 'flag',
+      'faction_check': 'faction',
+    };
+
+    const normalizedType = typeMap[type] || type as 'stat' | 'flag' | 'item' | 'faction' | 'and' | 'or' | 'not';
+
+    const result: Condition = {
+      type: normalizedType,
+    };
+
+    // Map field aliases and copy relevant fields
+    if (normalizedType === 'stat') {
+      result.stat = String(condition.stat ?? '');
+      result.operator = (condition.op as StatOperator) ?? condition.operator as StatOperator ?? 'gte';
+      result.value = Number(condition.value ?? 0);
+    } else if (normalizedType === 'flag') {
+      result.flag = String(condition.flag ?? '');
+    } else if (normalizedType === 'item') {
+      result.item = String(condition.item ?? '');
+      result.itemCount = Number(condition.itemCount ?? condition.count ?? 1);
+    } else if (normalizedType === 'faction') {
+      result.faction = String(condition.faction ?? '');
+      result.factionLevel = Number(condition.factionLevel ?? condition.level ?? 0);
+    } else if (['and', 'or', 'not'].includes(normalizedType)) {
+      // Recursively normalize nested conditions
+      const rawNested = condition.conditions;
+      if (Array.isArray(rawNested)) {
+        result.conditions = rawNested.map(c => this.normalizeCondition(c as Record<string, unknown>));
+      } else if (typeof rawNested === 'object' && rawNested !== null) {
+        result.conditions = [this.normalizeCondition(rawNested as Record<string, unknown>)];
+      }
+    }
+
+    return result;
+  }
+
+  /**
    * Transform raw scene data to runtime SceneData format.
    * Handles:
    * - text object → string conversion
    * - effectsOnEnter → effects mapping
    * - onChoose → effects mapping in choices
    * - audio.music/audio.sfx → music/sfx flattening
+   * - condition format normalization (type aliases, field aliases, array wrapping)
+   * - effect type normalization (underscore → hyphen)
    * - ending property preservation (per agent-d for DOS UI treatment)
    *
    * @param raw - Raw scene data from JSON file
@@ -387,15 +472,16 @@ export class SceneLoader {
     // Transform text
     const text = this.transformSceneText(raw.text);
 
-    // Get effects from either effectsOnEnter or effects field
-    const effects = raw.effectsOnEnter ?? raw.effects ?? [];
+    // Get effects from either effectsOnEnter or effects field, normalize types
+    const rawEffects = raw.effectsOnEnter ?? raw.effects ?? [];
+    const effects = this.normalizeEffects(rawEffects);
 
-    // Transform choices: map onChoose to effects
+    // Transform choices: normalize conditions, normalize effects, map onChoose to effects
     const choices: Choice[] = raw.choices.map(choice => ({
       label: choice.label,
       to: choice.to,
-      conditions: choice.conditions,
-      effects: choice.effects ?? choice.onChoose,
+      conditions: this.normalizeConditions(choice.conditions),
+      effects: this.normalizeEffects(choice.effects ?? choice.onChoose),
       disabledHint: choice.disabledHint,
     }));
 
@@ -416,6 +502,44 @@ export class SceneLoader {
       requiredItems: raw.requiredItems,
       ending: raw.ending,  // Preserve ending property for DOS UI visual treatment
     };
+  }
+
+  /**
+   * Normalize effect type format from content files to engine runtime format.
+   * Maps underscore versions to hyphen versions (e.g., set_flag → set-flag).
+   *
+   * @param effects - Raw effects array (may be undefined)
+   * @returns Normalized effects array
+   */
+  private normalizeEffects(effects: unknown): Effect[] {
+    if (!effects || !Array.isArray(effects)) {
+      return [];
+    }
+
+    return effects.map(effect => {
+      if (typeof effect !== 'object' || effect === null) {
+        return effect as Effect;
+      }
+
+      const effectObj = effect as Record<string, unknown>;
+      const type = String(effectObj.type ?? '');
+
+      // Map underscore format to hyphen format
+      const typeMap: Record<string, EffectType> = {
+        'set_stat': 'set-stat',
+        'modify_stat': 'modify-stat',
+        'set_flag': 'set-flag',
+        'clear_flag': 'clear-flag',
+        'add_item': 'add-item',
+        'remove_item': 'remove-item',
+        'modify_faction': 'modify-faction',
+      };
+
+      return {
+        ...effectObj,
+        type: typeMap[type] || type as EffectType,
+      } as Effect;
+    });
   }
 
   /**

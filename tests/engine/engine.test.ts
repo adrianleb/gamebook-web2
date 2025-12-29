@@ -18,6 +18,8 @@ import type {
 
 /**
  * Mock manifest for testing.
+ * Note: Actual scene files may reference additional scenes (e.g., sc_1_0_004),
+ * so this manifest includes entries for those to avoid validation errors.
  */
 const mockManifest: GameManifest = {
   gamebook: {
@@ -28,7 +30,7 @@ const mockManifest: GameManifest = {
   },
   structure: {
     acts: 1,
-    totalNodesEstimated: 3,
+    totalNodesEstimated: 4,
     endings: 0,
   },
   startingScene: 'sc_1_0_001',
@@ -59,12 +61,20 @@ const mockManifest: GameManifest = {
       status: 'complete',
       description: 'Third scene',
     },
+    sc_1_0_004: {
+      title: 'Scene 4',
+      location: 'Test',
+      act: 1,
+      hub: 0,
+      status: 'complete',
+      description: 'Fourth scene (Maren)',
+    },
   },
   implementationStatus: {
-    totalScenes: 3,
+    totalScenes: 4,
     pending: 0,
     draft: 0,
-    complete: 3,
+    complete: 4,
     reviewed: 0,
   },
 };
@@ -135,7 +145,7 @@ describe('Engine Core', () => {
   let engine: Engine;
 
   beforeEach(async () => {
-    engine = createTestEngine(mockManifest, { cacheScenes: false });
+    engine = createTestEngine(mockManifest, { cacheScenes: true });
 
     // Mock the scene loader to return our test scenes
     const loader = engine.getLoader();
