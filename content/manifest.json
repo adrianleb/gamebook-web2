@@ -297,17 +297,18 @@
       "location": "The Archives",
       "act": 2,
       "hub": 3,
-      "status": "pending",
-      "description": "Hub 3 opening"
+      "status": "draft",
+      "description": "Hub 3 opening - First drafts, cut scenes, abandoned stories",
+      "mechanics": ["hub_opening", "discovery", "mystery"]
     },
     "sc_2_3_099": {
       "title": "The Revelation",
       "location": "The Archives",
       "act": 2,
       "hub": 3,
-      "status": "pending",
-      "description": "Act 2 Climax - Discover the Editor's plan",
-      "mechanics": ["discovery_chain", "alliance_check"]
+      "status": "draft",
+      "description": "Act 2 Climax - Discover the Editor's Great Revision plan",
+      "mechanics": ["discovery_chain", "alliance_check", "act_transition"]
     },
     "sc_3_4_001": {
       "title": "Mainstage Descent",
@@ -379,8 +380,8 @@
   },
   "implementationStatus": {
     "totalScenes": 18,
-    "pending": 10,
-    "draft": 2,
+    "pending": 8,
+    "draft": 4,
     "complete": 6,
     "reviewed": 0
   }

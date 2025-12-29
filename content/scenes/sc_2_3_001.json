@@ -1,0 +1,106 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_3_001",
+  "title": "The Archives Entry",
+  "act": 2,
+  "hub": 3,
+  "location": "The Archives",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["hub_opening", "discovery", "mystery"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The Archives",
+    "paragraphs": [
+      "The passage from the Green Room leads downward, spiraling into depths that feel older than stories themselves.",
+      "You emerge into a vast cathedral of forgotten narratives. Towering shelves stretch into darkness beyond what light should reach, each packed with manuscripts in various states of completion—first drafts with crossed-out passages, scenes abandoned mid-sentence, characters whose stories were never finished.",
+      "The air smells of ink dust and dried time. Here and there, pages drift like snow, catching on invisible currents. Some contain only fragments: a name, a line of dialogue, a description of a room that exists in no completed work.",
+      "A figure sits at a desk that seems to grown from the floor itself, surrounded by towers of loose parchment. They wear a costume that changes subtly each time you glance at it—a herald's tabard, a servant's uniform, a background extra's street clothes. The Understudy, guardian of what might have been.",
+      "They look up, and for a moment you see every role they've never played reflected in their eyes.",
+      "\"Another Prompter, come to browse the ruins.\" Their voice holds quiet dignity. \"Welcome to the Archives. Here we keep what the Editor discarded. First drafts, cut scenes, characters written out before their time. The ghosts of stories that could have been.\"",
+      "The Understudy gestures to the labyrinth around you. \"Seek what you will. The Stacks hold every version of every story. The Prop Room contains items from narratives that no longer exist. But beware the Author's Desk—it waits at the heart of the Archives, and those who visit it too often lose themselves in what they find.\"",
+      "A rustling sound echoes through the shelves, like pages turning in a wind that shouldn't exist.",
+      "\"Something stirs in the Archives,\" the Understudy says softly. \"The Editor's work extends beyond what you've seen. Disturbances grow. Abandoned stories are... waking up. Choose your path carefully, Prompter. Not every fragment deserves to be remembered.\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "A shapeshifting guardian of abandoned narratives, wearing costumes of roles never played",
+      "role": "archive_guide"
+    },
+    {
+      "id": "lost_pages",
+      "name": "Lost Pages",
+      "description": "Fragmentary remains of abandoned stories that drift through the Archives like restless ghosts",
+      "role": "ambient_hazard"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "archives_ambient",
+    "sfx": ["page_rustle", "distant_quill"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "archives_reached"
+    },
+    {
+      "type": "set_flag",
+      "flag": "act2_hub3_started"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Speak with The Understudy about abandoned stories",
+      "to": "sc_2_3_002",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Explore The Stacks (search for clues)",
+      "to": "sc_2_3_010",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Visit The Prop Room (items from lost stories)",
+      "to": "sc_2_3_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "Approach The Author's Desk",
+      "to": "sc_2_3_050",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_5",
+      "label": "Return to the Green Room",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["archives_reached", "act2_hub3_started"],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}
