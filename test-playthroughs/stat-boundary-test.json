@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "name": "stat_boundary_test",
+    "description": "Tests stat check boundaries. Validates that stat gates work correctly at pass/fail thresholds.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": [],
+    "stats": {
+      "script": 7
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify starting stat value",
+      "assertions": {
+        "stats": {
+          "script": 7
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "description": "Pass stat check (script >= 7)",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_success",
+      "assertions": {
+        "flagsSet": ["stat_check_passed"]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_0_100"
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3
+  }
+}

@@ -77,3 +77,26 @@ export type { SceneLoaderOptions } from './scene-loader.js';
 
 // Validator
 export { ContentValidator, contentValidator } from './validator.js';
+
+// Headless runner
+export { HeadlessRunner } from './headless-runner.js';
+export type {
+  PlaythroughScript,
+  PlaythroughMeta,
+  StartingState,
+  PlaythroughStep,
+  PlaythroughAction,
+  ChooseStep,
+  CheckpointStep,
+  SaveSnapshotStep,
+  LoadSnapshotStep,
+  StateAssertions,
+  EndingCriteria,
+  SoftlockConfig,
+  SoftlockResult,
+  StateSnapshot,
+  PlaythroughResult,
+  PlaythroughSummary,
+  CliCommand,
+  CliOptions,
+} from './headless-types.js';

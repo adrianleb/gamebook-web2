@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "name": "softlock_scenarios",
+    "description": "Intentional softlock tests. Validates softlock detection catches various deadlock scenarios.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": [],
+    "stats": {},
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "choose",
+      "description": "Enter potential loop area",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_loop_a"
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "description": "Return to previous scene (revisit 1)",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_001"
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "description": "Enter loop again (revisit 2)",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_loop_a"
+    },
+    {
+      "sequence": 4,
+      "action": "checkpoint",
+      "description": "Checkpoint at loop entry",
+      "assertions": {
+        "visitedCount": {
+          "sc_1_0_loop_a": 2
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "choose",
+      "description": "Return again (revisit 3)",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_001"
+    },
+    {
+      "sequence": 6,
+      "action": "choose",
+      "description": "Enter loop third time (revisit 3 - should trigger softlock)",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_loop_a"
+    }
+  ],
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 2,
+    "failOnDetection": false,
+    "continueOnDetection": true
+  }
+}
