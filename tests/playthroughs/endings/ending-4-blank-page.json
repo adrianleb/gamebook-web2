@@ -1,0 +1,100 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-END-004",
+    "description": "Independent Ending (The Blank Page) - Tests independent path (no faction threshold), editor state requirement (revealedTruth), and ending reachability from convergence scene sc_3_4_098 The Last Curtain Call.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["game_started", "act1_complete", "act2_complete"],
+    "inventory": [],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "factions": {
+      "preservationist": 3,
+      "revisionist": 3,
+      "exiter": 3,
+      "independent": 4
+    },
+    "currentScene": "sc_3_4_098",
+    "editorState": "revealedTruth"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Arrived at Last Curtain Call with balanced faction state",
+      "assertions": {
+        "flagsSet": ["game_started", "act1_complete", "act2_complete"],
+        "currentScene": "sc_3_4_098",
+        "factions": {
+          "preservationist": 3,
+          "revisionist": 3,
+          "exiter": 3,
+          "independent": 4
+        },
+        "editorState": "revealedTruth"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "verify",
+      "description": "Verify 'The Blank Page' choice is enabled",
+      "assertions": {
+        "choiceEnabled": "The Blank Page",
+        "reason": "editorState == revealedTruth (no faction gate)"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceLabel": "The Blank Page",
+      "description": "Choose independent ending path",
+      "expectedScene": "sc_3_4_904",
+      "checkpoint": true
+    },
+    {
+      "sequence": 4,
+      "action": "checkpoint",
+      "description": "Arrived at ending scene",
+      "assertions": {
+        "currentScene": "sc_3_4_904",
+        "flagsSet": ["ending_achieved"],
+        "ending_achieved": "blank_page"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_904",
+    "flagsRequired": ["game_started", "act1_complete", "act2_complete", "ending_achieved"],
+    "inventoryRequired": [],
+    "statsRequired": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "factionsRequired": {
+      "preservationist": 3,
+      "revisionist": 3,
+      "exiter": 3,
+      "independent": 4
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "No faction gate: This ending is available regardless of faction levels",
+    "Editor state gate: editorState == revealedTruth required for this ending",
+    "This ending represents the Independent/balance path with no dominant alliance",
+    "If editorState != revealedTruth, choice should be disabled",
+    "Faction values are balanced (all <= 5) representing no strong alignment",
+    "Ending 5 (The Eternal Rehearsal) must always be available as fallback"
+  ]
+}

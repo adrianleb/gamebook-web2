@@ -1,0 +1,99 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-END-001",
+    "description": "Revisionist Ending (The Revised Draft) - Tests faction gate (revisionist >= 7), editor state requirement (defeated), and ending reachability from convergence scene sc_3_4_098 The Last Curtain Call.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["game_started", "act1_complete", "act2_complete"],
+    "inventory": [],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "factions": {
+      "preservationist": 2,
+      "revisionist": 7,
+      "exiter": 1,
+      "independent": 2
+    },
+    "currentScene": "sc_3_4_098",
+    "editorState": "defeated"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Arrived at Last Curtain Call with high revisionist alignment",
+      "assertions": {
+        "flagsSet": ["game_started", "act1_complete", "act2_complete"],
+        "currentScene": "sc_3_4_098",
+        "factions": {
+          "preservationist": 2,
+          "revisionist": 7,
+          "exiter": 1,
+          "independent": 2
+        },
+        "editorState": "defeated"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "verify",
+      "description": "Verify 'The Revised Draft' choice is enabled",
+      "assertions": {
+        "choiceEnabled": "The Revised Draft",
+        "reason": "revisionist >= 7 AND editorState == defeated"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceLabel": "The Revised Draft",
+      "description": "Choose revisionist ending path",
+      "expectedScene": "sc_3_4_901",
+      "checkpoint": true
+    },
+    {
+      "sequence": 4,
+      "action": "checkpoint",
+      "description": "Arrived at ending scene",
+      "assertions": {
+        "currentScene": "sc_3_4_901",
+        "flagsSet": ["ending_achieved"],
+        "ending_achieved": "revised_draft"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_901",
+    "flagsRequired": ["game_started", "act1_complete", "act2_complete", "ending_achieved"],
+    "inventoryRequired": [],
+    "statsRequired": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "factionsRequired": {
+      "preservationist": 2,
+      "revisionist": 7,
+      "exiter": 1,
+      "independent": 2
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "Faction gate: revisionist >= 7 required for this ending",
+    "Editor state gate: editorState == defeated required for this ending",
+    "This ending represents the Revisionist path where stories can be rewritten",
+    "If revisionist < 7 or editorState != defeated, choice should be disabled",
+    "Ending 5 (The Eternal Rehearsal) must always be available as fallback"
+  ]
+}
