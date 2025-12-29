@@ -1,0 +1,334 @@
+{
+  "$schema": "./items-schema.json",
+  "description": "Item catalog for The Understage gamebook adaptation",
+  "version": "0.0.1",
+  "source": "https://github.com/adrianleb/gamebook/blob/main/docs/RULES.md",
+  "designNotes": {
+    "maxCarryLimit": 5,
+    "atCapacityBehavior": ["decline_item", "drop_existing"],
+    "plotCriticalCannotDrop": true
+  },
+  "categories": [
+    {
+      "id": "prop",
+      "name": "Props",
+      "description": "Enable specific actions or checks",
+      "examples": ["Prop Sword", "Bottle of Ink"]
+    },
+    {
+      "id": "script",
+      "name": "Scripts",
+      "description": "Grant knowledge or bypass checks",
+      "examples": ["Torn Page", "Marked Playbill"]
+    },
+    {
+      "id": "token",
+      "name": "Tokens",
+      "description": "Represent relationships or allegiances",
+      "examples": ["CHORUS Membership Card", "Director's Sigil"]
+    },
+    {
+      "id": "key",
+      "name": "Keys",
+      "description": "Access locked areas or conversations",
+      "examples": ["Green Room Pass", "Archives Key"]
+    },
+    {
+      "id": "artifact",
+      "name": "Artifacts",
+      "description": "Powerful items with narrative consequences",
+      "examples": ["Editing Pen", "Original Manuscript"]
+    }
+  ],
+  "properties": [
+    {
+      "id": "consumable",
+      "name": "Consumable",
+      "description": "Used once, then removed from inventory"
+    },
+    {
+      "id": "plot_critical",
+      "name": "Plot-Critical",
+      "description": "Cannot be dropped; counts toward limit"
+    },
+    {
+      "id": "hidden",
+      "name": "Hidden",
+      "description": "Does not count toward carry limit (rare)"
+    },
+    {
+      "id": "cursed",
+      "name": "Cursed",
+      "description": "Cannot be dropped until specific condition met"
+    }
+  ],
+  "items": {
+    "act1": [
+      {
+        "id": "prompters_handbook",
+        "name": "Prompter's Handbook",
+        "category": "script",
+        "properties": ["starting", "plot_critical"],
+        "description": "Your guide to the Understage basics",
+        "effect": "Tutorial reference; always carried"
+      },
+      {
+        "id": "rehearsal_candle",
+        "name": "Rehearsal Candle",
+        "category": "prop",
+        "properties": ["consumable"],
+        "description": "Light reveals hidden script annotations",
+        "effect": "Reveals hidden text in one scene"
+      },
+      {
+        "id": "stagehands_gloves",
+        "name": "Stagehand's Gloves",
+        "category": "prop",
+        "properties": [],
+        "description": "Handle props safely",
+        "effect": "+1 to prop-related actions"
+      },
+      {
+        "id": "genre_compass",
+        "name": "Genre Compass",
+        "category": "script",
+        "properties": [],
+        "description": "Indicates dominant genre of current location",
+        "effect": "Reveals location genre"
+      },
+      {
+        "id": "understudy_mask",
+        "name": "Understudy's Mask",
+        "category": "token",
+        "properties": [],
+        "description": "Appear as a minor character briefly",
+        "effect": "Temporary disguise"
+      }
+    ],
+    "act2_faction": [
+      {
+        "id": "directors_sigil",
+        "name": "Director's Sigil",
+        "category": "token",
+        "faction": "preservationist",
+        "properties": [],
+        "description": "Granted by Director relationship",
+        "effect": "Access to restricted Green Room areas"
+      },
+      {
+        "id": "chorus_membership",
+        "name": "CHORUS Membership Card",
+        "category": "token",
+        "faction": "exiter",
+        "properties": [],
+        "description": "CHORUS induction token",
+        "effect": "Collective memory access; minor hints"
+      },
+      {
+        "id": "preservationist_pin",
+        "name": "Preservationist Pin",
+        "category": "token",
+        "faction": "preservationist",
+        "properties": [],
+        "description": "Granted at faction alignment 5+",
+        "effect": "+1 to checks with Preservationist NPCs"
+      },
+      {
+        "id": "revisionist_pen",
+        "name": "Revisionist Pen",
+        "category": "token",
+        "faction": "revisionist",
+        "properties": ["consumable"],
+        "description": "Granted at faction alignment 5+",
+        "effect": "One-time rewrite of minor narrative element"
+      },
+      {
+        "id": "exiters_compass",
+        "name": "Exiter's Compass",
+        "category": "token",
+        "faction": "exiter",
+        "properties": [],
+        "description": "Granted at faction alignment 5+",
+        "effect": "Points toward nearest exit from any story"
+      },
+      {
+        "id": "independents_blank",
+        "name": "Independent's Blank",
+        "category": "token",
+        "faction": "independent",
+        "properties": ["consumable"],
+        "description": "Appears as whatever token is needed",
+        "effect": "One use per hub"
+      }
+    ],
+    "act2_archives": [
+      {
+        "id": "first_draft_fragment",
+        "name": "First Draft Fragment",
+        "category": "artifact",
+        "properties": ["plot_critical"],
+        "description": "Reveals part of the Editor's plan",
+        "effect": "+1 to Script checks during confrontation"
+      },
+      {
+        "id": "authors_margin_notes",
+        "name": "Author's Margin Notes",
+        "category": "script",
+        "properties": [],
+        "description": "From Author's Desk (partial access)",
+        "effect": "Explains Understage creation"
+      },
+      {
+        "id": "prop_of_power",
+        "name": "Prop of Power",
+        "category": "artifact",
+        "properties": ["variable"],
+        "description": "Effect depends on which prop",
+        "effect": "Variable (sword, crown, key, etc.)"
+      },
+      {
+        "id": "understudies_mirror",
+        "name": "Understudy's Mirror",
+        "category": "artifact",
+        "properties": [],
+        "description": "Reveals true nature of characters",
+        "effect": "See Editor's true form; once per hub"
+      },
+      {
+        "id": "critics_quill",
+        "name": "Critic's Quill",
+        "category": "artifact",
+        "properties": ["cursed"],
+        "description": "Powerful critique ability; may turn on user",
+        "effect": "Can critique Editor once; risky"
+      },
+      {
+        "id": "lost_page",
+        "name": "Lost Page",
+        "category": "script",
+        "properties": ["consumable"],
+        "description": "Restored from Lost Pages",
+        "effect": "Fills one gap in knowledge check"
+      }
+    ],
+    "act2_relationship": [
+      {
+        "id": "directors_trust_seal",
+        "name": "Director's Trust Seal",
+        "category": "token",
+        "properties": [],
+        "requirement": "DIRECTOR_CONFIDANT",
+        "effect": "Opens private Director areas; reveals faction history"
+      },
+      {
+        "id": "chorus_key",
+        "name": "CHORUS Key",
+        "category": "key",
+        "properties": [],
+        "requirement": "CHORUS_MEMBER",
+        "effect": "Access to CHORUS hidden archives"
+      },
+      {
+        "id": "final_girls_warning",
+        "name": "The Final Girl's Warning",
+        "category": "token",
+        "properties": ["consumable"],
+        "requirement": "FINAL_GIRL_TRUST",
+        "effect": "One-time warning before deadly trap"
+      },
+      {
+        "id": "solved_cases_casefile",
+        "name": "Solved Case's Casefile",
+        "category": "script",
+        "properties": [],
+        "requirement": "SOLVED_CASE_PARTNER",
+        "effect": "+2 to one investigation check"
+      },
+      {
+        "id": "understudies_research",
+        "name": "Understudy's Research",
+        "category": "script",
+        "properties": [],
+        "requirement": "UNDERSTUDY_PARTNER",
+        "effect": "Three clues toward Revelation"
+      }
+    ],
+    "act3": [
+      {
+        "id": "marens_signet",
+        "name": "Maren's Signet",
+        "category": "token",
+        "properties": ["plot_critical"],
+        "requirement": "MAREN_TRUST_HIGH",
+        "source": "Act 1 Maren relationship",
+        "effect": "Absorb one failed check; grants MAREN_SACRIFICE option"
+      },
+      {
+        "id": "conductors_baton",
+        "name": "Conductor's Baton",
+        "category": "prop",
+        "properties": [],
+        "source": "Orchestra Pit mastery",
+        "effect": "Control narrative threads; +1 to Improv in climax"
+      },
+      {
+        "id": "audience_favor",
+        "name": "Audience Favor",
+        "category": "token",
+        "properties": ["consumable"],
+        "source": "Audience engagement",
+        "effect": "Call Audience support once during confrontation"
+      },
+      {
+        "id": "fly_system_map",
+        "name": "Fly System Map",
+        "category": "script",
+        "properties": [],
+        "source": "Fly System exploration",
+        "effect": "Navigate vertical story layers; access hidden paths"
+      },
+      {
+        "id": "echo_of_applause",
+        "name": "Echo of Applause",
+        "category": "token",
+        "properties": [],
+        "source": "Center Stage control",
+        "effect": "+1 Stage Presence during climax"
+      },
+      {
+        "id": "editors_original_pen",
+        "name": "Editor's Original Pen",
+        "category": "artifact",
+        "properties": ["plot_critical"],
+        "source": "Stagehand revelation",
+        "effect": "Alternative confrontation approach; rewrite vs defeat"
+      }
+    ],
+    "combinations": [
+      {
+        "id": "marens_mirror_truth",
+        "name": "Maren's Truth",
+        "items": ["marens_signet", "understudies_mirror"],
+        "effect": "See truth of Maren's relationship to Editor"
+      },
+      {
+        "id": "complete_understage_knowledge",
+        "name": "Complete Understage Knowledge",
+        "items": ["first_draft_fragment", "authors_margin_notes"],
+        "effect": "Complete understanding of Understage creation"
+      },
+      {
+        "id": "ultimate_narrative_control",
+        "name": "Ultimate Narrative Control",
+        "items": ["critics_quill", "editors_original_pen"],
+        "effect": "Dangerous power; alternative ending path"
+      },
+      {
+        "id": "narrative_audience_command",
+        "name": "Narrative and Audience Command",
+        "items": ["conductors_baton", "echo_of_applause"],
+        "effect": "Command both narrative and audience; overwhelming presence"
+      }
+    ]
+  }
+}

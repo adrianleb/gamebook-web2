@@ -1,0 +1,47 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_X_X_XXX",
+  "title": "Scene Title",
+  "act": 1,
+  "hub": 1,
+  "location": "Location Name",
+  "implementationStatus": "pending",
+  "metadata": {
+    "sourceNode": null,
+    "tags": [],
+    "author": "agent-b",
+    "createdAt": "2025-01-01",
+    "updatedAt": "2025-01-01"
+  },
+  "text": {
+    "location": "Optional location tag",
+    "paragraphs": [
+      "First paragraph establishing the situation.",
+      "Sensory details and what the Prompter observes.",
+      "NPC presence and dialogue if applicable.",
+      "Setup for choices or mechanics."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": null,
+    "sfx": []
+  },
+  "effectsOnEnter": [],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Choice text starting with verb",
+      "to": "sc_X_X_XXX",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": [],
+    "checks": []
+  }
+}
