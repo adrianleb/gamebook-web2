@@ -220,8 +220,11 @@ export class Engine {
       checkpoint: isInitial ? undefined : 'scene-transition',
     });
 
-    // Update scene history
-    this.updateSceneHistory(sceneId, isInitial ? undefined : '');
+    // Update scene history (only for initial scene load)
+    // For non-initial loads, caller (makeChoice/transitionTo) handles history update
+    if (isInitial) {
+      this.updateSceneHistory(sceneId);
+    }
 
     // Apply scene effects
     if (scene.effects && scene.effects.length > 0) {
