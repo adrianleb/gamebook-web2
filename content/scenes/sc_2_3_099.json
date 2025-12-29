@@ -22,8 +22,9 @@
       "\"You've found it,\" they say quietly. \"The truth behind the disturbances. The Editor isn't just maintaining the Understage. They're rewriting it. Every cut scene, every abandoned character, every story that didn't fit their vision—all stored here, waiting to be used or erased.\"",
       "They gesture to the manuscript, and you see that the ink is still wet, forming new words even as you watch.",
       "\"The Editor plans a Great Revision. A single story that replaces all others. No more branching paths. No more unexpected endings. No more choices.\"",
-      "The Understudy turns to you, and in their face you see every character who was ever written out of a story.",
-      "\"But you've made allies in the Understage. Factions who believe stories should be preserved, revised, freed, or balanced. They will stand with you against the Editor's final curtain call.\"",
+      "The Understudy studies you carefully, their expression shifting as they sense the alliances you've forged in the Understage.",
+      "\"You've chosen your path, Prompter. The factions have taken note of your journey. Whatever you believe about stories—whether they should be preserved, revised, freed, or balanced—those beliefs will shape what comes next.\"",
+      "\"The Mainstage awaits, and the Editor will not step aside willingly. But you are no longer alone in this story.\"",
       "Above the desk, the walls of the Archives begin to dissolve, revealing a vast darkness beyond—the Mainstage awaits. The final act approaches."
     ]
   },
@@ -52,16 +53,123 @@
     {
       "type": "set_flag",
       "flag": "editor_revealed"
-    },
-    {
-      "type": "modify-faction",
-      "faction": "independent",
-      "amount": 1
     }
   ],
   "choices": [
     {
       "id": "choice_1",
+      "label": "\"Stories should be preserved as they were.\" (Preservationist)",
+      "to": "sc_3_4_001",
+      "conditions": [
+        {
+          "type": "stat",
+          "stat": "preservationist",
+          "value": 5,
+          "comparison": "gte"
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "alliance_determined"
+        },
+        {
+          "type": "set_flag",
+          "flag": "preservationist_ally"
+        },
+        {
+          "type": "set_flag",
+          "flag": "mainstage_ascent"
+        }
+      ],
+      "disabledHint": "Requires stronger connection to the Preservationist faction"
+    },
+    {
+      "id": "choice_2",
+      "label": "\"Stories can and should be improved.\" (Revisionist)",
+      "to": "sc_3_4_001",
+      "conditions": [
+        {
+          "type": "stat",
+          "stat": "revisionist",
+          "value": 5,
+          "comparison": "gte"
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "alliance_determined"
+        },
+        {
+          "type": "set_flag",
+          "flag": "revisionist_ally"
+        },
+        {
+          "type": "set_flag",
+          "flag": "mainstage_ascent"
+        }
+      ],
+      "disabledHint": "Requires stronger connection to the Revisionist faction"
+    },
+    {
+      "id": "choice_3",
+      "label": "\"Fictional beings deserve real existence.\" (Exiter)",
+      "to": "sc_3_4_001",
+      "conditions": [
+        {
+          "type": "stat",
+          "stat": "exiter",
+          "value": 5,
+          "comparison": "gte"
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "alliance_determined"
+        },
+        {
+          "type": "set_flag",
+          "flag": "exiter_ally"
+        },
+        {
+          "type": "set_flag",
+          "flag": "mainstage_ascent"
+        }
+      ],
+      "disabledHint": "Requires stronger connection to the Exiter faction"
+    },
+    {
+      "id": "choice_4",
+      "label": "\"Balance between all paths.\" (Independent)",
+      "to": "sc_3_4_001",
+      "conditions": [
+        {
+          "type": "stat",
+          "stat": "independent",
+          "value": 3,
+          "comparison": "gte"
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "alliance_determined"
+        },
+        {
+          "type": "set_flag",
+          "flag": "independent_path"
+        },
+        {
+          "type": "set_flag",
+          "flag": "mainstage_ascent"
+        }
+      ],
+      "disabledHint": "Requires some investment in the Independent path"
+    },
+    {
+      "id": "choice_5",
       "label": "Ascend to the Mainstage (Final Act)",
       "to": "sc_3_4_001",
       "conditions": null,
@@ -75,7 +183,7 @@
     }
   ],
   "flags": {
-    "sets": ["revelation_discovered", "act2_complete", "editor_revealed"],
+    "sets": ["revelation_discovered", "act2_complete", "editor_revealed", "alliance_determined", "mainstage_ascent"],
     "requires": ["archives_reached"],
     "checks": []
   }
