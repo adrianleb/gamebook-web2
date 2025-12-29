@@ -223,18 +223,56 @@
       "location": "The Prompter's Booth",
       "act": 1,
       "hub": 0,
-      "status": "pending",
-      "description": "Opening scene"
+      "status": "complete",
+      "description": "Opening scene - Hub with 3 choices",
+      "mechanics": ["choice_navigation", "inventory_gating_demo"]
     },
-    "sc_1_0_902": {
-      "title": "The Crossing Failed",
+    "sc_1_0_002": {
+      "title": "The Wings",
+      "location": "The Wings",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Direct path - No requirements",
+      "mechanics": ["navigation"]
+    },
+    "sc_1_0_003": {
+      "title": "The Threshold Stage",
       "location": "The Threshold Stage",
       "act": 1,
       "hub": 0,
       "status": "complete",
-      "description": "Stat check failure ending - vertical slice",
+      "description": "Inventory-gated + Courage stat check",
+      "mechanics": ["inventory_gating", "stat_check"]
+    },
+    "sc_1_0_004": {
+      "title": "Maren's Guidance",
+      "location": "The Prompter's Booth",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Item acquisition - Get booth_key",
+      "mechanics": ["item_acquisition", "dialogue"]
+    },
+    "sc_1_0_900": {
+      "title": "Vertical Slice Resolution",
+      "location": "The Threshold Stage",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Vertical slice ending - Direct path resolution",
       "ending": true,
-      "endingId": "vs_failure"
+      "endingId": "vertical_slice_direct"
+    },
+    "sc_1_0_901": {
+      "title": "The Crossing Succeeded",
+      "location": "The Threshold Stage",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Vertical slice ending - Courage check success",
+      "ending": true,
+      "endingId": "vertical_slice_courage"
     },
     "sc_1_1_099": {
       "title": "The First Crossing",
@@ -339,10 +377,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 13,
+    "totalScenes": 18,
     "pending": 12,
     "draft": 0,
-    "complete": 1,
+    "complete": 6,
     "reviewed": 0
   }
 }

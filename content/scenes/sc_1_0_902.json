@@ -2,10 +2,36 @@
   "$schema": "./scene-schema.json",
   "id": "sc_1_0_902",
   "title": "The Crossing Failed",
-  "text": "The Threshold Stage\n\nYou try to step forward—but your feet will not move.\n\nThe darkness presses against you like a physical weight, whispering of all the stories that end badly, all the heroes who faltered, all the doors that close forever. Your heart hammers against your ribs. The resistance is absolute.\n\nYou cannot do it. Not yet. The fear is too old, too heavy, too real.\n\nYou stagger back from the threshold, gasping for air, your vision swimming. The iron door slams shut with a sound like breaking bone.\n\nThe Understage rejects you this day.\n\n--- VERTICAL SLICE COMPLETE ---\n\nYour courage was not sufficient to cross the threshold. The Preservationists note your hesitation.\n\nThank you for experiencing The Understage vertical slice.",
+  "act": 1,
+  "hub": 0,
+  "location": "The Threshold Stage",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "failure", "vertical_slice"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The Threshold Stage",
+    "paragraphs": [
+      "You try to step forward—but your feet will not move.",
+      "The darkness presses against you like a physical weight, whispering of all the stories that end badly, all the heroes who faltered, all the doors that close forever. Your heart hammers against your ribs. The resistance is absolute.",
+      "You cannot do it. Not yet. The fear is too old, too heavy, too real.",
+      "You stagger back from the threshold, gasping for air, your vision swimming. The iron door slams shut with a sound like breaking bone.",
+      "The Understage rejects you this day.",
+      "--- VERTICAL SLICE COMPLETE ---",
+      "Your courage was not sufficient to cross the threshold. The Preservationists note your hesitation.",
+      "Thank you for experiencing The Understage vertical slice."
+    ]
+  },
+  "npcs": [],
   "art": null,
-  "music": "resolution_failure",
-  "sfx": ["door_slam", "heartbeat_fast", "wind_void_reject"],
+  "audio": {
+    "music": "resolution_failure",
+    "sfx": ["door_slam", "heartbeat_fast", "wind_void_reject"]
+  },
   "effects": [
     {
       "type": "set-flag",
@@ -19,5 +45,10 @@
       "min": 0
     }
   ],
-  "choices": []
+  "choices": [],
+  "flags": {
+    "sets": ["crossing_failed"],
+    "requires": [],
+    "checks": []
+  }
 }

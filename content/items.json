@@ -63,6 +63,24 @@
     }
   ],
   "items": {
+    "vertical_slice": [
+      {
+        "id": "booth_key",
+        "name": "Booth Key",
+        "category": "key",
+        "properties": ["plot_critical"],
+        "description": "A rusty iron key that unlocks the prompter's booth door",
+        "effect": "Opens iron door to Threshold Stage"
+      },
+      {
+        "id": "wings_pass",
+        "name": "Wings Pass",
+        "category": "token",
+        "properties": [],
+        "description": "A temporary pass allowing access to the theatre wings",
+        "effect": " grants access to Wings area"
+      }
+    ],
     "act1": [
       {
         "id": "prompters_handbook",

@@ -1,0 +1,60 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_901",
+  "title": "The Crossing Succeeded",
+  "act": 1,
+  "hub": 0,
+  "location": "The Threshold Stage",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "resolution", "stat_check_success"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The Threshold Stage",
+    "paragraphs": [
+      "You breathe deep, center yourself, and step.",
+      "The darkness resists—a pressure against your skin, a voice whispering TURN BACK—and you feel the fear catch in your throat like a hook. But you do not stop. You carry the fear with you, and the darkness yields.",
+      "The amber light flares bright as day, then fades to gentle gold. You stand in the center of a stage impossibly vast, its edges lost to shadow. Above, an audience of empty seats waits.",
+      "You have crossed. The Understage acknowledges you.",
+      "A voice speaks from everywhere at once: \"WELCOME, PROMPTER. YOUR STORY BEGINS NOW.\"",
+      "",
+      "--- VERTICAL SLICE COMPLETE ---",
+      "",
+      "Through courage, you have crossed the threshold. The Preservationists note your strength.",
+      "",
+      "Thank you for experiencing The Understage vertical slice."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "resolution_triumph",
+    "sfx": ["chorus_welcome", "light_flare"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "crossing_succeeded"
+    },
+    {
+      "type": "modify_faction",
+      "faction": "preservationist",
+      "value": 1
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["crossing_succeeded"],
+    "requires": [],
+    "checks": []
+  },
+  "ending": {
+    "type": "vertical_slice_success",
+    "title": "The Courageous Crossing",
+    "description": "Your courage carried you across the threshold. The Understage opens before you."
+  }
+}

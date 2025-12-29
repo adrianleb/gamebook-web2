@@ -1,96 +1,84 @@
 {
   "$schema": "./scene-schema.json",
   "id": "sc_1_0_001",
-  "title": "The Dark Corridor",
+  "title": "The Booth Awakens",
   "act": 1,
   "hub": 0,
-  "location": "Understage Corridor",
+  "location": "The Prompter's Booth",
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["tutorial", "inventory-test"],
-    "author": "agent-d",
+    "tags": ["hub", "tutorial", "starting"],
+    "author": "agent-b",
     "createdAt": "2025-12-29",
     "updatedAt": "2025-12-29"
   },
   "text": {
-    "location": "Understage Corridor",
+    "location": "The Prompter's Booth",
     "paragraphs": [
-      "The stage lights flicker, then die. In the sudden darkness, you hear the unmistakable <em>creak</em> of floorboards—boards that haven't been walked in <strong>fifty years</strong>.",
-      "<strong>DIRECTOR:</strong> \"You're late for your own disappearance.\"",
-      "The voice comes from everywhere and nowhere. This is <span class=\"faction-preservationist\">The Understage</span>—the labyrinth beneath the theater where the <strong>Preservationists</strong> guard what <span class=\"faction-revisor\">The Revisors</span> would rewrite.",
-      "Your pockets are empty. Your <strong>Script</strong> is blank. And somewhere in these dark corridors, your past is waiting."
+      "The darkness is absolute. A crushing weight of silence, as if the entire world has been holding its breath for a very long time.",
+      "Then—a flicker. A single candle flares to life on a cramped wooden desk before you. Its flame dances uncertainly, illuminating walls covered in layer upon layer of yellowed posters, playbills, and notes scribbled in a hundred different hands.",
+      "You sit in a high-backed chair that's seen better decades. This is the Prompter's Booth—the hidden heart of the Threshold Theatre, though you have no memory of how you arrived. Your name, your history, the world beyond these walls... all distant echoes, faded almost to nothing.",
+      "Before you lies a leather-bound handbook: THE PROMPTER'S GUIDE TO THE UNDERSTAGE. Beside it, a heavy iron door set into the far wall—its lock rusted shut, handle immovable.",
+      "The candle flame leans toward an opening to your right. To your left, a figure sits in shadow, watching you with patient, knowing eyes.",
+      "You are the Prompter. And somewhere beyond this booth, stories are waiting."
     ]
   },
   "npcs": [
     {
-      "id": "director",
-      "name": "The Director",
-      "faction": "preservationist",
-      "disposition": 5
+      "id": "maren",
+      "name": "Maren",
+      "description": "A figure of indeterminate age, wrapped in a cloak that seems to absorb the candlelight. Their voice carries the weight of countless rehearsals.",
+      "disposition": 5,
+      "faction": "independent"
     }
   ],
   "art": null,
   "audio": {
-    "music": null,
-    "sfx": ["footstep_wooden", "door_creak"]
+    "music": "ambient_theatre_creaks",
+    "sfx": ["candle_flare", "distant_footsteps"]
   },
   "effectsOnEnter": [
     {
-      "type": "set-stat",
-      "stat": "script",
-      "value": 5
+      "type": "set_flag",
+      "flag": "game_started"
+    },
+    {
+      "type": "set_flag",
+      "flag": "location_booth_visited"
     }
   ],
   "choices": [
     {
       "id": "choice_1",
-      "label": "Follow the voice into the darkness",
-      "to": "sc_1_1_002",
+      "label": "Step through the opening to the right",
+      "to": "sc_1_0_002",
       "conditions": null,
       "onChoose": [],
       "disabledHint": null
     },
     {
       "id": "choice_2",
-      "label": "Try to remember how you got here",
-      "to": "sc_1_1_003",
-      "conditions": [
-        {
-          "type": "stat",
-          "stat": "script",
-          "operator": "gte",
-          "value": 6
-        }
-      ],
+      "label": "Attempt the iron door",
+      "to": "sc_1_0_003",
+      "conditions": {
+        "type": "has_item",
+        "item": "booth_key"
+      },
       "onChoose": [],
-      "disabledHint": "Requires Script 6+"
+      "disabledHint": "The lock is rusted shut. You'll need a key."
     },
     {
       "id": "choice_3",
-      "label": "Use the Prompter's Handbook to find your way",
-      "to": "sc_1_1_004",
-      "conditions": [
-        {
-          "type": "item",
-          "item": "prompters_handbook",
-          "itemCount": 1
-        }
-      ],
-      "onChoose": [],
-      "disabledHint": "Requires Prompter's Handbook"
-    },
-    {
-      "id": "choice_4",
-      "label": "Call out into the darkness",
-      "to": "sc_1_1_005",
+      "label": "Speak with the figure in shadow",
+      "to": "sc_1_0_004",
       "conditions": null,
       "onChoose": [],
       "disabledHint": null
     }
   ],
   "flags": {
-    "sets": [],
+    "sets": ["game_started", "location_booth_visited"],
     "requires": [],
     "checks": []
   }
