@@ -78,6 +78,15 @@ export type { SceneLoaderOptions } from './scene-loader.js';
 // Validator
 export { ContentValidator, contentValidator } from './validator.js';
 
+// SaveManager for game persistence
+export { SaveManager, SaveError, SAVE_FORMAT_VERSION } from './save-manager.js';
+export type {
+  SaveSlotId,
+  SaveSlotMetadata,
+  SaveDataWithMetadata,
+  SaveErrorType,
+} from './save-manager.js';
+
 // Headless runner
 export { HeadlessRunner } from './headless-runner.js';
 export type {

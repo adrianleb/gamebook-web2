@@ -104,14 +104,119 @@
   <!-- LOADING INDICATOR (hidden by default) -->
   <div id="loading-indicator" class="loading-indicator" data-test-id="loading-indicator" aria-hidden="true"></div>
 
+  <!-- SAVE/LOAD MODAL (hidden by default) -->
+  <div id="save-load-modal"
+       class="modal-overlay"
+       data-test-id="save-load-modal"
+       role="dialog"
+       aria-labelledby="save-load-title"
+       aria-modal="true"
+       aria-hidden="true">
+    <div class="modal-content" data-test-id="save-load-modal-content">
+      <h2 id="save-load-title" class="modal-title" data-test-id="save-load-title">Save Game</h2>
+
+      <!-- Save slot list -->
+      <div class="save-slots" data-test-id="save-slots">
+        <!-- Slot 1 -->
+        <div class="save-slot" data-slot-id="1" data-test-id="save-slot-1">
+          <div class="slot-header">
+            <span class="slot-number">Slot 1</span>
+            <span class="slot-status" data-test-id="slot-1-status">Empty</span>
+          </div>
+          <div class="slot-metadata" data-test-id="slot-1-metadata"></div>
+          <div class="slot-actions">
+            <button class="slot-action-btn" data-action="save" data-slot="1" disabled>Save</button>
+            <button class="slot-action-btn" data-action="load" data-slot="1" disabled>Load</button>
+            <button class="slot-action-btn slot-delete-btn" data-action="delete" data-slot="1" disabled>Delete</button>
+          </div>
+        </div>
+
+        <!-- Slot 2 -->
+        <div class="save-slot" data-slot-id="2" data-test-id="save-slot-2">
+          <div class="slot-header">
+            <span class="slot-number">Slot 2</span>
+            <span class="slot-status" data-test-id="slot-2-status">Empty</span>
+          </div>
+          <div class="slot-metadata" data-test-id="slot-2-metadata"></div>
+          <div class="slot-actions">
+            <button class="slot-action-btn" data-action="save" data-slot="2" disabled>Save</button>
+            <button class="slot-action-btn" data-action="load" data-slot="2" disabled>Load</button>
+            <button class="slot-action-btn slot-delete-btn" data-action="delete" data-slot="2" disabled>Delete</button>
+          </div>
+        </div>
+
+        <!-- Slot 3 -->
+        <div class="save-slot" data-slot-id="3" data-test-id="save-slot-3">
+          <div class="slot-header">
+            <span class="slot-number">Slot 3</span>
+            <span class="slot-status" data-test-id="slot-3-status">Empty</span>
+          </div>
+          <div class="slot-metadata" data-test-id="slot-3-metadata"></div>
+          <div class="slot-actions">
+            <button class="slot-action-btn" data-action="save" data-slot="3" disabled>Save</button>
+            <button class="slot-action-btn" data-action="load" data-slot="3" disabled>Load</button>
+            <button class="slot-action-btn slot-delete-btn" data-action="delete" data-slot="3" disabled>Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal footer actions -->
+      <div class="modal-footer">
+        <button id="save-load-cancel" class="modal-close-btn" data-test-id="save-load-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRMATION DIALOG (hidden by default) -->
+  <div id="confirm-dialog"
+       class="modal-overlay"
+       data-test-id="confirm-dialog"
+       role="alertdialog"
+       aria-labelledby="confirm-title"
+       aria-describedby="confirm-message"
+       aria-modal="true"
+       aria-hidden="true">
+    <div class="modal-content modal-small" data-test-id="confirm-dialog-content">
+      <h2 id="confirm-title" class="modal-title" data-test-id="confirm-title">Confirm</h2>
+      <p id="confirm-message" class="confirm-message" data-test-id="confirm-message"></p>
+      <div class="modal-footer modal-footer-actions">
+        <button id="confirm-cancel" class="modal-close-btn" data-test-id="confirm-cancel">Cancel</button>
+        <button id="confirm-ok" class="modal-confirm-btn" data-test-id="confirm-ok">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN MENU OVERLAY (hidden by default) -->
+  <div id="main-menu"
+       class="modal-overlay"
+       data-test-id="main-menu"
+       role="dialog"
+       aria-labelledby="main-menu-title"
+       aria-modal="true"
+       aria-hidden="true">
+    <div class="modal-content modal-small" data-test-id="main-menu-content">
+      <h2 id="main-menu-title" class="modal-title" data-test-id="main-menu-title">Menu</h2>
+      <div class="menu-options">
+        <button class="menu-option-btn" data-action="resume" data-test-id="menu-resume">Resume Game</button>
+        <button class="menu-option-btn" data-action="save" data-test-id="menu-save">Save Game</button>
+        <button class="menu-option-btn" data-action="load" data-test-id="menu-load">Load Game</button>
+        <button class="menu-option-btn menu-danger-btn" data-action="quit" data-test-id="menu-quit">Quit to Title</button>
+      </div>
+      <div class="modal-footer">
+        <button id="main-menu-close" class="modal-close-btn" data-test-id="main-menu-close">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ENGINE & RENDERER INITIALIZATION -->
   <script type="module">
     import { Engine } from '../engine/engine.js';
     import { GameRenderer } from './game-renderer.js';
+    import { SaveMenu } from './save-menu.js';
 
     /**
      * Initialize the game.
-     * Creates Engine instance, initializes content, and connects GameRenderer.
+     * Creates Engine instance, initializes content, and connects GameRenderer and SaveMenu.
      */
     async function initializeGame() {
       try {
@@ -134,10 +239,17 @@
 
         console.log('[DOS UI Shell] GameRenderer initialized');
 
+        // Create and initialize SaveMenu
+        const saveMenu = new SaveMenu(engine);
+        saveMenu.initialize();
+
+        console.log('[DOS UI Shell] SaveMenu initialized');
+
         // Expose for debugging (development only)
         if (typeof window !== 'undefined') {
           (window as any).__GAME_ENGINE__ = engine;
           (window as any).__GAME_RENDERER__ = renderer;
+          (window as any).__SAVE_MENU__ = saveMenu;
         }
 
         // Emit font-ready event after VT323 loads
