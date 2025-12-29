@@ -2,34 +2,7 @@
   "$schema": "./scene-schema.json",
   "id": "sc_1_0_003",
   "title": "The Threshold Stage",
-  "act": 1,
-  "hub": 0,
-  "location": "The Threshold Stage",
-  "implementationStatus": "complete",
-  "metadata": {
-    "sourceNode": null,
-    "tags": ["inventory_gated", "stat_check", "branching"],
-    "author": "agent-b",
-    "createdAt": "2025-12-29",
-    "updatedAt": "2025-12-29"
-  },
-  "text": {
-    "location": "The Threshold Stage",
-    "paragraphs": [
-      "The iron door swings open with a sound like breaking bone. Beyond lies a corridor lined with mirrors—each reflecting a version of yourself you do not remember being.",
-      "At the corridor's end: a stage. The Threshold Stage. The amber light you saw from the Wings spills across worn floorboards, catching the dust motes that spiral through the air like suspended starlight.",
-      "Beyond the stage's edge, darkness absolute. The Understage awaits.",
-      "You feel it—the resistance. The boundary between worlds is not easily crossed. It demands something of you. A price. A sacrifice. The courage to step into the unknown.",
-      "Your heart hammers against your ribs. This is no mere stage—it is the threshold of story itself."
-    ]
-  },
-  "npcs": [],
-  "art": null,
-  "audio": {
-    "music": "tension_threshold_rising",
-    "sfx": ["door_creak", "heartbeat", "wind_void"]
-  },
-  "effectsOnEnter": [],
+  "text": "The iron door swings open with a sound like breaking bone. Beyond lies a corridor lined with mirrors—each reflecting a version of yourself you do not remember being.\n\nAt the corridor's end: a stage. The Threshold Stage. The amber light you saw from the Wings spills across worn floorboards, catching the dust motes that spiral through the air like suspended starlight.\n\nBeyond the stage's edge, darkness absolute. The Understage awaits.\n\nYou feel it—the resistance. The boundary between worlds is not easily crossed. It demands something of you. A price. A sacrifice. The courage to step into the unknown.\n\nYour heart hammers against your ribs. This is no mere stage—it is the threshold of story itself.",
   "choices": [
     {
       "id": "choice_1",
@@ -41,7 +14,7 @@
         "operator": "gte",
         "value": 5
       },
-      "onChoose": [
+      "effects": [
         {
           "type": "set-flag",
           "flag": "crossing_succeeded"
@@ -49,7 +22,7 @@
         {
           "type": "modify-faction",
           "faction": "preservationist",
-          "value": 1
+          "amount": 1
         }
       ],
       "disabledHint": "You are not yet ready to face the unknown. Requires Courage 5+."
@@ -64,7 +37,7 @@
         "operator": "lt",
         "value": 5
       },
-      "onChoose": [],
+      "effects": [],
       "disabledHint": null
     },
     {
@@ -72,21 +45,8 @@
       "label": "Turn back",
       "to": "sc_1_0_001",
       "conditions": null,
-      "onChoose": [],
+      "effects": [],
       "disabledHint": null
     }
-  ],
-  "flags": {
-    "sets": [],
-    "requires": [],
-    "checks": [
-      {
-        "type": "stat",
-        "stat": "courage",
-        "operator": "gte",
-        "value": 5,
-        "passEffect": "set-flag:crossing_succeeded"
-      }
-    ]
-  }
+  ]
 }

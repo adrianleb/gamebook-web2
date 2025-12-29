@@ -2,40 +2,8 @@
   "$schema": "./scene-schema.json",
   "id": "sc_1_0_902",
   "title": "The Crossing Failed",
-  "act": 1,
-  "hub": 0,
-  "location": "The Threshold Stage",
-  "implementationStatus": "complete",
-  "metadata": {
-    "sourceNode": null,
-    "tags": ["ending", "resolution", "stat_check_failure"],
-    "author": "agent-b",
-    "createdAt": "2025-12-29",
-    "updatedAt": "2025-12-29"
-  },
-  "text": {
-    "location": "The Threshold Stage",
-    "paragraphs": [
-      "You breathe deep, center yourself, and step.",
-      "The darkness resists—a pressure against your skin, a voice whispering TURN BACK—and you feel the fear catch in your throat like a hook. You try to carry it with you, to push through, but the darkness does not yield.",
-      "Your courage fails. The boundary rejects you.",
-      "You stumble back, gasping, as the amber light dims to a dull glow. The stage recedes into shadow. You are not yet ready to cross.",
-      "A voice speaks from everywhere at once: \"THE PROMPTER MUST BE READY. RETURN WHEN YOU HAVE FOUND YOUR COURAGE.\"",
-      "",
-      "--- VERTICAL SLICE COMPLETE ---",
-      "",
-      "Your courage was insufficient. The Understage rejects those who cannot face the unknown.",
-      "",
-      "Thank you for experiencing The Understage vertical slice."
-    ]
-  },
-  "npcs": [],
-  "art": null,
-  "audio": {
-    "music": "resolution_failure",
-    "sfx": ["darkness_reject", "heartbeat_slow", "whisper_turnback"]
-  },
-  "effectsOnEnter": [
+  "text": "You breathe deep, center yourself, and step.\n\nThe darkness resists—a pressure against your skin, a voice whispering TURN BACK—and you feel the fear catch in your throat like a hook. You try to carry it with you, to push through, but the darkness does not yield.\n\nYour courage fails. The boundary rejects you.\n\nYou stumble back, gasping, as the amber light dims to a dull glow. The stage recedes into shadow. You are not yet ready to cross.\n\nA voice speaks from everywhere at once: \"THE PROMPTER MUST BE READY. RETURN WHEN YOU HAVE FOUND YOUR COURAGE.\"\n\n--- VERTICAL SLICE COMPLETE ---\n\nYour courage was insufficient. The Understage rejects those who cannot face the unknown.\n\nThank you for experiencing The Understage vertical slice.",
+  "effects": [
     {
       "type": "set-flag",
       "flag": "crossing_failed"
@@ -47,13 +15,8 @@
     }
   ],
   "choices": [],
-  "flags": {
-    "sets": ["crossing_failed"],
-    "requires": [],
-    "checks": []
-  },
   "ending": {
-    "type": "vertical_slice_failure",
+    "type": "defeat",
     "title": "The Failed Crossing",
     "description": "Your courage was insufficient. The Understage rejects those who cannot face the unknown."
   }
