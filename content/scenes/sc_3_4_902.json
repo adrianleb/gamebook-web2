@@ -1,0 +1,59 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_3_4_902",
+  "title": "The Open Book",
+  "act": 3,
+  "hub": 4,
+  "location": "Ending",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "exiter", "hopeful"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "Ending",
+    "paragraphs": [
+      "\"You're right,\" you say, and your voice carries across the Mainstage like a spotlight finding its mark. \"Characters deserve the chance to exist. Stories deserve the chance to be lived, not just written.\"",
+      "The Editor's expression shifts. For the first time, you see hope beneath the weariness.",
+      "You speak of everything you've learned—every character you've met, every story you've guided, every moment when fiction felt more real than reality itself. You speak of the Green Room where narratives gather, the Archives where abandoned tales wait, the vast web of stories that spans all creation.",
+      "\"The Understage isn't a prison,\" you say. \"It's a nursery. A place where stories grow until they're strong enough to step into the light.\"",
+      "The Editor listens. And for the first time in millennia, they consider an alternative to revision.",
+      "\"Perhaps,\" they say slowly, \"the boundary doesn't need to dissolve. Perhaps it only needs to... open.\"",
+      "They raise their hands, and the ghostlight flares. The machinery of the Mainstage shifts into new configurations—ropes and pulleys arranging themselves not to control, but to connect.",
+      "\"The Great Revision becomes the Great Passage,\" The Editor declares. \"A doorway, not a wall. Characters may choose to step into reality, or remain in the world of stories. The choice is theirs.\"",
+      "The boundary between fiction and reality doesn't break. It transforms.",
+      "You watch as characters from the Green Room step forward—not being rewritten, but being invited. Some choose to remain. Some choose to cross. The choice is theirs, as it should have always been.",
+      "The Editor's form flickers one last time, then settles into something new—not a guardian, but a guide. Someone who helps stories find their way home, whether home is the world of fiction or the world of reality.",
+      "The Director approaches, their face shifting through expressions until settling on something like peace. \"The Understage is no longer a secret,\" they say. \"It is a bridge.\"",
+      "You stand at the threshold of a new world—one where stories and readers, characters and authors, fiction and reality flow back and forth like water between two seas.",
+      "It is uncertain. It is chaotic. It is hopeful.",
+      "The book is open. The story continues.",
+      "THE END - ENDING 2: THE OPEN BOOK (Exiter Path)"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ending_hopeful",
+    "sfx": ["boundary_open", "doorway_ambient"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_achieved"
+    },
+    {
+      "type": "set_flag",
+      "flag": "ending_2_open_book"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_achieved", "ending_2_open_book"],
+    "requires": [],
+    "checks": []
+  }
+}

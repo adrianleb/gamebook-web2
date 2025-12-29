@@ -1,0 +1,56 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_3_4_901",
+  "title": "The Revised Draft",
+  "act": 3,
+  "hub": 4,
+  "location": "Ending",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "revisionist", "bittersweet"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "Ending",
+    "paragraphs": [
+      "You take The Editor's hand, and ink wells up between your palms—the raw power of narrative, the authority to rewrite.",
+      "The Editor's form dissolves into streams of text, pouring into you like water into dry earth. You feel their knowledge, their weariness, their ancient burden settling into your bones. Every story they ever guarded. Every ending they ever wrote. Every character they ever remembered.",
+      "For a moment, you are everything—a being of pure narrative, holding the fate of all fiction in your grasp.",
+      "Then the moment passes, and you stand alone on the Mainstage.",
+      "The Understage still exists. Stories still flow through its arches, characters still wander its halls. But the boundary remains—the wall between fiction and reality holds firm. The Great Revision is halted.",
+      "You feel different. Your hands are stained with ink that will never wash away. When you speak, narratives shift around you. When you walk, stories rearrange themselves in your wake.",
+      "The power of The Editor is yours now. The burden is yours.",
+      "In the Green Room, The Director cannot meet your eyes. CHORUS falls silent as you pass. In the Archives, The Understudy bows—a gesture of respect, or perhaps fear.",
+      "You realize what you've become. The guardian of the unwritten. The keeper of the abandoned. The one who decides which stories survive and which fade into obscurity.",
+      "It is a lonely existence. The Prompter no longer guides—they rule.",
+      "But the stories are safe. The boundary holds. Fiction remains fiction, reality remains real, and you stand between them like a dam against an endless sea.",
+      "You raise your ink-stained hands and begin your work. There are so many stories that need revision.",
+      "THE END - ENDING 1: THE REVISED DRAFT (Revisionist Path)"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ending_bittersweet",
+    "sfx": ["ink_flow", "reality_stabilize"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_achieved"
+    },
+    {
+      "type": "set_flag",
+      "flag": "ending_1_revised_draft"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_achieved", "ending_1_revised_draft"],
+    "requires": [],
+    "checks": []
+  }
+}

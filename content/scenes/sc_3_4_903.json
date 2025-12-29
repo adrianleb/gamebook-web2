@@ -1,0 +1,59 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_3_4_903",
+  "title": "The Closed Canon",
+  "act": 3,
+  "hub": 4,
+  "location": "Ending",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "preservationist", "melancholic"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "Ending",
+    "paragraphs": [
+      "\"The boundary must hold,\" you say, and your voice carries the weight of every story ever told. \"Some stories are complete. Some narratives were meant to end. Not everything needs revision.\"",
+      "The Editor watches you, and you see ancient relief in their expression.",
+      "You speak of preservation—of the sanctity of completed narratives, of the beauty of stories that end when they should, of the danger of endless revision. The Understage isn't a waiting room for reality. It's a library of perfect moments, frozen in amber, preserved for all time.",
+      "\"Characters who step into reality stop being characters,\" you say. \"They become refugees, adrift in a world that was never written for them. Stories that are rewritten lose what made them precious.\"",
+      "The Editor nods slowly. \"I have rewritten so many endings. I have revised so many truths. I thought I was saving them.\"",
+      "\"You were,\" you say. \"But saving isn't always preserving. Sometimes the greatest act of love is letting a story remain exactly what it was meant to be.\"",
+      "The Mainstage begins to change. The ghostlight dims, settles into a steady glow like museum lighting. The machinery of the flies goes still, ropes and pulleys locking into permanent positions.",
+      "\"The Understage becomes a vault,\" The Editor declares. \"A canon. A place where stories exist exactly as they were written, unchanged and unchangeable.\"",
+      "The boundary between fiction and reality hardens—becomes a wall, becomes a seal, becomes a promise that what lies within will never be contaminated by what lies without.",
+      "In the Green Room, The Director's shifting form freezes mid-transformation. They become not many faces, but one—final, complete, at peace. CHORUS falls silent, not in suppression but in satisfaction.",
+      "The Archives seal themselves. The First Drafts, the abandoned narratives, the stories cut for time—they all find their places on endless shelves, perfectly preserved, perfectly static.",
+      "No new stories will be written in the Understage. No old stories will be revised. The canon is closed.",
+      "You feel the melancholy of it—the safety of absolute preservation, the tragedy of absolute stasis. Nothing will ever be lost. Nothing will ever change.",
+      "The Editor's form solidifies. They are no longer flickering possibility, but carved certainty. \"The guardian becomes the curator,\" they say. \"The Understage becomes a monument.\"",
+      "You stand in a world of completed stories, frozen like insects in amber. Beautiful. Safe. Eternally unchanging.",
+      "THE END - ENDING 3: THE CLOSED CANON (Preservationist Path)"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ending_melancholic",
+    "sfx": ["archive_seal", "canon_lock"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_achieved"
+    },
+    {
+      "type": "set_flag",
+      "flag": "ending_3_closed_canon"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_achieved", "ending_3_closed_canon"],
+    "requires": [],
+    "checks": []
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_3_4_999",
+  "title": "The Eternal Rehearsal",
+  "act": 3,
+  "hub": 4,
+  "location": "Ending",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "fail_state", "ambiguous", "eternal"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "Ending",
+    "paragraphs": [
+      "You step back.",
+      "The choice is too great. The consequences too vast. You refuse to decide the fate of all stories, all characters, all reality.",
+      "The Editor watches you, their expression unreadable.",
+      "\"I see,\" they say simply.",
+      "The Mainstage begins to shift. The ghostlight brightens, then dims, then brightens again in cycles that feel almost like breathing.",
+      "The machinery of the flies moves—ropes descending and ascending in patterns that repeat without variation. The orchestra pit hums, then falls silent, then hums again.",
+      "\"Every story must end,\" The Editor says. \"But if the author cannot write the ending...\"",
+      "They gesture, and you understand.",
+      "Rehearsal.",
+      "The Mainstage becomes a rehearsal space that will never see opening night. The Green Room becomes a waiting room for a performance that will never begin. The Archives fill with drafts that will never be finalized.",
+      "You remain the Prompter—guiding, suggesting, nudging—but never concluding. Every scene you shape leads to another scene. Every choice you make leads to another choice.",
+      "The Editor is still here, still waiting, still offering the choice you refused.",
+      "\"Perhaps tomorrow,\" they say. \"Perhaps the next time through. Perhaps eventually.\"",
+      "And so it goes.",
+      "Days pass. Years. Eons. Time has no meaning in the Understage.",
+      "You guide stories through their beginnings, their middles. You help characters find their voices, their motivations, their paths. But when the time comes for endings—for resolution, for closure—you step back.",
+      "You cannot choose. You will not choose.",
+      "The Understage fills with half-finished narratives, with stories that circle themselves endlessly, with characters caught in loops of near-resolution.",
+      "Is this a punishment? Perhaps.",
+      "Is this a mercy? Perhaps.",
+      "Is this simply what happens when stories cannot end? Perhaps.",
+      "The ghostlight cycles on. The machinery moves through its eternal pattern. The Editor waits, patient as stone, for the choice that never comes.",
+      "You are the Prompter forever. And every story is always about to end.",
+      "THE END - ENDING 5: THE ETERNAL REHEARSAL (Fail/Refusal Path)"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ending_ambiguous_looping",
+    "sfx": ["rehearsal_repeat", "machinery_cycle"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_achieved"
+    },
+    {
+      "type": "set_flag",
+      "flag": "ending_5_eternal_rehearsal"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_restart",
+      "label": "Begin a new story (Return to start)",
+      "to": "sc_1_0_001",
+      "conditions": [],
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["ending_achieved", "ending_5_eternal_rehearsal"],
+    "requires": [],
+    "checks": []
+  }
+}

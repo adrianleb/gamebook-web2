@@ -314,25 +314,26 @@
       "location": "The Mainstage",
       "act": 3,
       "hub": 4,
-      "status": "pending",
-      "description": "Act 3 Hub opening"
+      "status": "draft",
+      "description": "Act 3 Hub opening - First encounter with The Editor",
+      "mechanics": ["npc_introduction", "hub_navigation", "act3_start"]
     },
     "sc_3_4_098": {
       "title": "The Last Curtain Call",
       "location": "The Mainstage",
       "act": 3,
       "hub": 4,
-      "status": "pending",
-      "description": "Final confrontation with the Editor",
-      "mechanics": ["ally_count", "multi_phase"]
+      "status": "draft",
+      "description": "Final confrontation - Convergence scene with all 5 ending branches",
+      "mechanics": ["faction_gate", "editor_state_gate", "final_choice"]
     },
     "sc_3_4_901": {
       "title": "The Revised Draft",
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "pending",
-      "description": "Ending 1 - Revisionist path",
+      "status": "draft",
+      "description": "Ending 1 - Revisionist path (bittersweet)",
       "ending": true,
       "endingId": 1
     },
@@ -341,8 +342,8 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "pending",
-      "description": "Ending 2 - Exiter path",
+      "status": "draft",
+      "description": "Ending 2 - Exiter path (hopeful)",
       "ending": true,
       "endingId": 2
     },
@@ -351,8 +352,8 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "pending",
-      "description": "Ending 3 - Preservationist path",
+      "status": "draft",
+      "description": "Ending 3 - Preservationist path (melancholic)",
       "ending": true,
       "endingId": 3
     },
@@ -361,8 +362,8 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "pending",
-      "description": "Ending 4 - Independent path",
+      "status": "draft",
+      "description": "Ending 4 - Independent path (tragic)",
       "ending": true,
       "endingId": 4
     },
@@ -371,16 +372,16 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "pending",
-      "description": "Ending 5 - Refused final choice",
+      "status": "draft",
+      "description": "Ending 5 - Refused final choice (ambiguous)",
       "ending": true,
       "endingId": 5
     }
   },
   "implementationStatus": {
     "totalScenes": 18,
-    "pending": 10,
-    "draft": 2,
+    "pending": 2,
+    "draft": 10,
     "complete": 6,
     "reviewed": 0
   }

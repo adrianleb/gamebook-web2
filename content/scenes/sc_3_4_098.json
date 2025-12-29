@@ -1,0 +1,141 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_3_4_098",
+  "title": "The Last Curtain Call",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["climax", "convergence", "ending_branch", "final_choice"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The Mainstage",
+    "paragraphs": [
+      "The Mainstage falls silent.",
+      "Your confrontation with The Editor has reached its final moment. The machinery of the Understage grinds to stillness. The ghostlight flares once, brilliant and terrible, and settles into a steady glow that illuminates the space between you.",
+      "The Editor stands before you, their form flickering like damaged film. Their expression is impossible to read—you see weariness, determination, something that might almost be pride.",
+      "\"Every story reaches this moment,\" they say, and their voice carries the weight of every narrative ever abandoned. \"The final scene. The last curtain call. The moment when characters must choose what becomes of them when the audience leaves and the houselights rise.\"",
+      "Behind you, your allies wait in the wings—those who chose to follow you, who believed in your vision for what the Understage could become. Above, the fly system holds infinite possibilities. Below, the orchestra pit hums with the power to reshape reality.",
+      "The Editor spreads their hands, and you see trails of ink dripping from their fingertips—the raw stuff of narrative, the power to rewrite endings.",
+      "\"I offer you the same choice I offer all who reach this stage. Accept the Great Revision, or refuse it and face the consequences.\"",
+      "They step closer, and you realize the truth: The Editor is not your enemy. They are what remains when stories lose their authors—keeper of the unwritten, guardian of the abandoned, the one who ensures that every character, every narrative, every tale has someone to remember it.",
+      "\"But I am tired,\" The Editor says, and the admission cracks their composure. \"I have held this space for longer than memory. The boundary weakens. The Great Revision is my attempt to save what can be saved before all stories dissolve into nothing.\"",
+      "They extend their hand, palm up—an offer, a challenge, a surrender all at once.",
+      "\"Choose now, Prompter. How does this story end?\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_editor",
+      "name": "The Editor",
+      "description": "The weary guardian of abandoned narratives, offering their power and their fate",
+      "role": "final_antagonist_catalyst"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "final_choice_climax",
+    "sfx": ["ink_drip", "houselight_dim"]
+  },
+  "effectsOnEnter": [],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Take The Editor's power—Revise the Understage yourself (Revisionist, requires revisionist >= 7 and editorState == defeated)",
+      "to": "sc_3_4_901",
+      "conditions": [
+        {
+          "type": "stat",
+          "stat": "revisionist",
+          "value": 7,
+          "comparison": "gte"
+        },
+        {
+          "type": "flag",
+          "flag": "editorState",
+          "value": "defeated"
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "Requires revisionist faction >= 7 and having defeated The Editor in combat"
+    },
+    {
+      "id": "choice_2",
+      "label": "Persuade The Editor to step aside—Let fiction and reality merge peacefully (Exiter, requires exiter >= 7 and editorState == persuaded)",
+      "to": "sc_3_4_902",
+      "conditions": [
+        {
+          "type": "stat",
+          "stat": "exiter",
+          "value": 7,
+          "comparison": "gte"
+        },
+        {
+          "type": "flag",
+          "flag": "editorState",
+          "value": "persuaded"
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "Requires exiter faction >= 7 and having persuaded The Editor through dialogue"
+    },
+    {
+      "id": "choice_3",
+      "label": "Seal the Understage completely—Preserve all stories as they are (Preservationist, requires preservationist >= 7 and editorState == defeated)",
+      "to": "sc_3_4_903",
+      "conditions": [
+        {
+          "type": "stat",
+          "stat": "preservationist",
+          "value": 7,
+          "comparison": "gte"
+        },
+        {
+          "type": "flag",
+          "flag": "editorState",
+          "value": "defeated"
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "Requires preservationist faction >= 7 and having defeated The Editor in combat"
+    },
+    {
+      "id": "choice_4",
+      "label": "Learn the deeper truth—End both Understage and its threat (Independent, requires editorState == revealedTruth)",
+      "to": "sc_3_4_904",
+      "conditions": [
+        {
+          "type": "flag",
+          "flag": "editorState",
+          "value": "revealedTruth"
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "Requires having discovered the deeper truth about The Editor and the Understage"
+    },
+    {
+      "id": "choice_5",
+      "label": "Refuse the choice—Step away from the final decision",
+      "to": "sc_3_4_999",
+      "conditions": [],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "finalChoice",
+          "value": "failed_or_refused"
+        }
+      ],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["mainstage_reached"],
+    "checks": []
+  }
+}

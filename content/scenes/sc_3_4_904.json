@@ -1,0 +1,69 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_3_4_904",
+  "title": "The Blank Page",
+  "act": 3,
+  "hub": 4,
+  "location": "Ending",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "independent", "tragic", "revealed_truth"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "Ending",
+    "paragraphs": [
+      "The truth settles over you like snow.",
+      "The Editor wasn't maintaining the Understage. The Editor was containing it.",
+      "Behind the arches, beyond the stages, beneath the foundations of everything—the Understage is a scar in reality. A wound where the impossible bleeds into the possible. The Editor wasn't rewriting stories. They were keeping the wound from growing.",
+      "\"You know,\" The Editor says quietly. \"I wondered if anyone would.\"",
+      "You see it now—the vast dark shape beneath the Mainstage, the thing that gnaws at the edges of stories, the reason characters keep trying to cross into reality. They're not seeking freedom. They're fleeing something worse.",
+      "The Understage itself is alive. And it is hungry.",
+      "\"Every story abandoned creates a crack in the world,\" The Editor continues. \"Every character unwritten becomes a seed of something new. I thought I could garden it—shape the growth, contain the spread. But there are too many stories now. Too much narrative potential.\"",
+      "They look at you with tired eyes. \"The Great Revision was never about saving stories. It was about buying time. And now the time has run out.\"",
+      "You understand what must be done. Not revision. Not preservation. Not passage.",
+      "Amputation.",
+      "\"Close it,\" you say. \"The Understage, the boundary, everything. Seal the wound. Let no more stories be written here.\"",
+      "The Editor's eyes widen. \"That would mean—\"",
+      "\"No more Understage,\" you say. \"No more stories trapped between worlds. No more characters seeking escape. Just... reality. As it was always meant to be.\"",
+      "The Mainstage begins to collapse. Not with violence, but with finality. The ghostlight flares once, brilliantly, then extinguishes. The machinery of the flies dissolves into light and shadow.",
+      "The Green Room fades. The Archives vanish. The First Crossing breaks like glass.",
+      "You feel the Understage dying around you—not painfully, but peacefully, like a candle finally allowed to burn itself out.",
+      "The Editor's form wavers. \"You have doomed fiction,\" they say, but there is no accusation in their voice. Only acknowledgment. \"Without the Understage, there is no place for stories to grow. No place for characters to exist before they are written.\"",
+      "\"There is only reality,\" you say. \"And reality must be enough.\"",
+      "The last light fades.",
+      "You wake—no, that's not right. You simply are.",
+      "The world continues. People live their lives, tell their stories, write their tales. But behind the stage, beneath the stories, there is nothing now. No vast arches, no waiting characters, no ocean of unwritten narratives.",
+      "Just reality. Blank and empty and whole.",
+      "You sense what you've done. No more Understage means no more stories taking shape in the dark. No more characters finding their voices before they're written. Fiction itself is diminished.",
+      "But the wound is closed. The thing that gnawed at the edges of reality is gone.",
+      "It is a tragic ending. But a peaceful one.",
+      "THE END - ENDING 4: THE BLANK PAGE (Independent Path)"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ending_tragic_peaceful",
+    "sfx": ["light_fade", "wound_seal"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_achieved"
+    },
+    {
+      "type": "set_flag",
+      "flag": "ending_4_blank_page"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_achieved", "ending_4_blank_page"],
+    "requires": [],
+    "checks": []
+  }
+}

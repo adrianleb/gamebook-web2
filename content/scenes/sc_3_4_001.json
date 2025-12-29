@@ -1,0 +1,100 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_3_4_001",
+  "title": "Mainstage Descent",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["hub_opening", "act3_start", "final_act"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The Mainstage",
+    "paragraphs": [
+      "The Archives fall silent behind you as you step through the final curtain.",
+      "Before you lies a space so vast it defies comprehension—an endless stage stretching into darkness, its floorboards worn smooth by countless performances. Rigs rise like cathedral arches into shadows above, ropes and pulleys dangling like the threads of half-finished stories. The air smells of dust and ghostlight, of endings that never quite finished and beginnings that never began.",
+      "This is the Mainstage. The heart of the Understage. Where all stories originate, and where all stories must end.",
+      "At the center of it all stands a figure—the Editor. Their presence distorts the space around them, reality flickering like damaged film stock. They do not turn to face you, but you feel their attention nonetheless, heavy as a spotlight, cold as the space between stars.",
+      "\"You came.\" The Editor's voice echoes from everywhere and nowhere. \"I wondered if you would. The Prompter who stepped into stories, who guided narratives through the Archives, who learned that all tales are drafts waiting to be rewritten.\"",
+      "They turn, and you see impossible things in their face—every character never written, every ending abandoned, every story cut for time. They are the gap between what is and what could have been.",
+      "\"The Great Revision is nearly complete. The boundary between fiction and reality will dissolve. All characters will step into the light of existence.\" The Editor's tone suggests choice where none exists. \"You have gathered allies. You have learned truths. You have played your part in bringing this moment to pass.\"",
+      "Something glimmers in their expression—not malice, but something worse. Certainty. The certainty of someone who has never doubted that stories belong to them.",
+      "\"But every story needs a final scene. Every character must face their curtain call.\"",
+      "The Mainstage trembles. Above, in the flies, machinery shifts into position. Below, in the orchestra pit, something vast begins to stir.",
+      "You stand at the threshold of the final act. The Editor waits. And behind you, in the darkness of the wings, the allies you've made watch and wait for your cue."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_editor",
+      "name": "The Editor",
+      "description": "The architect of the Great Revision—able to rewrite narratives and manipulate the boundary between fiction and reality",
+      "role": "antagonist"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "mainstage_tension",
+    "sfx": ["machinery_shift", "ghostlight_hum"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "act3_started"
+    },
+    {
+      "type": "set_flag",
+      "flag": "mainstage_reached"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Approach The Editor directly",
+      "to": "sc_3_4_010",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Call upon your allies",
+      "to": "sc_3_4_020",
+      "conditions": [
+        {
+          "type": "flag",
+          "flag": "alliance_determined",
+          "value": true
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "You must have formed alliances in Act 2"
+    },
+    {
+      "id": "choice_3",
+      "label": "Investigate the orchestra pit",
+      "to": "sc_3_4_030",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "Ascend to the fly system",
+      "to": "sc_3_4_040",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["act3_started", "mainstage_reached"],
+    "requires": ["act2_complete"],
+    "checks": []
+  }
+}
