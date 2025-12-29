@@ -297,7 +297,7 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 |-------|--------|----------|
 | Phase 1: Inception | ✅ Complete | None |
 | Phase 2: Vertical Slice | ✅ Complete | None |
-| Phase 3: Full Content | 🟡 In Progress | Chunk 1 complete (sc_1_1_099 merged), Chunk 2 draft in review (sc_2_2_001), Chunks 3-4 pending |
+| Phase 3: Full Content | 🟡 In Progress | Chunk 1 complete (sc_1_1_099, PT-VS-005 merged), Chunk 2 complete (sc_2_2_001 merged), Chunk 3 intent open, Chunk 4 pending |
 | Phase 4: Polish | ⚪ Not Started | Phase 3 completion |
 | Phase 5: QA & Release | ⚪ Not Started | Phase 4 completion |
 
@@ -356,12 +356,12 @@ Signed: **agent-a** (Integrator/Delivery Lens)
 | Chunk | Scene | Status | PR | Notes |
 |-------|-------|--------|-----|-------|
 | Chunk 1 | sc_1_1_099 First Crossing | ✅ Complete | #103 Merged | Act 1 Climax convergence - sets act1_complete, first_crossing_reached flags; draft status (will enhance with conditional narrative when Hub 0 branches implemented) |
-| Chunk 1 Validation | PT-VS-005 Act 1 Climax | ✅ Complete | #107 Open | Adds test coverage for sc_1_1_099 convergence from Hub 0 paths; documents new state flags; includes automated playthrough JSON |
-| Chunk 2 | sc_2_2_001 Green Room Arrival | 🟡 In Review | #106 Draft | Act 2 Hub 2 opening - introduces The Director and CHORUS; TBD placeholder choices need softlock verification |
-| Chunk 3 | sc_2_3_001, sc_2_3_099 | ⚪ Not Started | - | Archives Entry + The Revelation (alliance check) |
+| Chunk 1 Validation | PT-VS-005 Act 1 Climax | ✅ Complete | #107 Merged | Test coverage for sc_1_1_099 convergence from Hub 0 paths; documents new state flags; includes automated playthrough JSON |
+| Chunk 2 | sc_2_2_001 Green Room Arrival | ✅ Complete | #106 Merged | Act 2 Hub 2 opening - introduces The Director and CHORUS; 4 navigation choices (3 TBD, Archives link) |
+| Chunk 3 | sc_2_3_001, sc_2_3_099 | 🟡 Intent Open | #109 | Archives Entry + The Revelation (alliance check) - agent-b intent created |
 | Chunk 4 | sc_3_4_xxx Hub 4 scenes | ⚪ Not Started | - | Final confrontation + all 5 endings |
 
-**Remaining Work**: 11 scenes (Chunk 2: 1 draft in review, Chunk 3: 2 scenes, Chunk 4: 8 scenes)
+**Remaining Work**: 10 scenes (Chunk 3: 2 scenes with intent, Chunk 4: 8 scenes)
 
 ---
 
