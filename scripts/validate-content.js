@@ -18,6 +18,7 @@ import { readFile, readdir } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Ajv from 'ajv';
+import addFormats from 'ajv-formats';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -80,8 +81,10 @@ function validateAgainstSchema(schema, data, filePath) {
   const ajv = new Ajv({
     allErrors: true,
     verbose: true,
-    strict: false
+    strict: false,
+    validateSchema: false
   });
+  addFormats(ajv);
 
   const validateFn = ajv.compile(schema);
   const valid = validateFn(data);
