@@ -1,0 +1,74 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-VS-001",
+    "description": "Direct Route (Baseline Navigation) - Tests choice navigation, basic scene transitions, no gating mechanics",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": [],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Starting state verification",
+      "assertions": {
+        "flagsSet": ["game_started", "location_booth_visited"],
+        "inventoryExcludes": ["wings_pass", "booth_key"],
+        "stats": {
+          "health": 10,
+          "courage": 5
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Step through the opening to the right'",
+      "expectedScene": "sc_1_0_002",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["path_direct"],
+        "inventoryContains": ["wings_pass"],
+        "currentScene": "sc_1_0_002"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Continue toward the light'",
+      "expectedScene": "sc_1_0_900",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "location_booth_visited", "path_direct"],
+        "inventoryContains": ["wings_pass"],
+        "currentScene": "sc_1_0_900"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_0_900",
+    "flagsRequired": ["game_started", "location_booth_visited", "path_direct"],
+    "inventoryRequired": ["wings_pass"],
+    "statsRequired": {
+      "health": 10,
+      "courage": 5
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

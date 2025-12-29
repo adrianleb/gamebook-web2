@@ -1,0 +1,76 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-VS-003",
+    "description": "Stat Check Success Path - Tests stat check mechanics (courage >= 5), success branch",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": ["booth_key"],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Starting with booth_key and courage=5",
+      "assertions": {
+        "inventoryContains": ["booth_key"],
+        "stats": { "courage": 5 }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose 'Attempt the iron door' (has key)",
+      "expectedScene": "sc_1_0_003",
+      "checkpoint": true,
+      "assertions": {
+        "inventoryContains": ["booth_key"],
+        "currentScene": "sc_1_0_003"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "At threshold - courage check should pass (5 >= 5)",
+      "assertions": {
+        "stats": { "courage": 5 },
+        "choicesAvailable": 2
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Step into the darkness' (courage check success)",
+      "expectedScene": "sc_1_0_901",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["crossing_succeeded"],
+        "currentScene": "sc_1_0_901"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_0_901",
+    "flagsRequired": ["crossing_succeeded"],
+    "inventoryRequired": ["booth_key"],
+    "statsRequired": {
+      "courage": 5
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

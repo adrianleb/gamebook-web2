@@ -1,0 +1,215 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Headless Playthrough Script Schema",
+  "description": "Schema for automated playthrough test scripts for the headless runner. Maps TEST_PLAYTHROUGHS.md paths to executable JSON.",
+  "type": "object",
+  "required": ["meta", "steps"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "description": "Playthrough script metadata",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique identifier for this playthrough (e.g., PT-VS-001)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of what this path tests"
+        },
+        "author": {
+          "type": "string",
+          "description": "Author who created this script"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version for tracking changes"
+        }
+      }
+    },
+    "startingState": {
+      "type": "object",
+      "description": "Initial state overrides (optional, uses engine defaults if not provided)",
+      "properties": {
+        "flags": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Starting flags that should be set"
+        },
+        "inventory": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Starting inventory item IDs"
+        },
+        "stats": {
+          "type": "object",
+          "description": "Starting stat values",
+          "additionalProperties": { "type": "number" }
+        },
+        "currentScene": {
+          "type": "string",
+          "description": "Starting scene ID (overrides manifest default)"
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "description": "Sequential steps to execute",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["sequence", "action"],
+            "properties": {
+              "sequence": { "type": "number" },
+              "action": { "const": "start" },
+              "description": { "type": "string" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["sequence", "action", "choiceIndex"],
+            "properties": {
+              "sequence": { "type": "number" },
+              "action": { "const": "choose" },
+              "choiceIndex": { "type": "number" },
+              "expectedScene": { "type": "string" },
+              "checkpoint": { "type": "boolean" },
+              "description": { "type": "string" },
+              "assertions": { "$ref": "#/definitions/assertions" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["sequence", "action", "assertions"],
+            "properties": {
+              "sequence": { "type": "number" },
+              "action": { "const": "checkpoint" },
+              "description": { "type": "string" },
+              "assertions": { "$ref": "#/definitions/assertions" },
+              "saveSnapshot": { "type": "string" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["sequence", "action", "snapshotName"],
+            "properties": {
+              "sequence": { "type": "number" },
+              "action": { "const": "save_snapshot" },
+              "snapshotName": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          },
+          {
+            "type": "object",
+            "required": ["sequence", "action", "snapshotName"],
+            "properties": {
+              "sequence": { "type": "number" },
+              "action": { "const": "load_snapshot" },
+              "snapshotName": { "type": "string" },
+              "description": { "type": "string" },
+              "assertions": { "$ref": "#/definitions/assertions" }
+            }
+          }
+        ]
+      }
+    },
+    "endingCriteria": {
+      "type": "object",
+      "description": "Ending validation criteria",
+      "required": ["sceneId"],
+      "properties": {
+        "sceneId": {
+          "type": "string",
+          "description": "Expected ending scene ID"
+        },
+        "flagsRequired": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Required flags at ending"
+        },
+        "inventoryRequired": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Required items at ending"
+        },
+        "statsRequired": {
+          "type": "object",
+          "description": "Required stat thresholds at ending",
+          "additionalProperties": { "type": "number" }
+        }
+      }
+    },
+    "softlockDetection": {
+      "type": "object",
+      "description": "Softlock detection configuration",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "maxSceneRevisits": { "type": "number" },
+        "maxStepsWithoutProgress": { "type": "number" },
+        "exemptScenes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "failOnDetection": { "type": "boolean" },
+        "continueOnDetection": { "type": "boolean" }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "QA notes, findings, or observations"
+    }
+  },
+  "definitions": {
+    "assertions": {
+      "type": "object",
+      "description": "State assertions for validation",
+      "properties": {
+        "flagsSet": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Expected flags to be set"
+        },
+        "flagsCleared": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Expected flags to be cleared"
+        },
+        "inventoryContains": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Expected items in inventory"
+        },
+        "inventoryExcludes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Expected items NOT in inventory"
+        },
+        "stats": {
+          "type": "object",
+          "description": "Expected stat values (partial match)",
+          "additionalProperties": { "type": "number" }
+        },
+        "currentScene": {
+          "type": "string",
+          "description": "Expected current scene"
+        },
+        "visitedCount": {
+          "type": "object",
+          "description": "Expected scene visit counts",
+          "additionalProperties": { "type": "number" }
+        },
+        "choicesAvailable": {
+          "type": "number",
+          "description": "Minimum expected number of available choices"
+        },
+        "disabledChoicesValidated": {
+          "type": "boolean",
+          "description": "Verify choices with disabledHint are properly disabled"
+        }
+      }
+    }
+  }
+}
