@@ -1,0 +1,61 @@
+{
+  "$schema": "../schemas/scene-schema.json",
+  "id": "sc_3_4_999",
+  "title": "The Eternal Rehearsal",
+  "act": 3,
+  "hub": 4,
+  "location": "Ending",
+  "implementationStatus": "draft",
+  "ending": true,
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "fail", "ambiguous"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The End",
+    "paragraphs": [
+      "\"I refuse,\" you say. \"None of these choices are acceptable.\"",
+      "The Editor waits. Silent. Patient.",
+      "\"The boundary cannot hold as it is. Sealing the Understage stops growth. Dissolving it invites chaos. Taking your place perpetuates the same flawed system. And the truth behind it all... the truth offers only emptiness.\"",
+      "You look around the infinite stage. The crystalline floor. The twilight curtains. The endless potential of stories.",
+      "\"There must be another way. A choice you haven't offered. A path you haven't seen.\"",
+      "\"There is not,\" the Editor says. \"These are the only paths. The only endings. Your refusal changes nothing—except that the choice will be made without your input.\"",
+      "\"Then let it wait.\" You meet the Editor's gaze. \"I will not choose between unacceptable options. If there is no good ending, then there is no ending at all.\"",
+      "The Editor considers this for a long moment.",
+      "\"Very well,\" they say at last. \"The rehearsal continues.\"",
+      "The Mainstage does not change. The Editor does not fade. The boundary remains as it was—strained, cracking, but not broken.",
+      "You remain as Prompter. The conflict continues. Characters keep crossing. Factions keep forming. The Great Revision looms, never arriving.",
+      "It is not victory. It is not defeat. It is simply... continuation.",
+      "Perhaps someday, a new choice will emerge. A better path. A way forward that doesn't require sacrifice.",
+      "Until then, the rehearsal is eternal.",
+      "**ENDING 5: THE ETERNAL REHEARSAL**",
+      "*Ambiguous Ending*",
+      "*Requirements: Refused or failed to make a final choice*"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ending_refusal",
+    "sfx": ["rehearsal_loop"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_5_reached"
+    },
+    {
+      "type": "set_flag",
+      "flag": "game_complete"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_5_reached", "game_complete"],
+    "requires": [],
+    "checks": []
+  }
+}

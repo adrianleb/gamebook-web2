@@ -1,0 +1,144 @@
+{
+  "$schema": "../schemas/scene-schema.json",
+  "id": "sc_3_4_098",
+  "title": "The Last Curtain Call",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["convergence", "final_confrontation", "ending_branch"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The Mainstage",
+    "paragraphs": [
+      "You stand before the Editor at the center of an infinite stage.",
+      "\"You have traveled far, Prompter.\" The Editor's voice resonates from everywhere and nowhere. \"Through breaches, across thresholds, into archives of forgotten stories. You have seen what the Understage truly is—a place where narratives live and die, where characters dream of existence, where every story ever told finds its home.\"",
+      "They gesture, and the curtains part. Beyond them lies not a theater audience, but something else—vistas of reality, of worlds where stories are only stories. Where characters remain on pages and stages, never crossing into waking life.",
+      "\"The Great Revision approaches. The boundary between fiction and reality grows thin. I offer you three paths through what comes next.\"",
+      "The Editor extends a hand. In their palm, three possibilities shimmer like ink in water.",
+      "\"The Revised Draft: Take my place. Choose which stories survive, which are rewritten, which are lost. Preserve the boundary, but bear the weight of curation forever.\"",
+      "\"The Open Book: Let the boundary dissolve completely. Fiction and reality merge. Characters become real, stories become life. The Understage becomes a threshold rather than a wall.\"",
+      "\"The Closed Canon: Seal the Understage eternally. No more new stories. No more crossings. What exists is fixed, complete, unchanging. Safe but static.\"",
+      "A fourth path whispers from the shadows behind the Editor—a path of balance, of revelation, of an ending no one foresaw.",
+      "And always, the choice to refuse, to let the conflict continue indefinitely...",
+      "\"Your alliances, your choices, your every step has led to this moment. The final curtain waits.\"",
+      "What will you choose?"
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_editor",
+      "name": "The Editor",
+      "description": "The architect of the Great Revision, offering you the final choice",
+      "role": "antagonist"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "final_confrontation",
+    "sfx": ["curtain_rise", "ink_shimmer"]
+  },
+  "effectsOnEnter": [],
+  "choices": [
+    {
+      "id": "choice_revisionist",
+      "label": "Take the Editor's power: The Revised Draft",
+      "to": "sc_3_4_901",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          {
+            "type": "stat_check",
+            "stat": "revisionist",
+            "op": "gte",
+            "value": 7
+          },
+          {
+            "type": "flag_check",
+            "flag": "editorState_defeated"
+          }
+        ]
+      },
+      "onChoose": [],
+      "disabledHint": "Requires revisionist faction >= 7 and editorState: defeated",
+      "style": "primary"
+    },
+    {
+      "id": "choice_exiter",
+      "label": "Dissolve the boundary: The Open Book",
+      "to": "sc_3_4_902",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          {
+            "type": "stat_check",
+            "stat": "exiter",
+            "op": "gte",
+            "value": 7
+          },
+          {
+            "type": "flag_check",
+            "flag": "editorState_persuaded"
+          }
+        ]
+      },
+      "onChoose": [],
+      "disabledHint": "Requires exiter faction >= 7 and editorState: persuaded",
+      "style": "primary"
+    },
+    {
+      "id": "choice_preservationist",
+      "label": "Seal the Understage: The Closed Canon",
+      "to": "sc_3_4_903",
+      "conditions": {
+        "type": "AND",
+        "conditions": [
+          {
+            "type": "stat_check",
+            "stat": "preservationist",
+            "op": "gte",
+            "value": 7
+          },
+          {
+            "type": "flag_check",
+            "flag": "editorState_defeated"
+          }
+        ]
+      },
+      "onChoose": [],
+      "disabledHint": "Requires preservationist faction >= 7 and editorState: defeated",
+      "style": "primary"
+    },
+    {
+      "id": "choice_independent",
+      "label": "Seek the truth beyond all paths: The Blank Page",
+      "to": "sc_3_4_904",
+      "conditions": {
+        "type": "flag_check",
+        "flag": "editorState_revealedTruth"
+      },
+      "onChoose": [],
+      "disabledHint": "Requires editorState: revealedTruth (independent path)",
+      "style": "special"
+    },
+    {
+      "id": "choice_refuse",
+      "label": "Refuse the choice. The conflict continues.",
+      "to": "sc_3_4_999",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null,
+      "style": "default"
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["mainstage_reached"],
+    "checks": []
+  }
+}

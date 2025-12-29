@@ -1,0 +1,67 @@
+{
+  "$schema": "../schemas/scene-schema.json",
+  "id": "sc_3_4_001",
+  "title": "Mainstage Descent",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["hub_opening", "act3", "final_act"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The Mainstage",
+    "paragraphs": [
+      "The Archives fade behind you as a new passage opens—not carved, not grown, but *written* into being. Steps of crystallized ink spiral downward into light that is neither warm nor cold, simply *present*.",
+      "You descend.",
+      "The space expands around you, vast beyond comprehension. An endless stage stretches in every direction, its floor polished to mirror-perfection. Above, rigging of impossible complexity supports curtains the color of twilight. Fly systems rise into darkness without ceiling.",
+      "This is the Mainstage. The heart of the Understage. Where every story begins.",
+      "In the center distance, a single figure stands. The Editor. They do not turn to face you—they have no need. They know you have arrived. They have been waiting.",
+      "The air thrums with potential. Your alliances, your choices, every faction you have aligned with or against—they all lead here. The final act approaches.",
+      "There is no turning back. The curtain waits."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_editor",
+      "name": "The Editor",
+      "description": "The architect of the Great Revision, standing at the heart of the Mainstage",
+      "role": "antagonist"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "mainstage_ambient",
+    "sfx": ["distant_curtain", "ink_crystals"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "mainstage_reached"
+    },
+    {
+      "type": "set_flag",
+      "flag": "act3_started"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Approach the Editor",
+      "to": "sc_3_4_098",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null,
+      "style": "primary"
+    }
+  ],
+  "flags": {
+    "sets": ["mainstage_reached", "act3_started"],
+    "requires": ["act2_complete"],
+    "checks": []
+  }
+}

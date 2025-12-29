@@ -1,0 +1,60 @@
+{
+  "$schema": "../schemas/scene-schema.json",
+  "id": "sc_3_4_903",
+  "title": "The Closed Canon",
+  "act": 3,
+  "hub": 4,
+  "location": "Ending",
+  "implementationStatus": "draft",
+  "ending": true,
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "preservationist", "melancholic"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The End",
+    "paragraphs": [
+      "\"Seal it,\" you tell the Editor. \"No more new stories. No more crossings. What exists is enough.\"",
+      "The Editor's expression—if they have one—grows thoughtful. \"Safety through stasis. The Understage becomes a museum. Every story exactly as it was meant to be, forever.\"",
+      "\"Some stories are worth preserving exactly as they are.\"",
+      "\"And some,\" the Editor counters softly, \"deserve to grow.\"",
+      "You do not waver. \"Growth brings chaos. The Understage has seen enough chaos.\"",
+      "A slow nod. The Editor accepts your choice.",
+      "The Mainstage transforms. The crystalline floor solidifies into unbreakable glass. The endless rigging locks into place. The curtains seal shut, becoming walls. The Understage becomes a vault—a closed canon, complete and unchanging.",
+      "Every story that exists continues to exist. Characters live their narratives in endless repetition, perfect performances of beloved tales. No new story will ever threaten what has been written.",
+      "The boundary between fiction and reality becomes absolute. No character will ever cross again. No breach will ever open.",
+      "It is safe. It is peaceful.",
+      "It is also, undeniably, still.",
+      "As the final seal sets, you feel a quiet melancholy. You have saved the Understage from chaos. You have also condemned it to repetition. Every story told exactly as written, forever, without surprise, without change, without growth.",
+      "Perhaps that is enough. Perhaps it must be.",
+      "**ENDING 3: THE CLOSED CANON**",
+      "*Melancholic Ending*",
+      "*Requirements: preservationist >= 7, editorState: defeated*"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ending_preservationist",
+    "sfx": ["seal_close"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_3_reached"
+    },
+    {
+      "type": "set_flag",
+      "flag": "game_complete"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_3_reached", "game_complete"],
+    "requires": [],
+    "checks": []
+  }
+}

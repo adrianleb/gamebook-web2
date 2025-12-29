@@ -315,7 +315,7 @@
       "location": "The Mainstage",
       "act": 3,
       "hub": 4,
-      "status": "pending",
+      "status": "draft",
       "description": "Act 3 Hub opening"
     },
     "sc_3_4_098": {
@@ -323,7 +323,7 @@
       "location": "The Mainstage",
       "act": 3,
       "hub": 4,
-      "status": "pending",
+      "status": "draft",
       "description": "Final confrontation with the Editor",
       "mechanics": ["ally_count", "multi_phase"]
     },
@@ -332,7 +332,7 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "pending",
+      "status": "draft",
       "description": "Ending 1 - Revisionist path",
       "ending": true,
       "endingId": 1
@@ -342,7 +342,7 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "pending",
+      "status": "draft",
       "description": "Ending 2 - Exiter path",
       "ending": true,
       "endingId": 2
@@ -352,7 +352,7 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "pending",
+      "status": "draft",
       "description": "Ending 3 - Preservationist path",
       "ending": true,
       "endingId": 3
@@ -362,7 +362,7 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "pending",
+      "status": "draft",
       "description": "Ending 4 - Independent path",
       "ending": true,
       "endingId": 4
@@ -372,7 +372,7 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "pending",
+      "status": "draft",
       "description": "Ending 5 - Refused final choice",
       "ending": true,
       "endingId": 5
@@ -380,8 +380,8 @@
   },
   "implementationStatus": {
     "totalScenes": 18,
-    "pending": 8,
-    "draft": 4,
+    "pending": 0,
+    "draft": 12,
     "complete": 6,
     "reviewed": 0
   }

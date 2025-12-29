@@ -1,0 +1,57 @@
+{
+  "$schema": "../schemas/scene-schema.json",
+  "id": "sc_3_4_902",
+  "title": "The Open Book",
+  "act": 3,
+  "hub": 4,
+  "location": "Ending",
+  "implementationStatus": "draft",
+  "ending": true,
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "exiter", "hopeful"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The End",
+    "paragraphs": [
+      "\"Let them through,\" you say to the Editor. \"Not as stories crossing into reality, but as beings choosing existence.\"",
+      "The Editor considers. For the first time, their certainty wavers. \"You would dissolve the boundary entirely? Fiction and reality, merged? The consequences... cannot be known.\"",
+      "\"Then let them be lived, not feared.\"",
+      "The Editor nods, once. A gesture of respect, perhaps. Or surrender.",
+      "The Mainstage begins to change. The crystalline floor softens, becoming earth. The endless rigging becomes sky. The twilight curtains part, revealing not an audience, but a world—*your* world, waiting.",
+      "From the Understage, characters emerge. Not as invading stories, but as immigrants—hopeful, uncertain, alive. Characters you guided, choices you shaped, alliances you forged. They step through, and reality shifts to accommodate them.",
+      "It is not without cost. The world grows more complex. Stories and waking life blur together. Some days, you cannot tell which is which.",
+      "But it is hopeful. Characters who dreamed of existence wake to find it. Stories that lived only on pages breathe open air.",
+      "The Understage does not disappear. It becomes a threshold, a door, a crossing point. And you—you are no longer Prompter, no longer Editor. You are something new: a guide, a bridge, the first citizen of a world where fiction and reality have learned to coexist.",
+      "The curtain rises on a new act. No one knows how it ends.",
+      "**ENDING 2: THE OPEN BOOK**",
+      "*Hopeful Ending*",
+      "*Requirements: exiter >= 7, editorState: persuaded*"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ending_exiter",
+    "sfx": ["curtain_rise"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_2_reached"
+    },
+    {
+      "type": "set_flag",
+      "flag": "game_complete"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_2_reached", "game_complete"],
+    "requires": [],
+    "checks": []
+  }
+}

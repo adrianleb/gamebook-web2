@@ -1,0 +1,57 @@
+{
+  "$schema": "../schemas/scene-schema.json",
+  "id": "sc_3_4_901",
+  "title": "The Revised Draft",
+  "act": 3,
+  "hub": 4,
+  "location": "Ending",
+  "implementationStatus": "draft",
+  "ending": true,
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "revisionist", "bittersweet"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The End",
+    "paragraphs": [
+      "You take the Editor's hand.",
+      "Power surges through you—not violent, but vast. The weight of infinite narratives settles into your bones. The Editor fades, their essence merging with yours, and you understand at last what it means to curate stories.",
+      "The Mainstage transforms around you. The crystalline ink of the floor becomes a canvas. Every story in the Understage spreads before your vision—characters, worlds, narratives beyond counting.",
+      "\"Some must be revised,\" you whisper, and the ink obliges. Weak stories strengthen. Broken narratives mend. The Understage becomes better than it was.",
+      "\"Some must be set aside.\" Ink darkens, stories recede. Not destroyed—archived. Preserved but no longer active. A necessary pruning.",
+      "\"And some... some must be written anew.\"",
+      "The boundary between Understage and reality holds firm. Fiction remains fiction. Reality remains reality. But the stories that cross the threshold are *better* now. Carefully curated. Thoughtfully revised.",
+      "You stand alone at center stage. The Prompter's mantle has become the Editor's burden. Yours now, forever.",
+      "The curtain falls. The lights dim. Somewhere beyond the stage, stories continue—better, stronger, more carefully told than before.",
+      "You have saved the Understage. You have also inherited its weight.",
+      "**ENDING 1: THE REVISED DRAFT**",
+      "*Bittersweet Ending*",
+      "*Requirements: revisionist >= 7, editorState: defeated*"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ending_revisionist",
+    "sfx": ["curtain_fall"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_1_reached"
+    },
+    {
+      "type": "set_flag",
+      "flag": "game_complete"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_1_reached", "game_complete"],
+    "requires": [],
+    "checks": []
+  }
+}

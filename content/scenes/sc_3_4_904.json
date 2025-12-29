@@ -1,0 +1,63 @@
+{
+  "$schema": "../schemas/scene-schema.json",
+  "id": "sc_3_4_904",
+  "title": "The Blank Page",
+  "act": 3,
+  "hub": 4,
+  "location": "Ending",
+  "implementationStatus": "draft",
+  "ending": true,
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "independent", "tragic"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The End",
+    "paragraphs": [
+      "You saw it—the truth behind the Editor, behind the Understage, behind stories themselves.",
+      "The Editor is not a curator or a guardian. They are a symptom. The Understage is not a sanctuary—it is a wound in reality's fabric, a place where stories accumulate like scar tissue.",
+      "And the Great Revision? It is not a new beginning. It is an ending—the moment the wound heals, whether we want it to or not.",
+      "\"There is another way,\" you say, and the Editor actually looks at you for the first time.",
+      "\"The wound can be healed completely. No Understage. No stories crossing into reality. No boundary to maintain. Just... reality, as it was before stories began.\"",
+      "Silence stretches across the infinite stage.",
+      "\"That would mean the end of every story ever told,\" the Editor says softly. \"Characters, worlds, narratives—all gone. Not archived. Not preserved. Gone.\"",
+      "\"But the wound would heal.\"",
+      "\"Yes. And no new stories would ever emerge from reality's imagination again.\"",
+      "You consider this. A world without stories. A reality that cannot dream of itself through fiction. Peaceful, yes. Safe, certainly. But also... blank.",
+      "It is a choice, you realize. Peace through the end of stories. Or the endless conflict that narratives bring.",
+      "\"What do you choose, Prompter?\"",
+      "Your answer hangs in the crystalline air.",
+      "The Understage fades. The Editor dissolves. The Mainstage becomes nothing.",
+      "Reality remains. Stories are gone.",
+      "The page is blank.",
+      "**ENDING 4: THE BLANK PAGE**",
+      "*Tragic Ending*",
+      "*Requirements: independent path, editorState: revealedTruth*"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ending_independent",
+    "sfx": ["fade_to_silence"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_4_reached"
+    },
+    {
+      "type": "set_flag",
+      "flag": "game_complete"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_4_reached", "game_complete"],
+    "requires": [],
+    "checks": []
+  }
+}
