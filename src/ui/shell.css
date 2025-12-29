@@ -725,3 +725,335 @@ body.test-mode .stat-bar::before {
 .mb-1 { margin-bottom: var(--space-1); }
 .mb-2 { margin-bottom: var(--space-2); }
 .mb-3 { margin-bottom: var(--space-3); }
+
+/* ============================================
+   MODAL OVERLAYS
+   ============================================ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: var(--space-2);
+}
+
+.modal-overlay.visible {
+  display: flex;
+  animation: modal-fade-in var(--transition-normal);
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: var(--bg-secondary);
+  border: 3px solid var(--border-accent);
+  padding: var(--space-3);
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 8px 8px 0px var(--bg-tertiary);
+  animation: modal-slide-up var(--transition-normal);
+}
+
+.modal-content.modal-small {
+  max-width: 400px;
+}
+
+@keyframes modal-slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Modal scrollbar styling */
+.modal-content::-webkit-scrollbar {
+  width: 12px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-dim);
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: var(--border-primary);
+  border: 1px solid var(--bg-primary);
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: var(--border-accent);
+}
+
+.modal-title {
+  font-size: var(--font-xl);
+  font-weight: var(--font-bold);
+  color: var(--text-accent);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 var(--space-3) 0;
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--border-primary);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-dim);
+}
+
+.modal-footer-actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
+.modal-close-btn,
+.modal-confirm-btn {
+  min-height: 44px;
+  min-width: 100px;
+  padding: var(--space-1) var(--space-3);
+  font-family: 'VT323', monospace;
+  font-size: var(--font-base);
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  border-radius: 0;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast);
+}
+
+.modal-close-btn:hover,
+.modal-confirm-btn:hover {
+  background: var(--bg-highlight);
+  border-color: var(--border-accent);
+}
+
+.modal-close-btn:focus-visible,
+.modal-confirm-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-color: var(--border-focus);
+}
+
+.modal-confirm-btn {
+  background: var(--bg-highlight);
+  border-color: var(--border-accent);
+  color: var(--text-accent);
+  font-weight: var(--font-bold);
+}
+
+.modal-confirm-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--text-accent);
+}
+
+/* ============================================
+   SAVE/LOAD MODAL
+   ============================================ */
+
+.save-slots {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.save-slot {
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-dim);
+  padding: var(--space-2);
+  transition: border-color var(--transition-fast),
+              background-color var(--transition-fast);
+}
+
+.save-slot:hover {
+  border-color: var(--border-primary);
+  background: var(--bg-highlight);
+}
+
+.slot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.slot-number {
+  font-size: var(--font-lg);
+  font-weight: var(--font-bold);
+  color: var(--text-accent);
+  text-transform: uppercase;
+}
+
+.slot-status {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.slot-metadata {
+  font-size: var(--font-base);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+  min-height: 24px;
+}
+
+.slot-actions {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.slot-action-btn {
+  min-height: 36px;
+  padding: var(--space-1) var(--space-2);
+  font-family: 'VT323', monospace;
+  font-size: var(--font-base);
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  border-radius: 0;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast);
+  flex: 1;
+  min-width: 80px;
+}
+
+.slot-action-btn:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+  border-color: var(--border-accent);
+}
+
+.slot-action-btn:active:not(:disabled) {
+  background: var(--bg-highlight);
+  box-shadow: inset 2px 2px 0px var(--bg-tertiary);
+  transform: translate(2px, 2px);
+}
+
+.slot-action-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-color: var(--border-focus);
+}
+
+.slot-action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: var(--bg-primary);
+  border-color: var(--border-dim);
+}
+
+.slot-delete-btn {
+  background: var(--bg-primary);
+  border-color: var(--border-dim);
+  color: var(--text-secondary);
+}
+
+.slot-delete-btn:hover:not(:disabled) {
+  background: var(--bg-highlight);
+  border-color: var(--text-danger);
+  color: var(--text-danger);
+}
+
+/* ============================================
+   CONFIRMATION DIALOG
+   ============================================ */
+
+.confirm-message {
+  font-size: var(--font-base);
+  color: var(--text-primary);
+  margin: var(--space-3) 0;
+  line-height: 1.6;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================
+   MAIN MENU
+   ============================================ */
+
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+}
+
+.menu-option-btn {
+  min-height: 48px;
+  padding: var(--space-2) var(--space-3);
+  font-family: 'VT323', monospace;
+  font-size: var(--font-lg);
+  background: var(--bg-tertiary);
+  border: 2px solid var(--border-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  border-radius: 0;
+  text-align: left;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.menu-option-btn:hover {
+  background: var(--bg-highlight);
+  border-color: var(--border-accent);
+  transform: translateX(4px);
+}
+
+.menu-option-btn:active {
+  background: var(--bg-secondary);
+  transform: translateX(8px);
+  box-shadow: inset 2px 2px 0px var(--bg-tertiary);
+}
+
+.menu-option-btn:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+  border-color: var(--border-focus);
+}
+
+.menu-danger-btn {
+  border-color: var(--text-danger);
+  color: var(--text-danger);
+}
+
+.menu-danger-btn:hover {
+  background: rgba(255, 71, 87, 0.1);
+  border-color: var(--text-danger);
+}
+
+/* Respect prefers-reduced-motion for modal animations */
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay.visible,
+  .modal-content,
+  .menu-option-btn {
+    animation: none;
+    transition: none;
+  }
+
+  .menu-option-btn:hover {
+    transform: none;
+  }
+}
