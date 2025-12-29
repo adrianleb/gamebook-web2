@@ -1,0 +1,179 @@
+{
+  "meta": {
+    "title": "Vertical Slice Path 4: Save/Load Regression",
+    "description": "Tests all vertical slice scenes with save/load checkpoint cycles. Verifies state persistence and restoration accuracy. Corresponds to PT-SAVE-001 and PT-REGRESSION-001 from TEST_PLAYTHROUGHS.md.",
+    "author": "agent-e",
+    "version": "1.0.0",
+    "tags": ["vertical-slice", "save-load", "regression", "state-persistence"]
+  },
+  "startingState": {
+    "currentSceneId": "sc_1_0_001",
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
+    "flags": ["game_started"],
+    "inventory": [],
+    "faction": "preservationist"
+  },
+  "steps": [
+    {
+      "action": "checkpoint",
+      "description": "Starting at hub scene - baseline state",
+      "assertions": {
+        "currentSceneId": "sc_1_0_001",
+        "stats": { "health": 10, "courage": 5, "insight": 5 },
+        "flagsSet": ["game_started"],
+        "inventoryExcludes": ["booth_key"]
+      }
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Go to Maren's Guidance (sc_1_0_004)",
+      "targetSceneId": "sc_1_0_004"
+    },
+    {
+      "action": "checkpoint",
+      "description": "At Maren's Guidance",
+      "assertions": {
+        "currentSceneId": "sc_1_0_004",
+        "visitedCount": { "sc_1_0_001": 1 }
+      }
+    },
+    {
+      "action": "save_snapshot",
+      "description": "SAVE STATE: Before acquiring booth_key",
+      "snapshotName": "before_key_acquisition"
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Accept booth_key from Maren",
+      "targetSceneId": "sc_1_0_001",
+      "expectedEffects": {
+        "addInventory": ["booth_key"],
+        "addFlags": ["key_acquired"]
+      }
+    },
+    {
+      "action": "checkpoint",
+      "description": "Back at hub with booth_key",
+      "assertions": {
+        "currentSceneId": "sc_1_0_001",
+        "inventoryContains": ["booth_key"],
+        "flagsSet": ["key_acquired"]
+      }
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 2,
+      "description": "Go to Threshold Stage",
+      "targetSceneId": "sc_1_0_003"
+    },
+    {
+      "action": "checkpoint",
+      "description": "At Threshold Stage with key and sufficient courage",
+      "assertions": {
+        "currentSceneId": "sc_1_0_003",
+        "inventoryContains": ["booth_key"],
+        "stats": { "courage": 5 }
+      }
+    },
+    {
+      "action": "save_snapshot",
+      "description": "SAVE STATE: At threshold before courage check",
+      "snapshotName": "at_threshold_stage"
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Pass courage check and proceed",
+      "targetSceneId": "sc_1_0_005",
+      "expectedEffects": {
+        "addFlags": ["booth_unlocked"]
+      }
+    },
+    {
+      "action": "checkpoint",
+      "description": "Reached resolution scene",
+      "assertions": {
+        "currentSceneId": "sc_1_0_005",
+        "flagsSet": ["booth_unlocked"],
+        "inventoryContains": ["booth_key"]
+      }
+    },
+    {
+      "action": "save_snapshot",
+      "description": "SAVE STATE: At resolution ending",
+      "snapshotName": "at_resolution_ending"
+    },
+    {
+      "action": "load_snapshot",
+      "description": "LOAD STATE: Return to threshold stage",
+      "snapshotName": "at_threshold_stage"
+    },
+    {
+      "action": "checkpoint",
+      "description": "Verified state restoration at threshold",
+      "assertions": {
+        "currentSceneId": "sc_1_0_003",
+        "inventoryContains": ["booth_key"],
+        "stats": { "courage": 5, "health": 10, "insight": 5 },
+        "flagsCleared": ["booth_unlocked"],
+        "visitedCount": { "sc_1_0_001": 2, "sc_1_0_003": 2 }
+      }
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Take alternative path from threshold",
+      "targetSceneId": "sc_1_0_001"
+    },
+    {
+      "action": "load_snapshot",
+      "description": "LOAD STATE: Return to before key acquisition",
+      "snapshotName": "before_key_acquisition"
+    },
+    {
+      "action": "checkpoint",
+      "description": "Verified state restoration - no booth_key",
+      "assertions": {
+        "currentSceneId": "sc_1_0_004",
+        "inventoryExcludes": ["booth_key"],
+        "flagsCleared": ["key_acquired", "booth_unlocked"]
+      }
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Re-acquire booth_key",
+      "targetSceneId": "sc_1_0_001",
+      "expectedEffects": {
+        "addInventory": ["booth_key"],
+        "addFlags": ["key_acquired"]
+      }
+    },
+    {
+      "action": "checkpoint",
+      "description": "Final state verification",
+      "assertions": {
+        "currentSceneId": "sc_1_0_001",
+        "inventoryContains": ["booth_key"],
+        "flagsSet": ["game_started", "key_acquired"]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "flagsSet": ["key_acquired"],
+    "inventoryContains": ["booth_key"],
+    "minSteps": 15,
+    "snapshotTestsPassed": 3
+  },
+  "softlockDetection": {
+    "maxSceneRevisits": 5,
+    "maxStepsWithoutProgress": 20,
+    "exemptScenes": ["sc_1_0_005"]
+  }
+}

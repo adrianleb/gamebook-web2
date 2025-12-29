@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "Vertical Slice Path 3: Stat Check Failure",
+    "description": "Tests hub → locked path with courage stat check failure. Verifies stat-based condition gating and fail-state handling. Corresponds to PT-VS-003 and PT-EDGE-002 from TEST_PLAYTHROUGHS.md.",
+    "author": "agent-e",
+    "version": "1.0.0",
+    "tags": ["vertical-slice", "stat-check", "failure-path", "edge-case"]
+  },
+  "startingState": {
+    "currentSceneId": "sc_1_0_001",
+    "stats": {
+      "health": 10,
+      "courage": 3,
+      "insight": 5
+    },
+    "flags": ["game_started"],
+    "inventory": ["booth_key"],
+    "faction": "preservationist"
+  },
+  "steps": [
+    {
+      "action": "checkpoint",
+      "description": "Starting at hub with booth_key but low courage (3)",
+      "assertions": {
+        "currentSceneId": "sc_1_0_001",
+        "stats": {
+          "courage": { "min": 0, "max": 4 }
+        },
+        "inventoryContains": ["booth_key"]
+      }
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 2,
+      "description": "Proceed to Threshold Stage (have booth_key)",
+      "targetSceneId": "sc_1_0_003"
+    },
+    {
+      "action": "checkpoint",
+      "description": "At Threshold Stage - courage check required",
+      "assertions": {
+        "currentSceneId": "sc_1_0_003",
+        "stats": { "courage": 3 },
+        "choicesAvailable": { "min": 2, "max": 3 }
+      }
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Attempt courage check (requires courage >= 5, will fail)",
+      "targetSceneId": "sc_1_0_003",
+      "expectDisabled": true
+    },
+    {
+      "action": "checkpoint",
+      "description": "Choice was disabled - stat check failed",
+      "assertions": {
+        "currentSceneId": "sc_1_0_003",
+        "stats": { "courage": 3 },
+        "flagsCleared": ["booth_unlocked"]
+      }
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Take alternative path (retreat)",
+      "targetSceneId": "sc_1_0_001"
+    },
+    {
+      "action": "checkpoint",
+      "description": "Retreated back to hub - alternative ending",
+      "assertions": {
+        "currentSceneId": "sc_1_0_001",
+        "flagsSet": ["game_started", "key_acquired"],
+        "visitedCount": { "sc_1_0_001": 2, "sc_1_0_003": 1 }
+      }
+    }
+  ],
+  "endingCriteria": {
+    "flagsSet": ["key_acquired"],
+    "inventoryContains": ["booth_key"],
+    "currentSceneId": "sc_1_0_001",
+    "stats": {
+      "courage": { "max": 4 }
+    },
+    "visitedCount": { "sc_1_0_003": 1 }
+  },
+  "softlockDetection": {
+    "maxSceneRevisits": 3,
+    "maxStepsWithoutProgress": 15,
+    "exemptScenes": ["sc_1_0_005"]
+  }
+}
