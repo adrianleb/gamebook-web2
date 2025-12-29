@@ -1,0 +1,97 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_001",
+  "title": "The Dark Corridor",
+  "act": 1,
+  "hub": 0,
+  "location": "Understage Corridor",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["tutorial", "inventory-test"],
+    "author": "agent-d",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "Understage Corridor",
+    "paragraphs": [
+      "The stage lights flicker, then die. In the sudden darkness, you hear the unmistakable <em>creak</em> of floorboards—boards that haven't been walked in <strong>fifty years</strong>.",
+      "<strong>DIRECTOR:</strong> \"You're late for your own disappearance.\"",
+      "The voice comes from everywhere and nowhere. This is <span class=\"faction-preservationist\">The Understage</span>—the labyrinth beneath the theater where the <strong>Preservationists</strong> guard what <span class=\"faction-revisor\">The Revisors</span> would rewrite.",
+      "Your pockets are empty. Your <strong>Script</strong> is blank. And somewhere in these dark corridors, your past is waiting."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "director",
+      "name": "The Director",
+      "faction": "preservationist",
+      "disposition": 5
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": null,
+    "sfx": ["footstep_wooden", "door_creak"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set-stat",
+      "stat": "script",
+      "value": 5
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Follow the voice into the darkness",
+      "to": "sc_1_1_002",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Try to remember how you got here",
+      "to": "sc_1_1_003",
+      "conditions": [
+        {
+          "type": "stat",
+          "stat": "script",
+          "operator": "gte",
+          "value": 6
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "Requires Script 6+"
+    },
+    {
+      "id": "choice_3",
+      "label": "Use the Prompter's Handbook to find your way",
+      "to": "sc_1_1_004",
+      "conditions": [
+        {
+          "type": "item",
+          "item": "prompters_handbook",
+          "itemCount": 1
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "Requires Prompter's Handbook"
+    },
+    {
+      "id": "choice_4",
+      "label": "Call out into the darkness",
+      "to": "sc_1_1_005",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": [],
+    "checks": []
+  }
+}
