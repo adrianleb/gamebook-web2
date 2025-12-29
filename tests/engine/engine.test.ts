@@ -7,14 +7,14 @@
  */
 
 import { describe, it, expect, beforeEach } from 'bun:test';
-import { Engine, createTestEngine } from '../src/engine/index.js';
+import { Engine, createTestEngine } from '../../src/engine/index.js';
 import type {
   GameManifest,
   SceneData,
   Condition,
   Effect,
   SceneHistoryEntry,
-} from '../src/engine/index.js';
+} from '../../src/engine/index.js';
 
 /**
  * Mock manifest for testing.

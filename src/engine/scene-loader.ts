@@ -378,6 +378,7 @@ export class SceneLoader {
    * - effectsOnEnter → effects mapping
    * - onChoose → effects mapping in choices
    * - audio.music/audio.sfx → music/sfx flattening
+   * - ending property preservation (per agent-d for DOS UI treatment)
    *
    * @param raw - Raw scene data from JSON file
    * @returns Transformed SceneData for runtime use
@@ -413,6 +414,7 @@ export class SceneLoader {
       choices,
       requiredFlags: raw.requiredFlags,
       requiredItems: raw.requiredItems,
+      ending: raw.ending,  // Preserve ending property for DOS UI visual treatment
     };
   }
 

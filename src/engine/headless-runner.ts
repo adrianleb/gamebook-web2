@@ -703,13 +703,19 @@ export class HeadlessRunner {
 
   /**
    * Check if a scene is an ending scene.
-   * Ending scenes have an `ending` property set.
-   * Scenes without choices but no `ending` property are dead ends (softlocks).
+   * Per agent-d (DOS UI lens): Check both ending property AND choices.length === 0
+   * for backward compatibility with existing content.
+   *
+   * - If scene has ending property (boolean or EndingData): it's an ending
+   * - If scene has no choices but no ending marker: it's a bug (dead end/softlock)
+   *
+   * This enables DOS UI to render different visual treatments for ending types
+   * (defeat/victory/neutral/secret) while supporting old content format.
    */
   private isEndingScene(scene: { id: string; choices: unknown[]; ending?: unknown }): boolean {
-    // A scene is only an ending if explicitly marked as such
-    // Scenes with no choices but no ending marker are bugs (dead ends)
-    return scene.ending !== undefined;
+    // Check explicit ending property first (new content format)
+    // Then fall back to choices.length heuristic for old content
+    return scene.ending !== undefined || scene.choices.length === 0;
   }
 
   /**
