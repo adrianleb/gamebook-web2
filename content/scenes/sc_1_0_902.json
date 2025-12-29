@@ -2,7 +2,10 @@
   "$schema": "./scene-schema.json",
   "id": "sc_1_0_902",
   "title": "The Crossing Failed",
-  "text": "You breathe deep, center yourself, and step.\n\nThe darkness resists—a pressure against your skin, a voice whispering TURN BACK—and you feel the fear catch in your throat like a hook. You try to carry it with you, to push through, but the darkness does not yield.\n\nYour courage fails. The boundary rejects you.\n\nYou stumble back, gasping, as the amber light dims to a dull glow. The stage recedes into shadow. You are not yet ready to cross.\n\nA voice speaks from everywhere at once: \"THE PROMPTER MUST BE READY. RETURN WHEN YOU HAVE FOUND YOUR COURAGE.\"\n\n--- VERTICAL SLICE COMPLETE ---\n\nYour courage was insufficient. The Understage rejects those who cannot face the unknown.\n\nThank you for experiencing The Understage vertical slice.",
+  "text": "The Threshold Stage\n\nYou try to step forward—but your feet will not move.\n\nThe darkness presses against you like a physical weight, whispering of all the stories that end badly, all the heroes who faltered, all the doors that close forever. Your heart hammers against your ribs. The resistance is absolute.\n\nYou cannot do it. Not yet. The fear is too old, too heavy, too real.\n\nYou stagger back from the threshold, gasping for air, your vision swimming. The iron door slams shut with a sound like breaking bone.\n\nThe Understage rejects you this day.\n\n--- VERTICAL SLICE COMPLETE ---\n\nYour courage was not sufficient to cross the threshold. The Preservationists note your hesitation.\n\nThank you for experiencing The Understage vertical slice.",
+  "art": null,
+  "music": "resolution_failure",
+  "sfx": ["door_slam", "heartbeat_fast", "wind_void_reject"],
   "effects": [
     {
       "type": "set-flag",
@@ -11,13 +14,10 @@
     {
       "type": "modify-stat",
       "stat": "health",
-      "value": -1
+      "operator": "sub",
+      "value": 1,
+      "min": 0
     }
   ],
-  "choices": [],
-  "ending": {
-    "type": "defeat",
-    "title": "The Failed Crossing",
-    "description": "Your courage was insufficient. The Understage rejects those who cannot face the unknown."
-  }
+  "choices": []
 }
