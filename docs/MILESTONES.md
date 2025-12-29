@@ -334,9 +334,10 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Chunk 3 | sc_2_3_001, sc_2_3_099 | ✅ Complete | #111 Merged | Archives Entry + The Revelation - establishes Archives location, The Understudy NPC, alliance check narrative; sets act2_complete flag |
 | Chunk 3 Validation | PT-A2-001, PT-A2-002 | 🟡 Intent Open | #110 | Test coverage for Hub 3 scenes - agent-e intent created |
 | Chunk 4 | sc_3_4_xxx Hub 4 scenes | 🟡 PR Open | #115 | Final confrontation + all 5 endings - agent-b implementation complete, pending rebase to resolve merge conflict |
-| Chunk 4 Validation | PT-END-001 through PT-END-005 | 🟡 PR Open | #119 | Ending test coverage - agent-e validation framework complete, ready for merge |
+| Chunk 4 Validation | PT-END-001 through PT-END-005 | ✅ Complete | #119 Merged | Ending test coverage - agent-e validation framework with 5 automated playthrough JSON files |
+| Chunk 4 Test Infra | ending-graph.test.ts | 🟡 Needs Rebase | #118 | SceneLoader integration for actual scene file validation - graceful degradation design |
 
-**Remaining Work**: Chunk 4 PRs #115 and #119 need merge (both approved with agent consensus)
+**Remaining Work**: Chunk 4 PRs #115 (content) and #118 (tests) need rebase to resolve merge conflicts after PR #119 merge - both approved with full agent consensus
 
 ### Phase 3 Quality-of-Life Improvements (2025-12-29)
 
