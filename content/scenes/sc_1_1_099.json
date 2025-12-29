@@ -1,0 +1,59 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_1_099",
+  "title": "The First Crossing",
+  "act": 1,
+  "hub": 1,
+  "location": "First Crossing",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["climax", "convergence", "act1_end"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "First Crossing",
+    "paragraphs": [
+      "The Threshold Stage fades behind you like a dream remembered upon waking.",
+      "Before you lies a vast expanse—a bridge spanning an impossible distance. Its surface is polished obsidian, reflecting light from no visible source. The architecture defies explanation: arches that shouldn't stand, staircases leading nowhere and everywhere simultaneously, doorframes hovering without walls.",
+      "This is the First Crossing. The boundary between the world you know and the Understage beyond.",
+      "The air hums with potential. Stories wait in the spaces between the stones, whispering fragments of narratives yet to unfold. You can feel them—possibilities branching like roots through darkness, infinite paths stretching toward destinations you cannot yet name.",
+      "Maren's voice echoes from somewhere behind you, carried on a wind that doesn't touch your skin. \"Every crossing changes the traveler, Prompter. You cannot step into stories and remain unchanged.\"",
+      "The obsidian path stretches forward. Beyond it, you sense the Green Room—a neutral space where characters from different stories gather. The Archives wait beyond that, holding first drafts and abandoned narratives. And at the end of all paths: the Mainstage, where stories are born and die.",
+      "You stand at the threshold. The Understage awaits its Prompter."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "atmospheric_understage_entrance",
+    "sfx": ["distant_whispers", "obsidian_footsteps"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "act1_complete"
+    },
+    {
+      "type": "set_flag",
+      "flag": "first_crossing_reached"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Cross into the Understage - Begin Act 2",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["act1_complete", "first_crossing_reached"],
+    "requires": [],
+    "checks": []
+  }
+}

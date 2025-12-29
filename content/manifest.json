@@ -279,7 +279,7 @@
       "location": "First Crossing",
       "act": 1,
       "hub": 1,
-      "status": "pending",
+      "status": "draft",
       "description": "Act 1 Climax - First descent into Understage",
       "mechanics": ["stat_check", "faction_preview"]
     },
@@ -378,8 +378,8 @@
   },
   "implementationStatus": {
     "totalScenes": 18,
-    "pending": 12,
-    "draft": 0,
+    "pending": 11,
+    "draft": 1,
     "complete": 6,
     "reviewed": 0
   }
