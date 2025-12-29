@@ -1,0 +1,88 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-VS-002",
+    "description": "Inventory-Gated Route - Tests inventory gating, disabled choice hints, item acquisition",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": [],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify 'Attempt the iron door' is disabled without key",
+      "assertions": {
+        "disabledChoicesValidated": true,
+        "choicesAvailable": 2
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 2,
+      "description": "Choose 'Speak with the figure in shadow' (Talk to Maren)",
+      "expectedScene": "sc_1_0_004",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["met_maren"],
+        "inventoryContains": ["booth_key"],
+        "currentScene": "sc_1_0_004"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Thank Maren and return to the booth'",
+      "expectedScene": "sc_1_0_001",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "location_booth_visited", "met_maren"],
+        "inventoryContains": ["booth_key"],
+        "currentScene": "sc_1_0_001"
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "checkpoint",
+      "description": "Verify 'Attempt the iron door' is now enabled with key",
+      "assertions": {
+        "inventoryContains": ["booth_key"],
+        "choicesAvailable": 3
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose 'Attempt the iron door' (now enabled)",
+      "expectedScene": "sc_1_0_003",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "location_booth_visited", "met_maren"],
+        "inventoryContains": ["booth_key"],
+        "currentScene": "sc_1_0_003"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_0_003",
+    "flagsRequired": ["met_maren"],
+    "inventoryRequired": ["booth_key"]
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
