@@ -288,8 +288,9 @@
       "location": "The Green Room",
       "act": 2,
       "hub": 2,
-      "status": "pending",
-      "description": "Hub 2 opening"
+      "status": "draft",
+      "description": "Hub 2 opening - Neutral meeting space with The Director and CHORUS",
+      "mechanics": ["npc_introduction", "faction_preview", "hub_navigation"]
     },
     "sc_2_3_001": {
       "title": "The Archives Entry",
@@ -378,8 +379,8 @@
   },
   "implementationStatus": {
     "totalScenes": 18,
-    "pending": 11,
-    "draft": 1,
+    "pending": 10,
+    "draft": 2,
     "complete": 6,
     "reviewed": 0
   }

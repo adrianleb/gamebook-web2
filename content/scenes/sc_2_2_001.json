@@ -1,0 +1,98 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_001",
+  "title": "Green Room Arrival",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["hub_opening", "faction_intro", "neutral_space"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The Green Room",
+    "paragraphs": [
+      "The obsidian bridge deposits you gently onto worn floorboards.",
+      "You find yourself in a space that feels both familiar and impossible—an expansive lounge lit by lamps that cast a warm, amber glow against velvet-draped walls. Mirrors of varying sizes cluster on every surface, some reflecting the room you stand in, others showing places you've never been but somehow recognize.",
+      "This is the Green Room. Behind every stage, beyond every story. Neutral ground where characters from different narratives gather when the audience isn't watching.",
+      "A figure stands near a vanity table, examining themselves in a mirror that shows only shadow. They turn, and you realize you cannot describe their face—it shifts subtly, like an actor changing masks between breaths.",
+      "\"The Prompter arrives at last.\" Their voice sounds like many voices layered together. \"I am the Director. I oversee what can and cannot be performed in this theater. And you... you are new to the Understage, but not to the work of guiding stories.\"",
+      "The Director gestures to the room around you. \"The Green Room welcomes all who have crossed into stories. Here you may rest, plan, or choose your next performance. But know this: the Understage is not what it was. Disturbances grow in the wings. Factions form, each claiming to know how stories should proceed.\"",
+      "From the mirrors, a whispers rises—not one voice, but many. CHORUS, the collective presence of every character who has ever existed in fiction, speaks through the glass: \"*Preserve. Revise. Exit. Balance. The four paths wait. Choose carefully, Prompter, for stories depend on your direction.*\"",
+      "The Director raises a hand, and CHORUS falls silent. \"Pay them no mind for now. You have only just arrived. Explore if you wish, or speak with me about what lies ahead. The Archives wait for those who seek knowledge. The Mainstage waits for those who seek resolution.\"",
+      "You stand at the heart of the Understage, surrounded by reflections of stories yet to be told."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_director",
+      "name": "The Director",
+      "description": "A shapeshifting figure who oversees what can and cannot be performed in the Understage",
+      "role": "faction_guide"
+    },
+    {
+      "id": "chorus",
+      "name": "CHORUS",
+      "description": "The collective presence of every fictional character, speaking through mirrors and glass",
+      "role": "collective_consciousness"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "green_room_ambient",
+    "sfx": ["mirror_whispers", "velvet_shift"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "green_room_reached"
+    },
+    {
+      "type": "set_flag",
+      "flag": "act2_started"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Speak with The Director about the Understage",
+      "to": "sc_2_2_002",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Explore the Green Room (The Dressing Rooms)",
+      "to": "sc_2_2_010",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Check the Call Board for quests and rumors",
+      "to": "sc_2_2_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "Head to the Archives",
+      "to": "sc_2_3_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["green_room_reached", "act2_started"],
+    "requires": ["act1_complete"],
+    "checks": []
+  }
+}
