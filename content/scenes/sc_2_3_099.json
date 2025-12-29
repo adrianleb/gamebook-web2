@@ -1,0 +1,82 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_3_099",
+  "title": "The Revelation",
+  "act": 2,
+  "hub": 3,
+  "location": "The Archives",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["act_climax", "alliance_check", "revelation", "convergence"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The Author's Desk",
+    "paragraphs": [
+      "The Author's Desk dominates the heart of the Archives—a monumental workspace carved from dark wood that seems to breathe. Papers cover every surface, each covered in handwriting that shifts between languages, some that no living tongue has spoken in centuries.",
+      "At the center of it all rests a manuscript bound in leather the color of dried blood. This is the Editor's work—a document that rewrites stories at their source, cutting scenes, changing endings, deciding which narratives deserve to exist.",
+      "The Understudy appears beside you, their form now solid—a young performer in rehearsal black, holding a script marked through with red ink.",
+      "\"You've found it,\" they say quietly. \"The truth behind the disturbances. The Editor isn't just maintaining the Understage. They're rewriting it. Every cut scene, every abandoned character, every story that didn't fit their vision—all stored here, waiting to be used or erased.\"",
+      "They gesture to the manuscript, and you see that the ink is still wet, forming new words even as you watch.",
+      "\"The Editor plans a Great Revision. A single story that replaces all others. No more branching paths. No more unexpected endings. No more choices.\"",
+      "The Understudy turns to you, and in their face you see every character who was ever written out of a story.",
+      "\"But you've made allies in the Understage. Factions who believe stories should be preserved, revised, freed, or balanced. They will stand with you against the Editor's final curtain call.\"",
+      "Above the desk, the walls of the Archives begin to dissolve, revealing a vast darkness beyond—the Mainstage awaits. The final act approaches."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "Now revealed as a guardian standing against the Editor's Great Revision",
+      "role": "quest_giver"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "revelation_climax",
+    "sfx": ["ink_dripping", "parchment_crumbling"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "revelation_discovered"
+    },
+    {
+      "type": "set_flag",
+      "flag": "act2_complete"
+    },
+    {
+      "type": "set_flag",
+      "flag": "editor_revealed"
+    },
+    {
+      "type": "modify-faction",
+      "faction": "independent",
+      "amount": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Ascend to the Mainstage (Final Act)",
+      "to": "sc_3_4_001",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "mainstage_ascent"
+        }
+      ],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["revelation_discovered", "act2_complete", "editor_revealed"],
+    "requires": ["archives_reached"],
+    "checks": []
+  }
+}
