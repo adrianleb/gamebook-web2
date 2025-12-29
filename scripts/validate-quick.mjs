@@ -16,7 +16,7 @@ const sceneFiles = readdirSync('./content/scenes').filter(f => f.endsWith('.json
 console.log('\nScene files:', sceneFiles.length);
 sceneFiles.forEach(file => {
   const scene = JSON.parse(readFileSync('./content/scenes/' + file, 'utf8'));
-  const sceneResult = validator.validateScene(scene, new Set(Object.keys(manifest.sceneIndex)));
+  const sceneResult = validator.validateScene(scene, manifest);
   if (!sceneResult.valid) {
     console.log(file + ':', JSON.stringify(sceneResult.errors));
   }
