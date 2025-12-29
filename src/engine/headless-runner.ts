@@ -95,12 +95,22 @@ export class HeadlessRunner {
         await this.applyStartingState(script.startingState);
       }
 
+      // Initial softlock check (catches softlocks in starting state)
+      if (script.softlockDetection?.enabled !== false) {
+        softlock = this.detectSoftlock(script.softlockDetection);
+        if (softlock.softlocked && script.softlockDetection?.failOnDetection !== false) {
+          failure = {
+            step: 0,
+            reason: `Softlock detected: ${softlock.reason} at scene ${softlock.sceneId}`,
+          };
+        }
+      }
       // Execute each step
       for (const step of script.steps) {
         this.stepCount++;
 
         // Check for softlock before executing step
-        if (script.softlockDetection?.enabled !== false) {
+        if (script.softlockDetection?.enabled !== false && !failure) {
           softlock = this.detectSoftlock(script.softlockDetection);
           if (softlock.softlocked) {
             if (script.softlockDetection?.failOnDetection !== false) {
@@ -272,7 +282,9 @@ export class HeadlessRunner {
           status: 'failed',
           failure: {
             step: step.sequence,
-            ...assertionResult.failure,
+            expected: assertionResult.expected,
+            actual: assertionResult.actual,
+            reason: assertionResult.reason!,
           },
         };
       }
@@ -299,12 +311,15 @@ export class HeadlessRunner {
     const assertionResult = this.validateAssertions(step.assertions, state);
 
     if (assertionResult.status === 'failed') {
+      const failure: PlaythroughResult['failure'] = {
+        step: step.sequence,
+        expected: assertionResult.expected,
+        actual: assertionResult.actual,
+        reason: assertionResult.reason!,
+      };
       return {
         status: 'failed',
-        failure: {
-          step: step.sequence,
-          ...assertionResult.failure,
-        },
+        failure,
       };
     }
 
@@ -380,7 +395,9 @@ export class HeadlessRunner {
           status: 'failed',
           failure: {
             step: step.sequence,
-            ...assertionResult.failure,
+            expected: assertionResult.expected,
+            actual: assertionResult.actual,
+            reason: assertionResult.reason!,
           },
         };
       }
@@ -397,7 +414,9 @@ export class HeadlessRunner {
     state: GameState
   ): {
     status: 'passed' | 'failed';
-    failure?: { expected?: string; actual?: string; reason: string };
+    expected?: string;
+    actual?: string;
+    reason?: string;
   } {
     // Check flagsSet
     if (assertions.flagsSet) {
@@ -611,13 +630,15 @@ export class HeadlessRunner {
     if (availableChoices.length === 0) {
       // Check if this is an ending scene (no choices is expected)
       const currentSceneData = this.engine.getCurrentScene();
-      if (!currentSceneData || !this.isEndingScene(currentSceneData)) {
+      // If we have scene data and it's not an ending, that's a softlock
+      if (currentSceneData && !this.isEndingScene(currentSceneData)) {
         return {
           softlocked: true,
           reason: 'no_choices',
           sceneId: currentScene,
         };
       }
+      // If no scene data or it's an ending, continue to other checks
     }
 
     // Check scene revisit threshold
@@ -682,12 +703,13 @@ export class HeadlessRunner {
 
   /**
    * Check if a scene is an ending scene.
-   * Ending scenes have no choices and are intentional dead ends.
+   * Ending scenes have an `ending` property set.
+   * Scenes without choices but no `ending` property are dead ends (softlocks).
    */
-  private isEndingScene(scene: { id: string; choices: unknown[] }): boolean {
-    // Simple heuristic: ending scenes have no choices
-    // Could be enhanced with scene metadata
-    return scene.choices.length === 0;
+  private isEndingScene(scene: { id: string; choices: unknown[]; ending?: unknown }): boolean {
+    // A scene is only an ending if explicitly marked as such
+    // Scenes with no choices but no ending marker are bugs (dead ends)
+    return scene.ending !== undefined;
   }
 
   /**
