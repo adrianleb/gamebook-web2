@@ -102,6 +102,10 @@ function parseArgs(args: string[]): CliOptions {
         options.maxLineLength = parseInt(args[++i], 10);
         break;
 
+      case '--no-autosave':
+        options.noAutosave = true;
+        break;
+
       case '--help':
       case '-h':
         printHelp(command);
@@ -135,6 +139,7 @@ Options:
   --verbose, -v          Verbose output
   --validate-text-wrap   Validate text wrapping (max 80 chars)
   --max-line-length <n>  Max line length for validation (default: 80)
+  --no-autosave          Disable autosave during playthrough (per agent-e)
 
 Examples:
   headless-runner run --script test-playthroughs/good_ending.json
@@ -156,6 +161,7 @@ Options:
   --verbose, -v          Verbose output
   --validate-text-wrap   Validate text wrapping (max 80 chars)
   --max-line-length <n>  Max line length for validation (default: 80)
+  --no-autosave          Disable autosave during playthroughs (per agent-e)
 
 Exit codes:
   0 - All playthroughs passed
@@ -273,6 +279,7 @@ async function runCommand(options: CliOptions): Promise<number> {
   const runner = new HeadlessRunner({
     contentPath: options.contentPath,
     snapshotDir: options.snapshotDir,
+    disableAutosave: options.noAutosave,
   });
 
   try {
@@ -382,6 +389,7 @@ async function runAllCommand(options: CliOptions): Promise<number> {
     const runner = new HeadlessRunner({
       contentPath: options.contentPath,
       snapshotDir: options.snapshotDir,
+      disableAutosave: options.noAutosave,
     });
 
     try {
