@@ -330,8 +330,11 @@ export class SceneLoader {
    * In browser, uses fetch API.
    */
   private async loadFile(path: string): Promise<string> {
-    // Detect environment
-    if (typeof window !== 'undefined') {
+    // Detect environment - check for browser-specific global
+    // @ts-expect-error - window is not defined in Node.js environment, but typeof check makes it safe
+    const isBrowser = typeof window !== 'undefined';
+
+    if (isBrowser) {
       // Browser: use fetch
       const response = await fetch(path);
       if (!response.ok) {

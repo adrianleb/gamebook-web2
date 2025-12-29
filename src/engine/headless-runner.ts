@@ -133,7 +133,7 @@ export class HeadlessRunner {
           break;
         }
 
-        if (stepResult.snapshot) {
+        if (stepResult.snapshot && stepResult.snapshotData) {
           snapshotsCreated.push(stepResult.snapshot);
           this.snapshots.set(stepResult.snapshot, stepResult.snapshotData);
         }
@@ -207,14 +207,17 @@ export class HeadlessRunner {
         return this.executeLoadSnapshotStep(step);
       }
 
-      default:
+      default: {
+        // Exhaustiveness check - should never reach here
+        const unknownStep: never = step;
         return {
           status: 'failed',
           failure: {
-            step: step.sequence,
-            reason: `Unknown action type: ${(step as any).action}`,
+            step: (unknownStep as PlaythroughStep).sequence,
+            reason: `Unknown action type: ${(unknownStep as any).action}`,
           },
         };
+      }
     }
   }
 
@@ -593,14 +596,14 @@ export class HeadlessRunner {
     if (criteria.statsRequired) {
       for (const [stat, minValue] of Object.entries(criteria.statsRequired)) {
         const actualValue = state.stats[stat] ?? 0;
-        if (actualValue < minValue) {
+        if (actualValue < (minValue ?? 0)) {
           return {
             status: 'failed',
             failure: {
               step: this.stepCount,
               expected: `${stat} >= ${minValue}`,
               actual: `${stat} = ${actualValue}`,
-              reason: `Required stat "${stat}" is ${actualValue}, expected at least ${minValue}`,
+              reason: `Required stat "${stat}" is ${actualValue}, expected at least ${minValue ?? 0}`,
             },
           };
         }

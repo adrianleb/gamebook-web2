@@ -283,14 +283,14 @@ async function runCommand(options: CliOptions): Promise<number> {
   }
 
   // Execute playthrough
-  logPlaythroughStart(script, options.verbose);
+  logPlaythroughStart(script, options.verbose ?? false);
 
   const startTime = Date.now();
   const result = await runner.executeScript(script);
   const duration = Date.now() - startTime;
 
   // Log results
-  logPlaythroughResult(result, options.verbose);
+  logPlaythroughResult(result, options.verbose ?? false);
 
   // Validate text wrapping if requested
   if (options.validateTextWrap) {
@@ -413,7 +413,7 @@ async function runAllCommand(options: CliOptions): Promise<number> {
   };
 
   // Log summary
-  logSummary(summary, options.ci);
+  logSummary(summary, options.ci ?? false);
 
   // Write JSON output if requested
   if (options.output) {

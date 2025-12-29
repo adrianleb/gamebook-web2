@@ -106,6 +106,7 @@ export interface StartingState {
  * Step types in a playthrough script.
  */
 export type PlaythroughStep =
+  | StartStep
   | ChooseStep
   | CheckpointStep
   | SaveSnapshotStep
@@ -134,6 +135,13 @@ export type PlaythroughAction =
   | 'checkpoint'  // Verify state without advancing
   | 'save_snapshot'  // Capture state for regression testing
   | 'load_snapshot'; // Restore from previous snapshot
+
+/**
+ * Start action - initialize engine (implicit, usually first step).
+ */
+export interface StartStep extends BaseStep {
+  action: 'start';
+}
 
 /**
  * Choose action - select a choice and transition.
