@@ -1,0 +1,40 @@
+{
+  "$schema": "content/schemas/scene-schema.json",
+  "id": "sc_prologue_arrival",
+  "title": "Arrival",
+  "location": "The Iron Gate",
+  "text": "The iron grate slams shut above you, cutting off the last light from the world above. Your eyes adjust slowly to the dim glow of phosphorescent fungi clinging to cavern walls.\n\nWelcome to The Understage.\n\nA figure in grease-stained overalls approaches, holding a lantern. \"Fresh from Above, eh? Don't get many of your kind down here anymore. Name's Rusty.\"",
+  "onEnter": [
+    {
+      "type": "set_flag",
+      "flag": "arrived_understage"
+    }
+  ],
+  "choices": [
+    {
+      "id": "ask_about_place",
+      "label": "Ask where you are",
+      "to": "sc_prologue_explanation",
+      "style": "default"
+    },
+    {
+      "id": "demand_return",
+      "label": "Demand to be returned to the surface",
+      "to": "sc_prologue_denied",
+      "conditions": {
+        "type": "stat_check",
+        "statId": "presence",
+        "operator": "gte",
+        "value": 7
+      },
+      "disabledHint": "Requires Presence 7+",
+      "style": "primary"
+    },
+    {
+      "id": "attack_rusty",
+      "label": "Attack Rusty and take his lantern",
+      "to": "sc_prologue_combat_rusty",
+      "style": "danger"
+    }
+  ]
+}
