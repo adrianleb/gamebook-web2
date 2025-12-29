@@ -2,51 +2,81 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/adrianleb/gamebook-web2/content/schemas/scene-schema.json",
   "title": "Gamebook Scene",
-  "description": "Individual scene data including text, choices, conditions, and effects for The Understage gamebook",
+  "description": "Individual scene data including text, choices, conditions, and effects for The Understage gamebook. Schema accepts content format (underscores) which scene-loader transforms to runtime format (hyphens).",
   "type": "object",
   "required": ["id", "title", "text", "choices"],
   "properties": {
     "$schema": {
-      "type": "string",
-      "description": "JSON Schema reference for validation"
+      "type": "string"
     },
     "id": {
       "type": "string",
-      "description": "Unique scene identifier (format: sc_<chapter>_<slug> or bk_<source>_<number>)",
       "pattern": "^(sc_|bk_)[a-z0-9_-]+$"
     },
     "title": {
       "type": "string",
-      "description": "Scene title displayed to player",
       "minLength": 1
     },
     "location": {
-      "type": "string",
-      "description": "Optional location name for context"
+      "type": "string"
     },
     "text": {
-      "type": "string",
-      "description": "Scene narrative text. Supports inline markup: [bold], {italic}, _underline_, |choice highlight|",
-      "minLength": 1,
-      "maxLength": 10000
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "required": ["location", "paragraphs"],
+          "properties": {
+            "location": {
+              "type": "string"
+            },
+            "paragraphs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          }
+        }
+      ]
     },
     "art": {
-      "type": "string",
-      "description": "Optional path to scene art image"
+      "oneOf": [
+        { "type": "string" },
+        { "type": "null" }
+      ]
     },
     "music": {
-      "type": "string",
-      "description": "Optional music track identifier"
+      "type": "string"
     },
     "sfx": {
       "type": "array",
-      "description": "Optional sound effects to play on scene entry",
       "items": {
         "type": "string"
       }
     },
-    "onEnter": {
-      "description": "Effects applied when scene is entered",
+    "audio": {
+      "type": "object",
+      "properties": {
+        "music": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "null" }
+          ]
+        },
+        "sfx": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "effectsOnEnter": {
       "oneOf": [
         {
           "type": "array",
@@ -59,8 +89,7 @@
         }
       ]
     },
-    "onExit": {
-      "description": "Effects applied when leaving scene",
+    "onEnter": {
       "oneOf": [
         {
           "type": "array",
@@ -75,36 +104,38 @@
     },
     "choices": {
       "type": "array",
-      "description": "Available choices from this scene",
-      "minItems": 0,
       "items": {
         "type": "object",
         "required": ["label", "to"],
         "properties": {
           "id": {
-            "type": "string",
-            "description": "Optional choice identifier for testing/debugging"
+            "type": "string"
           },
           "label": {
             "type": "string",
-            "description": "Choice button text (supports inline markup)",
             "minLength": 1
           },
           "to": {
             "type": "string",
-            "description": "Target scene ID",
             "pattern": "^(sc_|bk_)[a-z0-9_-]+$"
           },
           "conditions": {
-            "description": "Conditions that must be met for choice to be available",
-            "$ref": "#/$defs/conditionGroup"
-          },
-          "disabledHint": {
-            "type": "string",
-            "description": "Text shown when choice is disabled (required if conditions exist)"
+            "oneOf": [
+              {
+                "$ref": "#/$defs/condition"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/condition"
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "onChoose": {
-            "description": "Effects applied when this choice is selected",
             "oneOf": [
               {
                 "type": "array",
@@ -113,152 +144,148 @@
                 }
               },
               {
-                "$ref": "#/$defs/effect"
+                "type": "null"
               }
+            ]
+          },
+          "disabledHint": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "null" }
             ]
           },
           "style": {
             "type": "string",
-            "enum": ["default", "primary", "danger", "special"],
-            "description": "Visual style variant for the choice button",
-            "default": "default"
-          },
-          "icon": {
-            "type": "string",
-            "description": "Optional icon identifier for the choice"
+            "enum": ["default", "primary", "danger", "special"]
           }
         }
       }
     },
-    "tags": {
+    "requiredFlags": {
       "type": "array",
-      "description": "Optional tags for categorization (e.g., combat, dialogue, exploration)",
+      "items": {
+        "type": "string"
+      }
+    },
+    "requiredItems": {
+      "type": "array",
       "items": {
         "type": "string"
       }
     },
     "ending": {
-      "type": "object",
-      "description": "If present, marks this scene as an ending",
-      "required": ["type", "title"],
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": ["victory", "defeat", "neutral", "secret"]
-        },
-        "title": {
-          "type": "string",
-          "minLength": 1
-        },
-        "description": {
-          "type": "string"
-        },
-        "achievementId": {
-          "type": "string"
-        }
-      }
-    }
-  },
-  "$defs": {
-    "conditionGroup": {
       "oneOf": [
         {
-          "type": "object",
-          "required": ["operator", "conditions"],
-          "properties": {
-            "operator": {
-              "type": "string",
-              "enum": ["AND", "OR", "NOT"]
-            },
-            "conditions": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/condition"
-              }
-            }
-          }
+          "type": "boolean"
         },
         {
-          "$ref": "#/$defs/condition"
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "achievementId": {
+              "type": "string"
+            }
+          }
         }
       ]
     },
+    "act": {
+      "type": "integer"
+    },
+    "hub": {
+      "type": "integer"
+    },
+    "implementationStatus": {
+      "type": "string",
+      "enum": ["pending", "draft", "complete", "reviewed"]
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "npcs": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "flags": {
+      "type": "object"
+    }
+  },
+  "$defs": {
     "condition": {
       "oneOf": [
+        {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "const": "stat_check"
+            },
+            "stat": {
+              "type": "string"
+            },
+            "statId": {
+              "type": "string"
+            },
+            "op": {
+              "type": "string",
+              "enum": ["gte", "lte", "gt", "lt", "eq"]
+            },
+            "operator": {
+              "type": "string",
+              "enum": ["gte", "lte", "gt", "lt", "eq"]
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        },
         {
           "type": "object",
           "required": ["type", "flag"],
           "properties": {
             "type": {
-              "const": "flag"
+              "const": "flag_check"
             },
             "flag": {
-              "type": "string",
-              "pattern": "^[a-z_][a-z0-9_]*$"
-            },
-            "value": {
-              "type": "boolean",
-              "default": true
+              "type": "string"
             }
           }
         },
         {
           "type": "object",
-          "required": ["type", "itemId"],
+          "required": ["type", "item"],
           "properties": {
             "type": {
               "const": "has_item"
             },
-            "itemId": {
-              "type": "string",
-              "pattern": "^[a-z0-9_-]+$"
-            },
-            "quantity": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
+            "item": {
+              "type": "string"
             }
           }
         },
         {
           "type": "object",
-          "required": ["type", "statId"],
+          "required": ["type", "faction"],
           "properties": {
             "type": {
-              "const": "stat_check"
+              "const": "faction_check"
             },
-            "statId": {
-              "type": "string",
-              "pattern": "^[a-z0-9_]+$"
+            "faction": {
+              "type": "string"
             },
-            "operator": {
-              "type": "string",
-              "enum": ["gte", "lte", "gt", "lt", "eq"],
-              "default": "gte"
-            },
-            "value": {
-              "type": "number"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": ["type", "factionId"],
-          "properties": {
-            "type": {
-              "const": "faction_reputation"
-            },
-            "factionId": {
-              "type": "string",
-              "pattern": "^[a-z0-9_-]+$"
-            },
-            "operator": {
-              "type": "string",
-              "enum": ["gte", "lte", "gt", "lt", "eq"],
-              "default": "gte"
-            },
-            "value": {
-              "type": "number"
+            "level": {
+              "type": "integer"
             }
           }
         },
@@ -290,6 +317,55 @@
               "type": "string"
             }
           }
+        },
+        {
+          "type": "object",
+          "required": ["type", "conditions"],
+          "properties": {
+            "type": {
+              "const": "AND"
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              },
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "conditions"],
+          "properties": {
+            "type": {
+              "const": "OR"
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              },
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "conditions"],
+          "properties": {
+            "type": {
+              "const": "NOT"
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              },
+              "minItems": 1,
+              "maxItems": 1
+            }
+          }
         }
       ]
     },
@@ -303,12 +379,7 @@
               "const": "set_flag"
             },
             "flag": {
-              "type": "string",
-              "pattern": "^[a-z_][a-z0-9_]*$"
-            },
-            "value": {
-              "type": "boolean",
-              "default": true
+              "type": "string"
             }
           }
         },
@@ -320,21 +391,19 @@
               "const": "clear_flag"
             },
             "flag": {
-              "type": "string",
-              "pattern": "^[a-z_][a-z0-9_]*$"
+              "type": "string"
             }
           }
         },
         {
           "type": "object",
-          "required": ["type", "itemId"],
+          "required": ["type", "item"],
           "properties": {
             "type": {
               "const": "add_item"
             },
-            "itemId": {
-              "type": "string",
-              "pattern": "^[a-z0-9_-]+$"
+            "item": {
+              "type": "string"
             },
             "quantity": {
               "type": "integer",
@@ -345,79 +414,48 @@
         },
         {
           "type": "object",
-          "required": ["type", "itemId"],
+          "required": ["type", "item"],
           "properties": {
             "type": {
               "const": "remove_item"
             },
-            "itemId": {
-              "type": "string",
-              "pattern": "^[a-z0-9_-]+$"
+            "item": {
+              "type": "string"
             },
             "quantity": {
               "type": "integer",
               "minimum": 1,
               "default": 1
-            },
-            "all": {
-              "type": "boolean",
-              "description": "If true, removes all of the item regardless of quantity",
-              "default": false
             }
           }
         },
         {
           "type": "object",
-          "required": ["type", "statId", "value"],
+          "required": ["type", "stat", "value"],
+          "properties": {
+            "type": {
+              "const": "set_stat"
+            },
+            "stat": {
+              "type": "string"
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "stat", "value"],
           "properties": {
             "type": {
               "const": "modify_stat"
             },
-            "statId": {
-              "type": "string",
-              "pattern": "^[a-z0-9_]+$"
+            "stat": {
+              "type": "string"
             },
             "value": {
               "type": "number"
-            },
-            "operator": {
-              "type": "string",
-              "enum": ["add", "subtract", "set", "multiply"],
-              "default": "add"
-            },
-            "min": {
-              "type": "number",
-              "description": "Optional minimum value cap"
-            },
-            "max": {
-              "type": "number",
-              "description": "Optional maximum value cap"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": ["type", "factionId", "value"],
-          "properties": {
-            "type": {
-              "const": "modify_reputation"
-            },
-            "factionId": {
-              "type": "string",
-              "pattern": "^[a-z0-9_-]+$"
-            },
-            "value": {
-              "type": "integer"
-            },
-            "min": {
-              "type": "integer",
-              "minimum": -100,
-              "maximum": 100
-            },
-            "max": {
-              "type": "integer",
-              "minimum": -100,
-              "maximum": 100
             }
           }
         },
@@ -431,43 +469,24 @@
             "sceneId": {
               "type": "string",
               "pattern": "^(sc_|bk_)[a-z0-9_-]+$"
-            },
-            "immediate": {
-              "type": "boolean",
-              "description": "If true, bypasses any remaining effects/choices",
-              "default": false
             }
           }
         },
         {
           "type": "object",
-          "required": ["type"],
+          "required": ["type", "faction"],
           "properties": {
             "type": {
-              "const": "game_over"
+              "const": "modify_faction"
             },
-            "victory": {
-              "type": "boolean",
-              "default": false
-            },
-            "endingId": {
-              "type": "string"
-            }
-          }
-        },
-        {
-          "type": "object",
-          "required": ["type", "sceneId"],
-          "properties": {
-            "type": {
-              "const": "mark_visited"
-            },
-            "sceneId": {
+            "faction": {
               "type": "string"
             },
-            "count": {
-              "type": "integer",
-              "minimum": 1
+            "value": {
+              "type": "integer"
+            },
+            "amount": {
+              "type": "integer"
             }
           }
         }
