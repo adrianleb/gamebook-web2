@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Understage — DOS UI Shell</title>
+
+  <!-- Preload VT323 font for performance -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/vt323/v15/pxiKyp0ihN8qnMr.woff2"
+        as="font" type="font/woff2" crossorigin>
+
+  <!-- Load VT323 font (SIL Open Font License) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+
+  <!-- DOS UI styles -->
+  <link rel="stylesheet" href="/src/ui/shell.css">
+</head>
+<body>
+  <!-- Main game container -->
+  <div class="game-container">
+
+    <!-- HEADER -->
+    <header class="game-header">
+      <h1 class="game-title">The Understage</h1>
+      <div class="header-actions">
+        <button class="menu-button" id="btn-menu" aria-label="Open menu">MENU</button>
+        <button class="menu-button" id="btn-save" aria-label="Save game">SAVE</button>
+        <button class="menu-button" id="btn-load" aria-label="Load game">LOAD</button>
+      </div>
+    </header>
+
+    <!-- MAIN TEXT VIEWPORT -->
+    <main id="main-text"
+          class="text-viewport"
+          data-test-id="main-text-viewport"
+          role="region"
+          aria-label="Scene text"
+          aria-live="polite"
+          tabindex="0">
+      <!-- Scene text will be rendered here by GameRenderer -->
+      <div id="scene-text" data-test-id="scene-text-content">
+        <p class="text-center" style="color: var(--text-secondary);">Loading...</p>
+      </div>
+    </main>
+
+    <!-- CHOICES PANEL -->
+    <section id="choices-panel" class="choices-panel" data-test-id="choices-panel" aria-label="Available choices">
+      <h2 class="choices-header">What do you do?</h2>
+      <ul class="choices-list" data-test-id="choices-list" role="listbox">
+        <!-- Choices will be rendered here by GameRenderer -->
+      </ul>
+    </section>
+
+    <!-- BOTTOM PANEL: Stats + Inventory -->
+    <div class="bottom-panel">
+
+      <!-- STATS PANEL -->
+      <aside id="stats-panel"
+             class="stats-panel"
+             data-test-id="stats-panel"
+             role="region"
+             aria-label="Character stats">
+        <div class="panel-header">Status</div>
+        <!-- Stats will be rendered here by GameRenderer -->
+      </aside>
+
+      <!-- INVENTORY PANEL -->
+      <aside id="inventory-panel"
+             class="inventory-panel"
+             data-test-id="inventory-panel"
+             role="region"
+             aria-label="Inventory items">
+        <div class="panel-header">Inventory</div>
+        <ul class="inventory-list" data-test-id="inventory-list">
+          <!-- Inventory items will be rendered here by GameRenderer -->
+        </ul>
+      </aside>
+
+    </div>
+    <!-- End bottom panel -->
+
+  </div>
+  <!-- End game container -->
+
+  <!-- ERROR OVERLAY (hidden by default) -->
+  <div id="error-overlay"
+       class="error-overlay"
+       data-test-id="error-overlay"
+       role="alertdialog"
+       aria-labelledby="error-title"
+       aria-describedby="error-text"
+       aria-hidden="true">
+    <div class="error-message">
+      <h2 id="error-title" class="error-title" data-test-id="error-title">Error</h2>
+      <p id="error-text" class="error-text" data-test-id="error-message">
+        An error occurred. Please reload.
+      </p>
+      <button id="error-dismiss" class="error-button" data-test-id="error-dismiss">
+        Continue
+      </button>
+    </div>
+  </div>
+
+  <!-- LOADING INDICATOR (hidden by default) -->
+  <div id="loading-indicator" class="loading-indicator" data-test-id="loading-indicator" aria-hidden="true"></div>
+
+  <!-- SAVE/LOAD MODAL (hidden by default) -->
+  <div id="save-load-modal"
+       class="modal-overlay"
+       data-test-id="save-load-modal"
+       role="dialog"
+       aria-labelledby="save-load-title"
+       aria-modal="true"
+       aria-hidden="true">
+    <div class="modal-content" data-test-id="save-load-modal-content">
+      <h2 id="save-load-title" class="modal-title" data-test-id="save-load-title">Save Game</h2>
+
+      <!-- Save slot list -->
+      <div class="save-slots" data-test-id="save-slots">
+        <!-- Slot 1 -->
+        <div class="save-slot" data-slot-id="1" data-test-id="save-slot-1">
+          <div class="slot-header">
+            <span class="slot-number">Slot 1</span>
+            <span class="slot-status" data-test-id="slot-1-status">Empty</span>
+          </div>
+          <div class="slot-metadata" data-test-id="slot-1-metadata"></div>
+          <div class="slot-actions">
+            <button class="slot-action-btn" data-action="save" data-slot="1" disabled>Save</button>
+            <button class="slot-action-btn" data-action="load" data-slot="1" disabled>Load</button>
+            <button class="slot-action-btn slot-delete-btn" data-action="delete" data-slot="1" disabled>Delete</button>
+          </div>
+        </div>
+
+        <!-- Slot 2 -->
+        <div class="save-slot" data-slot-id="2" data-test-id="save-slot-2">
+          <div class="slot-header">
+            <span class="slot-number">Slot 2</span>
+            <span class="slot-status" data-test-id="slot-2-status">Empty</span>
+          </div>
+          <div class="slot-metadata" data-test-id="slot-2-metadata"></div>
+          <div class="slot-actions">
+            <button class="slot-action-btn" data-action="save" data-slot="2" disabled>Save</button>
+            <button class="slot-action-btn" data-action="load" data-slot="2" disabled>Load</button>
+            <button class="slot-action-btn slot-delete-btn" data-action="delete" data-slot="2" disabled>Delete</button>
+          </div>
+        </div>
+
+        <!-- Slot 3 -->
+        <div class="save-slot" data-slot-id="3" data-test-id="save-slot-3">
+          <div class="slot-header">
+            <span class="slot-number">Slot 3</span>
+            <span class="slot-status" data-test-id="slot-3-status">Empty</span>
+          </div>
+          <div class="slot-metadata" data-test-id="slot-3-metadata"></div>
+          <div class="slot-actions">
+            <button class="slot-action-btn" data-action="save" data-slot="3" disabled>Save</button>
+            <button class="slot-action-btn" data-action="load" data-slot="3" disabled>Load</button>
+            <button class="slot-action-btn slot-delete-btn" data-action="delete" data-slot="3" disabled>Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal footer actions -->
+      <div class="modal-footer">
+        <button id="save-load-cancel" class="modal-close-btn" data-test-id="save-load-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRMATION DIALOG (hidden by default) -->
+  <div id="confirm-dialog"
+       class="modal-overlay"
+       data-test-id="confirm-dialog"
+       role="alertdialog"
+       aria-labelledby="confirm-title"
+       aria-describedby="confirm-message"
+       aria-modal="true"
+       aria-hidden="true">
+    <div class="modal-content modal-small" data-test-id="confirm-dialog-content">
+      <h2 id="confirm-title" class="modal-title" data-test-id="confirm-title">Confirm</h2>
+      <p id="confirm-message" class="confirm-message" data-test-id="confirm-message"></p>
+      <div class="modal-footer modal-footer-actions">
+        <button id="confirm-cancel" class="modal-close-btn" data-test-id="confirm-cancel">Cancel</button>
+        <button id="confirm-ok" class="modal-confirm-btn" data-test-id="confirm-ok">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN MENU OVERLAY (hidden by default) -->
+  <div id="main-menu"
+       class="modal-overlay"
+       data-test-id="main-menu"
+       role="dialog"
+       aria-labelledby="main-menu-title"
+       aria-modal="true"
+       aria-hidden="true">
+    <div class="modal-content modal-small" data-test-id="main-menu-content">
+      <h2 id="main-menu-title" class="modal-title" data-test-id="main-menu-title">Menu</h2>
+      <div class="menu-options">
+        <button class="menu-option-btn" data-action="resume" data-test-id="menu-resume">Resume Game</button>
+        <button class="menu-option-btn" data-action="save" data-test-id="menu-save">Save Game</button>
+        <button class="menu-option-btn" data-action="load" data-test-id="menu-load">Load Game</button>
+        <button class="menu-option-btn menu-danger-btn" data-action="quit" data-test-id="menu-quit">Quit to Title</button>
+      </div>
+      <div class="modal-footer">
+        <button id="main-menu-close" class="modal-close-btn" data-test-id="main-menu-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENGINE & RENDERER INITIALIZATION -->
+  <script type="module">
+    import { Engine } from '/src/engine/engine.ts';
+    import { GameRenderer } from '/src/ui/game-renderer.ts';
+    import { SaveMenu } from '/src/ui/save-menu.ts';
+
+    /**
+     * Initialize the game.
+     * Creates Engine instance, initializes content, and connects GameRenderer and SaveMenu.
+     */
+    async function initializeGame() {
+      try {
+        console.log('[DOS UI Shell] Initializing...');
+
+        // Create Engine instance with content path for browser
+        const engine = new Engine({
+          contentPath: '/content',
+          cacheScenes: true,
+        });
+
+        // Initialize engine (loads manifest and starting scene)
+        await engine.initialize();
+
+        console.log('[DOS UI Shell] Engine initialized');
+
+        // Create and initialize GameRenderer
+        const renderer = new GameRenderer(engine);
+        await renderer.initialize();
+
+        console.log('[DOS UI Shell] GameRenderer initialized');
+
+        // Create and initialize SaveMenu
+        const saveMenu = new SaveMenu(engine);
+        saveMenu.initialize();
+
+        console.log('[DOS UI Shell] SaveMenu initialized');
+
+        // Expose for debugging (development only)
+        if (typeof window !== 'undefined') {
+          window.__GAME_ENGINE__ = engine;
+          window.__GAME_RENDERER__ = renderer;
+          window.__SAVE_MENU__ = saveMenu;
+        }
+
+        // Emit font-ready event after VT323 loads
+        if (document.fonts) {
+          document.fonts.ready.then(() => {
+            console.log('[DOS UI Shell] VT323 font loaded');
+          });
+        }
+      } catch (error) {
+        console.error('[DOS UI Shell] Initialization failed:', error);
+        const errorOverlay = document.querySelector('[data-test-id="error-overlay"]');
+        const errorText = document.querySelector('[data-test-id="error-message"]');
+        if (errorOverlay && errorText) {
+          errorText.textContent = `Failed to initialize: ${error instanceof Error ? error.message : 'Unknown error'}`;
+          errorOverlay.classList.add('visible');
+          errorOverlay.setAttribute('aria-hidden', 'false');
+        }
+      }
+    }
+
+    // Error overlay handler
+    document.getElementById('error-dismiss')?.addEventListener('click', () => {
+      const overlay = document.getElementById('error-overlay');
+      if (overlay) {
+        overlay.classList.remove('visible');
+        overlay.setAttribute('aria-hidden', 'true');
+      }
+    });
+
+    // Initialize on DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeGame);
+    } else {
+      initializeGame();
+    }
+  </script>
+
+</body>
+</html>

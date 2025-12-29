@@ -864,7 +864,7 @@ export class GameRenderer {
    */
   private async loadItemCatalog(): Promise<void> {
     try {
-      const response = await fetch('./content/items.json');
+      const response = await fetch('/content/items.json');
       if (!response.ok) {
         throw new Error(`Failed to load items.json: ${response.statusText}`);
       }
@@ -891,7 +891,7 @@ export class GameRenderer {
    */
   private async loadStatMetadata(): Promise<void> {
     try {
-      const response = await fetch('./content/stats.json');
+      const response = await fetch('/content/stats.json');
       if (!response.ok) {
         throw new Error(`Failed to load stats.json: ${response.statusText}`);
       }
