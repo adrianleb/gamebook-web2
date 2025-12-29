@@ -448,6 +448,29 @@ body {
   border-color: var(--border-accent);
 }
 
+/* Stat bar animation - smooth fill transitions */
+.stat-bar-animated .stat-bar-segment.filled {
+  animation: stat-fill 300ms ease-out;
+}
+
+@keyframes stat-fill {
+  from {
+    background: var(--bg-tertiary);
+    border-color: var(--border-dim);
+  }
+  to {
+    background: var(--text-accent);
+    border-color: var(--border-accent);
+  }
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .stat-bar-animated .stat-bar-segment.filled {
+    animation: none;
+  }
+}
+
 /* ============================================
    INVENTORY PANEL
    ============================================ */
@@ -483,6 +506,65 @@ body {
   border: 1px solid var(--border-dim);
   cursor: pointer;
   transition: border-color var(--transition-fast);
+}
+
+/* Inventory item animation - flash effect for new items */
+.inventory-item-animated {
+  animation: inventory-flash 400ms ease-out;
+}
+
+@keyframes inventory-flash {
+  0% {
+    background: var(--text-accent);
+    transform: scale(1.05);
+  }
+  100% {
+    background: var(--bg-tertiary);
+    transform: scale(1);
+  }
+}
+
+/* Respect prefers-reduced-motion for inventory animations */
+@media (prefers-reduced-motion: reduce) {
+  .inventory-item-animated {
+    animation: none;
+  }
+}
+
+/* Empty inventory state */
+.inventory-empty {
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: var(--space-2);
+}
+
+/* Category header */
+.inventory-category-header {
+  grid-column: 1 / -1;
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+  color: var(--text-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--border-dim);
+  margin-top: var(--space-2);
+}
+
+/* Fallback icon for items without emoji */
+.item-icon-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: var(--bg-highlight);
+  border: 1px solid var(--border-accent);
+  border-radius: 2px;
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+  color: var(--bg-primary);
 }
 
 .inventory-item:hover {
