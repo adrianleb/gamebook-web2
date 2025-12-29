@@ -443,18 +443,219 @@
         this.updateChoiceTabIndexes();
       }
 
-      // Render stats panel
+      // Render stats panel - dynamic stat bar updates
       renderStats() {
         const stats = this.engine.state.stats;
-        // Update stat bars
-        // (Full implementation would update DOM based on state)
+
+        // Defensive validation: check if stats exist and are valid
+        if (!stats || typeof stats !== 'object') {
+          console.error('[UI] Invalid stats state:', stats);
+          this.showError('Stats data corrupted. Please reload.');
+          return;
+        }
+
+        const statConfigs = [
+          { key: 'script', label: 'Script', testId: 'stat-script' },
+          { key: 'stagePresence', label: 'Stage Presence', testId: 'stat-stage' },
+          { key: 'improv', label: 'Improv', testId: 'stat-improv' }
+        ];
+
+        const statsPanel = this.elements.statsPanel;
+        const maxStat = 10;
+
+        // Clear and rebuild stats panel
+        const header = statsPanel.querySelector('.panel-header');
+        statsPanel.innerHTML = '';
+        if (header) statsPanel.appendChild(header);
+
+        statConfigs.forEach(config => {
+          const value = stats[config.key];
+          const clampedValue = Math.max(0, Math.min(maxStat, value || 0));
+
+          // Stat row with label and value
+          const statRow = document.createElement('div');
+          statRow.className = 'stat-row mt-3';
+          statRow.setAttribute('data-test-id', config.testId);
+
+          const label = document.createElement('span');
+          label.className = 'stat-label';
+          label.textContent = config.label;
+
+          const valueSpan = document.createElement('span');
+          valueSpan.className = 'stat-value';
+          valueSpan.textContent = `${clampedValue}/${maxStat}`;
+          valueSpan.setAttribute('data-test-id', `${config.testId}-value`);
+
+          statRow.appendChild(label);
+          statRow.appendChild(valueSpan);
+
+          // Stat bar with segments
+          const statBar = document.createElement('div');
+          statBar.className = 'stat-bar stat-bar-animated';
+          statBar.setAttribute('data-stat-value', clampedValue);
+          statBar.setAttribute('data-stat-max', maxStat);
+          statBar.setAttribute('role', 'progressbar');
+          statBar.setAttribute('aria-label', `${config.label} stat: ${clampedValue} out of ${maxStat}`);
+          statBar.setAttribute('aria-valuenow', clampedValue);
+          statBar.setAttribute('aria-valuemin', 0);
+          statBar.setAttribute('aria-valuemax', maxStat);
+          statBar.setAttribute('data-test-id', `${config.testId}-bar`);
+
+          // Create filled and empty segments
+          for (let i = 0; i < maxStat; i++) {
+            const segment = document.createElement('div');
+            segment.className = 'stat-bar-segment';
+            if (i < clampedValue) {
+              segment.classList.add('filled');
+            }
+            statBar.appendChild(segment);
+          }
+
+          statsPanel.appendChild(statRow);
+          statsPanel.appendChild(statBar);
+        });
       }
 
-      // Render inventory panel
+      // Render inventory panel - dynamic inventory list with categories
       renderInventory() {
         const inventory = this.engine.state.inventory;
-        // Update inventory list
-        // (Full implementation would update DOM based on state)
+
+        // Defensive validation: check if inventory is array
+        if (!Array.isArray(inventory)) {
+          console.error('[UI] Invalid inventory state:', inventory);
+          this.showError('Inventory data corrupted. Please reload.');
+          return;
+        }
+
+        const inventoryList = this.elements.inventoryList;
+        inventoryList.innerHTML = '';
+
+        if (inventory.length === 0) {
+          const emptyMsg = document.createElement('li');
+          emptyMsg.className = 'inventory-empty';
+          emptyMsg.textContent = '— Empty —';
+          emptyMsg.setAttribute('data-test-id', 'inventory-empty');
+          inventoryList.appendChild(emptyMsg);
+          return;
+        }
+
+        // Group items by category (per agent-b's perspective response)
+        const categoryOrder = ['Keys', 'Tools', 'Consumables', 'Misc', 'Quest', 'Readables', 'Tokens', 'Props', 'Scripts'];
+        const itemsByCategory = {};
+
+        inventory.forEach(item => {
+          const category = item.category || 'Misc';
+          if (!itemsByCategory[category]) {
+            itemsByCategory[category] = [];
+          }
+          // Skip items with quantity 0 (except key/quest items)
+          if (item.quantity === 0 && !['Keys', 'Quest'].includes(category)) {
+            return;
+          }
+          itemsByCategory[category].push(item);
+        });
+
+        // Sort categories by defined order, then alphabetically
+        const sortedCategories = Object.keys(itemsByCategory).sort((a, b) => {
+          const indexA = categoryOrder.indexOf(a);
+          const indexB = categoryOrder.indexOf(b);
+          if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+          if (indexA !== -1) return -1;
+          if (indexB !== -1) return 1;
+          return a.localeCompare(b);
+        });
+
+        // Render items by category
+        sortedCategories.forEach(category => {
+          const items = itemsByCategory[category].sort((a, b) => a.name.localeCompare(b.name));
+
+          // Category header (only if multiple categories)
+          if (sortedCategories.length > 1) {
+            const categoryHeader = document.createElement('li');
+            categoryHeader.className = 'inventory-category-header';
+            categoryHeader.textContent = `${category} (${items.length})`;
+            categoryHeader.setAttribute('data-test-id', `category-${category.toLowerCase()}`);
+            inventoryList.appendChild(categoryHeader);
+          }
+
+          // Render items in this category
+          items.forEach((item, index) => {
+            const itemLi = document.createElement('li');
+            itemLi.className = 'inventory-item inventory-item-animated';
+            itemLi.setAttribute('data-test-id', `item-${item.id}`);
+            itemLi.setAttribute('data-item-id', item.id);
+            itemLi.setAttribute('tabindex', '0');
+
+            // Icon - fallback to first 2 letters if no icon
+            const icon = document.createElement('span');
+            icon.className = 'item-icon';
+            if (item.icon) {
+              icon.textContent = item.icon;
+            } else {
+              // Fallback: colored box with first 2 letters
+              icon.textContent = item.id.substring(0, 2).toUpperCase();
+              icon.className += ' item-icon-fallback';
+              icon.style.backgroundColor = this.getCategoryColor(category);
+            }
+
+            // Item name
+            const name = document.createElement('span');
+            name.className = 'item-name';
+            name.textContent = item.name;
+            name.setAttribute('data-test-id', `item-name-${item.id}`);
+
+            // Category (screen reader only per existing HTML)
+            const categorySpan = document.createElement('span');
+            categorySpan.className = 'item-category sr-only';
+            categorySpan.textContent = category;
+
+            itemLi.appendChild(icon);
+            itemLi.appendChild(name);
+            itemLi.appendChild(categorySpan);
+
+            // Quantity badge for consumables/stackable items
+            if (item.quantity && item.quantity > 1) {
+              const quantity = document.createElement('span');
+              quantity.className = 'item-quantity';
+              quantity.textContent = item.quantity > 99 ? '99+' : `x${item.quantity}`;
+              quantity.setAttribute('data-test-id', `item-quantity-${item.id}`);
+              itemLi.appendChild(quantity);
+            }
+
+            inventoryList.appendChild(itemLi);
+          });
+        });
+
+        // Update panel header with count
+        const panelHeader = this.elements.inventoryPanel.querySelector('.panel-header');
+        if (panelHeader) {
+          panelHeader.textContent = `Inventory (${inventory.length})`;
+        }
+      }
+
+      // Helper: Get fallback icon color by category
+      getCategoryColor(category) {
+        const colors = {
+          'Keys': '#ffd700',
+          'Tools': '#5dade2',
+          'Consumables': '#ff4757',
+          'Misc': '#a0a0a0',
+          'Quest': '#ffd700',
+          'Readables': '#e8e8e8',
+          'Tokens': '#f39c12',
+          'Props': '#9b59b6',
+          'Scripts': '#1abc9c'
+        };
+        return colors[category] || '#a0a0a0';
+      }
+
+      // Show error message in overlay
+      showError(message) {
+        const overlay = this.elements.errorOverlay;
+        const errorText = overlay.querySelector('[data-test-id="error-message"]');
+        errorText.textContent = message;
+        overlay.classList.add('visible');
+        overlay.setAttribute('aria-hidden', 'false');
       }
 
       // Handle choice selection
@@ -571,6 +772,10 @@
       const engine = new MockEngine();
       const ui = new UIController(engine);
 
+      // Initial render of stats and inventory
+      ui.renderStats();
+      ui.renderInventory();
+
       // Emit font-ready event after VT323 loads
       if (document.fonts) {
         document.fonts.ready.then(() => {
@@ -579,11 +784,29 @@
         });
       }
 
-      // Demo: Simulate state changes
+      // Demo: Simulate stat changes after delay
       setTimeout(() => {
-        console.log('[Demo] Simulating stat change...');
+        console.log('[Demo] Simulating stat change: Script +1');
         engine.changeStat('script', 1);
       }, 5000);
+
+      // Demo: Simulate inventory addition after delay
+      setTimeout(() => {
+        console.log('[Demo] Simulating inventory addition');
+        engine.state.inventory.push({
+          id: 'prompters_handbook',
+          name: "Prompter's Handbook",
+          icon: '📘',
+          category: 'Tools'
+        });
+        ui.renderInventory();
+      }, 8000);
+
+      // Demo: Simulate stat decrease
+      setTimeout(() => {
+        console.log('[Demo] Simulating stat change: Stage Presence -1');
+        engine.changeStat('stagePresence', -1);
+      }, 12000);
     });
 
     // Error overlay handler
