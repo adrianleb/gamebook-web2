@@ -1,0 +1,418 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/adrianleb/gamebook-web2/content/schemas/scene-schema.json",
+  "title": "Gamebook Scene",
+  "description": "Individual scene data including text, choices, conditions, and effects for The Understage gamebook. Matches engine types.ts canonical format.",
+  "type": "object",
+  "required": ["id", "title", "text", "choices"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON Schema reference for validation"
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique scene identifier (format: sc_ACT_HUB_SEQ)",
+      "pattern": "^sc_[0-9]+_[0-9]+_[0-9]+$"
+    },
+    "title": {
+      "type": "string",
+      "description": "Scene title displayed to player",
+      "minLength": 1
+    },
+    "text": {
+      "type": "string",
+      "description": "Scene narrative text. Supports HTML markup: <em>, <strong>, <span>",
+      "minLength": 1,
+      "maxLength": 10000
+    },
+    "art": {
+      "type": "string",
+      "description": "Optional path to scene art image"
+    },
+    "music": {
+      "type": "string",
+      "description": "Optional music track identifier"
+    },
+    "sfx": {
+      "type": "array",
+      "description": "Optional sound effects to play on scene entry",
+      "items": {
+        "type": "string"
+      }
+    },
+    "effects": {
+      "description": "Effects applied when scene is entered (maps to engine SceneData.effects)",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/effect"
+          }
+        },
+        {
+          "$ref": "#/$defs/effect"
+        }
+      ]
+    },
+    "choices": {
+      "type": "array",
+      "description": "Available choices from this scene",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["label", "to"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Optional choice identifier for testing/debugging"
+          },
+          "label": {
+            "type": "string",
+            "description": "Choice button text",
+            "minLength": 1
+          },
+          "to": {
+            "type": "string",
+            "description": "Target scene ID (maps to engine Choice.to)",
+            "pattern": "^sc_[0-9]+_[0-9]+_[0-9]+$"
+          },
+          "conditions": {
+            "description": "Conditions that must be met for choice to be available (maps to engine Choice.conditions)",
+            "oneOf": [
+              {
+                "$ref": "#/$defs/condition"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/condition"
+                }
+              }
+            ]
+          },
+          "effects": {
+            "description": "Effects applied when this choice is selected (maps to engine Choice.effects)",
+            "oneOf": [
+              {
+                "$ref": "#/$defs/effect"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/effect"
+                }
+              }
+            ]
+          },
+          "disabledHint": {
+            "type": "string",
+            "description": "Text shown when choice is disabled (maps to engine Choice.disabledHint)"
+          }
+        }
+      }
+    },
+    "ending": {
+      "type": "object",
+      "description": "If present, marks this scene as an ending",
+      "required": ["type", "title"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["victory", "defeat", "neutral", "secret"]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "condition": {
+      "oneOf": [
+        {
+          "description": "Flag condition (maps to engine Condition.type='flag')",
+          "type": "object",
+          "required": ["type", "flag"],
+          "properties": {
+            "type": {
+              "const": "flag"
+            },
+            "flag": {
+              "type": "string",
+              "pattern": "^[A-Z_][A-Z0-9_]*$",
+              "description": "Flag name in UPPERCASE_SNAKE_CASE (maps to engine Condition.flag)"
+            }
+          }
+        },
+        {
+          "description": "Item condition (maps to engine Condition.type='item')",
+          "type": "object",
+          "required": ["type", "item"],
+          "properties": {
+            "type": {
+              "const": "item"
+            },
+            "item": {
+              "type": "string",
+              "pattern": "^[a-z0-9_]+$",
+              "description": "Item ID (maps to engine Condition.item)"
+            },
+            "itemCount": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "Quantity required (maps to engine Condition.itemCount)"
+            }
+          }
+        },
+        {
+          "description": "Stat condition (maps to engine Condition.type='stat')",
+          "type": "object",
+          "required": ["type", "stat", "operator", "value"],
+          "properties": {
+            "type": {
+              "const": "stat"
+            },
+            "stat": {
+              "type": "string",
+              "pattern": "^[a-z0-9_]+$",
+              "description": "Stat ID (maps to engine Condition.stat)"
+            },
+            "operator": {
+              "type": "string",
+              "enum": ["gte", "lte", "eq", "gt", "lt"],
+              "description": "Comparison operator (maps to engine Condition.operator)"
+            },
+            "value": {
+              "type": "number",
+              "description": "Value to compare against (maps to engine Condition.value)"
+            }
+          }
+        },
+        {
+          "description": "Faction condition (maps to engine Condition.type='faction')",
+          "type": "object",
+          "required": ["type", "faction", "factionLevel"],
+          "properties": {
+            "type": {
+              "const": "faction"
+            },
+            "faction": {
+              "type": "string",
+              "pattern": "^[a-z0-9_-]+$",
+              "description": "Faction ID (maps to engine Condition.faction)"
+            },
+            "factionLevel": {
+              "type": "integer",
+              "description": "Required faction level (maps to engine Condition.factionLevel)"
+            }
+          }
+        },
+        {
+          "description": "AND condition (maps to engine Condition.type='and')",
+          "type": "object",
+          "required": ["type", "conditions"],
+          "properties": {
+            "type": {
+              "const": "and"
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              },
+              "description": "Nested conditions (maps to engine Condition.conditions)"
+            }
+          }
+        },
+        {
+          "description": "OR condition (maps to engine Condition.type='or')",
+          "type": "object",
+          "required": ["type", "conditions"],
+          "properties": {
+            "type": {
+              "const": "or"
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              },
+              "description": "Nested conditions (maps to engine Condition.conditions)"
+            }
+          }
+        },
+        {
+          "description": "NOT condition (maps to engine Condition.type='not')",
+          "type": "object",
+          "required": ["type", "conditions"],
+          "properties": {
+            "type": {
+              "const": "not"
+            },
+            "conditions": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/condition"
+              },
+              "description": "Nested conditions (maps to engine Condition.conditions)"
+            }
+          }
+        }
+      ]
+    },
+    "effect": {
+      "oneOf": [
+        {
+          "description": "Set flag effect (maps to engine Effect.type='set-flag')",
+          "type": "object",
+          "required": ["type", "flag"],
+          "properties": {
+            "type": {
+              "const": "set-flag"
+            },
+            "flag": {
+              "type": "string",
+              "pattern": "^[A-Z_][A-Z0-9_]*$",
+              "description": "Flag name in UPPERCASE_SNAKE_CASE (maps to engine Effect.flag)"
+            }
+          }
+        },
+        {
+          "description": "Clear flag effect (maps to engine Effect.type='clear-flag')",
+          "type": "object",
+          "required": ["type", "flag"],
+          "properties": {
+            "type": {
+              "const": "clear-flag"
+            },
+            "flag": {
+              "type": "string",
+              "pattern": "^[A-Z_][A-Z0-9_]*$",
+              "description": "Flag name in UPPERCASE_SNAKE_CASE (maps to engine Effect.flag)"
+            }
+          }
+        },
+        {
+          "description": "Add item effect (maps to engine Effect.type='add-item')",
+          "type": "object",
+          "required": ["type", "item"],
+          "properties": {
+            "type": {
+              "const": "add-item"
+            },
+            "item": {
+              "type": "string",
+              "pattern": "^[a-z0-9_]+$",
+              "description": "Item ID (maps to engine Effect.item)"
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "Quantity to add (maps to engine Effect.count)"
+            }
+          }
+        },
+        {
+          "description": "Remove item effect (maps to engine Effect.type='remove-item')",
+          "type": "object",
+          "required": ["type", "item"],
+          "properties": {
+            "type": {
+              "const": "remove-item"
+            },
+            "item": {
+              "type": "string",
+              "pattern": "^[a-z0-9_]+$",
+              "description": "Item ID (maps to engine Effect.item)"
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "description": "Quantity to remove (maps to engine Effect.count)"
+            }
+          }
+        },
+        {
+          "description": "Set stat effect (maps to engine Effect.type='set-stat')",
+          "type": "object",
+          "required": ["type", "stat", "value"],
+          "properties": {
+            "type": {
+              "const": "set-stat"
+            },
+            "stat": {
+              "type": "string",
+              "pattern": "^[a-z0-9_]+$",
+              "description": "Stat ID (maps to engine Effect.stat)"
+            },
+            "value": {
+              "type": "number",
+              "description": "Value to set (maps to engine Effect.value)"
+            }
+          }
+        },
+        {
+          "description": "Modify stat effect (maps to engine Effect.type='modify-stat')",
+          "type": "object",
+          "required": ["type", "stat", "value"],
+          "properties": {
+            "type": {
+              "const": "modify-stat"
+            },
+            "stat": {
+              "type": "string",
+              "pattern": "^[a-z0-9_]+$",
+              "description": "Stat ID (maps to engine Effect.stat)"
+            },
+            "value": {
+              "type": "number",
+              "description": "Value to add/subtract (maps to engine Effect.value)"
+            }
+          }
+        },
+        {
+          "description": "Goto scene effect (maps to engine Effect.type='goto')",
+          "type": "object",
+          "required": ["type", "sceneId"],
+          "properties": {
+            "type": {
+              "const": "goto"
+            },
+            "sceneId": {
+              "type": "string",
+              "pattern": "^sc_[0-9]+_[0-9]+_[0-9]+$",
+              "description": "Target scene ID (maps to engine Effect.sceneId)"
+            }
+          }
+        },
+        {
+          "description": "Modify faction effect (maps to engine Effect.type='modify-faction')",
+          "type": "object",
+          "required": ["type", "faction", "amount"],
+          "properties": {
+            "type": {
+              "const": "modify-faction"
+            },
+            "faction": {
+              "type": "string",
+              "pattern": "^[a-z0-9_-]+$",
+              "description": "Faction ID (maps to engine Effect.faction)"
+            },
+            "amount": {
+              "type": "integer",
+              "description": "Amount to change faction alignment (maps to engine Effect.amount)"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
