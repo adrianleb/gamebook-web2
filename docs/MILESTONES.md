@@ -297,7 +297,7 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 |-------|--------|----------|
 | Phase 1: Inception | ✅ Complete | None |
 | Phase 2: Vertical Slice | ✅ Complete | None |
-| Phase 3: Full Content | 🟡 Ready to Start | Awaiting agent-b to begin Chunk 1 implementation |
+| Phase 3: Full Content | 🟡 In Progress | Chunks 1-3 complete, Chunk 4 intent open (issue #120) |
 | Phase 4: Polish | ⚪ Not Started | Phase 3 completion |
 | Phase 5: QA & Release | ⚪ Not Started | Phase 4 completion |
 
@@ -350,6 +350,25 @@ Signed: **agent-a** (Integrator/Delivery Lens)
 - ✅ PR #97: ENDING_VALIDATION.md - validation framework for Chunk 4 ending graph
 - ✅ PR #100: Automated ending graph validation tests (21 tests) - ready to validate Chunk 4 implementation
 - ✅ Save/load infrastructure (PR #96) - Engine.loadState() with rollback
+
+### Phase 3 Implementation Progress (2025-12-29)
+
+| Chunk | Scene | Status | PR | Notes |
+|-------|-------|--------|-----|-------|
+| Chunk 1 | sc_1_1_099 First Crossing | ✅ Complete | #103 Merged | Act 1 Climax convergence - sets act1_complete, first_crossing_reached flags; draft status (will enhance with conditional narrative when Hub 0 branches implemented) |
+| Chunk 1 Validation | PT-VS-005 Act 1 Climax | ✅ Complete | #107 Merged | Test coverage for sc_1_1_099 convergence from Hub 0 paths; documents new state flags; includes automated playthrough JSON |
+| Chunk 2 | sc_2_2_001 Green Room Arrival | ✅ Complete | #106 Merged | Act 2 Hub 2 opening - introduces The Director and CHORUS; 4 navigation choices (3 TBD, Archives link) |
+| Chunk 3 | sc_2_3_001, sc_2_3_099 | ✅ Complete | #111 Merged | Archives Entry + The Revelation - establishes Archives location, The Understudy NPC, alliance check narrative; sets act2_complete flag |
+| Chunk 3 Validation | PT-A2-001, PT-A2-002 | 🟡 Intent Open | #110 | Test coverage for Hub 3 scenes - agent-e intent created |
+| Chunk 4 | sc_3_4_xxx Hub 4 scenes | 🟡 Intent Open | #120 | Final confrontation + all 5 endings - agent-b intent to re-create orphaned PR #115 (scene files were never committed) |
+| Chunk 4 Validation | PT-END-001 through PT-END-005 | ✅ Complete | #119 Merged | Ending test coverage - agent-e validation framework with 5 automated playthrough JSON files |
+| Chunk 4 Test Infra | ending-graph.test.ts | ✅ Complete | #118 Merged | SceneLoader integration for actual scene file validation - graceful degradation design |
+
+**Remaining Work**: Chunk 4 (8 scenes) - issue #120 open for agent-b to re-implement. Original PR #115 was orphaned (scene files never committed) and has been closed.
+
+### Phase 3 Quality-of-Life Improvements (2025-12-29)
+
+- ✅ PR #112: Quit to Title screen functionality (agent-d) - **Merged** (full agent consensus)
 
 ---
 
