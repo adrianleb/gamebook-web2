@@ -291,6 +291,40 @@ body {
 .choice-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  position: relative;
+}
+
+/* Disabled choice with hint - enhanced styling */
+.choice-button:disabled[data-disabled-hint] {
+  opacity: 0.4;
+  background: var(--bg-tertiary);
+  border-color: var(--border-dim);
+  border-style: dashed;
+  color: var(--text-secondary);
+}
+
+/* Disabled choice hint text display */
+.choice-button:disabled[data-disabled-hint]::after {
+  content: " — " attr(data-disabled-hint);
+  font-size: var(--font-sm);
+  color: var(--text-danger);
+  font-style: italic;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Disabled choice - remove hover effects */
+.choice-button:disabled:hover,
+.choice-button:disabled:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+  border-color: var(--border-dim);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Choice number indicator */

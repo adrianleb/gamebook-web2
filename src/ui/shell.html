@@ -76,12 +76,15 @@
           </button>
         </li>
         <li data-test-id="choice-2" data-choice-index="2">
-          <button class="choice-button locked"
+          <button class="choice-button"
                   data-choice-number="3"
                   data-test-id="choice-button-2"
                   disabled
-                  aria-label="Choice 3 - Locked, requires Key to Green Room">
+                  data-disabled-hint="Requires Key to Green Room"
+                  aria-label="Choice 3: Check your pockets for the Key to Green Room — Requires Key to Green Room"
+                  aria-disabled="true">
             Check your pockets for the <span class="bold">Key to Green Room</span>
+            <span class="sr-only"> (Requires Key to Green Room)</span>
           </button>
         </li>
         <li data-test-id="choice-3" data-choice-index="3">
@@ -250,10 +253,10 @@
             { id: 'ticket_archives', name: 'Ticket to Archives', icon: '🎫', category: 'Keys' }
           ],
           availableChoices: [
-            { id: 0, text: 'Follow the voice into the darkness', statCheck: null, locked: false },
-            { id: 1, text: 'Try to remember how you got here', statCheck: { stat: 'script', threshold: 6 }, locked: false },
-            { id: 2, text: 'Check your pockets for the Key to Green Room', statCheck: null, locked: true, requirement: 'Key to Green Room' },
-            { id: 3, text: 'Call out into the darkness', statCheck: null, locked: false }
+            { id: 0, text: 'Follow the voice into the darkness', statCheck: null, locked: false, disabledHint: null },
+            { id: 1, text: 'Try to remember how you got here', statCheck: { stat: 'script', threshold: 6 }, locked: false, disabledHint: null },
+            { id: 2, text: 'Check your pockets for the Key to Green Room', statCheck: null, locked: true, disabledHint: 'Requires Key to Green Room' },
+            { id: 3, text: 'Call out into the darkness', statCheck: null, locked: false, disabledHint: null }
           ]
         };
       }
@@ -400,12 +403,26 @@
           const button = document.createElement('button');
           button.className = 'choice-button';
           button.setAttribute('data-choice-number', index + 1);
+          button.setAttribute('data-choice-index', index);
           button.setAttribute('data-test-id', `choice-button-${index}`);
           button.textContent = choice.text;
 
           if (choice.locked) {
-            button.classList.add('locked');
             button.disabled = true;
+            button.setAttribute('aria-disabled', 'true');
+
+            // Add disabled hint for accessibility and visual display
+            const hint = choice.disabledHint || 'Locked';
+            button.setAttribute('data-disabled-hint', hint);
+            button.setAttribute('aria-label', `Choice ${index + 1}: ${choice.text} — ${hint}`);
+
+            // Add sr-only text for screen readers
+            const srText = document.createElement('span');
+            srText.className = 'sr-only';
+            srText.textContent = ` (${hint})`;
+            button.appendChild(srText);
+          } else {
+            button.setAttribute('aria-label', `Choice ${index + 1}: ${choice.text}`);
           }
 
           if (choice.statCheck) {
@@ -421,6 +438,9 @@
           li.appendChild(button);
           list.appendChild(li);
         });
+
+        // Update tab indexes after rendering
+        this.updateChoiceTabIndexes();
       }
 
       // Render stats panel
@@ -451,14 +471,40 @@
 
       // Setup keyboard navigation (per agent-e requirements)
       setupKeyboardNav() {
-        document.addEventListener('keydown', (e) => {
-          // Tab order handled by browser (Text → Choices → Stats → Inventory)
-          // Custom shortcuts:
+        const choicesList = this.elements.choicesList;
+
+        choicesList.addEventListener('keydown', (e) => {
+          const allButtons = Array.from(choicesList.querySelectorAll('.choice-button'));
+          const enabledButtons = allButtons.filter(btn => !btn.disabled);
+          const currentFocused = document.activeElement;
+          const currentIndex = enabledButtons.indexOf(currentFocused);
+
           switch (e.key) {
+            case 'ArrowDown':
+              e.preventDefault();
+              this.focusNextChoice(enabledButtons, currentIndex);
+              break;
+
+            case 'ArrowUp':
+              e.preventDefault();
+              this.focusPreviousChoice(enabledButtons, currentIndex);
+              break;
+
+            case 'Home':
+              e.preventDefault();
+              if (enabledButtons.length > 0) enabledButtons[0].focus();
+              break;
+
+            case 'End':
+              e.preventDefault();
+              if (enabledButtons.length > 0) enabledButtons[enabledButtons.length - 1].focus();
+              break;
+
             case 'Escape':
               // Toggle inventory
               this.elements.inventoryList.parentElement.classList.toggle('collapsed');
               break;
+
             case '1':
             case '2':
             case '3':
@@ -468,7 +514,7 @@
             case '7':
             case '8':
             case '9':
-              // Quick select choice
+              // Quick select choice - only enabled choices
               const choiceIndex = parseInt(e.key) - 1;
               const choice = this.engine.state.availableChoices[choiceIndex];
               if (choice && !choice.locked) {
@@ -478,6 +524,33 @@
               break;
           }
         });
+
+        // Initialize: Set first enabled choice as focusable
+        this.updateChoiceTabIndexes();
+      }
+
+      focusNextChoice(enabledButtons, currentIndex) {
+        let nextIndex = currentIndex + 1;
+        if (nextIndex >= enabledButtons.length) nextIndex = 0; // Wrap to first
+        if (enabledButtons[nextIndex]) enabledButtons[nextIndex].focus();
+      }
+
+      focusPreviousChoice(enabledButtons, currentIndex) {
+        let prevIndex = currentIndex - 1;
+        if (prevIndex < 0) prevIndex = enabledButtons.length - 1; // Wrap to last
+        if (enabledButtons[prevIndex]) enabledButtons[prevIndex].focus();
+      }
+
+      updateChoiceTabIndexes() {
+        const allButtons = this.elements.choicesList.querySelectorAll('.choice-button');
+        allButtons.forEach(btn => btn.tabIndex = -1);
+
+        const enabledButtons = Array.from(allButtons).filter(btn => !btn.disabled);
+        enabledButtons.forEach(btn => btn.tabIndex = 0);
+
+        if (enabledButtons.length > 0) {
+          enabledButtons[0].focus();
+        }
       }
 
       // Setup choice button handlers
