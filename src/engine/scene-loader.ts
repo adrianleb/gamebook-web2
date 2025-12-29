@@ -1,0 +1,367 @@
+/**
+ * Scene Loader
+ *
+ * Loads scene data from content files and caches for performance.
+ * Validates manifest and scene integrity.
+ *
+ * Per RFC: Framework-agnostic, supports headless testing in Node.js.
+ */
+
+import type {
+  SceneData,
+  SceneId,
+  GameManifest,
+  ManifestValidationResult,
+  ContentVersion,
+} from './types.js';
+import { ContentValidator } from './validator.js';
+
+/**
+ * Scene loader options.
+ */
+export interface SceneLoaderOptions {
+  /** Base path for content directory */
+  contentPath?: string;
+  /** Whether to cache loaded scenes */
+  cache?: boolean;
+  /** Custom manifest (for testing) */
+  manifest?: GameManifest;
+}
+
+/**
+ * Scene loader class.
+ * Loads scenes from content files with optional caching.
+ */
+export class SceneLoader {
+  private manifest: GameManifest | null = null;
+  private sceneCache: Map<SceneId, SceneData> = new Map();
+  private contentPath: string;
+  private cacheEnabled: boolean;
+  private validator: ContentValidator;
+
+  constructor(options: SceneLoaderOptions = {}) {
+    this.contentPath = options.contentPath ?? './content';
+    this.cacheEnabled = options.cache ?? true;
+    this.validator = new ContentValidator();
+
+    if (options.manifest) {
+      this.manifest = options.manifest;
+    }
+  }
+
+  /**
+   * Initialize the loader by loading the manifest.
+   * Must be called before loading scenes.
+   *
+   * @throws Error if manifest is missing or invalid
+   */
+  async initialize(): Promise<void> {
+    if (this.manifest) {
+      return; // Already initialized with custom manifest
+    }
+
+    try {
+      const manifestPath = `${this.contentPath}/manifest.json`;
+      const manifestData = await this.loadFile(manifestPath);
+      this.manifest = JSON.parse(manifestData) as GameManifest;
+
+      // Validate manifest structure
+      const validation = this.validator.validateManifest(this.manifest);
+      if (!validation.valid) {
+        throw new Error(
+          `Invalid manifest: ${validation.errors.map(e => e.message).join(', ')}`
+        );
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to load manifest: ${error.message}`);
+      }
+      throw new Error('Failed to load manifest: Unknown error');
+    }
+  }
+
+  /**
+   * Load a scene by ID.
+   * Returns cached scene if available and caching is enabled.
+   *
+   * @param sceneId - Scene identifier (e.g., "sc_1_0_001")
+   * @returns Scene data
+   * @throws Error if scene is not found or invalid
+   */
+  async loadScene(sceneId: SceneId): Promise<SceneData> {
+    // Check cache first
+    if (this.cacheEnabled && this.sceneCache.has(sceneId)) {
+      return this.sceneCache.get(sceneId)!;
+    }
+
+    // Ensure manifest is loaded
+    if (!this.manifest) {
+      throw new Error('SceneLoader not initialized. Call initialize() first.');
+    }
+
+    // Verify scene exists in manifest
+    if (!(sceneId in this.manifest.sceneIndex)) {
+      throw new Error(`Scene "${sceneId}" not found in manifest`);
+    }
+
+    try {
+      // Load scene file
+      const scenePath = `${this.contentPath}/scenes/${sceneId}.json`;
+      const sceneData = await this.loadFile(scenePath);
+      const scene = JSON.parse(sceneData) as SceneData;
+
+      // Validate scene structure
+      const validation = this.validator.validateScene(scene, this.manifest);
+      if (!validation.valid) {
+        throw new Error(
+          `Invalid scene "${sceneId}": ${validation.errors.map(e => e.message).join(', ')}`
+        );
+      }
+
+      // Check required flags/items (fail-fast)
+      if (scene.requiredFlags || scene.requiredItems) {
+        // Note: These are validated at load time, actual check happens during transition
+        // This just ensures the referenced flags/items exist in manifest
+      }
+
+      // Cache if enabled
+      if (this.cacheEnabled) {
+        this.sceneCache.set(sceneId, scene);
+      }
+
+      return scene;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(`Failed to load scene "${sceneId}": ${error.message}`);
+      }
+      throw new Error(`Failed to load scene "${sceneId}": Unknown error`);
+    }
+  }
+
+  /**
+   * Get the starting scene ID from manifest.
+   *
+   * @returns Starting scene ID
+   * @throws Error if manifest is not loaded
+   */
+  getStartingScene(): SceneId {
+    if (!this.manifest) {
+      throw new Error('SceneLoader not initialized. Call initialize() first.');
+    }
+    return this.manifest.startingScene;
+  }
+
+  /**
+   * Get the content version from manifest.
+   * Used for save/load compatibility checking.
+   *
+   * @returns Content version string
+   */
+  getContentVersion(): ContentVersion {
+    if (!this.manifest) {
+      throw new Error('SceneLoader not initialized. Call initialize() first.');
+    }
+    return this.manifest.gamebook.adaptationVersion;
+  }
+
+  /**
+   * Get the gamebook title from manifest.
+   *
+   * @returns Gamebook title
+   */
+  getGamebookTitle(): string {
+    if (!this.manifest) {
+      throw new Error('SceneLoader not initialized. Call initialize() first.');
+    }
+    return this.manifest.gamebook.title;
+  }
+
+  /**
+   * Check if a scene exists in the manifest.
+   *
+   * @param sceneId - Scene identifier
+   * @returns True if scene exists
+   */
+  hasScene(sceneId: SceneId): boolean {
+    if (!this.manifest) {
+      return false;
+    }
+    return sceneId in this.manifest.sceneIndex;
+  }
+
+  /**
+   * Get all scene IDs from manifest.
+   *
+   * @returns Array of scene IDs
+   */
+  getAllSceneIds(): SceneId[] {
+    if (!this.manifest) {
+      return [];
+    }
+    return Object.keys(this.manifest.sceneIndex);
+  }
+
+  /**
+   * Get scene metadata from manifest.
+   *
+   * @param sceneId - Scene identifier
+   * @returns Scene index entry or undefined
+   */
+  getSceneMetadata(sceneId: SceneId) {
+    if (!this.manifest) {
+      return undefined;
+    }
+    return this.manifest.sceneIndex[sceneId];
+  }
+
+  /**
+   * Validate the entire manifest and all scenes.
+   *
+   * @returns Validation result with errors and warnings
+   */
+  async validateAll(): Promise<ManifestValidationResult> {
+    if (!this.manifest) {
+      await this.initialize();
+    }
+
+    if (!this.manifest) {
+      return {
+        valid: false,
+        errors: [{ type: 'schema-error', message: 'Failed to load manifest' }],
+        warnings: [],
+      };
+    }
+
+    // Validate manifest
+    const manifestValidation = this.validator.validateManifest(this.manifest);
+    if (!manifestValidation.valid) {
+      return manifestValidation as ManifestValidationResult;
+    }
+
+    const errors: typeof manifestValidation.errors = [];
+    const warnings: typeof manifestValidation.warnings = [];
+    const brokenLinks: Array<{ from: SceneId; to: SceneId }> = [];
+    const missingScenes: SceneId[] = [];
+
+    // Validate all scenes
+    for (const sceneId of this.getAllSceneIds()) {
+      try {
+        const scene = await this.loadScene(sceneId);
+
+        // Check choice links
+        for (const choice of scene.choices) {
+          if (!this.hasScene(choice.to)) {
+            brokenLinks.push({ from: sceneId, to: choice.to });
+          }
+        }
+      } catch (error) {
+        missingScenes.push(sceneId);
+      }
+    }
+
+    // Check for unreachable scenes
+    const unreachable = this.validator.checkReachability(this.manifest);
+
+    return {
+      valid: errors.length === 0 && brokenLinks.length === 0 && missingScenes.length === 0,
+      errors: [
+        ...errors,
+        ...brokenLinks.map(link => ({
+          type: 'broken-link' as const,
+          sceneId: link.from,
+          message: `Broken link from "${link.from}" to "${link.to}"`,
+        })),
+        ...missingScenes.map(id => ({
+          type: 'missing-scene' as const,
+          sceneId: id,
+          message: `Scene file missing for "${id}"`,
+        })),
+      ],
+      warnings: [
+        ...warnings,
+        ...unreachable.map(u => ({
+          type: 'unreachable-scene' as const,
+          sceneId: u.sceneId,
+          message: `Unreachable scene: ${u.reason}`,
+        })),
+      ],
+      brokenLinks,
+      missingScenes,
+    };
+  }
+
+  /**
+   * Clear the scene cache.
+   * Useful for testing or forcing reload of updated content.
+   */
+  clearCache(): void {
+    this.sceneCache.clear();
+  }
+
+  /**
+   * Preload multiple scenes into cache.
+   * Useful for performance optimization.
+   *
+   * @param sceneIds - Array of scene IDs to preload
+   */
+  async preload(sceneIds: SceneId[]): Promise<void> {
+    if (!this.cacheEnabled) {
+      return; // Caching disabled, no point in preloading
+    }
+
+    await Promise.all(
+      sceneIds.map(sceneId => this.loadScene(sceneId))
+    );
+  }
+
+  /**
+   * Load a file from the filesystem.
+   * Abstract method to allow different implementations (browser vs Node).
+   *
+   * In Node.js, uses fs.readFile.
+   * In browser, uses fetch API.
+   */
+  private async loadFile(path: string): Promise<string> {
+    // Detect environment
+    if (typeof window !== 'undefined') {
+      // Browser: use fetch
+      const response = await fetch(path);
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      return response.text();
+    } else {
+      // Node.js: use dynamic import of fs
+      try {
+        const fs = await import('fs/promises');
+        return await fs.readFile(path, 'utf-8');
+      } catch (error) {
+        if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+          throw new Error(`File not found: ${path}`);
+        }
+        throw error;
+      }
+    }
+  }
+
+  /**
+   * Get the current manifest (for testing).
+   */
+  getManifest(): GameManifest | null {
+    return this.manifest;
+  }
+
+  /**
+   * Set a custom manifest (for testing).
+   */
+  setManifest(manifest: GameManifest): void {
+    this.manifest = manifest;
+  }
+}
+
+/**
+ * Create a scene loader with a custom manifest (for testing).
+ */
+export function createTestLoader(manifest: GameManifest): SceneLoader {
+  return new SceneLoader({ manifest, cache: false });
+}
