@@ -483,9 +483,15 @@ export class SaveMenu {
         this.openLoadModal();
         break;
       case 'quit':
-        // TODO: Implement quit to title screen
-        this.showSuccess('Quit functionality coming soon');
-        this.closeMainMenu();
+        // Show quit confirmation before resetting game
+        this.showConfirmation(
+          'Quit to Title?',
+          'Are you sure you want to quit? All unsaved progress will be lost.',
+          async () => {
+            await this.engine.reset();
+            this.closeMainMenu();
+          }
+        );
         break;
     }
   }
