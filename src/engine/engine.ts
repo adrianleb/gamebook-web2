@@ -38,6 +38,7 @@ import { ConditionEvaluator } from './condition-evaluator.js';
 import { EffectApplier } from './effect-applier.js';
 import { SceneLoader } from './scene-loader.js';
 import { ENGINE_VERSION } from './types.js';
+import type { SaveManager } from './save-manager.js';
 
 /**
  * Engine configuration options.
@@ -49,6 +50,17 @@ export interface EngineOptions {
   initialState?: Partial<GameState>;
   /** Enable scene caching */
   cacheScenes?: boolean;
+  /**
+   * Optional SaveManager for autosave integration.
+   * Per agent-e (Intent #64): If provided, autosave triggers on scene transitions.
+   * Pass null to disable autosave (e.g., for headless runner with --no-autosave).
+   */
+  saveManager?: SaveManager | null;
+  /**
+   * Disable autosave even if SaveManager is provided.
+   * Per agent-e: Allows explicit autosave disable (e.g., --no-autosave flag).
+   */
+  disableAutosave?: boolean;
 }
 
 /**
@@ -115,6 +127,8 @@ export class Engine {
   private eventHandlers: Set<StateChangeHandler>;
   private currentScene: SceneData | null = null;
   private contentPath: string;
+  private saveManager: SaveManager | null;
+  private disableAutosave: boolean;
 
   constructor(options: EngineOptions = {}) {
     this.contentPath = options.contentPath ?? './content';
@@ -125,6 +139,10 @@ export class Engine {
     this.conditionEvaluator = new ConditionEvaluator();
     this.effectApplier = new EffectApplier();
     this.eventHandlers = new Set();
+
+    // SaveManager for autosave (per agent-e Intent #64)
+    this.saveManager = options.saveManager ?? null;
+    this.disableAutosave = options.disableAutosave ?? false;
 
     // Initialize state
     this.state = this.createInitialState(options.initialState);
@@ -326,12 +344,27 @@ export class Engine {
    * Transition to a scene by ID.
    * Direct transition without checking conditions.
    *
+   * Per agent-e (Intent #64): Triggers autosave on every scene transition
+   * if SaveManager is provided and autosave is not disabled.
+   *
    * @param sceneId - Target scene ID
    * @param choiceLabel - Optional choice label for history
    */
   async transitionTo(sceneId: SceneId, choiceLabel?: string): Promise<void> {
     this.updateSceneHistory(sceneId, choiceLabel);
     await this.loadScene(sceneId);
+
+    // Autosave after scene transition (per agent-e Intent #64)
+    // Event-driven, no debouncing - every transition triggers save
+    if (this.saveManager && !this.disableAutosave) {
+      const sceneTitle = this.currentScene?.title ?? sceneId;
+      const success = await this.saveManager.autosave(this.state, sceneTitle);
+
+      if (!success) {
+        // Autosave failure should warn but not block gameplay
+        console.warn(`[Engine] Autosave failed after transition to ${sceneId}`);
+      }
+    }
   }
 
   /**

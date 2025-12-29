@@ -421,4 +421,10 @@ export interface CliOptions {
 
   /** Maximum line length for text validation */
   maxLineLength?: number;
+
+  /**
+   * Disable autosave during playthrough.
+   * Per agent-e (Intent #64): Prevents filesystem churn during automated tests.
+   */
+  noAutosave?: boolean;
 }
