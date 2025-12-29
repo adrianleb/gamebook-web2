@@ -301,6 +301,149 @@ sc_1_1_099 ─[Choose: "Cross into the Understage"]──> sc_2_2_001
 
 ---
 
+### PT-VS-006: Act 2 Hub 3 Entry (The Archives)
+
+**Tests:** Act 2 Hub 2→Hub 3 transition, Archives entry scene, faction state initialization
+
+**Entry Point:** `sc_2_3_001` (The Archives Entry)
+
+**Prerequisites:** Must have completed Act 2 Hub 2 (sc_2_2_xxx scenes), `act2_started=true`
+
+**Path:**
+```
+sc_2_2_001 ─[Choose: "Head to the Archives"]──> sc_2_3_001 ─[Explore]──> sc_2_3_099
+```
+
+**Steps:**
+
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_2_2_001 | (In Green Room, act2_started=true) | ✅ save_point | At Hub 2, explored available content |
+| 2 | sc_2_2_001 | Choose "Head to the Archives" | ✅ softlock_check | Choice enabled (no requirements) |
+| 3 | sc_2_3_001 | (Arrived at Archives) | ✅ save_point | `archives_entered=true`, location updated |
+| 4 | sc_2_3_001 | Verify faction display available | ✅ mechanic_test | Faction panel visible (4 factions: preservationist, revisionist, exiter, independent) |
+| 5 | sc_2_3_001 | Explore Archives content | ✅ softlock_check | No softlock, forward progress available |
+| 6 | sc_2_3_099 | (Arrived at Revelation) | ✅ save_point | Alliance check scene loaded |
+
+**Final State Assertions:**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "act1_complete": true,
+    "act2_started": true,
+    "archives_entered": true
+  },
+  "inventory": [],
+  "factions": {
+    "preservationist": 0,
+    "revisionist": 0,
+    "exiter": 0,
+    "independent": 0
+  },
+  "current_scene": "sc_2_3_099"
+}
+```
+
+**Critical Mechanics Validated:**
+- Hub 2→Hub 3 scene transition (sc_2_2_001 → sc_2_3_001)
+- Archives entry scene sets `archives_entered` flag
+- Faction panel displays all 4 factions at starting values (0)
+- No softlock at Archives entry (always can proceed to Revelation)
+
+**Regression Checkpoints:** Steps 1, 3, 6
+
+**Note:** Faction values will be 0 at entry. Faction alignment happens through Act 2 Hub 2 branch path choices before reaching Hub 3.
+
+---
+
+### PT-VS-007: Act 2 Climax Alliance Check (The Revelation)
+
+**Tests:** Faction alliance acknowledgment, conditional narrative based on alignment state, Act 2→Act 3 transition preparation
+
+**Entry Point:** `sc_2_3_099` (The Revelation)
+
+**Prerequisites:** Must have `archives_entered=true`, explored Act 2 Hub 2 content with faction choices
+
+**Path:**
+```
+sc_2_3_099 ─[Faction check]──> sc_2_3_099 ─[Choose forward option]──> sc_3_4_001
+```
+
+**Test Variants:**
+
+**Variant A: High Preservationist (≥5)**
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_2_3_099 | (Arrived, preservationist=5) | ✅ save_point | High preservationist alignment |
+| 2 | sc_2_3_099 | Verify faction narrative | ✅ mechanic_test | Text acknowledges Preservationist alliance, conditional choices reflect alignment |
+| 3 | sc_2_3_099 | Choose "Proceed to Mainstage" | ✅ softlock_check | Choice enabled |
+
+**Variant B: High Revisionist (≥5)**
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_2_3_099 | (Arrived, revisionist=5) | ✅ save_point | High revisionist alignment |
+| 2 | sc_2_3_099 | Verify faction narrative | ✅ mechanic_test | Text acknowledges Revisionist alliance, conditional choices reflect alignment |
+| 3 | sc_2_3_099 | Choose "Proceed to Mainstage" | ✅ softlock_check | Choice enabled |
+
+**Variant C: High Exiter (≥5)**
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_2_3_099 | (Arrived, exiter=5) | ✅ save_point | High exiter alignment |
+| 2 | sc_2_3_099 | Verify faction narrative | ✅ mechanic_test | Text acknowledges Exiter alliance, conditional choices reflect alignment |
+| 3 | sc_2_3_099 | Choose "Proceed to Mainstage" | ✅ softlock_check | Choice enabled |
+
+**Variant D: Balanced / Independent (no dominant faction)**
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_2_3_099 | (Arrived, all factions ≤3) | ✅ save_point | Balanced faction state |
+| 2 | sc_2_3_099 | Verify faction narrative | ✅ mechanic_test | Text acknowledges no dominant alliance, independent path available |
+| 3 | sc_2_3_099 | Choose "Proceed to Mainstage" | ✅ softlock_check | Choice enabled |
+
+**Final State Assertions (Variant A - Preservationist):**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "act1_complete": true,
+    "act2_started": true,
+    "archives_entered": true,
+    "alliance_acknowledged": true
+  },
+  "inventory": [],
+  "factions": {
+    "preservationist": 5,
+    "revisionist": 2,
+    "exiter": 1,
+    "independent": 2
+  },
+  "current_scene": "sc_2_3_099"
+}
+```
+
+**Critical Mechanics Validated:**
+- **Faction acknowledgment**: Narrative text references player's dominant faction
+- **Conditional choices**: sc_2_3_099 shows different choices based on faction alignment
+- **No softlock**: Forward progress always possible regardless of faction state
+- **Act 3 preparation**: Scene sets flags for Act 3 Hub 4 entry (editor state variables)
+
+**Faction Validation Requirements:**
+
+| Faction | Threshold | Ending Enabled | Validation Check |
+|---------|-----------|----------------|------------------|
+| preservationist | ≥7 | Ending 1 (sc_3_4_901) | Narrative acknowledges Preservationist alliance at ≥5 |
+| revisionist | ≥7 | Ending 2 (sc_3_4_902) | Narrative acknowledges Revisionist alliance at ≥5 |
+| exiter | ≥7 | Ending 3 (sc_3_4_903) | Narrative acknowledges Exiter alliance at ≥5 |
+| independent | No threshold | Ending 4 (sc_3_4_904) | Narrative acknowledges balanced path when no faction ≥5 |
+
+**Regression Checkpoints:** All variants, step 2 (faction acknowledgment)
+
+**Note:** This is the CRITICAL alliance check scene per MILESTONES.md. It MUST acknowledge which faction(s) the player aligned with during Act 2. The faction state values here determine which endings are reachable in Act 3.
+
+---
+
 ## Save/Load Regression Tests
 
 These playthroughs specifically test state persistence across save/load operations.
@@ -546,6 +689,10 @@ When adding new scenes or mechanics, use this checklist:
 | met_maren | bool | Spoke with Maren character |
 | act1_complete | bool | Set when reaching sc_1_1_099 First Crossing (Act 1 Climax) |
 | first_crossing_reached | bool | Set when arriving at First Crossing scene |
+| act2_started | bool | Set when entering Act 2 (sc_2_2_001 Green Room) |
+| green_room_reached | bool | Set when arriving at Green Room |
+| archives_entered | bool | Set when entering Archives (sc_2_3_001) |
+| alliance_acknowledged | bool | Set when sc_2_3_099 acknowledges faction alliance |
 
 ### Inventory Items
 | Item ID | Display Name | Description |
@@ -557,6 +704,9 @@ When adding new scenes or mechanics, use this checklist:
 | Faction | Starting | Description |
 |---------|----------|-------------|
 | preservationist | 0 | Faction favoring separation of worlds |
+| revisionist | 0 | Faction favoring rewriting stories |
+| exiter | 0 | Faction favoring escaping narrative |
+| independent | 0 | Balanced path between factions |
 
 ---
 
@@ -564,6 +714,7 @@ When adding new scenes or mechanics, use this checklist:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2 | 2025-12-29 | Added PT-VS-006 (Act 2 Hub 3 Entry) and PT-VS-007 (Act 2 Climax Alliance Check) - validates sc_2_3_001 Archives Entry and sc_2_3_099 The Revelation scenes, documents all 4 faction states (preservationist, revisionist, exiter, independent), and adds faction alliance acknowledgment test variants |
 | 1.1 | 2025-12-29 | Added PT-VS-005 (Act 1 Climax Convergence) - validates sc_1_1_099 First Crossing scene, Act 1→Act 2 transition, and new state variables (act1_complete, first_crossing_reached) |
 | 1.0 | 2025-12-29 | Initial version with vertical slice playthroughs (PT-VS-001 through PT-VS-004) |
 
