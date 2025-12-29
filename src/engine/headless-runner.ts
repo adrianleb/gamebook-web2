@@ -60,14 +60,21 @@ export class HeadlessRunner {
 
   /**
    * Create a new headless runner.
+   *
+   * Per agent-e (Intent #64): disableAutosave option prevents filesystem churn during automated tests.
    */
   constructor(options: {
     contentPath?: string;
     snapshotDir?: string;
+    /** Disable autosave during playthrough (per agent-e) */
+    disableAutosave?: boolean;
   } = {}) {
     this.contentPath = options.contentPath ?? './content';
     this.snapshotDir = options.snapshotDir ?? './test-snapshots';
-    this.engine = new Engine({ contentPath: this.contentPath });
+    this.engine = new Engine({
+      contentPath: this.contentPath,
+      disableAutosave: options.disableAutosave ?? false,
+    });
   }
 
   /**
