@@ -252,11 +252,8 @@ export class EffectApplier {
     const oldValue = state.inventory.get(item) ?? 0;
     const newValue = Math.max(0, oldValue - count);
 
-    if (newValue === 0) {
-      state.inventory.delete(item);
-    } else {
-      state.inventory.set(item, newValue);
-    }
+    // Always set the value, even if 0 (per agent-a: access layer returns 0 for missing items)
+    state.inventory.set(item, newValue);
 
     return {
       type: 'effect-applied',

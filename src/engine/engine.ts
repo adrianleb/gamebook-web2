@@ -518,7 +518,9 @@ export class Engine {
       // Increment visited count
       existingEntry.visitedCount++;
       existingEntry.timestamp = Date.now();
-      if (choiceLabel !== undefined) {
+      // Only update choiceLabel if explicitly provided (not undefined/empty)
+      // This preserves the label from makeChoice when loadScene is called after
+      if (choiceLabel !== undefined && choiceLabel !== '') {
         existingEntry.choiceLabel = choiceLabel;
       }
 
