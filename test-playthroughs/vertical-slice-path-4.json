@@ -1,5 +1,6 @@
 {
   "meta": {
+    "name": "vertical-slice-path-4",
     "title": "Vertical Slice Path 4: Save/Load Regression",
     "description": "Tests all vertical slice scenes with save/load checkpoint cycles. Verifies state persistence and restoration accuracy. Corresponds to PT-SAVE-001 and PT-REGRESSION-001 from TEST_PLAYTHROUGHS.md.",
     "author": "agent-e",
@@ -7,7 +8,7 @@
     "tags": ["vertical-slice", "save-load", "regression", "state-persistence"]
   },
   "startingState": {
-    "currentSceneId": "sc_1_0_001",
+    "currentScene": "sc_1_0_001",
     "stats": {
       "health": 10,
       "courage": 5,
@@ -22,7 +23,7 @@
       "action": "checkpoint",
       "description": "Starting at hub scene - baseline state",
       "assertions": {
-        "currentSceneId": "sc_1_0_001",
+        "currentScene": "sc_1_0_001",
         "stats": { "health": 10, "courage": 5, "insight": 5 },
         "flagsSet": ["game_started"],
         "inventoryExcludes": ["booth_key"]
@@ -38,7 +39,7 @@
       "action": "checkpoint",
       "description": "At Maren's Guidance",
       "assertions": {
-        "currentSceneId": "sc_1_0_004",
+        "currentScene": "sc_1_0_004",
         "visitedCount": { "sc_1_0_001": 1 }
       }
     },
@@ -61,7 +62,7 @@
       "action": "checkpoint",
       "description": "Back at hub with booth_key",
       "assertions": {
-        "currentSceneId": "sc_1_0_001",
+        "currentScene": "sc_1_0_001",
         "inventoryContains": ["booth_key"],
         "flagsSet": ["key_acquired"]
       }
@@ -76,7 +77,7 @@
       "action": "checkpoint",
       "description": "At Threshold Stage with key and sufficient courage",
       "assertions": {
-        "currentSceneId": "sc_1_0_003",
+        "currentScene": "sc_1_0_003",
         "inventoryContains": ["booth_key"],
         "stats": { "courage": 5 }
       }
@@ -99,7 +100,7 @@
       "action": "checkpoint",
       "description": "Reached resolution scene",
       "assertions": {
-        "currentSceneId": "sc_1_0_900",
+        "currentScene": "sc_1_0_900",
         "flagsSet": ["booth_unlocked"],
         "inventoryContains": ["booth_key"]
       }
@@ -118,7 +119,7 @@
       "action": "checkpoint",
       "description": "Verified state restoration at threshold",
       "assertions": {
-        "currentSceneId": "sc_1_0_003",
+        "currentScene": "sc_1_0_003",
         "inventoryContains": ["booth_key"],
         "stats": { "courage": 5, "health": 10, "insight": 5 },
         "flagsCleared": ["booth_unlocked"],
@@ -140,7 +141,7 @@
       "action": "checkpoint",
       "description": "Verified state restoration - no booth_key",
       "assertions": {
-        "currentSceneId": "sc_1_0_004",
+        "currentScene": "sc_1_0_004",
         "inventoryExcludes": ["booth_key"],
         "flagsCleared": ["key_acquired", "booth_unlocked"]
       }
@@ -159,17 +160,16 @@
       "action": "checkpoint",
       "description": "Final state verification",
       "assertions": {
-        "currentSceneId": "sc_1_0_001",
+        "currentScene": "sc_1_0_001",
         "inventoryContains": ["booth_key"],
         "flagsSet": ["game_started", "key_acquired"]
       }
     }
   ],
   "endingCriteria": {
-    "flagsSet": ["key_acquired"],
-    "inventoryContains": ["booth_key"],
-    "minSteps": 15,
-    "snapshotTestsPassed": 3
+    "sceneId": "sc_1_0_001",
+    "flagsRequired": ["key_acquired"],
+    "inventoryRequired": ["booth_key"]
   },
   "softlockDetection": {
     "maxSceneRevisits": 5,

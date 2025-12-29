@@ -1,5 +1,6 @@
 {
   "meta": {
+    "name": "vertical-slice-path-3",
     "title": "Vertical Slice Path 3: Stat Check Failure",
     "description": "Tests hub → locked path with courage stat check failure. Verifies stat-based condition gating and fail-state handling. Corresponds to PT-VS-003 and PT-EDGE-002 from TEST_PLAYTHROUGHS.md.",
     "author": "agent-e",
@@ -7,7 +8,7 @@
     "tags": ["vertical-slice", "stat-check", "failure-path", "edge-case"]
   },
   "startingState": {
-    "currentSceneId": "sc_1_0_001",
+    "currentScene": "sc_1_0_001",
     "stats": {
       "health": 10,
       "courage": 3,
@@ -22,7 +23,7 @@
       "action": "checkpoint",
       "description": "Starting at hub with booth_key but low courage (3)",
       "assertions": {
-        "currentSceneId": "sc_1_0_001",
+        "currentScene": "sc_1_0_001",
         "stats": {
           "courage": { "min": 0, "max": 4 }
         },
@@ -39,7 +40,7 @@
       "action": "checkpoint",
       "description": "At Threshold Stage - courage check required",
       "assertions": {
-        "currentSceneId": "sc_1_0_003",
+        "currentScene": "sc_1_0_003",
         "stats": { "courage": 3 },
         "choicesAvailable": { "min": 2, "max": 3 }
       }
@@ -55,7 +56,7 @@
       "action": "checkpoint",
       "description": "Choice was disabled - stat check failed",
       "assertions": {
-        "currentSceneId": "sc_1_0_003",
+        "currentScene": "sc_1_0_003",
         "stats": { "courage": 3 },
         "flagsCleared": ["booth_unlocked"]
       }
@@ -70,20 +71,19 @@
       "action": "checkpoint",
       "description": "Retreated back to hub - alternative ending",
       "assertions": {
-        "currentSceneId": "sc_1_0_001",
+        "currentScene": "sc_1_0_001",
         "flagsSet": ["game_started", "key_acquired"],
         "visitedCount": { "sc_1_0_001": 2, "sc_1_0_003": 1 }
       }
     }
   ],
   "endingCriteria": {
-    "flagsSet": ["key_acquired"],
-    "inventoryContains": ["booth_key"],
-    "currentSceneId": "sc_1_0_001",
-    "stats": {
+    "sceneId": "sc_1_0_001",
+    "flagsRequired": ["key_acquired"],
+    "inventoryRequired": ["booth_key"],
+    "statsRequired": {
       "courage": { "max": 4 }
-    },
-    "visitedCount": { "sc_1_0_003": 1 }
+    }
   },
   "softlockDetection": {
     "maxSceneRevisits": 3,

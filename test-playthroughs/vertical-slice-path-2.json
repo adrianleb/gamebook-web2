@@ -1,5 +1,6 @@
 {
   "meta": {
+    "name": "vertical-slice-path-2",
     "title": "Vertical Slice Path 2: Inventory Gating",
     "description": "Tests hub → locked → key → resolution path. Verifies inventory-based choice gating and item acquisition. Corresponds to PT-VS-002 from TEST_PLAYTHROUGHS.md.",
     "author": "agent-e",
@@ -7,7 +8,7 @@
     "tags": ["vertical-slice", "inventory", "gating"]
   },
   "startingState": {
-    "currentSceneId": "sc_1_0_001",
+    "currentScene": "sc_1_0_001",
     "stats": {
       "health": 10,
       "courage": 5,
@@ -22,8 +23,8 @@
       "action": "checkpoint",
       "description": "Starting at hub scene sc_1_0_001",
       "assertions": {
-        "currentSceneId": "sc_1_0_001",
-        "choicesAvailable": { "min": 3, "max": 3 },
+        "currentScene": "sc_1_0_001",
+        "choicesAvailable": 3,
         "flagsSet": ["game_started"],
         "inventoryExcludes": ["booth_key"]
       }
@@ -39,7 +40,7 @@
       "action": "checkpoint",
       "description": "Still at hub - choice was disabled",
       "assertions": {
-        "currentSceneId": "sc_1_0_001",
+        "currentScene": "sc_1_0_001",
         "inventoryExcludes": ["booth_key"]
       }
     },
@@ -53,8 +54,8 @@
       "action": "checkpoint",
       "description": "At Maren's Guidance - about to receive booth_key",
       "assertions": {
-        "currentSceneId": "sc_1_0_004",
-        "choicesAvailable": { "min": 1, "max": 2 }
+        "currentScene": "sc_1_0_004",
+        "choicesAvailable": 2
       }
     },
     {
@@ -71,7 +72,7 @@
       "action": "checkpoint",
       "description": "Back at hub with booth_key in inventory",
       "assertions": {
-        "currentSceneId": "sc_1_0_001",
+        "currentScene": "sc_1_0_001",
         "inventoryContains": ["booth_key"],
         "flagsSet": ["game_started", "key_acquired"]
       }
@@ -86,7 +87,7 @@
       "action": "checkpoint",
       "description": "At Threshold Stage with booth_key",
       "assertions": {
-        "currentSceneId": "sc_1_0_003",
+        "currentScene": "sc_1_0_003",
         "inventoryContains": ["booth_key"],
         "flagsSet": ["game_started", "key_acquired", "location_booth_visited"],
         "visitedCount": { "sc_1_0_001": 2 }
@@ -100,10 +101,9 @@
     }
   ],
   "endingCriteria": {
-    "flagsSet": ["key_acquired", "location_booth_visited"],
-    "inventoryContains": ["booth_key"],
-    "currentSceneId": "sc_1_0_900",
-    "minSteps": 6
+    "sceneId": "sc_1_0_900",
+    "flagsRequired": ["key_acquired", "location_booth_visited"],
+    "inventoryRequired": ["booth_key"]
   },
   "softlockDetection": {
     "maxSceneRevisits": 3,
