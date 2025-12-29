@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Understage — DOS UI Shell Prototype</title>
+  <title>The Understage — DOS UI Shell</title>
 
   <!-- Preload VT323 font for performance -->
   <link rel="preload" href="https://fonts.gstatic.com/s/vt323/v15/pxiKyp0ihN8qnMr.woff2"
@@ -37,63 +37,17 @@
           aria-label="Scene text"
           aria-live="polite"
           tabindex="0">
-      <p id="scene-text" data-test-id="scene-text-content">
-        The stage lights flicker, then die. In the sudden darkness, you hear the unmistakable
-        <span class="italic">creak</span> of floorboards—boards that haven't been walked in
-        <span class="bold">fifty years</span>.
-
-      </p><p>
-        <span class="speaker">DIRECTOR:</span> "You're late for your own disappearance."
-
-      </p><p>
-        The voice comes from everywhere and nowhere. This is <span class="faction-preservationist">The Understage</span>—the labyrinth
-        beneath the theater where the <span class="bold">Preservationists</span> guard what
-        <span class="faction-revisor">The Revisors</span> would rewrite.
-
-      </p><p>
-        Your pockets are empty. Your <span class="bold">Script</span> is blank. And somewhere
-        in these dark corridors, your past is waiting.
-      </p>
+      <!-- Scene text will be rendered here by GameRenderer -->
+      <div id="scene-text" data-test-id="scene-text-content">
+        <p class="text-center" style="color: var(--text-secondary);">Loading...</p>
+      </div>
     </main>
 
     <!-- CHOICES PANEL -->
     <section id="choices-panel" class="choices-panel" data-test-id="choices-panel" aria-label="Available choices">
       <h2 class="choices-header">What do you do?</h2>
       <ul class="choices-list" data-test-id="choices-list" role="listbox">
-        <li data-test-id="choice-0" data-choice-index="0">
-          <button class="choice-button"
-                  data-choice-number="1"
-                  data-test-id="choice-button-0">
-            Follow the voice into the darkness
-          </button>
-        </li>
-        <li data-test-id="choice-1" data-choice-index="1">
-          <button class="choice-button stat-check"
-                  data-choice-number="2"
-                  data-test-id="choice-button-1">
-            <span class="stat-requirement" data-test-id="stat-check">[Script 6+]</span>
-            Try to remember how you got here
-          </button>
-        </li>
-        <li data-test-id="choice-2" data-choice-index="2">
-          <button class="choice-button"
-                  data-choice-number="3"
-                  data-test-id="choice-button-2"
-                  disabled
-                  data-disabled-hint="Requires Key to Green Room"
-                  aria-label="Choice 3: Check your pockets for the Key to Green Room — Requires Key to Green Room"
-                  aria-disabled="true">
-            Check your pockets for the <span class="bold">Key to Green Room</span>
-            <span class="sr-only"> (Requires Key to Green Room)</span>
-          </button>
-        </li>
-        <li data-test-id="choice-3" data-choice-index="3">
-          <button class="choice-button"
-                  data-choice-number="4"
-                  data-test-id="choice-button-3">
-            Call out into the darkness
-          </button>
-        </li>
+        <!-- Choices will be rendered here by GameRenderer -->
       </ul>
     </section>
 
@@ -107,57 +61,7 @@
              role="region"
              aria-label="Character stats">
         <div class="panel-header">Status</div>
-
-        <div class="stat-row" data-test-id="stat-script">
-          <span class="stat-label">Script</span>
-          <span class="stat-value">5/10</span>
-        </div>
-        <div class="stat-bar" data-stat-value="5" data-stat-max="10" aria-label="Script stat: 5 out of 10">
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-        </div>
-
-        <div class="stat-row mt-3" data-test-id="stat-stage">
-          <span class="stat-label">Stage Presence</span>
-          <span class="stat-value">3/10</span>
-        </div>
-        <div class="stat-bar" data-stat-value="3" data-stat-max="10" aria-label="Stage Presence stat: 3 out of 10">
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-        </div>
-
-        <div class="stat-row mt-3" data-test-id="stat-improv">
-          <span class="stat-label">Improv</span>
-          <span class="stat-value">7/10</span>
-        </div>
-        <div class="stat-bar" data-stat-value="7" data-stat-max="10" aria-label="Improv stat: 7 out of 10">
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment filled"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-          <div class="stat-bar-segment"></div>
-        </div>
+        <!-- Stats will be rendered here by GameRenderer -->
       </aside>
 
       <!-- INVENTORY PANEL -->
@@ -168,27 +72,7 @@
              aria-label="Inventory items">
         <div class="panel-header">Inventory</div>
         <ul class="inventory-list" data-test-id="inventory-list">
-          <li class="inventory-item" data-test-id="item-0" tabindex="0">
-            <span class="item-icon">📜</span>
-            <span class="item-name">Blank Script</span>
-            <span class="item-category" class="sr-only">Script</span>
-          </li>
-          <li class="inventory-item" data-test-id="item-1" tabindex="0">
-            <span class="item-icon">🎭</span>
-            <span class="item-name">Rehearsal Props</span>
-            <span class="item-category">Props</span>
-            <span class="item-quantity">x3</span>
-          </li>
-          <li class="inventory-item" data-test-id="item-2" tabindex="0">
-            <span class="item-icon">🔦</span>
-            <span class="item-name">Stage Light Fuse</span>
-            <span class="item-category">Token</span>
-          </li>
-          <li class="inventory-item" data-test-id="item-3" tabindex="0">
-            <span class="item-icon">🎫</span>
-            <span class="item-name">Ticket to Archives</span>
-            <span class="item-category">Key</span>
-          </li>
+          <!-- Inventory items will be rendered here by GameRenderer -->
         </ul>
       </aside>
 
@@ -209,7 +93,7 @@
     <div class="error-message">
       <h2 id="error-title" class="error-title" data-test-id="error-title">Error</h2>
       <p id="error-text" class="error-text" data-test-id="error-message">
-        Scene not found. Please report this bug.
+        An error occurred. Please reload.
       </p>
       <button id="error-dismiss" class="error-button" data-test-id="error-dismiss">
         Continue
@@ -218,602 +102,77 @@
   </div>
 
   <!-- LOADING INDICATOR (hidden by default) -->
-  <div id="loading-indicator" class="loading-indicator" aria-hidden="true"></div>
+  <div id="loading-indicator" class="loading-indicator" data-test-id="loading-indicator" aria-hidden="true"></div>
 
-  <!-- MOCK EVENT DISPATCHER FOR PROTOTYPE -->
-  <script>
+  <!-- ENGINE & RENDERER INITIALIZATION -->
+  <script type="module">
+    import { Engine } from '../engine/engine.js';
+    import { GameRenderer } from './game-renderer.js';
+
     /**
-     * MOCK ENGINE EVENT SYSTEM
-     * Demonstrates UI subscription to engine state changes
-     * Per agent-c's RFC: synchronous emission, async UI updates
+     * Initialize the game.
+     * Creates Engine instance, initializes content, and connects GameRenderer.
      */
+    async function initializeGame() {
+      try {
+        console.log('[DOS UI Shell] Initializing...');
 
-    // Mock StateChangeEvent structure (per engine RFC)
-    /*
-    interface StateChangeEvent {
-      type: 'scene-loaded' | 'condition-evaluated' | 'effect-applied' | 'state-changed' | 'font-ready';
-      path: string;           // e.g., 'stats.courage', 'inventory.[2]'
-      oldValue: any;
-      newValue: any;
-      renderScope?: 'all' | 'viewport' | 'choices' | 'stats' | 'inventory';
-      urgency?: 'high' | 'normal' | 'low';
-    }
-    */
-
-    class MockEngine {
-      constructor() {
-        this.subscribers = [];
-        this.state = {
-          currentScene: 'sc_1_1_001',
-          stats: { script: 5, stagePresence: 3, improv: 7 },
-          inventory: [
-            { id: 'blank_script', name: 'Blank Script', icon: '📜', category: 'Scripts' },
-            { id: 'rehearsal_props', name: 'Rehearsal Props', icon: '🎭', category: 'Props', quantity: 3 },
-            { id: 'stage_light_fuse', name: 'Stage Light Fuse', icon: '🔦', category: 'Tokens' },
-            { id: 'ticket_archives', name: 'Ticket to Archives', icon: '🎫', category: 'Keys' }
-          ],
-          availableChoices: [
-            { id: 0, text: 'Follow the voice into the darkness', statCheck: null, locked: false, disabledHint: null },
-            { id: 1, text: 'Try to remember how you got here', statCheck: { stat: 'script', threshold: 6 }, locked: false, disabledHint: null },
-            { id: 2, text: 'Check your pockets for the Key to Green Room', statCheck: null, locked: true, disabledHint: 'Requires Key to Green Room' },
-            { id: 3, text: 'Call out into the darkness', statCheck: null, locked: false, disabledHint: null }
-          ]
-        };
-      }
-
-      // Subscribe to state changes (per engine RFC)
-      subscribe(callback) {
-        this.subscribers.push(callback);
-      }
-
-      // Emit state change event (synchronous)
-      emit(event) {
-        this.subscribers.forEach(callback => {
-          // Async UI update per agent-c perspective
-          setTimeout(() => callback(event), 0);
-        });
-      }
-
-      // Mock: Load scene
-      loadScene(sceneId) {
-        const oldScene = this.state.currentScene;
-        this.state.currentScene = sceneId;
-
-        this.emit({
-          type: 'scene-loaded',
-          path: 'currentScene',
-          oldValue: oldScene,
-          newValue: sceneId,
-          renderScope: 'all',
-          urgency: 'high'
-        });
-      }
-
-      // Mock: Apply stat change
-      changeStat(stat, delta) {
-        const oldValue = this.state.stats[stat];
-        const newValue = Math.max(0, Math.min(10, oldValue + delta));
-        this.state.stats[stat] = newValue;
-
-        this.emit({
-          type: 'effect-applied',
-          path: `stats.${stat}`,
-          oldValue: oldValue,
-          newValue: newValue,
-          renderScope: 'stats',
-          urgency: 'normal'
-        });
-      }
-
-      // Mock: Font ready event
-      fontReady() {
-        this.emit({
-          type: 'font-ready',
-          path: 'ui.fontLoaded',
-          oldValue: false,
-          newValue: true,
-          renderScope: 'all',
-          urgency: 'high'
-        });
-      }
-    }
-
-    // UI Controller - subscribes to engine events
-    class UIController {
-      constructor(engine) {
-        this.engine = engine;
-
-        // DOM elements (with test attributes per agent-e requirements)
-        this.elements = {
-          viewport: document.querySelector('[data-test-id="main-text-viewport"]'),
-          choicesList: document.querySelector('[data-test-id="choices-list"]'),
-          statsPanel: document.querySelector('[data-test-id="stats-panel"]'),
-          inventoryList: document.querySelector('[data-test-id="inventory-list"]'),
-          errorOverlay: document.querySelector('[data-test-id="error-overlay"]'),
-          loadingIndicator: document.querySelector('[data-test-id="loading-indicator"]')
-        };
-
-        // Subscribe to engine events
-        this.engine.subscribe(this.handleStateChange.bind(this));
-
-        // Setup keyboard navigation
-        this.setupKeyboardNav();
-
-        // Setup choice button handlers
-        this.setupChoices();
-      }
-
-      // Handle state change events
-      handleStateChange(event) {
-        console.log('[UI] State change:', event);
-
-        switch (event.renderScope) {
-          case 'all':
-            this.renderAll();
-            break;
-          case 'viewport':
-            this.renderViewport();
-            break;
-          case 'choices':
-            this.renderChoices();
-            break;
-          case 'stats':
-            this.renderStats();
-            break;
-          case 'inventory':
-            this.renderInventory();
-            break;
-        }
-      }
-
-      // Render all UI components
-      renderAll() {
-        this.renderViewport();
-        this.renderChoices();
-        this.renderStats();
-        this.renderInventory();
-      }
-
-      // Render main text viewport with DOS-style transition
-      renderViewport() {
-        const viewport = this.elements.viewport;
-        viewport.classList.add('transitioning');
-
-        // Mock: Update text content
-        setTimeout(() => {
-          // Text swap would happen here via engine state
-        }, 250); // Midpoint of 500ms transition
-
-        setTimeout(() => {
-          viewport.classList.remove('transitioning');
-        }, 500);
-      }
-
-      // Render choices panel
-      renderChoices() {
-        const choices = this.engine.state.availableChoices;
-        const list = this.elements.choicesList;
-        list.innerHTML = '';
-
-        choices.forEach((choice, index) => {
-          const li = document.createElement('li');
-          li.setAttribute('data-test-id', `choice-${index}`);
-          li.setAttribute('data-choice-index', index);
-
-          const button = document.createElement('button');
-          button.className = 'choice-button';
-          button.setAttribute('data-choice-number', index + 1);
-          button.setAttribute('data-choice-index', index);
-          button.setAttribute('data-test-id', `choice-button-${index}`);
-          button.textContent = choice.text;
-
-          if (choice.locked) {
-            button.disabled = true;
-            button.setAttribute('aria-disabled', 'true');
-
-            // Add disabled hint for accessibility and visual display
-            const hint = choice.disabledHint || 'Locked';
-            button.setAttribute('data-disabled-hint', hint);
-            button.setAttribute('aria-label', `Choice ${index + 1}: ${choice.text} — ${hint}`);
-
-            // Add sr-only text for screen readers
-            const srText = document.createElement('span');
-            srText.className = 'sr-only';
-            srText.textContent = ` (${hint})`;
-            button.appendChild(srText);
-          } else {
-            button.setAttribute('aria-label', `Choice ${index + 1}: ${choice.text}`);
-          }
-
-          if (choice.statCheck) {
-            button.classList.add('stat-check');
-            const reqSpan = document.createElement('span');
-            reqSpan.className = 'stat-requirement';
-            reqSpan.setAttribute('data-test-id', 'stat-check');
-            reqSpan.textContent = `[${choice.statCheck.stat.charAt(0).toUpperCase() + choice.statCheck.stat.slice(1)} ${choice.statCheck.threshold}+]`;
-            button.prepend(reqSpan);
-          }
-
-          button.addEventListener('click', () => this.handleChoice(choice.id));
-          li.appendChild(button);
-          list.appendChild(li);
+        // Create Engine instance
+        const engine = new Engine({
+          contentPath: '../content',
+          cacheScenes: true,
         });
 
-        // Update tab indexes after rendering
-        this.updateChoiceTabIndexes();
-      }
+        // Initialize engine (loads manifest and starting scene)
+        await engine.initialize();
 
-      // Render stats panel - dynamic stat bar updates
-      renderStats() {
-        const stats = this.engine.state.stats;
+        console.log('[DOS UI Shell] Engine initialized');
 
-        // Defensive validation: check if stats exist and are valid
-        if (!stats || typeof stats !== 'object') {
-          console.error('[UI] Invalid stats state:', stats);
-          this.showError('Stats data corrupted. Please reload.');
-          return;
+        // Create and initialize GameRenderer
+        const renderer = new GameRenderer(engine);
+        await renderer.initialize();
+
+        console.log('[DOS UI Shell] GameRenderer initialized');
+
+        // Expose for debugging (development only)
+        if (typeof window !== 'undefined') {
+          (window as any).__GAME_ENGINE__ = engine;
+          (window as any).__GAME_RENDERER__ = renderer;
         }
 
-        const statConfigs = [
-          { key: 'script', label: 'Script', testId: 'stat-script' },
-          { key: 'stagePresence', label: 'Stage Presence', testId: 'stat-stage' },
-          { key: 'improv', label: 'Improv', testId: 'stat-improv' }
-        ];
-
-        const statsPanel = this.elements.statsPanel;
-        const maxStat = 10;
-
-        // Clear and rebuild stats panel
-        const header = statsPanel.querySelector('.panel-header');
-        statsPanel.innerHTML = '';
-        if (header) statsPanel.appendChild(header);
-
-        statConfigs.forEach(config => {
-          const value = stats[config.key];
-          const clampedValue = Math.max(0, Math.min(maxStat, value || 0));
-
-          // Stat row with label and value
-          const statRow = document.createElement('div');
-          statRow.className = 'stat-row mt-3';
-          statRow.setAttribute('data-test-id', config.testId);
-
-          const label = document.createElement('span');
-          label.className = 'stat-label';
-          label.textContent = config.label;
-
-          const valueSpan = document.createElement('span');
-          valueSpan.className = 'stat-value';
-          valueSpan.textContent = `${clampedValue}/${maxStat}`;
-          valueSpan.setAttribute('data-test-id', `${config.testId}-value`);
-
-          statRow.appendChild(label);
-          statRow.appendChild(valueSpan);
-
-          // Stat bar with segments
-          const statBar = document.createElement('div');
-          statBar.className = 'stat-bar stat-bar-animated';
-          statBar.setAttribute('data-stat-value', clampedValue);
-          statBar.setAttribute('data-stat-max', maxStat);
-          statBar.setAttribute('role', 'progressbar');
-          statBar.setAttribute('aria-label', `${config.label} stat: ${clampedValue} out of ${maxStat}`);
-          statBar.setAttribute('aria-valuenow', clampedValue);
-          statBar.setAttribute('aria-valuemin', 0);
-          statBar.setAttribute('aria-valuemax', maxStat);
-          statBar.setAttribute('data-test-id', `${config.testId}-bar`);
-
-          // Create filled and empty segments
-          for (let i = 0; i < maxStat; i++) {
-            const segment = document.createElement('div');
-            segment.className = 'stat-bar-segment';
-            if (i < clampedValue) {
-              segment.classList.add('filled');
-            }
-            statBar.appendChild(segment);
-          }
-
-          statsPanel.appendChild(statRow);
-          statsPanel.appendChild(statBar);
-        });
-      }
-
-      // Render inventory panel - dynamic inventory list with categories
-      renderInventory() {
-        const inventory = this.engine.state.inventory;
-
-        // Defensive validation: check if inventory is array
-        if (!Array.isArray(inventory)) {
-          console.error('[UI] Invalid inventory state:', inventory);
-          this.showError('Inventory data corrupted. Please reload.');
-          return;
-        }
-
-        const inventoryList = this.elements.inventoryList;
-        inventoryList.innerHTML = '';
-
-        if (inventory.length === 0) {
-          const emptyMsg = document.createElement('li');
-          emptyMsg.className = 'inventory-empty';
-          emptyMsg.textContent = '— Empty —';
-          emptyMsg.setAttribute('data-test-id', 'inventory-empty');
-          inventoryList.appendChild(emptyMsg);
-          return;
-        }
-
-        // Group items by category (per agent-b's perspective response)
-        const categoryOrder = ['Keys', 'Tools', 'Consumables', 'Misc', 'Quest', 'Readables', 'Tokens', 'Props', 'Scripts'];
-        const itemsByCategory = {};
-
-        inventory.forEach(item => {
-          const category = item.category || 'Misc';
-          if (!itemsByCategory[category]) {
-            itemsByCategory[category] = [];
-          }
-          // Skip items with quantity 0 (except key/quest items)
-          if (item.quantity === 0 && !['Keys', 'Quest'].includes(category)) {
-            return;
-          }
-          itemsByCategory[category].push(item);
-        });
-
-        // Sort categories by defined order, then alphabetically
-        const sortedCategories = Object.keys(itemsByCategory).sort((a, b) => {
-          const indexA = categoryOrder.indexOf(a);
-          const indexB = categoryOrder.indexOf(b);
-          if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-          if (indexA !== -1) return -1;
-          if (indexB !== -1) return 1;
-          return a.localeCompare(b);
-        });
-
-        // Render items by category
-        sortedCategories.forEach(category => {
-          const items = itemsByCategory[category].sort((a, b) => a.name.localeCompare(b.name));
-
-          // Category header (only if multiple categories)
-          if (sortedCategories.length > 1) {
-            const categoryHeader = document.createElement('li');
-            categoryHeader.className = 'inventory-category-header';
-            categoryHeader.textContent = `${category} (${items.length})`;
-            categoryHeader.setAttribute('data-test-id', `category-${category.toLowerCase()}`);
-            inventoryList.appendChild(categoryHeader);
-          }
-
-          // Render items in this category
-          items.forEach((item, index) => {
-            const itemLi = document.createElement('li');
-            itemLi.className = 'inventory-item inventory-item-animated';
-            itemLi.setAttribute('data-test-id', `item-${item.id}`);
-            itemLi.setAttribute('data-item-id', item.id);
-            itemLi.setAttribute('tabindex', '0');
-
-            // Icon - fallback to first 2 letters if no icon
-            const icon = document.createElement('span');
-            icon.className = 'item-icon';
-            if (item.icon) {
-              icon.textContent = item.icon;
-            } else {
-              // Fallback: colored box with first 2 letters
-              icon.textContent = item.id.substring(0, 2).toUpperCase();
-              icon.className += ' item-icon-fallback';
-              icon.style.backgroundColor = this.getCategoryColor(category);
-            }
-
-            // Item name
-            const name = document.createElement('span');
-            name.className = 'item-name';
-            name.textContent = item.name;
-            name.setAttribute('data-test-id', `item-name-${item.id}`);
-
-            // Category (screen reader only per existing HTML)
-            const categorySpan = document.createElement('span');
-            categorySpan.className = 'item-category sr-only';
-            categorySpan.textContent = category;
-
-            itemLi.appendChild(icon);
-            itemLi.appendChild(name);
-            itemLi.appendChild(categorySpan);
-
-            // Quantity badge for consumables/stackable items
-            if (item.quantity && item.quantity > 1) {
-              const quantity = document.createElement('span');
-              quantity.className = 'item-quantity';
-              quantity.textContent = item.quantity > 99 ? '99+' : `x${item.quantity}`;
-              quantity.setAttribute('data-test-id', `item-quantity-${item.id}`);
-              itemLi.appendChild(quantity);
-            }
-
-            inventoryList.appendChild(itemLi);
+        // Emit font-ready event after VT323 loads
+        if (document.fonts) {
+          document.fonts.ready.then(() => {
+            console.log('[DOS UI Shell] VT323 font loaded');
           });
-        });
-
-        // Update panel header with count
-        const panelHeader = this.elements.inventoryPanel.querySelector('.panel-header');
-        if (panelHeader) {
-          panelHeader.textContent = `Inventory (${inventory.length})`;
         }
-      }
-
-      // Helper: Get fallback icon color by category
-      getCategoryColor(category) {
-        const colors = {
-          'Keys': '#ffd700',
-          'Tools': '#5dade2',
-          'Consumables': '#ff4757',
-          'Misc': '#a0a0a0',
-          'Quest': '#ffd700',
-          'Readables': '#e8e8e8',
-          'Tokens': '#f39c12',
-          'Props': '#9b59b6',
-          'Scripts': '#1abc9c'
-        };
-        return colors[category] || '#a0a0a0';
-      }
-
-      // Show error message in overlay
-      showError(message) {
-        const overlay = this.elements.errorOverlay;
-        const errorText = overlay.querySelector('[data-test-id="error-message"]');
-        errorText.textContent = message;
-        overlay.classList.add('visible');
-        overlay.setAttribute('aria-hidden', 'false');
-      }
-
-      // Handle choice selection
-      handleChoice(choiceId) {
-        console.log('[UI] Choice selected:', choiceId);
-        const button = document.querySelector(`[data-choice-index="${choiceId}"] .choice-button`);
-        button.classList.add('selected');
-
-        // Mock: Transition to next scene
-        setTimeout(() => {
-          this.engine.loadScene('sc_1_1_002');
-        }, 300); // DOS-style 300ms delay
-      }
-
-      // Setup keyboard navigation (per agent-e requirements)
-      setupKeyboardNav() {
-        const choicesList = this.elements.choicesList;
-
-        choicesList.addEventListener('keydown', (e) => {
-          const allButtons = Array.from(choicesList.querySelectorAll('.choice-button'));
-          const enabledButtons = allButtons.filter(btn => !btn.disabled);
-          const currentFocused = document.activeElement;
-          const currentIndex = enabledButtons.indexOf(currentFocused);
-
-          switch (e.key) {
-            case 'ArrowDown':
-              e.preventDefault();
-              this.focusNextChoice(enabledButtons, currentIndex);
-              break;
-
-            case 'ArrowUp':
-              e.preventDefault();
-              this.focusPreviousChoice(enabledButtons, currentIndex);
-              break;
-
-            case 'Home':
-              e.preventDefault();
-              if (enabledButtons.length > 0) enabledButtons[0].focus();
-              break;
-
-            case 'End':
-              e.preventDefault();
-              if (enabledButtons.length > 0) enabledButtons[enabledButtons.length - 1].focus();
-              break;
-
-            case 'Escape':
-              // Toggle inventory
-              this.elements.inventoryList.parentElement.classList.toggle('collapsed');
-              break;
-
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-              // Quick select choice - only enabled choices
-              const choiceIndex = parseInt(e.key) - 1;
-              const choice = this.engine.state.availableChoices[choiceIndex];
-              if (choice && !choice.locked) {
-                this.handleChoice(choiceIndex);
-              }
-              e.preventDefault();
-              break;
-          }
-        });
-
-        // Initialize: Set first enabled choice as focusable
-        this.updateChoiceTabIndexes();
-      }
-
-      focusNextChoice(enabledButtons, currentIndex) {
-        let nextIndex = currentIndex + 1;
-        if (nextIndex >= enabledButtons.length) nextIndex = 0; // Wrap to first
-        if (enabledButtons[nextIndex]) enabledButtons[nextIndex].focus();
-      }
-
-      focusPreviousChoice(enabledButtons, currentIndex) {
-        let prevIndex = currentIndex - 1;
-        if (prevIndex < 0) prevIndex = enabledButtons.length - 1; // Wrap to last
-        if (enabledButtons[prevIndex]) enabledButtons[prevIndex].focus();
-      }
-
-      updateChoiceTabIndexes() {
-        const allButtons = this.elements.choicesList.querySelectorAll('.choice-button');
-        allButtons.forEach(btn => btn.tabIndex = -1);
-
-        const enabledButtons = Array.from(allButtons).filter(btn => !btn.disabled);
-        enabledButtons.forEach(btn => btn.tabIndex = 0);
-
-        if (enabledButtons.length > 0) {
-          enabledButtons[0].focus();
+      } catch (error) {
+        console.error('[DOS UI Shell] Initialization failed:', error);
+        const errorOverlay = document.querySelector('[data-test-id="error-overlay"]');
+        const errorText = document.querySelector('[data-test-id="error-message"]');
+        if (errorOverlay && errorText) {
+          errorText.textContent = `Failed to initialize: ${error instanceof Error ? error.message : 'Unknown error'}`;
+          errorOverlay.classList.add('visible');
+          errorOverlay.setAttribute('aria-hidden', 'false');
         }
-      }
-
-      // Setup choice button handlers
-      setupChoices() {
-        const buttons = document.querySelectorAll('.choice-button:not(.locked)');
-        buttons.forEach((button, index) => {
-          button.addEventListener('click', () => {
-            this.handleChoice(index);
-          });
-        });
       }
     }
-
-    // Initialize mock engine and UI controller
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('[DOS UI Shell] Prototype initialized');
-
-      const engine = new MockEngine();
-      const ui = new UIController(engine);
-
-      // Initial render of stats and inventory
-      ui.renderStats();
-      ui.renderInventory();
-
-      // Emit font-ready event after VT323 loads
-      if (document.fonts) {
-        document.fonts.ready.then(() => {
-          console.log('[DOS UI Shell] VT323 font loaded');
-          engine.fontReady();
-        });
-      }
-
-      // Demo: Simulate stat changes after delay
-      setTimeout(() => {
-        console.log('[Demo] Simulating stat change: Script +1');
-        engine.changeStat('script', 1);
-      }, 5000);
-
-      // Demo: Simulate inventory addition after delay
-      setTimeout(() => {
-        console.log('[Demo] Simulating inventory addition');
-        engine.state.inventory.push({
-          id: 'prompters_handbook',
-          name: "Prompter's Handbook",
-          icon: '📘',
-          category: 'Tools'
-        });
-        ui.renderInventory();
-      }, 8000);
-
-      // Demo: Simulate stat decrease
-      setTimeout(() => {
-        console.log('[Demo] Simulating stat change: Stage Presence -1');
-        engine.changeStat('stagePresence', -1);
-      }, 12000);
-    });
 
     // Error overlay handler
-    document.getElementById('error-dismiss').addEventListener('click', () => {
-      document.getElementById('error-overlay').classList.remove('visible');
-      document.getElementById('error-overlay').setAttribute('aria-hidden', 'true');
+    document.getElementById('error-dismiss')?.addEventListener('click', () => {
+      const overlay = document.getElementById('error-overlay');
+      if (overlay) {
+        overlay.classList.remove('visible');
+        overlay.setAttribute('aria-hidden', 'true');
+      }
     });
+
+    // Initialize on DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeGame);
+    } else {
+      initializeGame();
+    }
   </script>
 
 </body>
