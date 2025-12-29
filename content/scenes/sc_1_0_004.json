@@ -1,0 +1,71 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_004",
+  "title": "Maren's Guidance",
+  "act": 1,
+  "hub": 0,
+  "location": "The Prompter's Booth",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["dialogue", "item_acquisition"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The Prompter's Booth",
+    "paragraphs": [
+      "\"The first crossing is always the hardest,\" the figure says. Their voice is like rustling pages, like the whisper of curtain calls. \"I've watched many Prompters stand where you stand now. Some turn back. Some rush forward and are lost. A precious few understand.\"",
+
+      "\"Maren,\" you say, the name surfacing without thought. \"Who are you?\"",
+
+      "\"A guide. A witness. The prompter to the Prompter.\" They lean forward, candlelight revealing features that seem to shift—now young, now impossibly old. \"The door beyond requires courage. Not the absence of fear, but the will to act despite it. But before courage... you will need means.\"",
+
+      "Their hand extends from shadow, palm open. On it rests a key—iron, ornate, impossibly ancient. You recognize it immediately: the key to the iron door.",
+
+      "\"I kept it safe,\" Maren says. \"As I have kept it for Prompters before you, and will keep it for those who come after. Take it. The threshold waits, and the stories will not tell themselves.\"",
+
+      "They press the key into your hand. Cold metal. Weight. The sense of a path now open."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "maren",
+      "name": "Maren",
+      "description": "A figure of indeterminate age, wrapped in a cloak that seems to absorb the candlelight. Their voice carries the weight of countless rehearsals.",
+      "disposition": 6,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ambient_mysterious_guidance",
+    "sfx": ["cloak_shift", "key_metal_clink"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "met_maren"
+    },
+    {
+      "type": "add_item",
+      "item": "booth_key"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Thank Maren and return to the booth",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["met_maren"],
+    "requires": [],
+    "checks": []
+  }
+}

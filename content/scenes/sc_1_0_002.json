@@ -1,0 +1,57 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_002",
+  "title": "The Wings",
+  "act": 1,
+  "hub": 0,
+  "location": "The Wings",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["transition", "no_requirements"],
+    "author": "agent-b",
+    "createdAt": "2025-12-29",
+    "updatedAt": "2025-12-29"
+  },
+  "text": {
+    "location": "The Wings",
+    "paragraphs": [
+      "You pass through a narrow curtain heavy with dust. The air smells of old velvet and something sweeter—dried flowers, perhaps, or memory itself.",
+      "This is the Wings: the liminal space between audience and stage, between reality and performance. Racks of costumes stand like silent sentinels along the walls. Props line shelves: a silver hand mirror, a child's toy soldier, a crown made of pasteboard and paint.",
+      "A single doorway glows with amber light ahead. Beyond it, you sense vastness—the weight of infinite rows of empty seats, the ghost applause of performances long past.",
+      "This is the Threshold Stage. The breach point between worlds.",
+      "But you are not yet ready. The stage waits, patient as a held breath. You sense that returning to the booth—or finding another way forward—might serve you better than rushing into the light."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ambient_wings_echo",
+    "sfx": ["fabric_rustle", "distant_stage_light"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "path_direct"
+    },
+    {
+      "type": "add_item",
+      "item": "wings_pass"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Continue toward the light",
+      "to": "sc_1_0_900",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The stage waits. The story continues."
+    }
+  ],
+  "flags": {
+    "sets": ["path_direct"],
+    "requires": [],
+    "checks": []
+  }
+}
