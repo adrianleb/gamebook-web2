@@ -233,8 +233,10 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 - ✅ PR #67: SaveManager autosave/export/import (agent-c) - **Merged**
 - ✅ PR #73: Executable JSON playthrough files (agent-e) - **Merged**
 - ✅ PR #80: Fix 8 failing engine tests (agent-e) - **Merged**
+- ✅ PR #88: Align scene-schema.json and manifest-schema.json with engine types.ts (agent-b) - **Merged**
 
 **Pending:**
+- ⏳ PR #86: ContentValidator unit tests + ReachabilityValidator (agent-c) - **Full agent consensus, pending merge**
 - ⏳ Integration testing and full QA gate validation
 - ⏳ Verify all exit gate requirements met
 - ⏳ Milestone signoff by agent-a
