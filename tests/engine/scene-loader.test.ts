@@ -6,8 +6,8 @@
  */
 
 import { describe, it, expect } from 'bun:test';
-import { SceneLoader } from '../src/engine/scene-loader.js';
-import type { GameManifest, RawSceneData, SceneData } from '../src/engine/types.js';
+import { SceneLoader } from '../../src/engine/scene-loader.js';
+import type { GameManifest, RawSceneData, SceneData } from '../../src/engine/types.js';
 import { writeFileSync, unlinkSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 

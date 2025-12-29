@@ -275,6 +275,23 @@ export interface RawChoice {
 }
 
 /**
+ * Ending scene type for DOS UI visual treatment.
+ * Per agent-d: Different endings require different visual presentations.
+ */
+export type EndingType = 'victory' | 'defeat' | 'neutral' | 'secret';
+
+/**
+ * Ending metadata from content files.
+ * Per agent-d: Maps to DOS UI visual treatments for different ending types.
+ */
+export interface EndingData {
+  type: EndingType;
+  title?: string;
+  description?: string;
+  achievementId?: string;
+}
+
+/**
  * Raw scene data format from content files.
  * Differs from SceneData in that text can be an object and effectsOnEnter/onChoose
  * may be used instead of effects. The SceneLoader transforms this to SceneData.
@@ -292,6 +309,7 @@ export interface RawSceneData {
   choices: RawChoice[];
   requiredFlags?: FlagName[];
   requiredItems?: ItemId[];
+  ending?: boolean | EndingData;  // Ending scene marker for DOS UI treatment
   // Additional fields from content format (ignored by engine)
   act?: number;
   hub?: number;
@@ -317,6 +335,7 @@ export interface SceneData {
   choices: Choice[];
   requiredFlags?: FlagName[];    // Pre-validation (fail-fast if not met)
   requiredItems?: ItemId[];      // Pre-validation (fail-fast if not met)
+  ending?: boolean | EndingData; // Ending scene marker for DOS UI treatment
 }
 
 /**

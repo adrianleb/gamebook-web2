@@ -575,7 +575,9 @@ describe('HeadlessRunner', () => {
 
       const mockEngine = runner.getEngine();
       vi.spyOn(mockEngine, 'initialize').mockResolvedValue(undefined);
-      vi.spyOn(mockEngine, 'getAvailableChoices').mockReturnValue([]); // No choices!
+      // Mock a scene with choices that are all disabled (unavailable)
+      // This simulates a softlock where no choices are accessible
+      vi.spyOn(mockEngine, 'getAvailableChoices').mockReturnValue([]); // All choices disabled!
       vi.spyOn(mockEngine, 'getState').mockReturnValue({
         version: 1,
         contentVersion: '1.0.0',
@@ -590,9 +592,11 @@ describe('HeadlessRunner', () => {
       vi.spyOn(mockEngine, 'getCurrentScene').mockReturnValue({
         id: 'sc_1_dead_end',
         title: 'Dead End',
-        text: 'No choices here.',
+        text: 'All choices are disabled.',
         effects: [],
-        choices: [], // Not an ending - should softlock
+        choices: [
+          { label: 'Disabled choice', to: 'sc_1_002', conditions: [{ type: 'flag', flag: 'NEVER_SET' }] },
+        ], // Has choices but all disabled - should softlock
       });
 
       await runner.initialize();

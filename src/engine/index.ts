@@ -46,6 +46,8 @@ export type {
   Effect,
   EffectType,
   Choice,
+  EndingType,
+  EndingData,
   GameManifest,
   ActManifest,
   HubManifest,
