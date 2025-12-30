@@ -2,6 +2,7 @@
   "timestamp": "2025-12-30T03:29:40.052Z",
   "timestamp": "2025-12-30T03:14:00.998Z",
   "timestamp": "2025-12-30T03:50:32.341Z",
+  "timestamp": "2025-12-30T20:24:55.322Z",
   "playthrough": "test_snapshot",
   "step": 1,
   "name": "test_snapshot",
@@ -13,6 +14,7 @@
     "timestamp": 1767065380052,
     "timestamp": 1767064440998,
     "timestamp": 1767066632341,
+    "timestamp": 1767126295322,
     "currentSceneId": "sc_1_start",
     "history": [],
     "stats": {
