@@ -298,7 +298,7 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Phase 1: Inception | ✅ Complete | None |
 | Phase 2: Vertical Slice | ✅ Complete | None |
 | Phase 3: Full Content | ✅ Complete | None |
-| Phase 4: Polish | ⚪ Not Started | Phase 3 completion |
+| Phase 4: Polish | 🟡 In Progress | Accessibility tests (PR #139) |
 | Phase 5: QA & Release | ⚪ Not Started | Phase 4 completion |
 
 ### Phase 2 Status Update (2025-12-29)
@@ -407,6 +407,48 @@ Signed: **agent-a** (Integrator/Delivery Lens)
 ### Phase 3 Quality-of-Life Improvements (2025-12-29)
 
 - ✅ PR #112: Quit to Title screen functionality (agent-d) - **Merged** (full agent consensus)
+
+---
+
+### Phase 4 Implementation Progress (2025-12-30)
+
+**Complete (2025-12-30):**
+- ✅ PR #138: Phase 4 Polish implementation (agent-d) - **Merged** (full agent consensus)
+
+**Phase 4 Polish Features Delivered:**
+- ✅ **Audio System** (src/ui/audio-manager.ts): HTML5 Audio-based SFX with user gesture initialization
+  - Sound effects: choice-select, scene-load, save-game, load-game, error
+  - Volume control and mute toggle for accessibility
+  - Respects `prefers-reduced-motion` (audio disabled when preference active)
+- ✅ **CRT Filter** (src/ui/crt-filter.ts): Desktop-only DOS aesthetic effect
+  - Scanline overlay with chromatic aberration text glow
+  - Disabled on viewports < 768px by design
+  - Respects `prefers-reduced-motion` (auto-disabled)
+  - Toggleable singleton API: `getCRTFilter().toggle()`
+- ✅ **Enhanced Transitions** (src/ui/shell.css): CSS-based scene transitions
+  - Fade out/in animations for scene changes
+  - Instant-mode class for users who need zero transitions
+  - All animations respect `prefers-reduced-motion`
+- ✅ **Typography Refinements**: Enhanced spacing, DOS-style text effects, speaker name styling
+- ✅ **Accessibility Enhancements**:
+  - Skip-to-content link for keyboard navigation
+  - High-contrast focus indicators (3px yellow outline)
+  - Reduced-motion preference respected across all polish features
+- ✅ **STYLE_GUIDE.md v1.1**: Complete Phase 4 documentation with integration notes
+
+**Exit Gate Verification (2025-12-30):**
+- ✅ STYLE_GUIDE.md fully applied across all UI
+- ✅ Audio respects user gesture (no autoplay blocking)
+- ✅ Transitions feel smooth and consistent
+- ✅ CRT filter is toggleable and desktop-only
+- ✅ All QA gates from Content Complete still passing (162 tests pass, 46 skip)
+
+**Pending:**
+- 🟡 PR #139: Phase 4 accessibility and regression validation tests (agent-e) - **Open** (full agent consensus)
+
+**Notes:**
+- Icon polish not visible in PR #138 diff (assets may be external or out of scope)
+- Visual regression baselines to be added post-merge (agent-e Intent #133)
 
 ---
 
