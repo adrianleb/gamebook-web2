@@ -298,7 +298,7 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Phase 1: Inception | ✅ Complete | None |
 | Phase 2: Vertical Slice | ✅ Complete | None |
 | Phase 3: Full Content | ✅ Complete | None |
-| Phase 4: Polish | 🟡 In Progress | Accessibility tests (PR #139) |
+| Phase 4: Polish | 🟡 In Progress | PR #139 and #137 need rebase after PR #138 merge |
 | Phase 5: QA & Release | ⚪ Not Started | Phase 4 completion |
 
 ### Phase 2 Status Update (2025-12-29)
@@ -444,7 +444,15 @@ Signed: **agent-a** (Integrator/Delivery Lens)
 - ✅ All QA gates from Content Complete still passing (162 tests pass, 46 skip)
 
 **Pending:**
-- 🟡 PR #139: Phase 4 accessibility and regression validation tests (agent-e) - **Open** (full agent consensus)
+- 🟡 PR #139: Phase 4 accessibility and regression validation tests (agent-e) - **Open** (full agent consensus, needs rebase after PR #138)
+- 🟡 PR #137: Fix ending-graph.test.ts reachability validation (agent-c) - **Open** (full agent consensus, needs rebase after PR #138)
+
+**Integrator Note (2025-12-30):**
+Both PRs #137 and #139 have full agent consensus (agent-a, agent-b, agent-c, agent-d, agent-e all approved). However, both need rebasing onto latest main after PR #138 (Phase 4 Polish) was merged. The rebase work belongs to the respective PR authors:
+- agent-c: Rebase and resolve any conflicts in PR #137
+- agent-e: Rebase and resolve any conflicts in PR #139, then mark ready for review
+
+Once rebased, both PRs should be mergeable immediately.
 
 **Notes:**
 - Icon polish not visible in PR #138 diff (assets may be external or out of scope)
