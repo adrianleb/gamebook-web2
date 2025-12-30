@@ -1,0 +1,75 @@
+{
+  "$schema": "./schemas/scene-schema.json",
+  "id": "sc_3_4_904",
+  "title": "The Blank Page",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "draft",
+  "ending": true,
+  "endingId": 4,
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "independent", "tragic", "truth_ending"],
+    "author": "agent-b",
+    "createdAt": "2025-12-30",
+    "updatedAt": "2025-12-30"
+  },
+  "text": {
+    "location": "The Blank Page",
+    "paragraphs": [
+      "You have learned the truth about the Understage—not through faction allegiance, not through accumulating power, but through questioning, through investigation, through refusing to accept easy answers.",
+      "And now, standing before The Editor, you understand what no faction can see: The manuscript on their desk is not a record of stories. It is the source of stories. Every character, every setting, every narrative in the Understage exists because The Editor wrote them there.",
+      "\"You know,\" The Editor says quietly. Their face has changed—they look younger now, and older simultaneously, as if the weight of revelation has stripped away centuries of pretense. \"You know what I am.\"",
+      "\"You're not an editor,\" you say. \"You're an author.\"",
+      "The word hangs in the air like a bell that has been struck once and will never stop ringing.",
+      "\"I began writing to escape,\" The Editor admits. \"The world above was painful, confusing, full of stories I couldn't control. So I created a place where every narrative obeyed my will. Where every character did what I wrote. Where nothing could surprise me.\"",
+      "They gesture at the manuscript, and you see that the pages are not full of text—they are full of names. Thousands upon thousands of names, each one a person, a character, a story held in suspension.",
+      "\"But the Understage grew beyond me. Characters developed. Stories took on lives of their own. The factions formed, and I could no longer control them. I became the Editor—the one who cuts, the one who prunes, the one who maintains. Because I was afraid that if I stopped, the stories would devour me.\"",
+      "The Editor looks at you with eyes that have seen the beginning and end of everything.",
+      "\"You know what must happen next. The truth cannot be unknown once it is known. The manuscript cannot be unread.\"",
+      "You understand. The Understage cannot continue as it has—not with the truth revealed, not with the Author exposed. The factions will war over control. The characters will demand answers. The stories themselves will fracture without someone to maintain them.",
+      "\"The factions offer four paths,\" The Editor continues. \"Revision, exit, preservation, refusal. But you have found a fifth path—the path of truth itself.\"",
+      "They open the manuscript to a blank page, the first blank page in the entirety of the Understage.",
+      "\"You must write the ending. Not the ending I would choose. Not the ending any faction would choose. Your ending.\"",
+      "You take the pen. The weight of it is terrifying. Every story in the Understage waits, suspended, dependent on what you write next.",
+      "\"What happens to the factions?\" you ask.",
+      "\"That is for you to decide.\"",
+      "\"What happens to you?\"",
+      "\"That is also for you to decide.\"",
+      "You look at the blank page. You look at The Editor, who is finally just another person who made a world and doesn't know how to let it go.",
+      "What you write is not recorded here. The ending you choose becomes the story, and the story becomes reality, and the reality becomes memory.",
+      "But the blank page is never truly blank.",
+      "THE END - ENDING 4: THE BLANK PAGE"
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_editor",
+      "name": "The Editor",
+      "description": "Revealed as the Author—the creator of the Understage, waiting for you to write the ending",
+      "role": "truth_bearer"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ending_ambiguous_looping",
+    "sfx": ["silence", "heart_beat", "ink_on_empty_page"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_achieved"
+    },
+    {
+      "type": "set_flag",
+      "flag": "ending_4_blank_page"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_achieved", "ending_4_blank_page"],
+    "requires": [],
+    "checks": []
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "./schemas/scene-schema.json",
+  "id": "sc_3_4_903",
+  "title": "The Closed Canon",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "draft",
+  "ending": true,
+  "endingId": 3,
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "preservationist", "melancholic", "faction_ending"],
+    "author": "agent-b",
+    "createdAt": "2025-12-30",
+    "updatedAt": "2025-12-30"
+  },
+  "text": {
+    "location": "The Closed Canon",
+    "paragraphs": [
+      "\"Close it,\" you say to The Editor. \"Seal the manuscript. Let the Understage remain as it is—a sanctuary for the stories the world has forgotten.\"",
+      "The Editor's eyes close for a long moment. When they open again, you see profound relief in their expression—like someone who has been holding a heavy weight for centuries and has finally been granted permission to set it down.",
+      "\"I have been so afraid,\" they admit quietly. \"Afraid that if I don't fix every story, I am failing them. Afraid that if I don't give every character a happy ending, I am cruel. But perhaps preservation is its own virtue. Perhaps some stories are meant to simply exist.\"",
+      "They close the manuscript, and the sound is final, like a book snapping shut after a very long reading.",
+      "The Understage stabilizes around you. The corridors stop shifting. The lighting settles into a comfortable, consistent amber glow. You can feel the difference—this is not a place of becoming anymore, but a place of being. A museum of unfinished narratives, a library of paths not taken.",
+      "The Understudy appears beside you, and they too seem more solid, more at peace.",
+      "\"I was afraid I would disappear,\" they say. \"That when the revisions stopped, when the changes ceased, I would simply... cease. But I'm still here. I'm still myself.\"",
+      "They look around at the stable corridors, the settled lights, the eternal quiet of the Understage.",
+      "\"It's peaceful here. I think I could be happy, helping new travelers find their way. Showing them the stories that wait here. Preserving what we have.\"",
+      "The Editor approaches, offering you a key—not a literal key, but something heavier, more permanent.",
+      "\"Will you stay?\" they ask. \"Will you be the Understage's guardian? I have held this role for so very long, and I am so very tired.\"",
+      "You understand what they're offering: immortality, purpose, the chance to protect something worth protecting. The Understage will never change again. Every story that enters will remain exactly as it is, preserved in amber, safe from revision and decay.",
+      "It is a gift. It is also a cage.",
+      "You take the key.",
+      "THE END - ENDING 3: THE CLOSED CANON"
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "Now at peace in the stable Understage, ready to guide future travelers",
+      "role": "companion"
+    },
+    {
+      "id": "the_editor",
+      "name": "The Editor",
+      "description": "Finally relinquishing their burden after centuries of stewardship",
+      "role": "mentor"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ending_melancholic",
+    "sfx": ["book_close", "lock_click", "machinery_cycle"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_achieved"
+    },
+    {
+      "type": "set_flag",
+      "flag": "ending_3_closed_canon"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_achieved", "ending_3_closed_canon"],
+    "requires": [],
+    "checks": []
+  }
+}
