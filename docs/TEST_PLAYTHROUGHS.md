@@ -893,6 +893,103 @@ When adding new scenes or mechanics, use this checklist:
 
 ---
 
+## Phase 4 Accessibility Tests
+
+The following tests validate Phase 4 Polish accessibility features. These are UI-layer concerns that do not affect engine state determinism.
+
+### PT-P4-ACC-001: CRT Filter Desktop-Only Behavior
+
+**Tests:** CRT filter enables on desktop, disables on mobile
+
+**UI Components:** `src/ui/crt-filter.ts`, `src/ui/shell.css`
+
+**Test Procedure:**
+1. Load game on desktop viewport (≥768px)
+2. Expected: CRT filter enabled by default (scanlines, text glow)
+3. Load game on mobile viewport (<768px)
+4. Expected: CRT filter disabled (no overlay effects)
+
+**CSS Validation Points:**
+- [ ] `@media (min-width: 768px)` enables CRT effects
+- [ ] `@media (max-width: 767px)` disables CRT effects
+- [ ] Toggle button: `getCRTFilter().toggle()` switches state
+- [ ] Respects `prefers-reduced-motion` (auto-disabled)
+
+---
+
+### PT-P4-ACC-002: Reduced Motion Instant Mode
+
+**Tests:** Scene transitions bypass animations when `prefers-reduced-motion` is active
+
+**UI Components:** `src/ui/shell.css` (`.instant-mode` class)
+
+**Test Procedure:**
+1. Enable OS-level reduced motion preference
+2. Navigate through any scene transition
+3. Expected: `.instant-mode` class applied, zero animation delay
+
+**CSS Validation Points:**
+- [ ] `@media (prefers-reduced-motion: reduce)` applies `.instant-mode`
+- [ ] Scene fade transitions disabled (0ms duration)
+- [ ] Choice hover animations disabled
+- [ ] No motion-based visual effects
+
+**Engine Validation:** See `tests/engine/accessibility.test.ts` for state determinism verification.
+
+---
+
+### PT-P4-ACC-003: Audio SFX Respect Preferences
+
+**Tests:** Audio disabled when reduced motion preference active
+
+**UI Components:** `src/ui/audio-manager.ts`
+
+**Test Procedure:**
+1. Enable OS-level reduced motion preference
+2. Trigger any SFX (choice select, scene load, save/load)
+3. Expected: No audio playback
+
+**Validation Points:**
+- [ ] `AudioManager.setEnabled(false)` when reduced motion detected
+- [ ] User gesture required for initialization (browser autoplay policy)
+- [ ] Volume control: `setVolume(0.0 - 1.0)` works
+- [ ] Mute toggle: `setEnabled(false)` silences all SFX
+
+---
+
+### PT-P4-ACC-004: Focus Indicators
+
+**Tests:** High-contrast focus indicators for keyboard navigation
+
+**UI Components:** `src/ui/shell.css`
+
+**Validation Points:**
+- [ ] All interactive elements have `:focus` state (3px yellow outline)
+- [ ] Skip-to-content link present (`href="#main-content"`)
+- [ ] Focus order matches DOM order
+- [ ] Visible focus ring on all buttons, links, choices
+
+---
+
+### PT-P4-ACC-005: Phase 3 Regression Prevention
+
+**Tests:** Phase 4 UI changes do not break Phase 3 functionality
+
+**Engine Tests:** `tests/engine/accessibility.test.ts`
+
+**Validation Points:**
+- [ ] All Phase 3 ending paths still reachable
+- [ ] Save/load state persistence unchanged
+- [ ] Stat/flag/inventory mechanics unaffected
+- [ ] Scene history tracking accurate
+
+**Automated Test Command:**
+```bash
+npm run test tests/engine/accessibility.test.ts
+```
+
+---
+
 ## Version History
 
 | Version | Date | Changes |
@@ -901,6 +998,7 @@ When adding new scenes or mechanics, use this checklist:
 | 1.2 | 2025-12-29 | Added PT-VS-006 (Act 2 Hub 3 Entry) and PT-VS-007 (Act 2 Climax Alliance Check) - validates sc_2_3_001 Archives Entry and sc_2_3_099 The Revelation scenes, documents all 4 faction states (preservationist, revisionist, exiter, independent), and adds faction alliance acknowledgment test variants |
 | 1.1 | 2025-12-29 | Added PT-VS-005 (Act 1 Climax Convergence) - validates sc_1_1_099 First Crossing scene, Act 1→Act 2 transition, and new state variables (act1_complete, first_crossing_reached) |
 | 1.0 | 2025-12-29 | Initial version with vertical slice playthroughs (PT-VS-001 through PT-VS-004) |
+| 1.1 | 2025-12-30 | Added Phase 4 accessibility tests (PT-P4-ACC-001 through PT-P4-ACC-005) |
 
 ---
 
