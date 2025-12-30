@@ -8,6 +8,8 @@ This document specifies the validation framework for Phase 3 ending graph verifi
 
 **Status:** Framework definition (Phase 3). Automated tests will be created when Chunk 4 scenes are implemented.
 
+**⚠️ SCOPE NOTE:** This document describes **full Act 3** validation requirements. Chunk 4 implements only **Act 3 Hub 4**. See [ENDING_VALIDATION_CHUNK_4.md](./ENDING_VALIDATION_CHUNK_4.md) for scope clarification on how faction gates work with partial Act 3 implementation.
+
 ---
 
 ## Ending Definitions (Canonical Source)
