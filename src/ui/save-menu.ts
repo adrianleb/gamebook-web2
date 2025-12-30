@@ -15,6 +15,7 @@
 
 import type { Engine } from '../engine/engine.js';
 import { SaveManager, type SaveSlotId, type SaveSlotMetadata, type SaveError } from '../engine/save-manager.js';
+import { getAudioManager } from './audio-manager.js';
 
 /**
  * Modal mode - determines available actions.
@@ -50,6 +51,9 @@ export class SaveMenu {
 
   /** SaveManager for persistence operations */
   private saveManager: SaveManager;
+
+  /** Audio manager for Phase 4 SFX */
+  private audio;
 
   /** Current modal mode (save or load) */
   private currentMode: ModalMode;
@@ -88,6 +92,7 @@ export class SaveMenu {
   constructor(engine: Engine) {
     this.engine = engine;
     this.saveManager = new SaveManager();
+    this.audio = getAudioManager();
     this.currentMode = 'save';
     this.pendingConfirmAction = null;
 
@@ -373,11 +378,15 @@ export class SaveMenu {
 
   /**
    * Perform the actual save operation.
+   * Phase 4 Polish: Added save-game SFX playback.
    *
    * @param slotId - Slot ID to save to
    */
   private async performSave(slotId: SaveSlotId): Promise<void> {
     try {
+      // Phase 4 Polish: Play save SFX
+      this.audio.play('save-game');
+
       // Get current scene title
       const scene = this.engine.getCurrentScene();
       const sceneTitle = scene?.title || scene?.id || 'Unknown';
@@ -395,6 +404,7 @@ export class SaveMenu {
       this.showSuccess(`Game saved to Slot ${slotId}`);
     } catch (error) {
       console.error('[SaveMenu] Save failed:', error);
+      this.audio.play('error');
       this.showError(this.getErrorMessage(error));
     }
   }
@@ -402,12 +412,16 @@ export class SaveMenu {
   /**
    * Handle load button click.
    * Loads game state from slot and applies to engine.
+   * Phase 4 Polish: Added load-game SFX playback.
    * Per agent-e (Intent #93): Shows loading state and handles rollback on failure.
    *
    * @param slotId - Slot ID to load from
    */
   private async handleLoadClick(slotId: SaveSlotId): Promise<void> {
     try {
+      // Phase 4 Polish: Play load SFX
+      this.audio.play('load-game');
+
       // Load via SaveManager
       const gameState = await this.saveManager.load(slotId);
 
@@ -424,6 +438,7 @@ export class SaveMenu {
       this.showSuccess(`Game loaded from Slot ${slotId}`);
     } catch (error) {
       console.error('[SaveMenu] Load failed:', error);
+      this.audio.play('error');
       this.showError(this.getErrorMessage(error));
     }
   }

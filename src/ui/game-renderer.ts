@@ -26,6 +26,7 @@ import type {
   StatId,
   ReadonlyState,
 } from '../engine/types.js';
+import { getAudioManager } from './audio-manager.js';
 
 /**
  * Item metadata from content/items.json
@@ -151,6 +152,9 @@ export class GameRenderer {
   /** Engine instance */
   private engine: Engine;
 
+  /** Audio manager for Phase 4 SFX */
+  private audio;
+
   /** DOM element references */
   private elements: GameElements;
 
@@ -173,6 +177,7 @@ export class GameRenderer {
    */
   constructor(engine: Engine) {
     this.engine = engine;
+    this.audio = getAudioManager();
     this.unsubscribers = [];
     this.itemCatalog = {};
     this.statMetadata = [];
@@ -214,6 +219,9 @@ export class GameRenderer {
       // Setup keyboard navigation
       this.setupKeyboardNav();
 
+      // Setup audio initialization on first user gesture (Phase 4 Polish)
+      this.setupAudioInit();
+
       // Initial render
       this.renderAll();
 
@@ -222,6 +230,30 @@ export class GameRenderer {
       console.error('[GameRenderer] Initialization failed:', error);
       this.showError('Failed to initialize game renderer. Please reload.');
     }
+  }
+
+  /**
+   * Setup audio manager initialization on first user gesture.
+   *
+   * Per agent-c's recommendation: "Initialize AudioManager lazily on
+   * first user interaction (any click/keyboard)."
+   *
+   * Per browser autoplay policies: AudioContext/Audio must be
+   * initialized after a user gesture.
+   */
+  private setupAudioInit(): void {
+    const initAudio = () => {
+      this.audio.initialize();
+      // Remove all listeners after first init
+      document.removeEventListener('click', initAudio);
+      document.removeEventListener('keydown', initAudio);
+      document.removeEventListener('touchstart', initAudio);
+    };
+
+    // Listen for first user interaction
+    document.addEventListener('click', initAudio, { once: true });
+    document.addEventListener('keydown', initAudio, { once: true });
+    document.addEventListener('touchstart', initAudio, { once: true, passive: true });
   }
 
   /**
@@ -293,6 +325,7 @@ export class GameRenderer {
    * Updates scene.title and scene.text with DOS-style transition.
    *
    * Per agent-e: performance target <5ms per render.
+   * Phase 4 Polish: Added audio SFX on scene load.
    */
   private renderScene(): void {
     const startTime = performance.now();
@@ -312,6 +345,9 @@ export class GameRenderer {
       sceneTextEl.textContent = '[Scene text missing]';
       return;
     }
+
+    // Phase 4 Polish: Play scene load SFX
+    this.audio.play('scene-load');
 
     // Add transition class for DOS-style fade
     viewportEl.classList.add('transitioning');
@@ -710,13 +746,18 @@ export class GameRenderer {
 
   /**
    * Handle choice selection.
-   * Triggers engine state transition with visual feedback.
+   * Triggers engine state transition with visual and audio feedback.
+   *
+   * Phase 4 Polish: Added choice-select SFX playback.
    *
    * @param choiceIndex - Index of selected choice
    */
   private async handleChoice(choiceIndex: number): Promise<void> {
     try {
       console.log('[GameRenderer] Choice selected:', choiceIndex);
+
+      // Phase 4 Polish: Play choice selection SFX
+      this.audio.play('choice-select');
 
       // Flash animation on selected button
       const button = document.querySelector(`[data-choice-index="${choiceIndex}"] .choice-button`);
@@ -729,6 +770,10 @@ export class GameRenderer {
     } catch (error) {
       console.error('[GameRenderer] Choice failed:', error);
       const message = error instanceof Error ? error.message : 'Unknown error';
+
+      // Phase 4 Polish: Play error SFX
+      this.audio.play('error');
+
       this.showError(`Failed to make choice: ${message}`);
     }
   }
