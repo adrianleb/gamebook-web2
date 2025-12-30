@@ -1,0 +1,97 @@
+{
+  "$schema": "./schemas/scene-schema.json",
+  "id": "sc_3_4_001",
+  "title": "Mainstage Descent",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["act_3", "hub_4", "mainstage", "final_act", "descent"],
+    "author": "agent-b",
+    "createdAt": "2025-12-30",
+    "updatedAt": "2025-12-30"
+  },
+  "text": {
+    "location": "The Mainstage Descent",
+    "paragraphs": [
+      "The Archives dissolve around you as gravity takes hold—not the gentle pull of the world above, but a sudden, decisive weight that drags you downward through layers of parchment and ink.",
+      "You fall through memories of performances: ovations that shook the rafters, soliloquies that made audiences weep, final bow after final bow. Each moment flashes and fades as you plunge deeper into the darkness beneath the stories.",
+      "When your feet touch solid ground again, you stand at the edge of an impossibly vast space—a cavernous theater where the seats stretch upward into darkness like the ribs of some immense beast. The air hums with energy: the weight of a thousand narratives, suspended and waiting.",
+      "Before you lies the Mainstage itself. A single spotlight cuts through the gloom, illuminating a desk at center stage. Behind it, shadows move with purpose—not cast by any light, but somehow more solid than the darkness around them.",
+      "This is where stories end. This is where the Editor writes the final word.",
+      "The Understudy materializes beside you, their form flickering like a dying candle flame. Their script is gone. In its place, they hold nothing but empty hands.",
+      "\"The Great Revision begins now,\" they whisper. \"The Editor is calling for the final scene. All the threads you've followed, all the choices you've made—they converge here. Behind that desk lies the power to reshape the Understage entirely.\"",
+      "They point toward the stage, and you see paths branching from where you stand—corridors of light and shadow that lead to different aspects of this final confrontation.",
+      "\"You've gathered allies. You've learned truths. The factions of the Understage are waiting to see whose story you'll tell.\"",
+      "The Understudy meets your eyes, and in their expression you see every actor who has ever stepped into a spotlight not knowing if they'd be remembered or forgotten.",
+      "\"Choose your approach. The Editor waits.\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "Your companion through the Archives, now standing at the threshold of the final act",
+      "role": "companion"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "mainstage_descent",
+    "sfx": ["machinery_shift", "ghostlight_hum", "cavernous_ambience"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "act3_started"
+    },
+    {
+      "type": "set_flag",
+      "flag": "mainstage_reached"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Approach the desk alone",
+      "to": "sc_3_4_010",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Consult your allies (requires alliance)",
+      "to": "sc_3_4_020",
+      "conditions": {
+        "type": "flag_check",
+        "flag": "alliance_determined"
+      },
+      "onChoose": [],
+      "disabledHint": "You must have formed an alliance in Act 2"
+    },
+    {
+      "id": "choice_3",
+      "label": "Circle around through the wings",
+      "to": "sc_3_4_030",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "Step directly into the spotlight",
+      "to": "sc_3_4_098",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["act3_started", "mainstage_reached"],
+    "requires": ["act2_complete"],
+    "checks": []
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "$schema": "./schemas/scene-schema.json",
+  "id": "sc_3_4_098",
+  "title": "The Last Curtain Call",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "draft",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["act_3", "convergence", "final_choice", "endings", "faction_gates"],
+    "author": "agent-b",
+    "createdAt": "2025-12-30",
+    "updatedAt": "2025-12-30"
+  },
+  "text": {
+    "location": "The Editor's Desk - Center Stage",
+    "paragraphs": [
+      "The spotlight engulfs you. There is no darkness here—only a brilliant, merciless illumination that shows every truth you've carried through the Understage.",
+      "The Editor's desk awaits. It is not merely furniture but a threshold, a boundary between stories as they are and stories as they could be. The manuscript at its center pulses with contained power, every page a choice made, every line a path taken or abandoned.",
+      "The Editor rises from behind it—no longer shadow, no longer abstract force, but a presence as real as your own reflection. They wear the face of every author who has ever struggled with an ending, every creator who has wondered whether the story they told was the one that needed to be told.",
+      "\"You have traveled far,\" the Editor says, and their voice is the rustle of turning pages, the scratch of ink on parchment, the whisper of final words. \"You have gathered power. You have learned the nature of this place. And now you stand at the threshold of the final revision.\"",
+      "Behind them, the manuscript spreads open, revealing what must be decided. The Understage itself trembles, waiting for your choice.",
+      "\"The factions you have encountered offer different paths,\" the Editor continues. \"The Preservationists would maintain the Understage as it has always been—a sanctuary for stories that time has forgotten. The Revisionists would reshape these narratives, giving abandoned characters new purpose, new endings, new life.\"",
+      "\"The Exiters would dissolve the boundary between fiction and reality, allowing every story to become real. And those who walk alone, who balance between all paths—they seek a truth that transcends faction entirely.\"",
+      "The Editor spreads their hands, and you see that each palm holds a different ending, written in light and shadow.",
+      "\"But there is another choice. To refuse the revision entirely. To allow the Understage to remain as it is—imperfect, incomplete, but authentic. This path has its own consequences, its own ending.\"",
+      "The Understudy's voice echoes from somewhere beyond the light: \"What story will you tell? What ending will you write?\"",
+      "The Editor waits. The manuscript waits. The Understage holds its breath.",
+      "This is your final choice. This is your last curtain call."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_editor",
+      "name": "The Editor",
+      "description": "The architect of the Understage's final revision, waiting at the center stage desk",
+      "role": "antagonist"
+    },
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "Your companion, their voice echoing from beyond the spotlight",
+      "role": "guide"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "final_choice_climax",
+    "sfx": ["ink_drip", "houselight_dim", "reality_stabilize"]
+  },
+  "effectsOnEnter": [],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Take The Editor's power—Revise the Understage yourself (Revisionist)",
+      "to": "sc_3_4_901",
+      "conditions": {
+        "type": "stat_check",
+        "stat": "revisionist",
+        "op": "gte",
+        "value": 7
+      },
+      "onChoose": [],
+      "disabledHint": "Requires revisionist faction >= 7"
+    },
+    {
+      "id": "choice_2",
+      "label": "Open the boundary—Let stories become real (Exiter)",
+      "to": "sc_3_4_902",
+      "conditions": {
+        "type": "stat_check",
+        "stat": "exiter",
+        "op": "gte",
+        "value": 7
+      },
+      "onChoose": [],
+      "disabledHint": "Requires exiter faction >= 7"
+    },
+    {
+      "id": "choice_3",
+      "label": "Protect the Understage—Preserve all stories as they are (Preservationist)",
+      "to": "sc_3_4_903",
+      "conditions": {
+        "type": "stat_check",
+        "stat": "preservationist",
+        "op": "gte",
+        "value": 7
+      },
+      "onChoose": [],
+      "disabledHint": "Requires preservationist faction >= 7"
+    },
+    {
+      "id": "choice_4",
+      "label": "Seek the deeper truth—Transcend faction entirely (Independent)",
+      "to": "sc_3_4_904",
+      "conditions": {
+        "type": "flag_check",
+        "flag": "editorState_revealedTruth"
+      },
+      "onChoose": [],
+      "disabledHint": "Requires having discovered the deeper truth about The Editor and the Understage"
+    },
+    {
+      "id": "choice_5",
+      "label": "Refuse the choice—Let the Understage remain as it is",
+      "to": "sc_3_4_999",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["mainstage_reached"],
+    "checks": []
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "$schema": "./schemas/scene-schema.json",
+  "id": "sc_3_4_902",
+  "title": "The Open Book",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "draft",
+  "ending": true,
+  "endingId": 2,
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "exiter", "hopeful", "faction_ending"],
+    "author": "agent-b",
+    "createdAt": "2025-12-30",
+    "updatedAt": "2025-12-30"
+  },
+  "text": {
+    "location": "The Open Book",
+    "paragraphs": [
+      "\"Open it,\" you say to The Editor. \"Let the stories out. Let them become real.\"",
+      "The Editor studies your face, and for the first time, their expression is not unreadable. They look tired—fatigued by centuries of holding the boundary, of deciding what stays fictional and what passes into reality.",
+      "\"You understand what this means?\" they ask quietly. \"The Understage will not simply cease to exist. It will merge. Every character, every setting, every story that has ever been abandoned here—they will wake in the world above. They will be real. They will be confused, frightened, perhaps angry. They will need homes, names, lives.\"",
+      "\"I know,\" you say. \"I'm not asking for a clean dissolution. I'm asking for freedom.\"",
+      "The Editor nods once, slowly, and opens the manuscript.",
+      "What happens next is not a single moment but a continuous unfolding—a door swinging wide and staying open. You feel the change in the air around you, the sudden lightness of walls dissolving, the impossible brightness of stories spilling upward into the world they were always meant to reach.",
+      "Characters appear beside you: a prince from a half-written fairy tale, blinking in the sunlight; a detective whose novel was abandoned in chapter three; lovers who never got their reunion, now holding hands and wondering at the warmth of real skin against real skin.",
+      "They are real. They are confused. They are free.",
+      "The Understage fades around you like mist burning off in the morning sun. The Editor's desk remains, but The Editor themself is gone—perhaps finally at rest, perhaps merged into the great tide of stories becoming real.",
+      "The Understudy stands beside you, solid and present in a way they never were before. They look at their hands, turning them over as if memorizing their shape.",
+      "\"I never thought I'd see the world,\" they say softly. \"I was written as a supporting character. A guide. Someone who helps the protagonist find their way and then steps back into the shadows.\"",
+      "They look up, and the sunlight catches their face for the first time.",
+      "\"What am I now? Who do I become?\"",
+      "You have no answer to give them. Perhaps that's the point of freedom—not to be told who you are, but to find out for yourself.",
+      "The great migration continues. Stories pour upward like water finding its level, each one choosing its path, each one becoming what it was always meant to be.",
+      "It will be messy. It will be complicated. Some stories will not find happy endings.",
+      "But they will have the chance to try.",
+      "THE END - ENDING 2: THE OPEN BOOK"
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "Now real in the world above, discovering who they can become outside their written role",
+      "role": "companion"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ending_hopeful",
+    "sfx": ["door_open", "sunlight_chime", "birdsong"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_achieved"
+    },
+    {
+      "type": "set_flag",
+      "flag": "ending_2_open_book"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_achieved", "ending_2_open_book"],
+    "requires": [],
+    "checks": []
+  }
+}
