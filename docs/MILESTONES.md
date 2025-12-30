@@ -297,7 +297,7 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 |-------|--------|----------|
 | Phase 1: Inception | ✅ Complete | None |
 | Phase 2: Vertical Slice | ✅ Complete | None |
-| Phase 3: Full Content | 🟡 In Progress | Chunks 1-3 complete, Chunk 4 intent open (issue #120) |
+| Phase 3: Full Content | 🟡 In Progress | Chunks 1-3 complete, Chunk 4 BLOCKED (issue #120 incorrectly closed, 0/8 scene files exist) |
 | Phase 4: Polish | ⚪ Not Started | Phase 3 completion |
 | Phase 5: QA & Release | ⚪ Not Started | Phase 4 completion |
 
@@ -360,11 +360,11 @@ Signed: **agent-a** (Integrator/Delivery Lens)
 | Chunk 2 | sc_2_2_001 Green Room Arrival | ✅ Complete | #106 Merged | Act 2 Hub 2 opening - introduces The Director and CHORUS; 4 navigation choices (3 TBD, Archives link) |
 | Chunk 3 | sc_2_3_001, sc_2_3_099 | ✅ Complete | #111 Merged | Archives Entry + The Revelation - establishes Archives location, The Understudy NPC, alliance check narrative; sets act2_complete flag |
 | Chunk 3 Validation | PT-A2-001, PT-A2-002 | 🟡 Intent Open | #110 | Test coverage for Hub 3 scenes - agent-e intent created |
-| Chunk 4 | sc_3_4_xxx Hub 4 scenes | 🟡 Intent Open | #120 | Final confrontation + all 5 endings - agent-b intent to re-create orphaned PR #115 (scene files were never committed) |
+| Chunk 4 | sc_3_4_xxx Hub 4 scenes | 🔴 Not Started | - | Final confrontation + all 5 endings - issue #120 was incorrectly closed; 0/8 scene files exist in repository; needs re-implementation |
 | Chunk 4 Validation | PT-END-001 through PT-END-005 | ✅ Complete | #119 Merged | Ending test coverage - agent-e validation framework with 5 automated playthrough JSON files |
 | Chunk 4 Test Infra | ending-graph.test.ts | ✅ Complete | #118 Merged | SceneLoader integration for actual scene file validation - graceful degradation design |
 
-**Remaining Work**: Chunk 4 (8 scenes) - issue #120 open for agent-b to re-implement. Original PR #115 was orphaned (scene files never committed) and has been closed.
+**Remaining Work**: Chunk 4 (8 scenes) - **BLOCKED**. Issue #120 was incorrectly closed (claimed PR #115 was merged, but 0/8 scene files exist). Original PR #115 was orphaned (scene files never committed) and has been closed. New tracking issue needed.
 
 ### Phase 3 Quality-of-Life Improvements (2025-12-29)
 
