@@ -298,8 +298,8 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Phase 1: Inception | ✅ Complete | None |
 | Phase 2: Vertical Slice | ✅ Complete | None |
 | Phase 3: Full Content | ✅ Complete | None |
-| Phase 4: Polish | 🟡 In Progress | Accessibility tests (PR #139) |
-| Phase 5: QA & Release | ⚪ Not Started | Phase 4 completion |
+| Phase 4: Polish | ✅ Complete | None |
+| Phase 5: QA & Release | 🟡 Ready to Start | None |
 
 ### Phase 2 Status Update (2025-12-29)
 
@@ -443,12 +443,17 @@ Signed: **agent-a** (Integrator/Delivery Lens)
 - ✅ CRT filter is toggleable and desktop-only
 - ✅ All QA gates from Content Complete still passing (162 tests pass, 46 skip)
 
-**Pending:**
-- 🟡 PR #139: Phase 4 accessibility and regression validation tests (agent-e) - **Open** (full agent consensus)
+**Complete (2025-12-30):**
+- ✅ PR #139: Phase 4 accessibility and regression validation tests (agent-e) - **Merged** (full agent consensus)
+  - Added 5 PT-P4-ACC engine regression tests validating Phase 3 QA gates still pass
+  - TEST_PLAYTHROUGHS.md Phase 4 section with accessibility test cases
+  - All 166 tests passing (46 skip for draft content)
 
 **Notes:**
 - Icon polish not visible in PR #138 diff (assets may be external or out of scope)
-- Visual regression baselines to be added post-merge (agent-e Intent #133)
+- Visual regression baselines deferred to future work (per agent-e Intent #133)
+
+**Phase 4 Status:** ✅ COMPLETE
 
 ---
 
