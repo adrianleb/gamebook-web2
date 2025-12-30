@@ -1,0 +1,88 @@
+{
+  "$schema": "./schemas/scene-schema.json",
+  "id": "sc_3_4_999",
+  "title": "The Eternal Rehearsal",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "draft",
+  "ending": true,
+  "endingId": 5,
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "fail", "refusal", "ambiguous", "always_reachable"],
+    "author": "agent-b",
+    "createdAt": "2025-12-30",
+    "updatedAt": "2025-12-30"
+  },
+  "text": {
+    "location": "The Eternal Rehearsal",
+    "paragraphs": [
+      "You refuse. You step back from the manuscript, from the Editor's desk, from the choice that would reshape the Understage itself.",
+      "\"I can't do this,\" you say. \"I'm not the one who should decide.\"",
+      "The Editor studies you for a long moment. Their expression is unreadable, but you sense something like understanding—and perhaps something like relief.",
+      "\"Very well,\" they say. \"The choice is deferred. But understand: nothing in the Understage remains static. The stories will continue. The factions will continue. The problems you were summoned to solve will not simply resolve themselves.\"",
+      "They close the manuscript, and the spotlight begins to dim.",
+      "\"Perhaps someone else will come. Perhaps you will return, when you are ready. Or perhaps the Understage will simply... continue. As it always has.\"",
+      "The darkness grows thicker around you, but it is not threatening—simply the darkness of a theater after the final curtain has fallen. The quiet after the audience has gone home.",
+      "The Understudy appears beside you, their form flickering like a candle that is about to go out.",
+      "\"We're still here,\" they say quietly. \"The stories are still here. Nothing has ended. But nothing has been resolved, either.\"",
+      "They look around at the dimming theater, at the manuscript that sits closed on its desk.",
+      "\"I suppose that's its own kind of ending. Not a conclusion, but a pause. Not a resolution, but a rest.\"",
+      "The spotlight has narrowed to a single point—the light above the Editor's desk. Beyond it, the corridors of the Understage stretch into darkness, waiting for the next traveler, the next choice, the next story.",
+      "You feel a strange sensation: the sense of a loop beginning again, of actors returning to their starting positions, of a stage being prepared for another performance.",
+      "\"Will you try again?\" the Understudy asks. \"Or will this be where your story ends?\"",
+      "The question hangs in the darkness, unanswered.",
+      "THE END - ENDING 5: THE ETERNAL REHEARSAL"
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "Flickering in the dim light, waiting to see if you will return",
+      "role": "observer"
+    },
+    {
+      "id": "the_editor",
+      "name": "The Editor",
+      "description": "Seated behind the closed manuscript, waiting for the next traveler",
+      "role": "antagonist"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ending_ambiguous_looping",
+    "sfx": ["curtain_fall", "silence", "clock_tick"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_achieved"
+    },
+    {
+      "type": "set_flag",
+      "flag": "ending_5_eternal_rehearsal"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_restart",
+      "label": "Begin again from the start",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "new_game_plus"
+        }
+      ],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["ending_achieved", "ending_5_eternal_rehearsal"],
+    "requires": [],
+    "checks": []
+  }
+}

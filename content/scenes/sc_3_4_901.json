@@ -1,0 +1,68 @@
+{
+  "$schema": "./schemas/scene-schema.json",
+  "id": "sc_3_4_901",
+  "title": "The Revised Draft",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "draft",
+  "ending": true,
+  "endingId": 1,
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["ending", "revisionist", "bittersweet", "faction_ending"],
+    "author": "agent-b",
+    "createdAt": "2025-12-30",
+    "updatedAt": "2025-12-30"
+  },
+  "text": {
+    "location": "The Revised Draft",
+    "paragraphs": [
+      "You take the manuscript from The Editor's hands, and the weight of it settles into your bones like ink into water. Every page thrums with potential—the power to reshape, to revise, to make every story better than it was.",
+      "The Editor does not resist. They step back, their form flickering like a candle flame in a sudden draft, and you understand what they have always been: not a tyrant, but a custodian. Someone had to hold this power until someone worthy could carry it.",
+      "\"I tried to be perfect,\" they say, their voice growing faint. \"I tried to fix every hurt, smooth every rough edge, give every character the ending they deserved. But perfection is paralysis. The Understage needs a revisionist—not a curator.\"",
+      "They dissolve into light, and you are alone at the desk with the manuscript open before you.",
+      "The changes you make are not gentle. You cut scenes that have no purpose. You rewrite endings that feel dishonest. You strengthen characters who have suffered too long and trim those who have taken more than their share. The work feels right, necessary, like pruning a garden that has grown wild.",
+      "But as you write, you feel the cost. Every revision erases something. Every improvement removes a piece of what made the Understage unique—the beautiful mess of abandoned stories, the glorious chaos of narratives left unfinished.",
+      "When you set down the pen, the Understage has changed. The corridors are straighter now. The lighting is more consistent. The stories that remain have been polished, refined, given proper structure and satisfying arcs.",
+      "They are better stories. They are also fewer stories.",
+      "The Understudy appears beside you, reading the revised manuscript. They look different now—sharper, more confident, less haunted by the weight of unrealized potential.",
+      "\"You've done what I could not,\" they say quietly. \"You've made the Understage work. Characters have purpose now. Stories have direction. The chaos is gone.\"",
+      "They look up, and their eyes are clear, untroubled.",
+      "\"But I wonder—do you ever miss the beautiful disasters? The characters who never quite fit? The stories that made no sense but somehow mattered anyway?\"",
+      "You don't have an answer. Perhaps there is none.",
+      "The spotlight narrows, focusing on the manuscript's final page. You have written the ending you believed in.",
+      "But somewhere in the darkness beyond the stage, you can almost hear the ghosts of all the stories you cut, whispering their unfinished lines.",
+      "THE END - ENDING 1: THE REVISED DRAFT"
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "Changed by your revision—sharper, more confident, but perhaps less wild",
+      "role": "observer"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ending_bittersweet",
+    "sfx": ["pen_scratch", "page_turn", "ghost_whisper"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ending_achieved"
+    },
+    {
+      "type": "set_flag",
+      "flag": "ending_1_revised_draft"
+    }
+  ],
+  "choices": [],
+  "flags": {
+    "sets": ["ending_achieved", "ending_1_revised_draft"],
+    "requires": [],
+    "checks": []
+  }
+}
