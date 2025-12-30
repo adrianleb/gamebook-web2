@@ -54,7 +54,7 @@
       "flag": "editor_revealed"
     },
     {
-      "type": "modify-faction",
+      "type": "modify_faction",
       "faction": "independent",
       "amount": 1
     }
