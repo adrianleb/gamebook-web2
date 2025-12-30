@@ -416,6 +416,71 @@ These playthroughs test for softlock conditions (scenes with no valid choices).
 
 ---
 
+## Act 3 Hub Playthroughs
+
+The following playthroughs test Act 3 content (The Final Act): Mainstage Descent (Hub 4).
+
+### PT-A3-H4-001: Mainstage Descent
+
+**Tests:** Act 3 Hub 4 opening scene, state flag propagation from Act 2 completion, forward transition to final confrontation
+
+**Entry Point:** `sc_3_4_001` (Mainstage Descent)
+
+**Prerequisites:**
+- `act2_complete` flag set (arrived from sc_2_3_099 The Revelation)
+- `editor_revealed` flag set (Editor's identity revealed)
+
+**Path:**
+```
+sc_2_3_099 ─[Choose: "Ascend to the Mainstage"]──> sc_3_4_001 ─[Choose: "Enter the Mainstage"]──> sc_3_4_098
+```
+
+**Steps:**
+
+| Step | Scene | Action | Checkpoint | Expected State |
+|------|-------|--------|------------|----------------|
+| 1 | sc_3_4_001 | (Arrived from Act 2) | ✅ save_point | `act2_complete=true`, `editor_revealed=true`, `mainstage_ascent=true` |
+| 2 | sc_3_4_001 | Verify entry effects | ✅ mechanic_test | Scene loaded, narrative displays descent to Mainstage |
+| 3 | sc_3_4_001 | Verify hub navigation choices | ✅ softlock_check | Forward choice enabled: "Enter the Mainstage" |
+| 4 | sc_3_4_001 | Hover "Enter the Mainstage" | ✅ mechanic_test | Choice enabled (no requirements) |
+| 5 | sc_3_4_001 | Choose "Enter the Mainstage (Final Confrontation)" | ✅ softlock_check | Transitions to sc_3_4_098 |
+| 6 | sc_3_4_098 | (Arrived at final confrontation) | ✅ save_point | `mainstage_ascent=true` persists, all previous flags persist |
+
+**Final State Assertions:**
+```json
+{
+  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "flags": {
+    "game_started": true,
+    "act1_complete": true,
+    "act2_complete": true,
+    "editor_revealed": true,
+    "mainstage_ascent": true
+  },
+  "inventory": [],
+  "factions": {
+    "preservationist": 0,
+    "revisionist": 0,
+    "exiter": 0,
+    "independent": 1
+  },
+  "current_scene": "sc_3_4_098"
+}
+```
+
+**Critical Mechanics Validated:**
+- Act 3 Hub 4 opening scene loads correctly
+- Entry effects set state flag correctly (`mainstage_ascent`)
+- Forward transition to final confrontation (sc_3_4_098) works correctly
+- All state flags from previous acts persist into Act 3
+- No softlock: At least forward choice is always enabled
+
+**Regression Checkpoints:** Steps 1, 2, 5, 6
+
+**Note:** This test validates the Act 3 Hub 4 opening scene. When this scene is implemented (Chunk 4, per issue #123), it should foreshadow the final confrontation with the Editor. This is a hub scene with minimal exploration—forward progress leads directly to sc_3_4_098 The Last Curtain Call where ending choices are presented.
+
+---
+
 ## Ending Playthroughs
 
 The following playthroughs test the Phase 3 Ending graph (Act 3 Hub 4: The Last Curtain Call).
@@ -897,6 +962,8 @@ When adding new scenes or mechanics, use this checklist:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.5 | 2025-12-30 | Added PT-A3-H4-001 (Act 3 Hub 4 Mainstage Descent) - validates sc_3_4_001 Mainstage Descent opening scene, state flag propagation (mainstage_ascent), and forward transition to sc_3_4_098 final confrontation. |
+| 1.4 | 2025-12-29 | Added PT-A2-H2-001, PT-A2-H3-001, PT-A2-H3-002 (Act 2 Hub validation) - validates sc_2_2_001 Green Room Arrival (The Director, CHORUS introductions), sc_2_3_001 Archives Entry (The Understudy introduction, 5 hub exploration choices), and sc_2_3_099 The Revelation (Act 2 climax, Editor reveal, Act 3 transition). Documents state flags (green_room_reached, act2_started, archives_reached, revelation_discovered, act2_complete, editor_revealed, mainstage_ascent) and validates act boundary propagation. |
 | 1.3 | 2025-12-29 | Added PT-END-001 through PT-END-005 (Act 3 Ending validation) - validates all 5 endings (sc_3_4_901 through sc_3_4_904, sc_3_4_999), faction gates (>=7), editorState requirements (defeated/persuaded/revealedTruth), and fail-state fallback ending. Updated State Variable Reference with editorState flag and all 4 factions. |
 | 1.2 | 2025-12-29 | Added PT-VS-006 (Act 2 Hub 3 Entry) and PT-VS-007 (Act 2 Climax Alliance Check) - validates sc_2_3_001 Archives Entry and sc_2_3_099 The Revelation scenes, documents all 4 faction states (preservationist, revisionist, exiter, independent), and adds faction alliance acknowledgment test variants |
 | 1.1 | 2025-12-29 | Added PT-VS-005 (Act 1 Climax Convergence) - validates sc_1_1_099 First Crossing scene, Act 1→Act 2 transition, and new state variables (act1_complete, first_crossing_reached) |
