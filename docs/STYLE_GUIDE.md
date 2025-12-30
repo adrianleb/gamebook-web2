@@ -795,8 +795,249 @@ body.test-mode .stat-bar::before {
 - **Content Manifest**: `content/manifest.json` — Scene structure and IDs
 - **Scene Conventions**: `docs/SCENE_ID_CONVENTIONS.md` — Scene ID format
 - **Test Playthroughs**: `docs/TEST_PLAYTHROUGHS.md` — QA validation scenarios
+- **MILESTONES**: `docs/MILESTONES.md` — Phase 4 Polish requirements
+
+---
+
+## Phase 4 Polish Additions (v1.1)
+
+**Last Updated:** 2025-12-30
+
+This section documents Phase 4 Polish enhancements to the DOS UI system, added after the initial v1.0 release.
+
+### Audio System
+
+Per agent-c's Engine lens perspective, Phase 4 uses **HTML5 Audio** for sound effects:
+
+- **Simplicity**: HTML5 `<audio>` elements have simpler state management than Web Audio API
+- **Determinism**: No AudioContext suspend/resume complexity
+- **Scope fit**: SFX for key moments (choice-select, scene-load, save/load)
+
+**Sound Effects:**
+| Effect | Description | Trigger |
+|--------|-------------|---------|
+| `choice-select` | Button click confirmation | User selects a choice |
+| `scene-load` | Scene transition fade | New scene loads |
+| `save-game` | Save complete | Save operation succeeds |
+| `load-game` | Load complete | Load operation succeeds |
+| `error` | Error notification | Operation fails |
+
+**Implementation:**
+```typescript
+import { getAudioManager } from './ui/audio-manager.js';
+
+// Audio manager initializes on first user gesture (browser autoplay policy)
+const audio = getAudioManager();
+audio.play('choice-select');  // Plays sound effect
+audio.setEnabled(false);      // Mute for accessibility
+```
+
+**Accessibility:**
+- Respects `prefers-reduced-motion` (audio disabled when motion preference active)
+- Volume control via `setVolume(0.0 - 1.0)`
+- Mute toggle via `setEnabled(false)`
+
+### CRT Filter Effect
+
+Optional retro DOS monitor visual effect (desktop-only, accessibility-aware).
+
+**Features:**
+- Scanline overlay pattern
+- Subtle text glow (chromatic aberration simulation)
+- Border glow on interactive elements
+- **Desktop-only** (disabled on viewports < 768px)
+- **Respects prefers-reduced-motion** (auto-disabled)
+
+**Implementation:**
+```typescript
+import { getCRTFilter } from './ui/crt-filter.js';
+
+const crt = getCRTFilter();
+crt.initialize();
+crt.toggle();  // Enable/disable CRT effect
+```
+
+**CSS Classes:**
+```css
+body.crt-enabled {
+  /* CRT effects active */
+}
+
+/* Instant mode for accessibility */
+body.instant-mode * {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
+```
+
+### Enhanced Scene Transitions
+
+Phase 4 refines the scene transition system with accessibility considerations:
+
+**Default Transition:**
+```css
+.text-viewport.transitioning {
+  animation: scene-transition 500ms ease;
+}
+```
+
+**Reduced Motion Fallback:**
+```css
+@media (prefers-reduced-motion: reduce) {
+  .text-viewport.transitioning {
+    animation: none;
+    opacity: 1;
+  }
+}
+```
+
+**Scene Title Animation:**
+```css
+.scene-title {
+  animation: title-fade-in 300ms ease-out;
+}
+```
+
+### Typography Refinements
+
+Enhanced text styling for better readability and DOS authenticity:
+
+**Paragraph Spacing:**
+```css
+.text-viewport p {
+  margin-bottom: 16px;  /* var(--space-2) */
+  line-height: 1.8;     /* var(--leading-relaxed) */
+}
+```
+
+**Enhanced Bold:**
+```css
+.bold {
+  font-weight: 700;
+  color: var(--text-accent);
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+}
+```
+
+**Speaker Prefixes:**
+```css
+.speaker {
+  font-weight: 700;
+  color: var(--text-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+```
+
+### Accessibility Enhancements
+
+**Skip to Content Link:**
+```html
+<a href="#main-text" class="skip-link">Skip to content</a>
+```
+
+```css
+.skip-link {
+  position: absolute;
+  top: -40px;
+  /* Hidden until focused */
+}
+.skip-link:focus {
+  top: 0;
+}
+```
+
+**High Contrast Focus:**
+```css
+:focus-visible {
+  outline: 3px solid var(--border-focus);
+  outline-offset: 3px;
+}
+```
+
+**Instant Mode Class:**
+For users who need to bypass all transitions:
+```html
+<body class="instant-mode">
+```
+
+### Choice Selection Feedback
+
+Enhanced visual feedback for choice interactions:
+
+```css
+.choice-button.selected {
+  animation: choice-flash 200ms ease;
+}
+
+@keyframes choice-flash {
+  0% { background: var(--bg-highlight); }
+  50% { background: var(--text-accent); color: var(--bg-primary); }
+  100% { background: var(--bg-highlight); }
+}
+```
+
+**Reduced Motion Fallback:**
+```css
+@media (prefers-reduced-motion: reduce) {
+  .choice-button.selected {
+    animation: none;
+    background: var(--bg-highlight);
+    border-color: var(--text-accent);
+  }
+}
+```
+
+### Stat Bar Improvements
+
+**Glow Effect on Full Stats:**
+```css
+.stat-bar-segment.filled:last-child {
+  box-shadow: 0 0 4px var(--text-accent);
+}
+```
+
+**Animation Respect:**
+```css
+@media (prefers-reduced-motion: reduce) {
+  .stat-bar-animated .stat-bar-segment.filled {
+    animation: none;
+  }
+}
+```
+
+### Inventory Item Animations
+
+**New Item Flash:**
+```css
+.inventory-item-animated {
+  animation: inventory-flash 400ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inventory-item-animated {
+    animation: none;
+  }
+}
+```
+
+### Integration Notes
+
+**GameRenderer Integration:**
+- Audio manager initializes on first user gesture
+- SFX playback integrated into `renderScene()`, `handleChoice()`, and error handlers
+- CRT filter available as singleton `getCRTFilter()`
+
+**SaveMenu Integration:**
+- Save/load SFX triggered on successful operations
+- Error SFX on operation failures
+
+**Menu System Integration:**
+- Menu open/close SFX (planned for future expansion)
+- Audio persists across modal interactions
 
 ---
 
 **Version History:**
+- v1.1 (2025-12-30) — Phase 4 Polish additions: audio SFX, CRT filter, enhanced transitions
 - v1.0 (2025-12-29) — Initial DOS aesthetic system definition

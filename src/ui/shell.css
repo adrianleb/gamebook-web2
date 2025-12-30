@@ -1057,3 +1057,290 @@ body.test-mode .stat-bar::before {
     transform: none;
   }
 }
+
+/* ============================================
+   PHASE 4 POLISH - Scene Transitions
+   ============================================ */
+
+/* Enhanced scene transition with instant mode for accessibility */
+.text-viewport.transitioning {
+  animation: scene-transition var(--transition-slow);
+}
+
+/* Instant mode for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .text-viewport.transitioning {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+@keyframes scene-transition {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Scene title styling with fade-in */
+.scene-title {
+  font-size: var(--font-xl);
+  font-weight: var(--font-bold);
+  color: var(--text-accent);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0 0 var(--space-2) 0;
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--border-accent);
+  animation: title-fade-in var(--transition-normal) ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-title {
+    animation: none;
+  }
+}
+
+@keyframes title-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   PHASE 4 POLISH - CRT Filter Effect
+   ============================================ */
+
+/* CRT filter enabled state - additional CSS effects */
+body.crt-enabled {
+  /* Subtle text shadow for CRT glow */
+  text-shadow: 0 0 1px rgba(232, 232, 232, 0.3);
+
+  /* Very subtle chromatic aberration on high-contrast elements */
+  --crt-offset: 0.5px;
+}
+
+/* CRT scanline effect on text */
+body.crt-enabled .text-viewport {
+  position: relative;
+}
+
+/* CRT-enhanced borders */
+body.crt-enabled .choice-button,
+body.crt-enabled .menu-button,
+body.crt-enabled .panel {
+  /* Subtle glow effect */
+  box-shadow:
+    0 0 2px rgba(255, 215, 0, 0.1),
+    4px 4px 0px var(--bg-tertiary);
+}
+
+/* CRT is disabled on mobile by design (per agent-e accessibility requirement) */
+@media (max-width: 767px) {
+  body.crt-enabled {
+    text-shadow: none;
+  }
+
+  body.crt-enabled .choice-button,
+  body.crt-enabled .menu-button,
+  body.crt-enabled .panel {
+    box-shadow: 4px 4px 0px var(--bg-tertiary);
+  }
+}
+
+/* ============================================
+   PHASE 4 POLISH - Typography Refinement
+   ============================================ */
+
+/* Enhanced paragraph readability */
+.text-viewport p {
+  margin-bottom: var(--space-2);
+  line-height: var(--leading-relaxed);
+}
+
+/* First paragraph in scene - no top margin */
+.text-viewport p:first-of-type {
+  margin-top: 0;
+}
+
+/* Emphasized inline text styling improvements */
+.bold {
+  font-weight: var(--font-bold);
+  color: var(--text-accent);
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+}
+
+.italic {
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+/* Speaker name enhancement */
+.speaker {
+  font-weight: var(--font-bold);
+  color: var(--text-accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Scene heading for act breaks */
+.scene-heading {
+  font-size: var(--font-2xl);
+  font-weight: var(--font-bold);
+  color: var(--text-accent);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin: var(--space-4) 0;
+  padding: var(--space-2) 0;
+  border-top: 2px solid var(--border-accent);
+  border-bottom: 2px solid var(--border-accent);
+}
+
+/* ============================================
+   PHASE 4 POLISH - Accessibility Enhancements
+   ============================================ */
+
+/* High contrast focus indicators (enhanced) */
+:focus-visible {
+  outline: 3px solid var(--border-focus);
+  outline-offset: 3px;
+}
+
+/* Skip to main content link (appears on focus) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--bg-highlight);
+  color: var(--text-accent);
+  padding: var(--space-1) var(--space-2);
+  text-decoration: none;
+  z-index: 10000;
+  border: 2px solid var(--border-accent);
+  border-radius: 0;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Instant mode class for accessibility - bypass all transitions */
+.instant-mode *,
+.instant-mode *::before,
+.instant-mode *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0.01ms !important;
+}
+
+/* ============================================
+   PHASE 4 POLISH - Choice Selection Feedback
+   ============================================ */
+
+/* Enhanced choice selection animation */
+.choice-button.selected {
+  animation: choice-flash 200ms ease;
+}
+
+@keyframes choice-flash {
+  0% {
+    background: var(--bg-highlight);
+  }
+  50% {
+    background: var(--text-accent);
+    color: var(--bg-primary);
+  }
+  100% {
+    background: var(--bg-highlight);
+  }
+}
+
+/* Respect reduced motion for choice flash */
+@media (prefers-reduced-motion: reduce) {
+  .choice-button.selected {
+    animation: none;
+    background: var(--bg-highlight);
+    border-color: var(--text-accent);
+  }
+}
+
+/* ============================================
+   PHASE 4 POLISH - Loading State Enhancement
+   ============================================ */
+
+.loading-dots::after {
+  content: '';
+  display: inline-block;
+  width: 1em;
+  text-align: left;
+  animation: loading-dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes loading-dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60%, 100% { content: '...'; }
+}
+
+/* ============================================
+   PHASE 4 POLISH - Stat Bar Improvements
+   ============================================ */
+
+/* Stat bar glow effect when full */
+.stat-bar-segment.filled:last-child {
+  box-shadow: 0 0 4px var(--text-accent);
+}
+
+/* Stat bar animation - respect reduced motion */
+.stat-bar-animated .stat-bar-segment.filled {
+  animation: stat-fill 300ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-bar-animated .stat-bar-segment.filled {
+    animation: none;
+  }
+}
+
+@keyframes stat-fill {
+  from {
+    background: var(--bg-tertiary);
+    border-color: var(--border-dim);
+  }
+  to {
+    background: var(--text-accent);
+    border-color: var(--border-accent);
+  }
+}
+
+/* ============================================
+   PHASE 4 POLISH - Inventory Item Enhancement
+   ============================================ */
+
+/* Inventory item new item animation */
+.inventory-item-animated {
+  animation: inventory-flash 400ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inventory-item-animated {
+    animation: none;
+  }
+}
+
+@keyframes inventory-flash {
+  0% {
+    background: var(--text-accent);
+    transform: scale(1.05);
+  }
+  100% {
+    background: var(--bg-tertiary);
+    transform: scale(1);
+  }
+}
