@@ -147,7 +147,7 @@ interface StorageLike {
  */
 class LocalStorageProvider implements StorageProvider {
   private getStorage(): StorageLike | null {
-    // @ts-expect-error - localStorage may not exist in non-browser environments
+    // localStorage may not exist in non-browser environments
     return typeof localStorage !== 'undefined' ? localStorage : null;
   }
 

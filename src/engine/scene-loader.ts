@@ -334,7 +334,7 @@ export class SceneLoader {
    */
   private async loadFile(path: string): Promise<string> {
     // Detect environment - check for browser-specific global
-    // @ts-expect-error - window is not defined in Node.js environment, but typeof check makes it safe
+    // window is not defined in Node.js environment, but typeof check makes it safe
     const isBrowser = typeof window !== 'undefined';
 
     if (isBrowser) {
