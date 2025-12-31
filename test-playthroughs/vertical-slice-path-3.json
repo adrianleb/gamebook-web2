@@ -1,11 +1,11 @@
 {
   "meta": {
     "name": "vertical-slice-path-3",
-    "title": "Vertical Slice Path 3: Stat Check Failure",
-    "description": "Tests hub → locked path with courage stat check failure. Verifies stat-based condition gating and fail-state handling. Corresponds to PT-VS-003 and PT-EDGE-002 from TEST_PLAYTHROUGHS.md.",
+    "title": "Vertical Slice Path 3: Attemptable Stat Check Failure",
+    "description": "Tests hub → attemptable stat check failure path. Verifies that choice remains enabled with attemptable flag set, branches to sc_1_0_902 on courage check failure, sets crossing_failed flag, and applies health penalty. Corresponds to PT-VS-003 from TEST_PLAYTHROUGHS.md.",
     "author": "agent-e",
-    "version": "1.0.0",
-    "tags": ["vertical-slice", "stat-check", "failure-path", "edge-case"]
+    "version": "2.0.0",
+    "tags": ["vertical-slice", "stat-check", "attemptable", "failure-path", "edge-case"]
   },
   "startingState": {
     "currentScene": "sc_1_0_001",
@@ -25,7 +25,7 @@
       "assertions": {
         "currentScene": "sc_1_0_001",
         "stats": {
-          "courage": { "min": 0, "max": 4 }
+          "courage": 3
         },
         "inventoryContains": ["booth_key"]
       }
@@ -38,56 +38,47 @@
     },
     {
       "action": "checkpoint",
-      "description": "At Threshold Stage - courage check required",
+      "description": "At Threshold Stage - attemptable courage check",
       "assertions": {
         "currentScene": "sc_1_0_003",
         "stats": { "courage": 3 },
-        "choicesAvailable": { "min": 2, "max": 3 }
+        "choicesAvailable": 2
       }
     },
     {
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Attempt courage check (requires courage >= 5, will fail)",
-      "targetSceneId": "sc_1_0_003",
-      "expectDisabled": true
-    },
-    {
-      "action": "checkpoint",
-      "description": "Choice was disabled - stat check failed",
+      "description": "Attempt courage check (attemptable: always enabled, courage < 5 will fail)",
+      "targetSceneId": "sc_1_0_902",
       "assertions": {
-        "currentScene": "sc_1_0_003",
-        "stats": { "courage": 3 },
-        "flagsCleared": ["booth_unlocked"]
+        "flagsSet": ["crossing_failed"],
+        "stats": {
+          "health": 9
+        }
       }
     },
     {
-      "action": "choose",
-      "choiceIndex": 1,
-      "description": "Take alternative path (retreat)",
-      "targetSceneId": "sc_1_0_001"
-    },
-    {
       "action": "checkpoint",
-      "description": "Retreated back to hub - alternative ending",
+      "description": "Reached failure scene sc_1_0_902 - crossing failed",
       "assertions": {
-        "currentScene": "sc_1_0_001",
-        "flagsSet": ["game_started", "key_acquired"],
-        "visitedCount": { "sc_1_0_001": 2, "sc_1_0_003": 1 }
+        "currentScene": "sc_1_0_902",
+        "flagsSet": ["crossing_failed"],
+        "stats": { "health": 9, "courage": 3 },
+        "visitedCount": { "sc_1_0_001": 1, "sc_1_0_003": 1, "sc_1_0_902": 1 }
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_001",
-    "flagsRequired": ["key_acquired"],
-    "inventoryRequired": ["booth_key"],
+    "sceneId": "sc_1_0_902",
+    "flagsRequired": ["crossing_failed"],
     "statsRequired": {
-      "courage": { "max": 4 }
+      "health": 9,
+      "courage": 3
     }
   },
   "softlockDetection": {
     "maxSceneRevisits": 3,
     "maxStepsWithoutProgress": 15,
-    "exemptScenes": ["sc_1_0_900"]
+    "exemptScenes": ["sc_1_0_900", "sc_1_0_901", "sc_1_0_902"]
   }
 }
