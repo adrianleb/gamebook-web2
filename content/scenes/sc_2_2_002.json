@@ -1,0 +1,58 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_002",
+  "title": "The Director's Guidance",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["dialogue", "faction_intro", "exploration"],
+    "author": "agent-b",
+    "createdAt": "2025-12-31",
+    "updatedAt": "2025-12-31"
+  },
+  "text": {
+    "location": "The Green Room",
+    "paragraphs": [
+      "You approach the Director at their vanity. The mirror before them shows only shifting silhouettes—hundreds of faces, none remaining long enough to be seen clearly.",
+      "\"You have questions, Prompter. They always do.\" The Director turns, and for a moment their face resolves into someone you once knew—a character from a story you loved as a child. Then the recognition passes, and they are featureless again.",
+      "The Director gestures to the mirrors surrounding you. \"The Green Room exists between performances. Every character who has ever stepped onto a stage passes through here eventually. Some linger. Most move on.\"",
+      "\"But the Understage is changing. Can you feel it?\" Their voice drops, taking on a sharper edge. \"Stories are growing restless. The Editor—the one who wrote the first draft of all this—has been silent too long. In that silence, factions have emerged.\"",
+      "The Director holds up three fingers. \"The Preservationists, who believe stories must never change. The Revisionists, who believe fiction can be perfected. The Exiters, who dream of crossing into your world. And then there are those who simply try to keep balance.\"",
+      "\"I do not tell you which path to walk, Prompter. My role is to ensure that whatever choice you make, the performance continues.\" The Director's face shifts again, this time showing weariness beneath the masks. \"But know this: the Editor is not what they were. Something disturbed the Great Revision. Now every story in the Understage faces an ending—and none of them are ready for their curtain call.\"",
+      "They turn back to their mirror, watching the infinite reflections. \"Speak with the others. Explore. The answers you seek will not come from me alone.\"",
+      "The Green Room hums around you, waiting for your next direction."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_director",
+      "name": "The Director",
+      "description": "A shapeshifting figure who oversees what can and cannot be performed in the Understage",
+      "role": "faction_guide"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "green_room_ambient",
+    "sfx": ["mirror_whispers"]
+  },
+  "effectsOnEnter": [],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Return to the Green Room center",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}

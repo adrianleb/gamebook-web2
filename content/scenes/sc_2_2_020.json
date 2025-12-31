@@ -1,0 +1,56 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_020",
+  "title": "The Call Board",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["exploration", "lore", "rumors"],
+    "author": "agent-b",
+    "createdAt": "2025-12-31",
+    "updatedAt": "2025-12-31"
+  },
+  "text": {
+    "location": "The Green Room - Call Board",
+    "paragraphs": [
+      "A large cork board dominates one wall of the Green Room, covered in notices, requests, and warnings. This is the Call Board—where the Understage's residents communicate when they're not performing.",
+      "You step closer and begin to read.",
+      "NOTICES FROM THE EDITOR: A series of yellowed notices, each marked with a seal you don't recognize. They speak of a \"Great Revision\"—a project to streamline every story, remove every inconsistency, create perfect narratives. The dates span centuries. The most recent is dated \"Yesterday.\"",
+      "REQUESTS FROM THE FACTIONS:",
+      "A flyer in Preservationist blue asks for volunteers to help \"restore damaged manuscripts\" in the Archives. It warns that \"stories are being rewritten without consent.\"",
+      "A Revisionist manifesto pinned nearby declares that \"fiction is too important to leave to chance.\" It argues for conscious improvement of every narrative.",
+      "An Exiter pamphlet, written in handwriting that seems to move, invites characters to \"imagine a world beyond the page.\" It asks: \"What if your story could continue after 'The End'?\"",
+      "RUMORS AND WARNINGS:",
+      "A scrap of paper reads: \"Has anyone else noticed that forgotten scenes are disappearing? First the cut chapters, now the minor characters...\"",
+      "Another note, hastily written: \"The Editor was seen in the Archives. They were weeping.\"",
+      "A final message, written in something that looks like ink but smells of iron: \"DO NOT TRUST THE DIRECTOR. DO NOT TRUST THE UNDERSTUDY. DO NOT TRUST YOUR OWN MEMORIES.\"",
+      "The Call Board suggests a world in conflict—stories choosing sides, unsure what happens when the final curtain falls.",
+      "You step back, the weight of what you've learned settling in."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "green_room_ambient",
+    "sfx": ["paper_rustle"]
+  },
+  "effectsOnEnter": [],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Return to the Green Room center",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}
