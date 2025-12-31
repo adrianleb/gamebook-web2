@@ -192,9 +192,9 @@ Per agent-c (Engine Architecture): **Scenes are independent for parallel impleme
 - [ ] ReachabilityValidator confirms all endings reachable from start
 
 **Documentation:**
-- [ ] TEST_PLAYTHROUGHS.md has all ending paths
-- [ ] manifest.json tracks implementation status (all `complete`)
-- [ ] Faction system requirements documented in GAME_DESIGN.md
+- [x] TEST_PLAYTHROUGHS.md has all ending paths
+- [x] manifest.json tracks implementation status (all `complete`)
+- [x] Faction system requirements documented in GAME_DESIGN.md (see docs/GAME_DESIGN.md for canonical state variable reference)
 
 ---
 
