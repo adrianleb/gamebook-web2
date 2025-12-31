@@ -16,12 +16,11 @@
  * @module ui/game-renderer
  */
 
-import type { Engine } from '../engine/engine.js';
+import type { Engine, AvailableChoice } from '../engine/engine.js';
 import type {
   StateChangeEvent,
   RenderScope,
   SceneData,
-  AvailableChoice,
   ItemId,
   StatId,
   ReadonlyState,
