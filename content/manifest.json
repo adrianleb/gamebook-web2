@@ -274,6 +274,16 @@
       "ending": true,
       "endingId": "vertical_slice_courage"
     },
+    "sc_1_0_902": {
+      "title": "The Crossing Failed",
+      "location": "The Threshold Stage",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Vertical slice ending - Courage check failure with penalty",
+      "ending": true,
+      "endingId": "vertical_slice_failure"
+    },
     "sc_1_1_099": {
       "title": "The First Crossing",
       "location": "First Crossing",
@@ -379,10 +389,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 18,
+    "totalScenes": 19,
     "pending": 0,
     "draft": 0,
-    "complete": 18,
+    "complete": 19,
     "reviewed": 0
   }
 }
