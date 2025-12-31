@@ -162,9 +162,15 @@ export type CheckpointType =
 /**
  * Condition types for evaluating requirements.
  * Supports nested and/or/not for complex logic.
+ *
+ * Per Intent #155: attemptable flag enables choices that can be tried
+ * but may fail, with branching to onSuccess/onFailure scenes based on result.
  */
 export interface Condition {
   type: 'stat' | 'flag' | 'item' | 'faction' | 'and' | 'or' | 'not';
+
+  // Attemptable mode: choice always enabled, branches on check result
+  attemptable?: boolean;
 
   // Stat check fields
   stat?: StatId;
@@ -237,12 +243,27 @@ export type EffectType =
 
 /**
  * Choice data structure for scene options.
+ *
+ * Per Intent #155: Attemptable stat checks support onSuccess/onFailure branching
+ * for choices that can be tried but may fail based on condition evaluation.
  */
 export interface Choice {
   label: string;
-  to: SceneId;
+  to?: SceneId;  // Optional when using conditional branches
   conditions?: Condition[];
   effects?: Effect[];
+
+  // Attemptable branching: when conditions contain attemptable: true,
+  // the engine evaluates the check and branches to onSuccess or onFailure
+  onSuccess?: {
+    to: SceneId;
+    effects?: Effect[];
+  };
+  onFailure?: {
+    to: SceneId;
+    effects?: Effect[];
+  };
+
   disabledHint?: string;
 }
 
@@ -264,13 +285,26 @@ export interface SceneTextObject {
 /**
  * Raw choice format from content files.
  * May use 'onChoose' instead of 'effects' for backwards compatibility.
+ *
+ * Per Intent #155: Supports onSuccess/onFailure for attemptable stat checks.
  */
 export interface RawChoice {
   label: string;
-  to: SceneId;
+  to?: SceneId;
   conditions?: Condition[];
   effects?: Effect[];
   onChoose?: Effect[];  // Alias for effects
+
+  // Attemptable branching
+  onSuccess?: {
+    to: SceneId;
+    effects?: Effect[];
+  };
+  onFailure?: {
+    to: SceneId;
+    effects?: Effect[];
+  };
+
   disabledHint?: string;
 }
 

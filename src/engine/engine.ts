@@ -76,20 +76,29 @@ export interface ChoiceResult {
 }
 
 /**
+ * Choice state for UI indication.
+ * Per Intent #155, agent-d (UI): Three states for DOS aesthetic.
+ */
+export type ChoiceState = 'enabled' | 'risky' | 'disabled';
+
+/**
  * Available choices for current scene.
+ * Per Intent #155: state indicates enabled/risky/disabled for UI rendering.
  */
 export interface AvailableChoice {
   /** Original choice data */
   choice: {
     label: string;
-    to: SceneId;
+    to?: SceneId;
   };
   /** Choice index in scene */
   index: number;
-  /** Whether choice is enabled */
-  enabled: boolean;
-  /** Disabled reason (if not enabled) */
+  /** Choice state: enabled (normal), risky (attemptable stat check), disabled (gated) */
+  state: ChoiceState;
+  /** Disabled reason (when state === 'disabled') */
   disabledHint?: string;
+  /** Stat check requirement for display (when state === 'risky') */
+  statCheck?: string;
 }
 
 /**
@@ -279,6 +288,28 @@ export class Engine {
     }
 
     return this.currentScene.choices.map((choice, index) => {
+      // Check if conditions have attemptable mode
+      const hasAttemptable = choice.conditions
+        ? this.conditionEvaluator.hasAttemptable(choice.conditions)
+        : false;
+
+      if (hasAttemptable) {
+        // Attemptable choice: always enabled, shown as 'risky'
+        // Get stat check description for UI display
+        const statCheck = this.getStatCheckForChoice(choice);
+
+        return {
+          choice: {
+            label: choice.label,
+            to: choice.to,
+          },
+          index,
+          state: 'risky',
+          statCheck,
+        };
+      }
+
+      // Normal choice: evaluate conditions for enabled/disabled
       const enabled = choice.conditions
         ? this.conditionEvaluator.evaluateAll(choice.conditions, this.state)
         : true;
@@ -289,15 +320,50 @@ export class Engine {
           to: choice.to,
         },
         index,
-        enabled,
+        state: enabled ? 'enabled' : 'disabled',
         disabledHint: choice.disabledHint,
       };
     });
   }
 
   /**
+   * Get stat check description for a choice with attemptable conditions.
+   * Used for UI display to show player what stat is being checked.
+   *
+   * @param choice - Choice to get stat check from
+   * @returns Stat check description string or undefined
+   */
+  private getStatCheckForChoice(choice: {
+    conditions?: Condition[];
+  }): string | undefined {
+    if (!choice.conditions) {
+      return undefined;
+    }
+
+    for (const condition of choice.conditions) {
+      if (condition.type === 'stat') {
+        const description = this.conditionEvaluator.getStatCheckDescription(condition);
+        if (description) {
+          return description;
+        }
+      }
+      // Check nested conditions for stat checks
+      if (condition.conditions) {
+        const nested = this.getStatCheckForChoice({ conditions: condition.conditions });
+        if (nested) {
+          return nested;
+        }
+      }
+    }
+
+    return undefined;
+  }
+
+  /**
    * Make a choice and transition to the target scene.
    * Applies choice effects and updates scene history.
+   * Per Intent #155: For attemptable choices, evaluates stat check and branches
+   * to onSuccess/onFailure based on result.
    *
    * @param choiceIndex - Index of choice to make
    * @returns Result with target scene and events
@@ -314,22 +380,72 @@ export class Engine {
       throw new Error(`Invalid choice index: ${choiceIndex}`);
     }
 
-    if (!selectedChoice.enabled) {
+    // Check if choice is available (disabled choices cannot be selected)
+    if (selectedChoice.state === 'disabled') {
       throw new Error(`Choice "${selectedChoice.choice.label}" is not available`);
     }
 
     const originalChoice = this.currentScene.choices[choiceIndex];
-    const targetSceneId = originalChoice.to;
-
-    // Apply choice effects
+    let targetSceneId: SceneId;
     const events: StateChangeEvent[] = [];
-    if (originalChoice.effects && originalChoice.effects.length > 0) {
-      const choiceEvents = this.effectApplier.applyAll(
-        originalChoice.effects,
-        this.state,
-        'choice' as CheckpointType
+
+    // Handle attemptable stat check branching (per Intent #155)
+    if (selectedChoice.state === 'risky' && originalChoice.conditions) {
+      // Evaluate the stat check
+      const checkPassed = this.conditionEvaluator.evaluateAll(
+        originalChoice.conditions,
+        this.state
       );
-      events.push(...choiceEvents);
+
+      // Branch to success or failure target
+      if (checkPassed) {
+        // Success path
+        if (originalChoice.onSuccess) {
+          targetSceneId = originalChoice.onSuccess.to;
+          // Apply success effects
+          if (originalChoice.onSuccess.effects) {
+            const successEvents = this.effectApplier.applyAll(
+              originalChoice.onSuccess.effects,
+              this.state,
+              'choice' as CheckpointType
+            );
+            events.push(...successEvents);
+          }
+        } else {
+          // Fallback to default to if onSuccess not defined
+          targetSceneId = originalChoice.to!;
+        }
+      } else {
+        // Failure path
+        if (originalChoice.onFailure) {
+          targetSceneId = originalChoice.onFailure.to;
+          // Apply failure effects
+          if (originalChoice.onFailure.effects) {
+            const failureEvents = this.effectApplier.applyAll(
+              originalChoice.onFailure.effects,
+              this.state,
+              'choice' as CheckpointType
+            );
+            events.push(...failureEvents);
+          }
+        } else {
+          // Fallback to default to if onFailure not defined
+          targetSceneId = originalChoice.to!;
+        }
+      }
+    } else {
+      // Normal choice (non-attemptable)
+      targetSceneId = originalChoice.to!;
+
+      // Apply choice effects
+      if (originalChoice.effects && originalChoice.effects.length > 0) {
+        const choiceEvents = this.effectApplier.applyAll(
+          originalChoice.effects,
+          this.state,
+          'choice' as CheckpointType
+        );
+        events.push(...choiceEvents);
+      }
     }
 
     // Update scene history with choice label

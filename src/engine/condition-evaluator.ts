@@ -19,6 +19,72 @@ import type {
  */
 export class ConditionEvaluator {
   /**
+   * Check if a condition or any nested condition has attemptable mode.
+   * Per Intent #155: attemptable conditions always enable choices
+   * but branch to onSuccess/onFailure based on evaluation result.
+   *
+   * @param condition - Condition to check
+   * @returns True if any condition has attemptable: true
+   */
+  isAttemptable(condition: Condition): boolean {
+    if (condition.attemptable === true) {
+      return true;
+    }
+    if (condition.conditions) {
+      return condition.conditions.some(c => this.isAttemptable(c));
+    }
+    return false;
+  }
+
+  /**
+   * Check if any condition in an array has attemptable mode.
+   *
+   * @param conditions - Array of conditions to check
+   * @returns True if any condition is attemptable
+   */
+  hasAttemptable(conditions: Condition[]): boolean {
+    return conditions.some(c => this.isAttemptable(c));
+  }
+
+  /**
+   * Get a human-readable stat check description for UI display.
+   * Per Intent #155, agent-d (UI): Show stat requirement to player.
+   *
+   * @param condition - Condition to describe
+   * @returns Stat check string like "Courage 5+" or null
+   */
+  getStatCheckDescription(condition: Condition): string | null {
+    if (condition.type !== 'stat' || !condition.stat || condition.value === undefined) {
+      return null;
+    }
+
+    const statName = this.formatStatName(condition.stat);
+    const operator = this.formatOperator(condition.operator);
+    return `${statName} ${operator}${condition.value}`;
+  }
+
+  /**
+   * Format stat ID for display (e.g., "courage" -> "Courage").
+   */
+  private formatStatName(stat: string): string {
+    return stat.charAt(0).toUpperCase() + stat.slice(1).replace(/([A-Z])/g, ' $1').trim();
+  }
+
+  /**
+   * Format operator for display.
+   */
+  private formatOperator(operator?: string): string {
+    switch (operator) {
+      case 'gte': return '+';
+      case 'lte': return '-';
+      case 'eq': return '=';
+      case 'gt': return '>';
+      case 'lt': return '<';
+      default: return '+';
+    }
+  }
+
+  /**
    * Evaluate a condition against the current state.
    * Returns true if condition is satisfied.
    *

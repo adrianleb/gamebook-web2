@@ -129,8 +129,8 @@ describe('Phase 4: Accessibility - Engine Regression Tests', () => {
       // Phase 3: Scene reachability should work unchanged
       const choices = engine.getAvailableChoices();
       expect(choices.length).toBe(2);
-      expect(choices[0].enabled).toBe(true); // courage >= 5
-      expect(choices[1].enabled).toBe(true); // no conditions
+      expect(choices[0].state).toBe('enabled'); // courage >= 5
+      expect(choices[1].state).toBe('enabled'); // no conditions
 
       await engine.makeChoice(0);
       expect(engine.getState().currentSceneId).toBe('sc_1_0_002');
@@ -329,8 +329,8 @@ describe('Phase 4: Accessibility - Engine Regression Tests', () => {
 
       // First choice should still be enabled (condition re-evaluated)
       // Actually, with courage=3, the first choice should be disabled
-      expect(choices[0].enabled).toBe(false);
-      expect(choices[1].enabled).toBe(true);
+      expect(choices[0].state).toBe('disabled');
+      expect(choices[1].state).toBe('enabled');
     });
   });
 });
