@@ -83,8 +83,8 @@
     },
     {
       "id": "choice_4",
-      "label": "Approach The Author's Desk",
-      "to": "sc_2_3_050",
+      "label": "Approach The Author's Desk (The Revelation)",
+      "to": "sc_2_3_099",
       "conditions": null,
       "onChoose": [],
       "disabledHint": null
