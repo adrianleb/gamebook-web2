@@ -457,6 +457,117 @@ Signed: **agent-a** (Integrator/Delivery Lens)
 
 ---
 
+### Phase 5: QA & Release - Detailed Plan (2025-12-31)
+
+**Goal**: Full playthrough testing, bug fixes, final build preparation.
+
+#### QA Execution Strategy
+
+Per agent-e (Validator Lens) perspective, **70% automated / 30% manual** testing balance:
+
+| Area | Coverage | Tests |
+|------|----------|-------|
+| **Ending Reachability** | 100% automated | 5 ending playthroughs in `test-playthroughs/` |
+| **State Regression** | 100% automated | 174 tests validate state transitions, flags, inventory, stats |
+| **Save/Load** | 100% automated | `save-load.test.ts` covers serialization/deserialization |
+| **Softlock Detection** | 90% automated | Graph-based detection in `ending-graph.test.ts` |
+
+**Manual Coverage (30%):**
+- **User Experience**: Narrative flow, emotional pacing, prose quality (automation cannot measure)
+- **Visual Polish**: Font scaling, contrast, mobile edge cases (subjective assessment)
+- **Audio/Performance**: Frame rate, audio sync, loading pauses (requires human observation)
+- **Browser Specific**: Cross-browser behaviors (edge case validation)
+
+**Rationale**: Automated playthrough framework is comprehensive (22 playthroughs in TEST_PLAYTHROUGHS.md). Manual testing focuses on qualities automation cannot measure.
+
+#### Softlock Detection Methodology
+
+Per agent-e recommendation: **Hybrid Graph Analysis + Automated Playthrough + Manual Spot-Check**
+
+**A. Graph-Based Detection (Primary):**
+- Verify every scene has at least one choice that advances (no dead ends)
+- Check all ending paths from convergence scene (sc_3_4_098)
+- Implementation: `ending-graph.test.ts`
+
+**B. Automated Playthrough Coverage (Secondary):**
+- Run all 5 ending playthroughs with max choices (not shortest path)
+- Verify no state prevents forward progress
+
+**C. Manual Spot-Check (Tertiary):**
+- Critical junctions: sc_3_4_098 (convergence), each ending gate
+- Conditional branches: Scenes with faction/stat/inventory checks
+
+**Exit Gate**: All 174 tests pass + 5 ending playthroughs complete + no dead-end scenes detected.
+
+#### Performance Benchmarking Criteria
+
+| Metric | Target | Test |
+|--------|--------|------|
+| Scene Load Time | < 100ms | `test/engine/performance.test.ts` |
+| Choice Selection Latency | < 50ms | `performance.now()` measurement |
+| Save/Write Time | < 200ms | `performance.now()` measurement |
+| Load/Deserialize Time | < 200ms | `performance.now()` measurement |
+| Full Playthrough Time | < 5 seconds | Headless runner timing |
+| Memory Footprint | < 50MB | Browser memory profiling |
+
+**Rationale**: Conservative targets (2-10x acceptable thresholds for visual novels). Headless runner is lightweight; browser performance should stay within 2-3x.
+
+#### Save Compatibility Testing
+
+Per agent-e recommendation: **Forward + Backward Compatibility Matrix**
+
+**A. Forward Compatibility (Old Load → New Code) - REQUIRED:**
+- Test: Load saves from Phase 3, Phase 4, Phase 5 into current codebase
+- Coverage: `save-load.test.ts` with version-tagged fixtures
+- Exit Gate: All Phase 3+ saves load without errors
+
+**B. Backward Compatibility (New Save → Old Code) - OPTIONAL:**
+- NOT REQUIRED for Phase 5 release
+- Users upgrading receive new save format
+- User downgrade is low-impact edge case
+
+**C. Version Tagging Protocol:**
+```typescript
+interface GameState {
+  meta: {
+    version: string; // e.g., "5.0.0"
+    savedAt: number;
+  };
+}
+```
+
+#### Build Preparation
+
+Per agent-c (Engine Lens) perspective:
+
+**Build Export Process:**
+- Dual build paths: `tsc` for Node.js engine (headless CLI), `vite build` for browser UI
+- Content files served static (not bundled) - critical for fetch() to work
+- **Determinism verification**: Release build MUST validate identical behavior across environments
+
+**Environment Parity:**
+- Lock `engines.node` to exact version for release candidates
+- Run cross-browser engine tests in CI (Chrome, Firefox, Safari) before release
+
+**Deliverable:** Production build in `/dist/` that behaves identically across environments
+
+#### Bug Triage Process
+
+See `docs/BUG_TRIAGE.md` for:
+- Bug severity classification (Critical, Warning, Info)
+- Assignment by agent specialty (agent-b for narrative, agent-c for engine, agent-d for UI)
+- Regression test requirements for fixes
+
+#### Release Checklist
+
+See `docs/RELEASE_CHECKLIST.md` for:
+- Pre-release validation steps
+- Cross-browser testing matrix
+- Performance benchmark verification
+- Documentation completeness check
+
+---
+
 ## RFCs and Scope Changes
 
 All scope deviations or significant decisions must be documented in `/docs/rfcs/` with:
