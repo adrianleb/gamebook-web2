@@ -453,4 +453,447 @@ describe('SceneLoader', () => {
       }
     });
   });
+
+  describe('Faction Condition Transformation', () => {
+    it('should transform stat_check with faction ID to type: faction condition', async () => {
+      const manifest: GameManifest = {
+        gamebook: {
+          title: 'Test Gamebook',
+          source: 'test',
+          version: '1.0.0',
+          adaptationVersion: '1.0.0',
+        },
+        structure: {
+          acts: 1,
+          totalNodesEstimated: 5,
+          endings: 4,
+        },
+        startingScene: 'sc_test_faction_001',
+        acts: [],
+        endings: [],
+        sceneIndex: {
+          sc_test_faction_001: {
+            title: 'Faction Test Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+          sc_test_ending_001: {
+            title: 'Ending 1',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+          sc_test_ending_002: {
+            title: 'Ending 2',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+          sc_test_ending_003: {
+            title: 'Ending 3',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+          sc_test_ending_004: {
+            title: 'Ending 4',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+        },
+        implementationStatus: {
+          totalScenes: 1,
+          pending: 0,
+          draft: 0,
+          complete: 1,
+          reviewed: 0,
+        },
+      };
+
+      // Scene with faction-based stat_check (like sc_3_4_098 convergence)
+      const rawScene: RawSceneData = {
+        id: 'sc_test_faction_001',
+        title: 'Faction Test Scene',
+        text: 'Test text',
+        effects: [],
+        choices: [
+          {
+            id: 'choice_1',
+            label: 'Revisionist path',
+            to: 'sc_test_ending_001',
+            conditions: {
+              type: 'stat_check',
+              stat: 'revisionist',
+              op: 'gte',
+              value: 7,
+            },
+            onChoose: [],
+            disabledHint: 'Requires revisionist faction >= 7',
+          },
+          {
+            id: 'choice_2',
+            label: 'Preservationist path',
+            to: 'sc_test_ending_002',
+            conditions: {
+              type: 'stat_check',
+              stat: 'preservationist',
+              op: 'gte',
+              value: 7,
+            },
+            onChoose: [],
+            disabledHint: 'Requires preservationist faction >= 7',
+          },
+          {
+            id: 'choice_3',
+            label: 'Exiter path',
+            to: 'sc_test_ending_003',
+            conditions: {
+              type: 'stat_check',
+              stat: 'exiter',
+              op: 'gte',
+              value: 7,
+            },
+            onChoose: [],
+            disabledHint: 'Requires exiter faction >= 7',
+          },
+          {
+            id: 'choice_4',
+            label: 'Independent path',
+            to: 'sc_test_ending_004',
+            conditions: {
+              type: 'stat_check',
+              stat: 'independent',
+              op: 'gte',
+              value: 7,
+            },
+            onChoose: [],
+            disabledHint: 'Requires independent faction >= 7',
+          },
+        ],
+      };
+
+      setupTestContent({ 'sc_test_faction_001.json': rawScene });
+
+      try {
+        const loader = new SceneLoader({ contentPath: testContentPath, cache: false, manifest });
+        await loader.initialize();
+        const sceneData = await loader.loadScene('sc_test_faction_001');
+
+        // All faction conditions should be transformed to type: 'faction'
+        expect(sceneData.choices.length).toBe(4);
+
+        // Revisionist choice
+        expect(sceneData.choices[0].conditions).toBeDefined();
+        expect(sceneData.choices[0].conditions?.[0].type).toBe('faction');
+        expect(sceneData.choices[0].conditions?.[0].faction).toBe('revisionist');
+        expect(sceneData.choices[0].conditions?.[0].factionLevel).toBe(7);
+
+        // Preservationist choice
+        expect(sceneData.choices[1].conditions).toBeDefined();
+        expect(sceneData.choices[1].conditions?.[0].type).toBe('faction');
+        expect(sceneData.choices[1].conditions?.[0].faction).toBe('preservationist');
+        expect(sceneData.choices[1].conditions?.[0].factionLevel).toBe(7);
+
+        // Exiter choice
+        expect(sceneData.choices[2].conditions).toBeDefined();
+        expect(sceneData.choices[2].conditions?.[0].type).toBe('faction');
+        expect(sceneData.choices[2].conditions?.[0].faction).toBe('exiter');
+        expect(sceneData.choices[2].conditions?.[0].factionLevel).toBe(7);
+
+        // Independent choice
+        expect(sceneData.choices[3].conditions).toBeDefined();
+        expect(sceneData.choices[3].conditions?.[0].type).toBe('faction');
+        expect(sceneData.choices[3].conditions?.[0].faction).toBe('independent');
+        expect(sceneData.choices[3].conditions?.[0].factionLevel).toBe(7);
+      } finally {
+        cleanupTestContent(['sc_test_faction_001.json']);
+      }
+    });
+
+    it('should preserve non-faction stat_check as type: stat condition', async () => {
+      const manifest: GameManifest = {
+        gamebook: {
+          title: 'Test Gamebook',
+          source: 'test',
+          version: '1.0.0',
+          adaptationVersion: '1.0.0',
+        },
+        structure: {
+          acts: 1,
+          totalNodesEstimated: 2,
+          endings: 0,
+        },
+        startingScene: 'sc_test_stat_001',
+        acts: [],
+        endings: [],
+        sceneIndex: {
+          sc_test_stat_001: {
+            title: 'Stat Test Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+          sc_test_001: {
+            title: 'Target Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+        },
+        implementationStatus: {
+          totalScenes: 1,
+          pending: 0,
+          draft: 0,
+          complete: 1,
+          reviewed: 0,
+        },
+      };
+
+      // Scene with regular stat_check (not faction)
+      const rawScene: RawSceneData = {
+        id: 'sc_test_stat_001',
+        title: 'Stat Test Scene',
+        text: 'Test text',
+        effects: [],
+        choices: [
+          {
+            id: 'choice_1',
+            label: 'Courage check',
+            to: 'sc_test_001',
+            conditions: {
+              type: 'stat_check',
+              stat: 'courage',
+              op: 'gte',
+              value: 5,
+            },
+            onChoose: [],
+            disabledHint: 'Requires Courage 5+',
+          },
+          {
+            id: 'choice_2',
+            label: 'Health check',
+            to: 'sc_test_001',
+            conditions: {
+              type: 'stat_check',
+              stat: 'health',
+              op: 'gte',
+              value: 10,
+            },
+            onChoose: [],
+            disabledHint: 'Requires Health 10+',
+          },
+        ],
+      };
+
+      setupTestContent({ 'sc_test_stat_001.json': rawScene });
+
+      try {
+        const loader = new SceneLoader({ contentPath: testContentPath, cache: false, manifest });
+        await loader.initialize();
+        const sceneData = await loader.loadScene('sc_test_stat_001');
+
+        // Non-faction stat checks should remain as type: 'stat'
+        expect(sceneData.choices.length).toBe(2);
+
+        expect(sceneData.choices[0].conditions?.[0].type).toBe('stat');
+        expect(sceneData.choices[0].conditions?.[0].stat).toBe('courage');
+        expect(sceneData.choices[0].conditions?.[0].operator).toBe('gte');
+        expect(sceneData.choices[0].conditions?.[0].value).toBe(5);
+
+        expect(sceneData.choices[1].conditions?.[0].type).toBe('stat');
+        expect(sceneData.choices[1].conditions?.[0].stat).toBe('health');
+        expect(sceneData.choices[1].conditions?.[0].operator).toBe('gte');
+        expect(sceneData.choices[1].conditions?.[0].value).toBe(10);
+      } finally {
+        cleanupTestContent(['sc_test_stat_001.json']);
+      }
+    });
+
+    it('should handle case-insensitive faction ID detection', async () => {
+      const manifest: GameManifest = {
+        gamebook: {
+          title: 'Test Gamebook',
+          source: 'test',
+          version: '1.0.0',
+          adaptationVersion: '1.0.0',
+        },
+        structure: {
+          acts: 1,
+          totalNodesEstimated: 2,
+          endings: 0,
+        },
+        startingScene: 'sc_test_case_001',
+        acts: [],
+        endings: [],
+        sceneIndex: {
+          sc_test_case_001: {
+            title: 'Case Test Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+          sc_test_001: {
+            title: 'Target Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+        },
+        implementationStatus: {
+          totalScenes: 1,
+          pending: 0,
+          draft: 0,
+          complete: 1,
+          reviewed: 0,
+        },
+      };
+
+      // Scene with mixed-case faction IDs
+      const rawScene: RawSceneData = {
+        id: 'sc_test_case_001',
+        title: 'Case Test Scene',
+        text: 'Test text',
+        effects: [],
+        choices: [
+          {
+            id: 'choice_1',
+            label: 'Revisionist (mixed case)',
+            to: 'sc_test_001',
+            conditions: {
+              type: 'stat_check',
+              stat: 'Revisionist',
+              op: 'gte',
+              value: 7,
+            },
+            onChoose: [],
+            disabledHint: 'Requires revisionist faction >= 7',
+          },
+          {
+            id: 'choice_2',
+            label: 'PRESERVATIONIST (uppercase)',
+            to: 'sc_test_001',
+            conditions: {
+              type: 'stat_check',
+              stat: 'PRESERVATIONIST',
+              op: 'gte',
+              value: 7,
+            },
+            onChoose: [],
+            disabledHint: 'Requires preservationist faction >= 7',
+          },
+        ],
+      };
+
+      setupTestContent({ 'sc_test_case_001.json': rawScene });
+
+      try {
+        const loader = new SceneLoader({ contentPath: testContentPath, cache: false, manifest });
+        await loader.initialize();
+        const sceneData = await loader.loadScene('sc_test_case_001');
+
+        // Case-insensitive detection should work
+        expect(sceneData.choices.length).toBe(2);
+
+        expect(sceneData.choices[0].conditions?.[0].type).toBe('faction');
+        expect(sceneData.choices[0].conditions?.[0].faction).toBe('Revisionist');
+        expect(sceneData.choices[0].conditions?.[0].factionLevel).toBe(7);
+
+        expect(sceneData.choices[1].conditions?.[0].type).toBe('faction');
+        expect(sceneData.choices[1].conditions?.[0].faction).toBe('PRESERVATIONIST');
+        expect(sceneData.choices[1].conditions?.[0].factionLevel).toBe(7);
+      } finally {
+        cleanupTestContent(['sc_test_case_001.json']);
+      }
+    });
+
+    it('should handle faction_check type with explicit faction field', async () => {
+      const manifest: GameManifest = {
+        gamebook: {
+          title: 'Test Gamebook',
+          source: 'test',
+          version: '1.0.0',
+          adaptationVersion: '1.0.0',
+        },
+        structure: {
+          acts: 1,
+          totalNodesEstimated: 2,
+          endings: 0,
+        },
+        startingScene: 'sc_test_explicit_001',
+        acts: [],
+        endings: [],
+        sceneIndex: {
+          sc_test_explicit_001: {
+            title: 'Explicit Faction Test',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+          sc_test_001: {
+            title: 'Target Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+        },
+        implementationStatus: {
+          totalScenes: 1,
+          pending: 0,
+          draft: 0,
+          complete: 1,
+          reviewed: 0,
+        },
+      };
+
+      // Scene with explicit faction_check type (not stat_check)
+      const rawScene: RawSceneData = {
+        id: 'sc_test_explicit_001',
+        title: 'Explicit Faction Test',
+        text: 'Test text',
+        effects: [],
+        choices: [
+          {
+            id: 'choice_1',
+            label: 'Explicit faction check',
+            to: 'sc_test_001',
+            conditions: {
+              type: 'faction_check',
+              faction: 'revisionist',
+              level: 7,
+            },
+            onChoose: [],
+            disabledHint: 'Requires revisionist faction >= 7',
+          },
+        ],
+      };
+
+      setupTestContent({ 'sc_test_explicit_001.json': rawScene });
+
+      try {
+        const loader = new SceneLoader({ contentPath: testContentPath, cache: false, manifest });
+        await loader.initialize();
+        const sceneData = await loader.loadScene('sc_test_explicit_001');
+
+        // Explicit faction_check should work correctly
+        expect(sceneData.choices[0].conditions?.[0].type).toBe('faction');
+        expect(sceneData.choices[0].conditions?.[0].faction).toBe('revisionist');
+        expect(sceneData.choices[0].conditions?.[0].factionLevel).toBe(7);
+      } finally {
+        cleanupTestContent(['sc_test_explicit_001.json']);
+      }
+    });
+  });
 });
