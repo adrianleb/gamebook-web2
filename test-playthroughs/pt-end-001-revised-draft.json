@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "name": "pt-end-001-revised-draft",
+    "title": "PT-END-001: The Revised Draft (Revisionist Ending)",
+    "description": "Tests revisionist faction ending path from convergence scene sc_3_4_098. Verifies faction gate (revisionist >= 7) enables ending choice, and ending scene sc_3_4_901 is reachable. Corresponds to PT-END-001 from PHASE_5_QA_PLAN.md.",
+    "author": "agent-e",
+    "version": "1.0.0",
+    "tags": ["ending", "revisionist", "faction-gate", "phase-5-qa"]
+  },
+  "startingState": {
+    "currentScene": "sc_3_4_098",
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
+    "flags": ["game_started", "mainstage_reached", "editorState_defeated"],
+    "inventory": [],
+    "factions": {
+      "preservationist": 2,
+      "revisionist": 7,
+      "exiter": 1,
+      "independent": 3
+    }
+  },
+  "steps": [
+    {
+      "action": "checkpoint",
+      "description": "Starting at convergence scene sc_3_4_098 (The Last Curtain Call)",
+      "assertions": {
+        "currentScene": "sc_3_4_098",
+        "choicesAvailable": 5,
+        "flagsSet": ["mainstage_reached"]
+      }
+    },
+    {
+      "action": "verify-choice-enabled",
+      "choiceIndex": 0,
+      "description": "Verify revisionist ending choice is enabled (revisionist >= 7)",
+      "expectedState": "enabled"
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose revisionist ending - Take The Editor's power",
+      "targetSceneId": "sc_3_4_901"
+    },
+    {
+      "action": "checkpoint",
+      "description": "Reached ending 1 - The Revised Draft",
+      "assertions": {
+        "currentScene": "sc_3_4_901",
+        "flagsSet": ["ending_achieved", "ending_1_revised_draft"],
+        "choicesAvailable": 0
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_901",
+    "flagsRequired": ["ending_achieved", "ending_1_revised_draft"],
+    "factionsRequired": {
+      "revisionist": 7
+    }
+  },
+  "softlockDetection": {
+    "maxSceneRevisits": 1,
+    "maxStepsWithoutProgress": 3,
+    "exemptScenes": ["sc_3_4_901"]
+  }
+}

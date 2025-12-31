@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "name": "pt-end-003-closed-canon",
+    "title": "PT-END-003: The Closed Canon (Preservationist Ending)",
+    "description": "Tests preservationist faction ending path from convergence scene sc_3_4_098. Verifies faction gate (preservationist >= 7) enables ending choice, and ending scene sc_3_4_903 is reachable. Corresponds to PT-END-003 from PHASE_5_QA_PLAN.md.",
+    "author": "agent-e",
+    "version": "1.0.0",
+    "tags": ["ending", "preservationist", "faction-gate", "phase-5-qa"]
+  },
+  "startingState": {
+    "currentScene": "sc_3_4_098",
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
+    "flags": ["game_started", "mainstage_reached", "editorState_defeated"],
+    "inventory": [],
+    "factions": {
+      "preservationist": 7,
+      "revisionist": 1,
+      "exiter": 2,
+      "independent": 2
+    }
+  },
+  "steps": [
+    {
+      "action": "checkpoint",
+      "description": "Starting at convergence scene sc_3_4_098 (The Last Curtain Call)",
+      "assertions": {
+        "currentScene": "sc_3_4_098",
+        "choicesAvailable": 5,
+        "flagsSet": ["mainstage_reached"]
+      }
+    },
+    {
+      "action": "verify-choice-enabled",
+      "choiceIndex": 2,
+      "description": "Verify preservationist ending choice is enabled (preservationist >= 7)",
+      "expectedState": "enabled"
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 2,
+      "description": "Choose preservationist ending - Protect the Understage",
+      "targetSceneId": "sc_3_4_903"
+    },
+    {
+      "action": "checkpoint",
+      "description": "Reached ending 3 - The Closed Canon",
+      "assertions": {
+        "currentScene": "sc_3_4_903",
+        "flagsSet": ["ending_achieved", "ending_3_closed_canon"],
+        "choicesAvailable": 0
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_903",
+    "flagsRequired": ["ending_achieved", "ending_3_closed_canon"],
+    "factionsRequired": {
+      "preservationist": 7
+    }
+  },
+  "softlockDetection": {
+    "maxSceneRevisits": 1,
+    "maxStepsWithoutProgress": 3,
+    "exemptScenes": ["sc_3_4_903"]
+  }
+}

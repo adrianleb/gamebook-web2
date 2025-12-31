@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "name": "pt-end-005-eternal-rehearsal",
+    "title": "PT-END-005: The Eternal Rehearsal (Fail-State Ending)",
+    "description": "Tests fail-state ending path from convergence scene sc_3_4_098. Verifies the 'refuse choice' ending is always reachable with no blocking conditions - serves as fallback for invalid states. Corresponds to PT-END-005 from PHASE_5_QA_PLAN.md.",
+    "author": "agent-e",
+    "version": "1.0.0",
+    "tags": ["ending", "fail-state", "always-reachable", "phase-5-qa"]
+  },
+  "startingState": {
+    "currentScene": "sc_3_4_098",
+    "stats": {
+      "health": 5,
+      "courage": 2,
+      "insight": 3
+    },
+    "flags": ["game_started", "mainstage_reached"],
+    "inventory": [],
+    "factions": {
+      "preservationist": 2,
+      "revisionist": 1,
+      "exiter": 1,
+      "independent": 1
+    }
+  },
+  "steps": [
+    {
+      "action": "checkpoint",
+      "description": "Starting at convergence scene sc_3_4_098 (The Last Curtain Call) with suboptimal stats",
+      "assertions": {
+        "currentScene": "sc_3_4_098",
+        "choicesAvailable": 5,
+        "flagsSet": ["mainstage_reached"]
+      }
+    },
+    {
+      "action": "verify-choice-enabled",
+      "choiceIndex": 4,
+      "description": "Verify fail-state ending choice is always enabled (no conditions)",
+      "expectedState": "enabled"
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 4,
+      "description": "Choose fail-state ending - Refuse the choice",
+      "targetSceneId": "sc_3_4_999"
+    },
+    {
+      "action": "checkpoint",
+      "description": "Reached ending 5 - The Eternal Rehearsal",
+      "assertions": {
+        "currentScene": "sc_3_4_999",
+        "flagsSet": ["ending_achieved", "ending_5_eternal_rehearsal"],
+        "choicesAvailable": 0
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_999",
+    "flagsRequired": ["ending_achieved", "ending_5_eternal_rehearsal"]
+  },
+  "softlockDetection": {
+    "maxSceneRevisits": 1,
+    "maxStepsWithoutProgress": 3,
+    "exemptScenes": ["sc_3_4_999"]
+  },
+  "negativeTests": [
+    {
+      "description": "Verify faction ending choices are DISABLED without sufficient faction level",
+      "testState": {
+        "factions": {
+          "preservationist": 3,
+          "revisionist": 2,
+          "exiter": 1
+        },
+        "flags": ["mainstage_reached"]
+      },
+      "expectedDisabledChoices": [0, 1, 2],
+      "expectedEnabledChoices": [3, 4]
+    }
+  ]
+}

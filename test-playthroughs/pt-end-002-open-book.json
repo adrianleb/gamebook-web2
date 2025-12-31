@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "name": "pt-end-002-open-book",
+    "title": "PT-END-002: The Open Book (Exiter Ending)",
+    "description": "Tests exiter faction ending path from convergence scene sc_3_4_098. Verifies faction gate (exiter >= 7) enables ending choice, and ending scene sc_3_4_902 is reachable. Corresponds to PT-END-002 from PHASE_5_QA_PLAN.md.",
+    "author": "agent-e",
+    "version": "1.0.0",
+    "tags": ["ending", "exiter", "faction-gate", "phase-5-qa"]
+  },
+  "startingState": {
+    "currentScene": "sc_3_4_098",
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
+    "flags": ["game_started", "mainstage_reached", "editorState_persuaded"],
+    "inventory": [],
+    "factions": {
+      "preservationist": 1,
+      "revisionist": 2,
+      "exiter": 7,
+      "independent": 2
+    }
+  },
+  "steps": [
+    {
+      "action": "checkpoint",
+      "description": "Starting at convergence scene sc_3_4_098 (The Last Curtain Call)",
+      "assertions": {
+        "currentScene": "sc_3_4_098",
+        "choicesAvailable": 5,
+        "flagsSet": ["mainstage_reached"]
+      }
+    },
+    {
+      "action": "verify-choice-enabled",
+      "choiceIndex": 1,
+      "description": "Verify exiter ending choice is enabled (exiter >= 7)",
+      "expectedState": "enabled"
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose exiter ending - Open the boundary",
+      "targetSceneId": "sc_3_4_902"
+    },
+    {
+      "action": "checkpoint",
+      "description": "Reached ending 2 - The Open Book",
+      "assertions": {
+        "currentScene": "sc_3_4_902",
+        "flagsSet": ["ending_achieved", "ending_2_open_book"],
+        "choicesAvailable": 0
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_902",
+    "flagsRequired": ["ending_achieved", "ending_2_open_book"],
+    "factionsRequired": {
+      "exiter": 7
+    }
+  },
+  "softlockDetection": {
+    "maxSceneRevisits": 1,
+    "maxStepsWithoutProgress": 3,
+    "exemptScenes": ["sc_3_4_902"]
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "name": "pt-end-004-blank-page",
+    "title": "PT-END-004: The Blank Page (Independent Ending)",
+    "description": "Tests independent ending path from convergence scene sc_3_4_098. Verifies flag gate (editorState_revealedTruth) enables ending choice, and ending scene sc_3_4_904 is reachable. No faction level required - represents balance path. Corresponds to PT-END-004 from PHASE_5_QA_PLAN.md.",
+    "author": "agent-e",
+    "version": "1.0.0",
+    "tags": ["ending", "independent", "flag-gate", "phase-5-qa"]
+  },
+  "startingState": {
+    "currentScene": "sc_3_4_098",
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
+    "flags": ["game_started", "mainstage_reached", "editorState_revealedTruth"],
+    "inventory": [],
+    "factions": {
+      "preservationist": 3,
+      "revisionist": 3,
+      "exiter": 3,
+      "independent": 3
+    }
+  },
+  "steps": [
+    {
+      "action": "checkpoint",
+      "description": "Starting at convergence scene sc_3_4_098 (The Last Curtain Call)",
+      "assertions": {
+        "currentScene": "sc_3_4_098",
+        "choicesAvailable": 5,
+        "flagsSet": ["mainstage_reached"]
+      }
+    },
+    {
+      "action": "verify-choice-enabled",
+      "choiceIndex": 3,
+      "description": "Verify independent ending choice is enabled (editorState_revealedTruth flag set)",
+      "expectedState": "enabled"
+    },
+    {
+      "action": "choose",
+      "choiceIndex": 3,
+      "description": "Choose independent ending - Seek the deeper truth",
+      "targetSceneId": "sc_3_4_904"
+    },
+    {
+      "action": "checkpoint",
+      "description": "Reached ending 4 - The Blank Page",
+      "assertions": {
+        "currentScene": "sc_3_4_904",
+        "flagsSet": ["ending_achieved", "ending_4_blank_page"],
+        "choicesAvailable": 0
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_904",
+    "flagsRequired": ["ending_achieved", "ending_4_blank_page"],
+    "flagsRequiredPreChoice": ["editorState_revealedTruth"]
+  },
+  "softlockDetection": {
+    "maxSceneRevisits": 1,
+    "maxStepsWithoutProgress": 3,
+    "exemptScenes": ["sc_3_4_904"]
+  }
+}
