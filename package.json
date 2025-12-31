@@ -16,8 +16,10 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "build": "tsc",
-    "dev": "vite",
-    "build:browser": "vite build"
+    "build:engine": "tsc -p tsconfig.cli.json",
+    "build:browser": "vite build",
+    "build:all": "npm run build:engine && npm run build:browser",
+    "dev": "vite"
   },
   "bin": {
     "gamebook-runner": "./dist/cli/headless-runner.js"

@@ -27,7 +27,7 @@ export default defineConfig({
 
   // Build configuration
   build: {
-    outDir: 'dist',
+    outDir: 'dist/browser',
     emptyOutDir: true,
 
     // Rollup options for TypeScript handling

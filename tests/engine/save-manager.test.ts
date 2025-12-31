@@ -659,6 +659,196 @@ describe('SaveManager Unit Tests', () => {
     });
   });
 
+  testSuite('SaveManager - Phase 3/4/5 Compatibility', () => {
+    /**
+     * Per Intent #149: Add version-tagged save fixtures for Phase 3/4/5 compatibility
+     *
+     * These tests verify that saves from different phases can be loaded:
+     * - Phase 3: Initial save/load implementation (ENGINE_VERSION = 1, SCHEMA_VERSION = '1.0.0')
+     * - Phase 4: UI polish (no engine changes - same save format)
+     * - Phase 5: QA & Release (no engine changes - same save format)
+     *
+     * Since the engine format hasn't changed between phases, all phases should use
+     * the same save format with ENGINE_VERSION = 1 and SCHEMA_VERSION = '1.0.0'.
+     */
+
+    const PHASE_3_SAVE = JSON.stringify({
+      schemaVersion: '1.0.0',
+      version: 1,
+      timestamp: new Date('2024-12-29T10:00:00Z').toISOString(),
+      contentVersion: '1.0.0',
+      currentSceneId: 'sc_1_0_001',
+      state: {
+        currentSceneId: 'sc_1_0_001',
+        version: 1,
+        contentVersion: '1.0.0',
+        timestamp: Date.now(),
+        history: [
+          {
+            sceneId: 'sc_1_0_001',
+            timestamp: Date.now(),
+            choiceLabel: undefined,
+            visitedCount: 1,
+          },
+        ],
+        stats: { script: 5, stagePresence: 3, improv: 4 },
+        flags: new Set(['MET_PURSUER']),
+        inventory: new Map([['prompter_book', 1]]),
+        factions: { preservationist: 2, revisionist: 0 },
+      },
+    });
+
+    const PHASE_4_SAVE = JSON.stringify({
+      schemaVersion: '1.0.0',
+      version: 1,
+      timestamp: new Date('2024-12-30T12:00:00Z').toISOString(),
+      contentVersion: '1.0.0',
+      currentSceneId: 'sc_2_1_050',
+      state: {
+        currentSceneId: 'sc_2_1_050',
+        version: 1,
+        contentVersion: '1.0.0',
+        timestamp: Date.now(),
+        history: [
+          { sceneId: 'sc_1_0_001', timestamp: Date.now(), choiceLabel: 'Enter theater', visitedCount: 1 },
+          { sceneId: 'sc_2_1_050', timestamp: Date.now(), choiceLabel: 'Go backstage', visitedCount: 1 },
+        ],
+        stats: { script: 7, stagePresence: 5, improv: 6 },
+        flags: new Set(['MET_PURSUER', 'HAS_GREEN_ROOM_KEY']),
+        inventory: new Map([
+          ['prompter_book', 1],
+          ['green_room_key', 1],
+        ]),
+        factions: { preservationist: 4, revisionist: 1 },
+      },
+    });
+
+    const PHASE_5_SAVE = JSON.stringify({
+      schemaVersion: '1.0.0',
+      version: 1,
+      timestamp: new Date('2024-12-31T15:00:00Z').toISOString(),
+      contentVersion: '1.0.0',
+      currentSceneId: 'sc_3_4_098',
+      state: {
+        currentSceneId: 'sc_3_4_098',
+        version: 1,
+        contentVersion: '1.0.0',
+        timestamp: Date.now(),
+        history: [
+          { sceneId: 'sc_1_0_001', timestamp: Date.now(), choiceLabel: 'Enter theater', visitedCount: 1 },
+          { sceneId: 'sc_2_1_050', timestamp: Date.now(), choiceLabel: 'Go backstage', visitedCount: 1 },
+          { sceneId: 'sc_3_4_098', timestamp: Date.now(), choiceLabel: 'Confront truth', visitedCount: 1 },
+        ],
+        stats: { script: 10, stagePresence: 8, improv: 9 },
+        flags: new Set(['MET_PURSUER', 'HAS_GREEN_ROOM_KEY', 'ENDING_REVEALED']),
+        inventory: new Map([
+          ['prompter_book', 1],
+          ['green_room_key', 1],
+          ['final_script', 1],
+        ]),
+        factions: { preservationist: 7, revisionist: 3 },
+      },
+    });
+
+    it('should load Phase 3 save (initial implementation)', () => {
+      const gameState = saveManager.importFromJSON(PHASE_3_SAVE);
+
+      expect(gameState.version).toBe(1);
+      expect(gameState.currentSceneId).toBe('sc_1_0_001');
+      expect(gameState.stats.script).toBe(5);
+      expect(gameState.flags.has('MET_PURSUER')).toBe(true);
+      expect(gameState.inventory.get('prompter_book')).toBe(1);
+      expect(gameState.factions.preservationist).toBe(2);
+    });
+
+    it('should load Phase 4 save (UI polish - same format)', () => {
+      const gameState = saveManager.importFromJSON(PHASE_4_SAVE);
+
+      expect(gameState.version).toBe(1);
+      expect(gameState.currentSceneId).toBe('sc_2_1_050');
+      expect(gameState.stats.script).toBe(7);
+      expect(gameState.flags.has('HAS_GREEN_ROOM_KEY')).toBe(true);
+      expect(gameState.inventory.get('green_room_key')).toBe(1);
+      expect(gameState.history.length).toBe(2);
+    });
+
+    it('should load Phase 5 save (QA & Release - same format)', () => {
+      const gameState = saveManager.importFromJSON(PHASE_5_SAVE);
+
+      expect(gameState.version).toBe(1);
+      expect(gameState.currentSceneId).toBe('sc_3_4_098');
+      expect(gameState.stats.script).toBe(10);
+      expect(gameState.flags.has('ENDING_REVEALED')).toBe(true);
+      expect(gameState.inventory.get('final_script')).toBe(1);
+      expect(gameState.history.length).toBe(3);
+    });
+
+    it('should reject save with incompatible schema version', () => {
+      // Simulate a future save format (schemaVersion 2.0.0)
+      const futureSave = JSON.stringify({
+        schemaVersion: '2.0.0', // Incompatible
+        version: 1,
+        timestamp: new Date().toISOString(),
+        contentVersion: '1.0.0',
+        currentSceneId: 'sc_1_0_001',
+        state: {
+          currentSceneId: 'sc_1_0_001',
+          version: 1,
+          contentVersion: '1.0.0',
+          timestamp: Date.now(),
+          history: [],
+          stats: {},
+          flags: new Set(),
+          inventory: new Map(),
+          factions: {},
+        },
+      });
+
+      expect(() => saveManager.importFromJSON(futureSave)).toThrow(
+        /Schema version mismatch/
+      );
+    });
+
+    it('should reject save with incompatible engine version', () => {
+      // Simulate a future engine version
+      const futureEngineSave = JSON.stringify({
+        schemaVersion: '1.0.0',
+        version: 999, // Incompatible engine version
+        timestamp: new Date().toISOString(),
+        contentVersion: '1.0.0',
+        currentSceneId: 'sc_1_0_001',
+        state: {
+          currentSceneId: 'sc_1_0_001',
+          version: 999,
+          contentVersion: '1.0.0',
+          timestamp: Date.now(),
+          history: [],
+          stats: {},
+          flags: new Set(),
+          inventory: new Map(),
+          factions: {},
+        },
+      });
+
+      // Should reject due to version mismatch
+      expect(() => saveManager.importFromJSON(futureSave)).toThrow();
+    });
+
+    it('should maintain save compatibility across phases (round-trip test)', () => {
+      // Load Phase 3 save, export it, and verify it still works
+      const phase3State = saveManager.importFromJSON(PHASE_3_SAVE);
+      const exportedJson = saveManager.exportToJSON(phase3State);
+      const reimportedState = saveManager.importFromJSON(exportedJson);
+
+      expect(reimportedState.currentSceneId).toBe(phase3State.currentSceneId);
+      expect(reimportedState.stats).toEqual(phase3State.stats);
+      expect(Array.from(reimportedState.flags)).toEqual(Array.from(phase3State.flags));
+      expect(Array.from(reimportedState.inventory.entries())).toEqual(
+        Array.from(phase3State.inventory.entries())
+      );
+    });
+  });
+
   testSuite('SaveManager - edge cases', () => {
     it('should handle empty history array', async () => {
       const emptyHistoryState = createMockGameState({ history: [] });

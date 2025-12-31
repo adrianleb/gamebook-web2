@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Override outDir for CLI build - outputs to dist/cli/
+    "outDir": "./dist/cli",
+    // ES2022 module for Node.js 20+ (supports import.meta)
+    "module": "ES2022",
+    // ES2022 target for Node.js 20+
+    "target": "ES2022"
+  },
+  "include": [
+    "src/engine/**/*",
+    "src/cli/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests",
+    "src/ui/**/*"
+  ]
+}
