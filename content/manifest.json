@@ -352,6 +352,30 @@
       "status": "complete",
       "description": "Act 3 Hub opening - Descent to the Mainstage with 4 approach options"
     },
+    "sc_3_4_010": {
+      "title": "The Empty Desk",
+      "location": "The Mainstage",
+      "act": 3,
+      "hub": 4,
+      "status": "complete",
+      "description": "Exploration - Solo approach to the Editor's desk, experiencing the weight of the final confrontation"
+    },
+    "sc_3_4_020": {
+      "title": "The Council of Shadows",
+      "location": "The Mainstage",
+      "act": 3,
+      "hub": 4,
+      "status": "complete",
+      "description": "Exploration - Consult faction allies in the wings before the final confrontation"
+    },
+    "sc_3_4_030": {
+      "title": "The Wings of Memory",
+      "location": "The Mainstage",
+      "act": 3,
+      "hub": 4,
+      "status": "complete",
+      "description": "Exploration - Discover props and memories from failed stories in the Editor's collection"
+    },
     "sc_3_4_098": {
       "title": "The Last Curtain Call",
       "location": "The Mainstage",
@@ -413,10 +437,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 22,
+    "totalScenes": 25,
     "pending": 0,
     "draft": 0,
-    "complete": 22,
+    "complete": 25,
     "reviewed": 0
   }
 }

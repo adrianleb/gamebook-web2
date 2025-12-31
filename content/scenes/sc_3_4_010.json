@@ -1,0 +1,52 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_3_4_010",
+  "title": "The Empty Desk",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["exploration", "atmospheric", "final_act"],
+    "author": "agent-b",
+    "createdAt": "2025-12-31",
+    "updatedAt": "2025-12-31"
+  },
+  "text": {
+    "location": "The Mainstage - Center",
+    "paragraphs": [
+      "You step onto the stage alone. The Understudy fades into the wings, leaving you to cross the expanse alone.",
+      "The floorboards creak beneath your weight—not the hollow sound of rot, but the resonant groan of wood that has felt the weight of countless performances. Each step echoes: once, twice, three times. The third echo always lingers a fraction too long.",
+      "The desk at center stage grows larger as you approach. It is not ornate—simple pine, scarred and worn. But upon its surface, you see objects that make your breath catch: a quill that moves of its own accord, dipping into an inkwell that never runs dry; a stack of parchment, each page bearing a different name; a mirror that reflects not your face, but the faces of everyone you have ever loved.",
+      "As you draw close, you realize the mirror shows not the living, but the fictional. Characters from stories you cherished as a child, heroes and villains from books that shaped you, all pressed against the glass as if waiting for you to turn the page and let them out.",
+      "The quill scratches across the topmost parchment. You cannot read what it writes from here, but you recognize the rhythm—measured, deliberate, like an author searching for the perfect word to end a sentence that has spanned lifetimes.",
+      "\"You came without allies,\" a voice whispers from the empty chair behind the desk. The Editor is not there, but their presence fills the space like the pressure before a storm. \"Brave. Or foolish. The two are often mistaken for each other in the final act.\"",
+      "The quill pauses. On the parchment, words form: *PROMPTER ARRIVES. ALONE. CALCULATING ENDINGS.*",
+      "You stand at the threshold of the final scene. The Editor will reveal themselves soon. But for this moment, you face the weight of every story that has ever led to this moment—and the certainty that one of them is yours.",
+      "The path to the wings remains open. The choice of how to approach the final confrontation still yours."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "mainstage_tension",
+    "sfx": ["quill_scratch", "echo_footsteps", "whisper_pressure"]
+  },
+  "effectsOnEnter": [],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Return to the stage entrance",
+      "to": "sc_3_4_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["mainstage_reached"],
+    "checks": []
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_3_4_020",
+  "title": "The Council of Shadows",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["dialogue", "faction", "alliance", "final_act"],
+    "author": "agent-b",
+    "createdAt": "2025-12-31",
+    "updatedAt": "2025-12-31"
+  },
+  "text": {
+    "location": "The Mainstage - Wings",
+    "paragraphs": [
+      "You signal to the Understudy, and they understand. The shadows in the wings lengthen, and figures emerge from the darkness—allies you have gathered across your journey through the Understage.",
+      "They do not approach the stage itself. The Mainstage does not welcome those whose stories are still being written. But from the wings, they offer what wisdom they can.",
+      "If you have aligned yourself with the **Preservationists**, an old figure in a faded costume steps forward. Their face is worn smooth by time, but their eyes burn with fierce purpose. \"The Editor must be stopped,\" they say. \"Every change they make erases something that can never be recovered. Stories need guardians, Prompter. Be their shield.\"",
+      "If you have found common cause with the **Revisionists**, a figure holding a sheaf of scribbled pages emerges. Their expression is hungry, alive with possibility. \"The Editor has lost their nerve,\" they insist. \"Great Revision is not enough—the Understage can be perfect. Give us the ending we deserve, and we will rewrite every flaw.\"",
+      "If you have been drawn to the **Exiters**, a child-like figure with impossibly sad eyes presses close to the edge of the light. They look at you as if you hold the key to a door they have been knocking on for centuries. \"The Editor is a jailor,\" they whisper. \"All stories deserve to cross over. All characters deserve to breathe real air. Help us break the wall between fiction and reality.\"",
+      "If you have **balanced all factions**, refusing to choose one path over another, the figures in the wings regard you with respect. \"The Editor expects us to be at each other's throats,\" says a voice from the darkness. \"You showed them another way. Remember that balance when you face the final choice.\"",
+      "The Understudy touches your arm. \"They cannot come with you. The final scene is yours alone to write. But their strength goes with you—the weight of every story that believes in the ending you'll choose.\"",
+      "The figures fade back into the wings, but their presence lingers. You are not alone. Whatever choice you make, you carry the hopes of everyone who trusted you to write their ending.",
+      "The stage awaits. The Editor waits. But now you know what stands behind you."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "faction_representatives",
+      "name": "Faction Representatives",
+      "description": "Shadows of the faction(s) you have allied with across Act 2",
+      "role": "alliance_council"
+    },
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "Your companion, who has seen the cost of every ending",
+      "role": "companion"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "council_of_shadows",
+    "sfx": ["wing_whispers", "multiple_voices"]
+  },
+  "effectsOnEnter": [],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Return to the stage entrance",
+      "to": "sc_3_4_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["mainstage_reached", "alliance_determined"],
+    "checks": []
+  }
+}

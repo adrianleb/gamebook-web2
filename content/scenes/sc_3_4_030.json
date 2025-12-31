@@ -1,0 +1,59 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_3_4_030",
+  "title": "The Wings of Memory",
+  "act": 3,
+  "hub": 4,
+  "location": "The Mainstage",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["exploration", "atmospheric", "lore", "final_act"],
+    "author": "agent-b",
+    "createdAt": "2025-12-31",
+    "updatedAt": "2025-12-31"
+  },
+  "text": {
+    "location": "The Mainstage - Wings",
+    "paragraphs": [
+      "You circle around the edge of the stage, keeping to the shadows. The wings of this theater hold centuries of history—every scene that led to this moment, every choice that brought the Understage to the brink of its final revision.",
+      "Here you see props from performances that have not played in lifetimes: a crown that remembers the weight of a king who learned too late that power cannot buy happiness; a mirror that once reflected a heroine who gave everything for love and received only silence in return; a doorframe that still bears the scratches of those who tried to escape a story that would not let them leave.",
+      "Each object hums with memory. As you pass, they flicker with ghostlight—brief visions of the moments that defined them. The crown's wearer, weeping alone in a tower while his kingdom crumbled. The mirror's heroine, standing before it as her reflection whispered that she was never truly loved. The doorframe, slick with tears from countless hands that could not find purchase on the other side.",
+      "The Understudy moves silently beside you. \"The Editor collected these,\" they say softly. \"Every tragedy. Every failure. Every ending that went wrong. The Editor believes that by studying what broke, they can write a world where nothing ever has to break again.\"",
+      "They gesture to a prop table lined with objects you recognize: a lantern from the Prologue, its glass dark; a key from the Archives, its teeth worn smooth from attempts that never succeeded; a single white rose, petals dried and falling apart, that someone once carried to a final confrontation that never happened.",
+      "\"These are the test cases,\" the Understudy explains. \"The Editor's experiments. Each one represents a story that was revised, rewritten, revised again—and still ended in heartbreak. The Great Revision was supposed to fix them. But the more the Editor tried to perfect the Understage, the more they realized that perfection and story are incompatible.\"",
+      "You realize suddenly what the Editor fears: not death, not defeat, but a story that cannot be controlled. The wings are filled with evidence that every attempt to eliminate pain from fiction only creates new kinds of suffering.",
+      "The question is not whether the Editor can be defeated or persuaded or understood. The question is what kind of ending you are willing to write—and whether you have the courage to accept that some stories must hurt in order to mean anything at all.",
+      "The path leads back to the stage entrance. The final confrontation waits."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "Your companion, who knows the history of every object in these wings",
+      "role": "companion"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "wings_of_memory",
+    "sfx": ["ghostlight_flicker", "prop_memory_hum"]
+  },
+  "effectsOnEnter": [],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Return to the stage entrance",
+      "to": "sc_3_4_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["mainstage_reached"],
+    "checks": []
+  }
+}
