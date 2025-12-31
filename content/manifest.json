@@ -242,8 +242,8 @@
       "act": 1,
       "hub": 0,
       "status": "complete",
-      "description": "Inventory-gated + Courage stat check",
-      "mechanics": ["inventory_gating", "stat_check"]
+      "description": "Inventory-gated + attemptable courage stat check",
+      "mechanics": ["inventory_gating", "attemptable_stat_check"]
     },
     "sc_1_0_004": {
       "title": "Maren's Guidance",
@@ -308,23 +308,26 @@
       "act": 2,
       "hub": 2,
       "status": "complete",
-      "description": "Exploration - Dialogue with The Director about factions and the Editor"
+      "description": "Exploration - Dialogue with The Director introducing the four factions",
+      "mechanics": ["dialogue", "faction_intro", "exploration"]
     },
     "sc_2_2_010": {
       "title": "The Dressing Rooms",
-      "location": "The Green Room",
+      "location": "The Green Room - Dressing Rooms",
       "act": 2,
       "hub": 2,
       "status": "complete",
-      "description": "Exploration - Private dressing rooms with character glimpses and CHORUS whispers"
+      "description": "Exploration - Atmospheric dressing rooms with character glimpses and CHORUS whispers",
+      "mechanics": ["exploration", "atmosphere", "environmental_storytelling"]
     },
     "sc_2_2_020": {
       "title": "The Call Board",
-      "location": "The Green Room",
+      "location": "The Green Room - Call Board",
       "act": 2,
       "hub": 2,
       "status": "complete",
-      "description": "Exploration - Rumors, faction notices, and warnings about the Editor"
+      "description": "Exploration - Lore exposition through faction notices, rumors, and warnings",
+      "mechanics": ["exploration", "lore", "environmental_storytelling"]
     },
     "sc_2_3_001": {
       "title": "The Archives Entry",
@@ -334,6 +337,33 @@
       "status": "complete",
       "description": "Hub 3 opening - First drafts, cut scenes, abandoned stories",
       "mechanics": ["hub_opening", "discovery", "mystery"]
+    },
+    "sc_2_3_002": {
+      "title": "The Understudy's Lament",
+      "location": "The Archives",
+      "act": 2,
+      "hub": 3,
+      "status": "complete",
+      "description": "Exploration - Dialogue with The Understudy about abandoned narratives",
+      "mechanics": ["dialogue", "lore", "character_study"]
+    },
+    "sc_2_3_010": {
+      "title": "The Stacks",
+      "location": "The Archives - The Stacks",
+      "act": 2,
+      "hub": 3,
+      "status": "complete",
+      "description": "Exploration - Endless shelves of abandoned manuscripts with environmental storytelling",
+      "mechanics": ["exploration", "mystery", "environmental_storytelling"]
+    },
+    "sc_2_3_020": {
+      "title": "The Prop Room",
+      "location": "The Archives - The Prop Room",
+      "act": 2,
+      "hub": 3,
+      "status": "complete",
+      "description": "Exploration - Items from lost stories and abandoned narratives",
+      "mechanics": ["exploration", "items", "mystery"]
     },
     "sc_2_3_099": {
       "title": "The Revelation",
