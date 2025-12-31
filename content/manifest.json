@@ -302,6 +302,30 @@
       "description": "Hub 2 opening - Neutral meeting space with The Director and CHORUS",
       "mechanics": ["npc_introduction", "faction_preview", "hub_navigation"]
     },
+    "sc_2_2_002": {
+      "title": "The Director's Guidance",
+      "location": "The Green Room",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Exploration - Dialogue with The Director about factions and the Editor"
+    },
+    "sc_2_2_010": {
+      "title": "The Dressing Rooms",
+      "location": "The Green Room",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Exploration - Private dressing rooms with character glimpses and CHORUS whispers"
+    },
+    "sc_2_2_020": {
+      "title": "The Call Board",
+      "location": "The Green Room",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Exploration - Rumors, faction notices, and warnings about the Editor"
+    },
     "sc_2_3_001": {
       "title": "The Archives Entry",
       "location": "The Archives",
@@ -389,10 +413,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 19,
+    "totalScenes": 22,
     "pending": 0,
     "draft": 0,
-    "complete": 19,
+    "complete": 22,
     "reviewed": 0
   }
 }
