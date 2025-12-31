@@ -33,26 +33,42 @@
   "choices": [
     {
       "id": "choice_1",
-      "label": "Step into the darkness (Requires Courage 5+)",
-      "to": "sc_1_0_901",
+      "label": "Step into the darkness",
       "conditions": {
         "type": "stat_check",
         "stat": "courage",
         "op": "gte",
-        "value": 5
+        "value": 5,
+        "attemptable": true
       },
-      "onChoose": [
-        {
-          "type": "set_flag",
-          "flag": "crossing_succeeded"
-        },
-        {
-          "type": "modify_faction",
-          "faction": "preservationist",
-          "value": 1
-        }
-      ],
-      "disabledHint": "You are not yet ready to face the unknown. Requires Courage 5+."
+      "onSuccess": {
+        "to": "sc_1_0_901",
+        "effects": [
+          {
+            "type": "set_flag",
+            "flag": "crossing_succeeded"
+          },
+          {
+            "type": "modify_faction",
+            "faction": "preservationist",
+            "value": 1
+          }
+        ]
+      },
+      "onFailure": {
+        "to": "sc_1_0_902",
+        "effects": [
+          {
+            "type": "set_flag",
+            "flag": "crossing_failed"
+          },
+          {
+            "type": "modify_stat",
+            "stat": "health",
+            "value": -1
+          }
+        ]
+      }
     },
     {
       "id": "choice_2",
