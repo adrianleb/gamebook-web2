@@ -462,6 +462,11 @@ export class SceneLoader {
       type: normalizedType,
     };
 
+    // Preserve attemptable flag for stat/faction conditions
+    if (condition.attemptable === true) {
+      result.attemptable = true;
+    }
+
     // Map field aliases and copy relevant fields
     if (normalizedType === 'stat') {
       result.stat = statValue;
