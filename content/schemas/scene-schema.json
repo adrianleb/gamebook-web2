@@ -106,7 +106,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["label", "to"],
+        "required": ["label"],
         "properties": {
           "id": {
             "type": "string"
@@ -157,6 +157,52 @@
           "style": {
             "type": "string",
             "enum": ["default", "primary", "danger", "special"]
+          },
+          "onSuccess": {
+            "type": "object",
+            "description": "Branch for attemptable stat check success (Intent #155)",
+            "properties": {
+              "to": {
+                "type": "string",
+                "pattern": "^(sc_|bk_)[a-z0-9_-]+$"
+              },
+              "effects": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/effect"
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          },
+          "onFailure": {
+            "type": "object",
+            "description": "Branch for attemptable stat check failure (Intent #155)",
+            "properties": {
+              "to": {
+                "type": "string",
+                "pattern": "^(sc_|bk_)[a-z0-9_-]+$"
+              },
+              "effects": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/effect"
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
           }
         }
       }
@@ -247,6 +293,10 @@
             },
             "value": {
               "type": "number"
+            },
+            "attemptable": {
+              "type": "boolean",
+              "description": "If true, choice is always enabled but branches to onSuccess/onFailure based on check result (Intent #155)"
             }
           }
         },

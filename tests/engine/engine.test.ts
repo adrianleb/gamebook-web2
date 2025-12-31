@@ -349,9 +349,9 @@ describe('Engine Core', () => {
       const choices = engine.getAvailableChoices();
 
       expect(choices.length).toBe(3);
-      expect(choices[0].enabled).toBe(true);
-      expect(choices[1].enabled).toBe(true); // courage >= 5
-      expect(choices[2].enabled).toBe(false); // missing flag
+      expect(choices[0].state).toBe('enabled');
+      expect(choices[1].state).toBe('enabled'); // courage >= 5
+      expect(choices[2].state).toBe('disabled'); // missing flag
       expect(choices[2].disabledHint).toBe('You need a secret key');
     });
 
@@ -562,6 +562,347 @@ describe('Engine Core', () => {
       // sc_circ_1 is visited: (1) transitionTo, (2) one return from sc_circ_2
       expect(circ1Entry.length).toBe(1);
       expect(circ1Entry[0].visitedCount).toBe(2); // Initial + 1 return
+    });
+  });
+
+  // Intent #155: Attemptable stat check tests
+  describe('Attemptable Stat Checks (Intent #155)', () => {
+    it('should mark attemptable choices as "risky" state', async () => {
+      const riskyScene: SceneData = {
+        id: 'sc_risky_001',
+        title: 'Risky Choice Test',
+        text: 'Test attemptable stat check.',
+        effects: [],
+        choices: [
+          {
+            label: 'Try to climb (Courage 5+)',
+            to: 'sc_success',
+            conditions: [
+              {
+                type: 'stat',
+                stat: 'courage',
+                operator: 'gte',
+                value: 5,
+                attemptable: true,
+              },
+            ],
+            onSuccess: {
+              to: 'sc_success',
+            },
+            onFailure: {
+              to: 'sc_failure',
+            },
+          },
+        ],
+      };
+
+      const loader = engine.getLoader();
+      loader['sceneCache'].set('sc_risky_001', riskyScene);
+      loader['sceneCache'].set('sc_success', {
+        id: 'sc_success',
+        title: 'Success',
+        text: 'You made it!',
+        effects: [],
+        choices: [],
+      });
+      loader['sceneCache'].set('sc_failure', {
+        id: 'sc_failure',
+        title: 'Failure',
+        text: 'You fell!',
+        effects: [],
+        choices: [],
+      });
+
+      await engine.transitionTo('sc_risky_001');
+      const choices = engine.getAvailableChoices();
+
+      expect(choices.length).toBe(1);
+      expect(choices[0].state).toBe('risky');
+      expect(choices[0].statCheck).toBe('Courage +5');
+    });
+
+    it('should branch to onSuccess when stat check passes', async () => {
+      const scene: SceneData = {
+        id: 'sc_branch_test',
+        title: 'Branch Test',
+        text: 'Test success/failure branching.',
+        effects: [],
+        choices: [
+          {
+            label: 'Attempt check',
+            conditions: [
+              {
+                type: 'stat',
+                stat: 'courage',
+                operator: 'gte',
+                value: 5,
+                attemptable: true,
+              },
+            ],
+            onSuccess: {
+              to: 'sc_success',
+              effects: [{ type: 'set-flag', flag: 'CHECK_PASSED' }],
+            },
+            onFailure: {
+              to: 'sc_failure',
+              effects: [{ type: 'set-flag', flag: 'CHECK_FAILED' }],
+            },
+          },
+        ],
+      };
+
+      const loader = engine.getLoader();
+      loader['sceneCache'].set('sc_branch_test', scene);
+      loader['sceneCache'].set('sc_success', {
+        id: 'sc_success',
+        title: 'Success',
+        text: 'Passed!',
+        effects: [],
+        choices: [],
+      });
+      loader['sceneCache'].set('sc_failure', {
+        id: 'sc_failure',
+        title: 'Failure',
+        text: 'Failed!',
+        effects: [],
+        choices: [],
+      });
+
+      await engine.transitionTo('sc_branch_test');
+      // Courage starts at 5, so check passes
+      const result = await engine.makeChoice(0);
+
+      expect(result.targetSceneId).toBe('sc_success');
+      expect(engine.getState().flags.has('CHECK_PASSED')).toBe(true);
+      expect(engine.getState().flags.has('CHECK_FAILED')).toBe(false);
+    });
+
+    it('should branch to onFailure when stat check fails', async () => {
+      const scene: SceneData = {
+        id: 'sc_branch_test_2',
+        title: 'Branch Test 2',
+        text: 'Test failure branch.',
+        effects: [],
+        choices: [
+          {
+            label: 'Attempt hard check',
+            conditions: [
+              {
+                type: 'stat',
+                stat: 'courage',
+                operator: 'gte',
+                value: 10,
+                attemptable: true,
+              },
+            ],
+            onSuccess: {
+              to: 'sc_success',
+              effects: [{ type: 'set-flag', flag: 'HARD_PASSED' }],
+            },
+            onFailure: {
+              to: 'sc_failure',
+              effects: [{ type: 'set-flag', flag: 'HARD_FAILED' }],
+            },
+          },
+        ],
+      };
+
+      const loader = engine.getLoader();
+      loader['sceneCache'].set('sc_branch_test_2', scene);
+      loader['sceneCache'].set('sc_success', {
+        id: 'sc_success',
+        title: 'Success',
+        text: 'Passed!',
+        effects: [],
+        choices: [],
+      });
+      loader['sceneCache'].set('sc_failure', {
+        id: 'sc_failure',
+        title: 'Failure',
+        text: 'Failed!',
+        effects: [],
+        choices: [],
+      });
+
+      await engine.transitionTo('sc_branch_test_2');
+      // Courage is 5, check requires 10, so it fails
+      const result = await engine.makeChoice(0);
+
+      expect(result.targetSceneId).toBe('sc_failure');
+      expect(engine.getState().flags.has('HARD_PASSED')).toBe(false);
+      expect(engine.getState().flags.has('HARD_FAILED')).toBe(true);
+    });
+
+    it('should fallback to default "to" when onSuccess missing', async () => {
+      const scene: SceneData = {
+        id: 'sc_fallback_test',
+        title: 'Fallback Test',
+        text: 'Test default fallback.',
+        effects: [],
+        choices: [
+          {
+            label: 'Try without onSuccess',
+            to: 'sc_default',
+            conditions: [
+              {
+                type: 'stat',
+                stat: 'courage',
+                operator: 'gte',
+                value: 3,
+                attemptable: true,
+              },
+            ],
+            onFailure: {
+              to: 'sc_failure',
+            },
+          },
+        ],
+      };
+
+      const loader = engine.getLoader();
+      loader['sceneCache'].set('sc_fallback_test', scene);
+      loader['sceneCache'].set('sc_default', {
+        id: 'sc_default',
+        title: 'Default',
+        text: 'Default path.',
+        effects: [],
+        choices: [],
+      });
+      loader['sceneCache'].set('sc_failure', {
+        id: 'sc_failure',
+        title: 'Failure',
+        text: 'Failed!',
+        effects: [],
+        choices: [],
+      });
+
+      await engine.transitionTo('sc_fallback_test');
+      // Courage is 5, check passes, but no onSuccess defined
+      const result = await engine.makeChoice(0);
+
+      expect(result.targetSceneId).toBe('sc_default');
+    });
+
+    it('should fallback to default "to" when onFailure missing', async () => {
+      const scene: SceneData = {
+        id: 'sc_fallback_test_2',
+        title: 'Fallback Test 2',
+        text: 'Test default fallback.',
+        effects: [],
+        choices: [
+          {
+            label: 'Try without onFailure',
+            to: 'sc_default',
+            conditions: [
+              {
+                type: 'stat',
+                stat: 'courage',
+                operator: 'gte',
+                value: 10,
+                attemptable: true,
+              },
+            ],
+            onSuccess: {
+              to: 'sc_success',
+            },
+          },
+        ],
+      };
+
+      const loader = engine.getLoader();
+      loader['sceneCache'].set('sc_fallback_test_2', scene);
+      loader['sceneCache'].set('sc_default', {
+        id: 'sc_default',
+        title: 'Default',
+        text: 'Default path.',
+        effects: [],
+        choices: [],
+      });
+      loader['sceneCache'].set('sc_success', {
+        id: 'sc_success',
+        title: 'Success',
+        text: 'Success!',
+        effects: [],
+        choices: [],
+      });
+
+      await engine.transitionTo('sc_fallback_test_2');
+      // Courage is 5, check fails, but no onFailure defined
+      const result = await engine.makeChoice(0);
+
+      expect(result.targetSceneId).toBe('sc_default');
+    });
+
+    it('should support non-attemptable choices alongside attemptable', async () => {
+      const mixedScene: SceneData = {
+        id: 'sc_mixed',
+        title: 'Mixed Choices',
+        text: 'Test mixed choice types.',
+        effects: [],
+        choices: [
+          {
+            label: 'Always available',
+            to: 'sc_always',
+          },
+          {
+            label: 'Attemptable check',
+            to: 'sc_risky',
+            conditions: [
+              {
+                type: 'stat',
+                stat: 'courage',
+                operator: 'gte',
+                value: 5,
+                attemptable: true,
+              },
+            ],
+          },
+          {
+            label: 'Gated choice',
+            to: 'sc_gated',
+            conditions: [
+              {
+                type: 'flag',
+                flag: 'HAS_KEY',
+              },
+            ],
+            disabledHint: 'You need a key',
+          },
+        ],
+      };
+
+      const loader = engine.getLoader();
+      loader['sceneCache'].set('sc_mixed', mixedScene);
+      loader['sceneCache'].set('sc_always', {
+        id: 'sc_always',
+        title: 'Always',
+        text: 'Always available.',
+        effects: [],
+        choices: [],
+      });
+      loader['sceneCache'].set('sc_risky', {
+        id: 'sc_risky',
+        title: 'Risky',
+        text: 'Risky path.',
+        effects: [],
+        choices: [],
+      });
+      loader['sceneCache'].set('sc_gated', {
+        id: 'sc_gated',
+        title: 'Gated',
+        text: 'Gated path.',
+        effects: [],
+        choices: [],
+      });
+
+      await engine.transitionTo('sc_mixed');
+      const choices = engine.getAvailableChoices();
+
+      expect(choices.length).toBe(3);
+      expect(choices[0].state).toBe('enabled');
+      expect(choices[1].state).toBe('risky');
+      expect(choices[2].state).toBe('disabled');
+      expect(choices[2].disabledHint).toBe('You need a key');
     });
   });
 });
