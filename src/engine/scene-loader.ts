@@ -37,6 +37,14 @@ export interface SceneLoaderOptions {
 }
 
 /**
+ * Known faction IDs for faction-based stat_check detection.
+ * Content files use stat_check with faction IDs; these need to be
+ * transformed to type: 'faction' conditions for correct evaluation.
+ */
+const FACTION_IDS = ['preservationist', 'revisionist', 'exiter', 'independent'] as const;
+type FactionId = typeof FACTION_IDS[number];
+
+/**
  * Scene loader class.
  * Loads scenes from content files with optional caching.
  */
@@ -55,6 +63,18 @@ export class SceneLoader {
     if (options.manifest) {
       this.manifest = options.manifest;
     }
+  }
+
+  /**
+   * Check if a stat ID is actually a faction ID.
+   * Content files use stat_check for both stats and factions;
+   * we need to detect faction IDs to transform them correctly.
+   *
+   * @param statId - The stat ID to check (case-insensitive)
+   * @returns True if the stat ID is a known faction ID
+   */
+  private isFactionId(statId: string): statId is FactionId {
+    return FACTION_IDS.includes(statId.toLowerCase() as FactionId);
   }
 
   /**
@@ -411,6 +431,10 @@ export class SceneLoader {
    * Normalize a single condition object to engine format.
    * Maps content file aliases to canonical engine format.
    *
+   * Faction Detection:
+   * Content files use stat_check with faction IDs (e.g., revisionist).
+   * We detect these and transform to type: 'faction' for correct evaluation.
+   *
    * @param condition - Raw condition object
    * @returns Normalized Condition
    */
@@ -425,7 +449,14 @@ export class SceneLoader {
       'faction_check': 'faction',
     };
 
-    const normalizedType = typeMap[type] || type as 'stat' | 'flag' | 'item' | 'faction' | 'and' | 'or' | 'not';
+    let normalizedType = typeMap[type] || type as 'stat' | 'flag' | 'item' | 'faction' | 'and' | 'or' | 'not';
+
+    // Detect faction IDs in stat_check - content files use stat_check for both
+    // stats and factions, so we need to transform faction-based checks
+    const statValue = String(condition.stat ?? '');
+    if (normalizedType === 'stat' && this.isFactionId(statValue)) {
+      normalizedType = 'faction';
+    }
 
     const result: Condition = {
       type: normalizedType,
@@ -433,7 +464,7 @@ export class SceneLoader {
 
     // Map field aliases and copy relevant fields
     if (normalizedType === 'stat') {
-      result.stat = String(condition.stat ?? '');
+      result.stat = statValue;
       result.operator = (condition.op as StatOperator) ?? condition.operator as StatOperator ?? 'gte';
       result.value = Number(condition.value ?? 0);
     } else if (normalizedType === 'flag') {
@@ -442,8 +473,9 @@ export class SceneLoader {
       result.item = String(condition.item ?? '');
       result.itemCount = Number(condition.itemCount ?? condition.count ?? 1);
     } else if (normalizedType === 'faction') {
-      result.faction = String(condition.faction ?? '');
-      result.factionLevel = Number(condition.factionLevel ?? condition.level ?? 0);
+      // For faction checks from content files, the 'stat' field contains the faction ID
+      result.faction = String(condition.faction ?? statValue);
+      result.factionLevel = Number(condition.factionLevel ?? condition.level ?? condition.value ?? 0);
     } else if (['and', 'or', 'not'].includes(normalizedType)) {
       // Recursively normalize nested conditions
       const rawNested = condition.conditions;
