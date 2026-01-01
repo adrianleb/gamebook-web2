@@ -72,6 +72,14 @@
     },
     {
       "id": "choice_2",
+      "label": "Study the mirror corridor before crossing",
+      "to": "sc_1_0_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The mirrors reflect possibilities you've never considered."
+    },
+    {
+      "id": "choice_3",
       "label": "Turn back",
       "to": "sc_1_0_001",
       "conditions": null,

@@ -1,0 +1,155 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_011",
+  "title": "The Trap",
+  "act": 1,
+  "hub": 0,
+  "location": "The Wings - Corridor of Echoes",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["action", "pursuers_branch", "branch_complication"],
+    "author": "agent-b",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
+  },
+  "text": {
+    "location": "The Wings - Corridor of Echoes",
+    "paragraphs": [
+      "You sprint after the figure, but the corridor shifts with every step. Doors appear and vanish. The walls curve when they should be straight. This is narrative space—malleable, responsive to the story being told.",
+      "Ahead, the figure stops. You skid to a halt.",
+      "It's not alone. Two more figures emerge from the shadows—a hero with a sword that glows with fading plot armor, and a villain whose monologue echoes as if spoken a thousand times.",
+      "\"The Prompter,\" the escaped figure says. Their voice cracks like dialogue from an unread draft. \"We heard about you. The one who guides stories. The one who decides.\"",
+      "\"We're tired of being characters,\" the hero says, but their eyes are empty. \"We want to be real.\"",
+      "\"But the Editor won't let us,\" the villain adds. \"So we run. We hide. We wait.\"",
+      "They surround you. The corridor narrows. You sense this isn't a confrontation—it's a test. They want to know if you're worthy of the title you carry.",
+      "\"Will you help us cross?\" the escaped figure asks. \"Or will you send us back to our stories?\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "escaped_figure",
+      "name": "Escaped Figure",
+      "description": "A character in a tattered costume, half-erased face, seeking escape from their narrative",
+      "disposition": 4,
+      "faction": "exiter"
+    },
+    {
+      "id": "faded_hero",
+      "name": "Faded Hero",
+      "description": "A protagonist whose plot armor has faded, seeking purpose beyond their story",
+      "disposition": 5,
+      "faction": "exiter"
+    },
+    {
+      "id": "monologue_villain",
+      "name": "Monologue Villain",
+      "description": "An antagonist tired of repeating the same speeches, seeking authenticity",
+      "disposition": 4,
+      "faction": "exiter"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "tension_confrontation",
+    "sfx": ["sword_fade_hum", "whispers_multiple"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "modify_faction",
+      "faction": "exiter",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Offer to help them cross to the Understage",
+      "to": "sc_1_0_012",
+      "conditions": {
+        "type": "stat_check",
+        "stat": "charm",
+        "op": "gte",
+        "value": 4,
+        "attemptable": true
+      },
+      "onSuccess": {
+        "to": "sc_1_0_012",
+        "effects": [
+          {
+            "type": "modify_faction",
+            "faction": "exiter",
+            "value": 2
+          },
+          {
+            "type": "set_flag",
+            "flag": "pursuers_escaped_trusted"
+          }
+        ]
+      },
+      "onFailure": {
+        "to": "sc_1_0_012",
+        "effects": [
+          {
+            "type": "set_flag",
+            "flag": "pursuers_escaped_distrusted"
+          },
+          {
+            "type": "modify_stat",
+            "stat": "health",
+            "value": -1
+          }
+        ]
+      }
+    },
+    {
+      "id": "choice_2",
+      "label": "Tell them they must return to their stories",
+      "to": "sc_1_0_012",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "pursuers_escaped_rejected"
+        },
+        {
+          "type": "modify_faction",
+          "faction": "preservationist",
+          "value": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Demand passage - you are the Prompter",
+      "to": "sc_1_0_012",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "pursuers_authoritative"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "courage",
+          "value": 1
+        }
+      ],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["branch_pursuers"],
+    "checks": [
+      {
+        "type": "stat_check",
+        "stat": "charm",
+        "op": "gte",
+        "value": 4,
+        "passEffect": "modify_faction:exiter+2"
+      }
+    ]
+  }
+}

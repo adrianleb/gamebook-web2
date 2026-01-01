@@ -1,0 +1,56 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_032",
+  "title": "The Negotiator's Crossing",
+  "act": 1,
+  "hub": 0,
+  "location": "First Crossing",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["dialogue", "negotiator_branch", "branch_convergence"],
+    "author": "agent-b",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
+  },
+  "text": {
+    "location": "First Crossing",
+    "paragraphs": [
+      "\"Then go find it,\" Maren says. \"The Understage will test your answers. The factions will challenge your choices. But you've begun with your eyes open—that is more than most Prompters.\"",
+      "They step back into shadow, their form beginning to fade.",
+      "\"One last thing, Prompter. The handbook... it's not complete. No version ever is. Trust your instincts as much as the rules. And when they conflict... trust yourself.\"",
+      "You walk through the iron door, past the mirror corridor, and emerge onto the First Crossing—the obsidian bridge spanning the void between worlds.",
+      "The air hums with potential. Stories wait in the spaces between the stones, whispering fragments of narratives yet to unfold.",
+      "Behind you, the Prompter's Booth is a distant memory. Ahead, the Green Room awaits—a neutral space where characters from different stories gather. Beyond that, the Archives hold first drafts and abandoned narratives. And at the end of all paths: the Mainstage, where stories are born and die.",
+      "Maren's voice echoes from somewhere behind you, carried on a wind that doesn't touch your skin: \"Every crossing changes the traveler, Prompter. You cannot step into stories and remain unchanged.\"",
+      "You stand at the threshold. The Understage awaits its Prompter."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "atmospheric_understage_entrance",
+    "sfx": ["distant_whispers", "obsidian_footsteps"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "negotiator_path_complete"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Continue to the First Crossing",
+      "to": "sc_1_1_099",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The crossing waits. The story continues."
+    }
+  ],
+  "flags": {
+    "sets": ["negotiator_path_complete"],
+    "requires": ["branch_negotiator"],
+    "checks": []
+  }
+}

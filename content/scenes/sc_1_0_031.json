@@ -1,0 +1,123 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_031",
+  "title": "Maren's Warning",
+  "act": 1,
+  "hub": 0,
+  "location": "The Prompter's Booth",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["dialogue", "negotiator_branch", "branch_complication"],
+    "author": "agent-b",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
+  },
+  "text": {
+    "location": "The Prompter's Booth",
+    "paragraphs": [
+      "Maren listens to your answer. Their expression doesn't change, but you sense approval—or perhaps simply acknowledgment.",
+      "\"Every answer creates a question,\" they say. \"Every choice creates consequences. You've chosen your path, but the path will test you.\"",
+      "They walk to the iron door, their steps silent on the wooden floor.",
+      "\"The Preservationists will tell you that stories are sacred. That changing them is destruction. They are not entirely wrong—there is wisdom in tradition, in the weight of what came before.\"",
+      "They touch the door, and it swings open at their touch.",
+      "\"The Revisionists will tell you that stories can be improved. That suffering is not a necessary plot device. They too are not entirely wrong—there is courage in revision, in refusing to accept cruelty as inevitable.\"",
+      "Beyond the door, you see a corridor leading to light.",
+      "\"The Exiters will tell you that fiction deserves reality. That characters should be free. Their cause is noble, but their means... complicated. The boundary exists for reasons.\"",
+      "Maren turns back to you.",
+      "\"And those who refuse to choose? They become something else. Witnesses. Observers. The problem with being a witness is that you can still be crushed by what you watch.\"",
+      "The corridor pulses with amber light—the Threshold Stage, waiting.",
+      "\"One final question, Prompter. Before you cross, before you meet the factions who will welcome you or fear you or try to use you—what do you want for yourself?\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "maren",
+      "name": "Maren",
+      "description": "A figure of indeterminate age, wrapped in a cloak that seems to absorb the candlelight. Their voice carries the weight of countless rehearsals.",
+      "disposition": 8,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "dialogue_revelation_building",
+    "sfx": ["door_creak_gentle", "light_amber_pulse"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "modify_stat",
+      "stat": "insight",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "\"I want to understand.\"",
+      "to": "sc_1_0_032",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "negotiator_goal_understanding"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "insight",
+          "value": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "\"I want to help.\"",
+      "to": "sc_1_0_032",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "negotiator_goal_help"
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "\"I want the truth.\"",
+      "to": "sc_1_0_032",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "negotiator_goal_truth"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "courage",
+          "value": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "\"I don't know yet.\"",
+      "to": "sc_1_0_032",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "negotiator_goal_uncertain"
+        }
+      ],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["branch_negotiator"],
+    "checks": []
+  }
+}

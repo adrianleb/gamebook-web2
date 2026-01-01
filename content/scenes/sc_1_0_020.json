@@ -1,0 +1,68 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_020",
+  "title": "The Mirror Corridor",
+  "act": 1,
+  "hub": 0,
+  "location": "The Threshold Stage - Mirror Corridor",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["discovery", "researcher_branch", "branch_setup"],
+    "author": "agent-b",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
+  },
+  "text": {
+    "location": "The Threshold Stage - Mirror Corridor",
+    "paragraphs": [
+      "The iron door opens at your touch. Beyond lies a corridor lined with mirrors—each reflecting a version of yourself you do not remember being.",
+      "But unlike before, when you passed through here quickly, you now pause to study the reflections. They're not identical. In one mirror, you wear a crown. In another, you're wounded. In a third, you're surrounded by shadows that speak your name.",
+      "These aren't mere reflections. They're possibilities. Versions of you from stories not yet written—or stories abandoned before their end.",
+      "Between the mirrors, you notice inscriptions scratched into the frames. Names. Dates. Titles of plays that never premiered. \"The Merchant's Second Daughter.\" \"The Hero Who Refused the Call.\" \"The Villain's Redemption.\"",
+      "The Prompter's Handbook comes to mind: *Every choice creates a universe where you chose differently. The Understage holds them all.*",
+      "Deeper in the corridor, you see a mirror that doesn't reflect you at all. It shows something else—a desk piled with manuscripts, a figure hunched over them, writing furiously.",
+      "The Archives await. But here, in this corridor of forgotten possibilities, there are answers waiting to be found."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "mystery_mirrors_echo",
+    "sfx": ["glass_shimmer", "quill_scratch_distant"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "branch_researcher"
+    },
+    {
+      "type": "modify_stat",
+      "stat": "insight",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Study the mirror inscriptions",
+      "to": "sc_1_0_021",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to the Prompter's Booth",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The mirrors wait, but their secrets remain hidden."
+    }
+  ],
+  "flags": {
+    "sets": ["branch_researcher"],
+    "requires": [],
+    "checks": []
+  }
+}

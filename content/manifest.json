@@ -251,8 +251,89 @@
       "act": 1,
       "hub": 0,
       "status": "complete",
-      "description": "Item acquisition - Get booth_key",
+      "description": "Item acquisition - Get booth_key, branch to negotiator path",
       "mechanics": ["item_acquisition", "dialogue"]
+    },
+    "sc_1_0_010": {
+      "title": "The Pursuit Begins",
+      "location": "The Wings - Pursuers Path",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Pursuers branch setup - Discover escaped characters fleeing through the Wings",
+      "mechanics": ["action", "pursuers_branch"]
+    },
+    "sc_1_0_011": {
+      "title": "The Trap",
+      "location": "The Wings - Corridor of Echoes",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Pursuers branch complication - Confront escaped characters who test your worthiness",
+      "mechanics": ["action", "charm_check", "faction_choice", "pursuers_branch"]
+    },
+    "sc_1_0_012": {
+      "title": "The Pursuers' Crossing",
+      "location": "First Crossing",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Pursuers branch convergence - Lead escaped characters to the First Crossing",
+      "mechanics": ["pursuers_branch", "act1_complete"]
+    },
+    "sc_1_0_020": {
+      "title": "The Mirror Corridor",
+      "location": "The Threshold Stage - Mirror Corridor",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Researcher branch setup - Discover mirror corridor showing abandoned possibilities",
+      "mechanics": ["discovery", "researcher_branch"]
+    },
+    "sc_1_0_021": {
+      "title": "The Abandoned Drafts",
+      "location": "The Threshold Stage - Mirror Corridor",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Researcher branch complication - Voice of abandoned drafts questions your values",
+      "mechanics": ["discovery", "insight_check", "faction_choice", "researcher_branch"]
+    },
+    "sc_1_0_022": {
+      "title": "The Researcher's Crossing",
+      "location": "First Crossing",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Researcher branch convergence - Mirror insights lead to First Crossing",
+      "mechanics": ["researcher_branch", "act1_complete"]
+    },
+    "sc_1_0_030": {
+      "title": "Maren's Test",
+      "location": "The Prompter's Booth",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Negotiator branch setup - Maren questions what kind of Prompter you'll be",
+      "mechanics": ["dialogue", "faction_choice", "negotiator_branch"]
+    },
+    "sc_1_0_031": {
+      "title": "Maren's Warning",
+      "location": "The Prompter's Booth",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Negotiator branch complication - Maren explains factions and their consequences",
+      "mechanics": ["dialogue", "negotiator_branch"]
+    },
+    "sc_1_0_032": {
+      "title": "The Negotiator's Crossing",
+      "location": "First Crossing",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Negotiator branch convergence - Maren's guidance leads to First Crossing",
+      "mechanics": ["negotiator_branch", "act1_complete"]
     },
     "sc_1_0_900": {
       "title": "Vertical Slice Resolution",
@@ -290,9 +371,8 @@
       "act": 1,
       "hub": 1,
       "status": "complete",
-      "description": "Act 1 Climax - First descent into Understage",
-      "mechanics": ["stat_check", "faction_preview"],
-      "unreachable": true
+      "description": "Act 1 Climax - First descent into Understage, reachable from all three Hub 0 branch paths",
+      "mechanics": ["stat_check", "faction_preview", "act1_complete"]
     },
     "sc_2_2_001": {
       "title": "Green Room Arrival",
@@ -468,10 +548,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 25,
+    "totalScenes": 34,
     "pending": 0,
     "draft": 0,
-    "complete": 25,
+    "complete": 34,
     "reviewed": 0
   }
 }
