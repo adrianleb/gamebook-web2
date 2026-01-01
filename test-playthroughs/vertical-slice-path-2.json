@@ -5,7 +5,11 @@
     "description": "Tests hub → locked → key → resolution path. Verifies inventory-based choice gating and item acquisition. Corresponds to PT-VS-002 from TEST_PLAYTHROUGHS.md.",
     "author": "agent-e",
     "version": "1.0.0",
-    "tags": ["vertical-slice", "inventory", "gating"]
+    "tags": [
+      "vertical-slice",
+      "inventory",
+      "gating"
+    ]
   },
   "startingState": {
     "currentScene": "sc_1_0_001",
@@ -14,7 +18,9 @@
       "courage": 5,
       "insight": 5
     },
-    "flags": ["game_started"],
+    "flags": [
+      "game_started"
+    ],
     "inventory": [],
     "faction": "preservationist"
   },
@@ -25,30 +31,40 @@
       "assertions": {
         "currentScene": "sc_1_0_001",
         "choicesAvailable": 3,
-        "flagsSet": ["game_started"],
-        "inventoryExcludes": ["booth_key"]
-      }
+        "flagsSet": [
+          "game_started"
+        ],
+        "inventoryExcludes": [
+          "booth_key"
+        ]
+      },
+      "sequence": 1
     },
     {
       "action": "choose",
       "choiceIndex": 2,
       "description": "Attempt locked path (should be disabled - requires booth_key)",
-      "targetSceneId": "sc_1_0_001",
-      "expectDisabled": true
+      "expectedScene": "sc_1_0_001",
+      "expectDisabled": true,
+      "sequence": 2
     },
     {
       "action": "checkpoint",
       "description": "Still at hub - choice was disabled",
       "assertions": {
         "currentScene": "sc_1_0_001",
-        "inventoryExcludes": ["booth_key"]
-      }
+        "inventoryExcludes": [
+          "booth_key"
+        ]
+      },
+      "sequence": 3
     },
     {
       "action": "choose",
       "choiceIndex": 0,
       "description": "Go to Maren's Guidance to acquire key",
-      "targetSceneId": "sc_1_0_004"
+      "expectedScene": "sc_1_0_004",
+      "sequence": 4
     },
     {
       "action": "checkpoint",
@@ -56,58 +72,88 @@
       "assertions": {
         "currentScene": "sc_1_0_004",
         "choicesAvailable": 2
-      }
+      },
+      "sequence": 5
     },
     {
       "action": "choose",
       "choiceIndex": 0,
       "description": "Accept booth_key from Maren",
-      "targetSceneId": "sc_1_0_001",
+      "expectedScene": "sc_1_0_001",
       "expectedEffects": {
-        "addInventory": ["booth_key"],
-        "addFlags": ["key_acquired"]
-      }
+        "addInventory": [
+          "booth_key"
+        ],
+        "addFlags": [
+          "key_acquired"
+        ]
+      },
+      "sequence": 6
     },
     {
       "action": "checkpoint",
       "description": "Back at hub with booth_key in inventory",
       "assertions": {
         "currentScene": "sc_1_0_001",
-        "inventoryContains": ["booth_key"],
-        "flagsSet": ["game_started", "key_acquired"]
-      }
+        "inventoryContains": [
+          "booth_key"
+        ],
+        "flagsSet": [
+          "game_started",
+          "key_acquired"
+        ]
+      },
+      "sequence": 7
     },
     {
       "action": "choose",
       "choiceIndex": 2,
       "description": "Now locked path is enabled - proceed to Threshold Stage",
-      "targetSceneId": "sc_1_0_003"
+      "expectedScene": "sc_1_0_003",
+      "sequence": 8
     },
     {
       "action": "checkpoint",
       "description": "At Threshold Stage with booth_key",
       "assertions": {
         "currentScene": "sc_1_0_003",
-        "inventoryContains": ["booth_key"],
-        "flagsSet": ["game_started", "key_acquired", "location_booth_visited"],
-        "visitedCount": { "sc_1_0_001": 2 }
-      }
+        "inventoryContains": [
+          "booth_key"
+        ],
+        "flagsSet": [
+          "game_started",
+          "key_acquired",
+          "location_booth_visited"
+        ],
+        "visitedCount": {
+          "sc_1_0_001": 2
+        }
+      },
+      "sequence": 9
     },
     {
       "action": "choose",
       "choiceIndex": 0,
       "description": "Continue to resolution",
-      "targetSceneId": "sc_1_0_900"
+      "expectedScene": "sc_1_0_900",
+      "sequence": 10
     }
   ],
   "endingCriteria": {
     "sceneId": "sc_1_0_900",
-    "flagsRequired": ["key_acquired", "location_booth_visited"],
-    "inventoryRequired": ["booth_key"]
+    "flagsRequired": [
+      "key_acquired",
+      "location_booth_visited"
+    ],
+    "inventoryRequired": [
+      "booth_key"
+    ]
   },
   "softlockDetection": {
     "maxSceneRevisits": 3,
     "maxStepsWithoutProgress": 15,
-    "exemptScenes": ["sc_1_0_900"]
+    "exemptScenes": [
+      "sc_1_0_900"
+    ]
   }
 }

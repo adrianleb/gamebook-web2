@@ -20,6 +20,7 @@
   },
   "steps": [
     {
+      "sequence": 1,
       "action": "checkpoint",
       "description": "Starting at hub scene sc_1_0_001",
       "assertions": {
@@ -29,34 +30,38 @@
       }
     },
     {
+      "sequence": 2,
       "action": "choose",
-      "choiceIndex": 1,
-      "description": "Choose direct path (second choice) to sc_1_0_002",
-      "targetSceneId": "sc_1_0_002"
+      "choiceIndex": 0,
+      "description": "Choose direct path (first choice) to sc_1_0_002",
+      "expectedScene": "sc_1_0_002"
     },
     {
+      "sequence": 3,
       "action": "checkpoint",
       "description": "Arrived at The Wings (sc_1_0_002)",
       "assertions": {
         "currentScene": "sc_1_0_002",
-        "choicesAvailable": 3,
+        "choicesAvailable": 2,
         "flagsSet": ["game_started", "path_direct"],
-        "visitedCount": { "sc_1_0_001": 1 }
+        "inventoryContains": ["wings_pass"]
       }
     },
     {
+      "sequence": 4,
       "action": "choose",
       "choiceIndex": 0,
       "description": "Continue to resolution scene",
-      "targetSceneId": "sc_1_0_900"
+      "expectedScene": "sc_1_0_900"
     },
     {
+      "sequence": 5,
       "action": "checkpoint",
       "description": "Reached resolution - ending achieved",
       "assertions": {
         "currentScene": "sc_1_0_900",
         "flagsSet": ["game_started", "path_direct"],
-        "visitedCount": { "sc_1_0_001": 1, "sc_1_0_002": 1 }
+        "inventoryContains": ["wings_pass"]
       }
     }
   ],

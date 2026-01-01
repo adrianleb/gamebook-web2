@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-01-01T22:21:32.258Z",
+  "playthrough": "pre_milestone_1",
+  "step": 4,
+  "name": "pre_milestone_1",
+  "engineVersion": 1,
+  "contentVersion": "0.0.1",
+  "state": {
+    "version": 1,
+    "contentVersion": "0.0.1",
+    "timestamp": 1767306092256,
+    "currentSceneId": "sc_1_0_010",
+    "history": [
+      {
+        "sceneId": "sc_1_0_001",
+        "timestamp": 1767306092257,
+        "visitedCount": 2
+      },
+      {
+        "sceneId": "sc_1_0_002",
+        "timestamp": 1767306092257,
+        "choiceLabel": "Step through the opening to the right",
+        "visitedCount": 1
+      },
+      {
+        "sceneId": "sc_1_0_010",
+        "timestamp": 1767306092257,
+        "choiceLabel": "Investigate the sound of running footsteps",
+        "visitedCount": 1
+      }
+    ],
+    "stats": {
+      "health": 10,
+      "courage": 6,
+      "insight": 5
+    },
+    "flags": {},
+    "inventory": {},
+    "factions": {}
+  }
+}

@@ -1,16 +1,17 @@
 {
   "meta": {
-    "name": "preservationist_early_path",
-    "description": "Test early Preservationist branch to first milestone. Validates conditional choices and flag tracking.",
+    "name": "pursuers_early_path",
+    "description": "Test early Pursuers branch to first milestone. Validates conditional choices, flag tracking, and stat modifications. Uses actual content scenes from Act 1 Hub 0.",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "2.0"
   },
   "startingState": {
     "flags": [],
     "inventory": [],
     "stats": {
-      "lore": 5,
-      "secrecy": 3
+      "health": 10,
+      "courage": 5,
+      "insight": 5
     },
     "currentScene": "sc_1_0_001"
   },
@@ -22,48 +23,63 @@
       "assertions": {
         "currentScene": "sc_1_0_001",
         "stats": {
-          "lore": 5,
-          "secrecy": 3
+          "courage": 5
         },
-        "choicesAvailable": 2
+        "choicesAvailable": 3
       }
     },
     {
       "sequence": 2,
       "action": "choose",
-      "description": "Choose the Preservationist-aligned option",
-      "choiceIndex": 1,
-      "expectedScene": "sc_1_0_010",
-      "checkpoint": true,
+      "description": "Go to The Wings (direct path)",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_002",
       "assertions": {
-        "flagsSet": ["met_stranger", "preservationist_interest"],
-        "visitedCount": {
-          "sc_1_0_001": 1
-        }
+        "flagsSet": ["path_direct"],
+        "inventoryContains": ["wings_pass"]
       }
     },
     {
       "sequence": 3,
+      "action": "choose",
+      "description": "Choose Pursuers branch - investigate running footsteps",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_010",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["branch_pursuers", "path_direct"],
+        "stats": {
+          "courage": 6
+        },
+        "visitedCount": {
+          "sc_1_0_001": 2,
+          "sc_1_0_002": 1,
+          "sc_1_0_010": 1
+        }
+      }
+    },
+    {
+      "sequence": 4,
       "action": "save_snapshot",
       "description": "Save snapshot after first milestone for regression testing",
       "snapshotName": "pre_milestone_1"
     },
     {
-      "sequence": 4,
+      "sequence": 5,
       "action": "choose",
-      "description": "Continue along Preservationist path",
-      "choiceIndex": 0,
-      "expectedScene": "sc_1_1_020",
+      "description": "Continue along Pursuers path - use non-attemptable choice",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_012",
       "assertions": {
-        "inventoryContains": ["stranger_note"]
+        "flagsSet": ["pursuers_escaped_rejected"]
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_1_050",
-    "flagsRequired": ["preservationist_ally"],
+    "sceneId": "sc_1_0_012",
+    "flagsRequired": ["branch_pursuers", "pursuers_escaped_rejected"],
     "statsRequired": {
-      "lore": 10
+      "courage": 6
     }
   },
   "softlockDetection": {

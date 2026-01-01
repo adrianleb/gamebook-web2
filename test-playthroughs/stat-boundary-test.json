@@ -1,42 +1,53 @@
 {
   "meta": {
     "name": "stat_boundary_test",
-    "description": "Tests stat check boundaries. Validates that stat gates work correctly at pass/fail thresholds.",
+    "description": "Tests stat check boundaries. Validates that stat gates work correctly at pass/fail thresholds. Uses actual content scene sc_1_0_003 (The Threshold Stage) with courage check.",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "2.0"
   },
   "startingState": {
     "flags": [],
-    "inventory": [],
+    "inventory": ["booth_key"],
     "stats": {
-      "script": 7
+      "health": 10,
+      "courage": 5
     },
     "currentScene": "sc_1_0_001"
   },
   "steps": [
     {
       "sequence": 1,
-      "action": "checkpoint",
-      "description": "Verify starting stat value",
-      "assertions": {
-        "stats": {
-          "script": 7
-        }
-      }
+      "action": "choose",
+      "description": "Go to Threshold Stage (have booth_key)",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_003"
     },
     {
       "sequence": 2,
-      "action": "choose",
-      "description": "Pass stat check (script >= 7)",
-      "choiceIndex": 0,
-      "expectedScene": "sc_1_0_success",
+      "action": "checkpoint",
+      "description": "At Threshold Stage - courage >= 5 will pass",
       "assertions": {
-        "flagsSet": ["stat_check_passed"]
+        "currentScene": "sc_1_0_003",
+        "stats": {
+          "courage": 5
+        },
+        "inventoryContains": ["booth_key"]
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "description": "Pass stat check (courage >= 5)",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_901",
+      "assertions": {
+        "flagsSet": ["crossing_succeeded"]
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_100"
+    "sceneId": "sc_1_0_901",
+    "flagsRequired": ["crossing_succeeded"]
   },
   "softlockDetection": {
     "enabled": true,

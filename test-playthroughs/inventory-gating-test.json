@@ -1,9 +1,9 @@
 {
   "meta": {
     "name": "inventory_gating_test",
-    "description": "Tests inventory-based choice gating. Validates that items are properly required for choices and disabledHint is shown.",
+    "description": "Tests inventory-based choice gating. Validates that items are properly acquired and enable locked choices. Uses actual content scenes from Hub 0.",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "2.0"
   },
   "startingState": {
     "flags": [],
@@ -14,24 +14,52 @@
   "steps": [
     {
       "sequence": 1,
-      "action": "choose",
-      "description": "Pick up key item",
-      "choiceIndex": 0,
-      "expectedScene": "sc_1_0_005",
+      "action": "checkpoint",
+      "description": "Starting at Booth without key",
       "assertions": {
-        "inventoryContains": ["rusty_key"]
+        "currentScene": "sc_1_0_001",
+        "inventoryExcludes": ["booth_key"],
+        "choicesAvailable": 3
       }
     },
     {
       "sequence": 2,
       "action": "choose",
-      "description": "Attempt door without key (should be disabled)",
-      "choiceIndex": 1
+      "description": "Go to Maren's Guidance to acquire booth_key",
+      "choiceIndex": 2,
+      "expectedScene": "sc_1_0_004",
+      "assertions": {
+        "inventoryContains": ["booth_key"]
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "description": "Return to Booth with booth_key",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_001"
+    },
+    {
+      "sequence": 4,
+      "action": "checkpoint",
+      "description": "Back at Booth - now have key",
+      "assertions": {
+        "currentScene": "sc_1_0_001",
+        "inventoryContains": ["booth_key"],
+        "flagsSet": ["met_maren", "location_booth_visited"]
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "choose",
+      "description": "Now iron door is enabled - proceed to Threshold Stage",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_003"
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_1_100",
-    "inventoryRequired": ["golden_key", "ancient_artifact"]
+    "sceneId": "sc_1_0_003",
+    "inventoryRequired": ["booth_key"]
   },
   "softlockDetection": {
     "enabled": true,

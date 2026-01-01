@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-01-01T22:21:32.263Z",
+  "playthrough": "after_first_choice",
+  "step": 2,
+  "name": "after_first_choice",
+  "engineVersion": 1,
+  "contentVersion": "0.0.1",
+  "state": {
+    "version": 1,
+    "contentVersion": "0.0.1",
+    "timestamp": 1767306092261,
+    "currentSceneId": "sc_1_0_002",
+    "history": [
+      {
+        "sceneId": "sc_1_0_001",
+        "timestamp": 1767306092262,
+        "visitedCount": 2
+      },
+      {
+        "sceneId": "sc_1_0_002",
+        "timestamp": 1767306092263,
+        "choiceLabel": "Step through the opening to the right",
+        "visitedCount": 1
+      }
+    ],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
+    "flags": {},
+    "inventory": {},
+    "factions": {}
+  }
+}

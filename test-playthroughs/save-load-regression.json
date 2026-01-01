@@ -1,25 +1,30 @@
 {
   "meta": {
     "name": "save_load_regression",
-    "description": "Tests save/load functionality and state round-trip. Validates that saves serialize and restore correctly.",
+    "description": "Tests save/load functionality and state round-trip. Validates that saves serialize and restore correctly. Uses actual content scenes from Hub 0.",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "2.0"
   },
   "startingState": {
     "flags": [],
     "inventory": [],
-    "stats": {},
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
     "currentScene": "sc_1_0_001"
   },
   "steps": [
     {
       "sequence": 1,
       "action": "choose",
-      "description": "Make first choice",
+      "description": "Go to The Wings",
       "choiceIndex": 0,
-      "expectedScene": "sc_1_0_010",
+      "expectedScene": "sc_1_0_002",
       "assertions": {
-        "flagsSet": ["first_choice_made"]
+        "flagsSet": ["path_direct"],
+        "inventoryContains": ["wings_pass"]
       }
     },
     {
@@ -31,12 +36,12 @@
     {
       "sequence": 3,
       "action": "choose",
-      "description": "Make second choice",
-      "choiceIndex": 1,
-      "expectedScene": "sc_1_0_020",
+      "description": "Make second choice - continue to resolution",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_900",
       "assertions": {
-        "flagsSet": ["second_choice_made"],
-        "inventoryContains": ["test_item"]
+        "flagsSet": ["path_direct"],
+        "inventoryContains": ["wings_pass"]
       }
     },
     {
@@ -45,25 +50,28 @@
       "description": "Load snapshot - should revert to state after step 1",
       "snapshotName": "after_first_choice",
       "assertions": {
-        "currentScene": "sc_1_0_010",
-        "flagsSet": ["first_choice_made"],
-        "flagsCleared": ["second_choice_made"],
-        "inventoryExcludes": ["test_item"]
+        "currentScene": "sc_1_0_002",
+        "flagsSet": ["path_direct"],
+        "inventoryContains": ["wings_pass"]
       }
     },
     {
       "sequence": 5,
       "action": "choose",
-      "description": "After loading, make different choice",
-      "choiceIndex": 0,
-      "expectedScene": "sc_1_0_015",
+      "description": "After loading, make different choice - go to pursuer path",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_010",
       "assertions": {
-        "flagsSet": ["alternative_path"]
+        "flagsSet": ["branch_pursuers", "path_direct"],
+        "stats": {
+          "courage": 6
+        }
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_1_000"
+    "sceneId": "sc_1_0_010",
+    "flagsRequired": ["branch_pursuers", "path_direct"]
   },
   "softlockDetection": {
     "enabled": true,

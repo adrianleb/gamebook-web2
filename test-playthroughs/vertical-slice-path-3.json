@@ -5,7 +5,13 @@
     "description": "Tests hub → attemptable stat check failure path. Verifies that choice remains enabled with attemptable flag set, branches to sc_1_0_902 on courage check failure, sets crossing_failed flag, and applies health penalty. Corresponds to PT-VS-003 from TEST_PLAYTHROUGHS.md.",
     "author": "agent-e",
     "version": "2.0.0",
-    "tags": ["vertical-slice", "stat-check", "attemptable", "failure-path", "edge-case"]
+    "tags": [
+      "vertical-slice",
+      "stat-check",
+      "attemptable",
+      "failure-path",
+      "edge-case"
+    ]
   },
   "startingState": {
     "currentScene": "sc_1_0_001",
@@ -14,8 +20,12 @@
       "courage": 3,
       "insight": 5
     },
-    "flags": ["game_started"],
-    "inventory": ["booth_key"],
+    "flags": [
+      "game_started"
+    ],
+    "inventory": [
+      "booth_key"
+    ],
     "faction": "preservationist"
   },
   "steps": [
@@ -27,50 +37,72 @@
         "stats": {
           "courage": 3
         },
-        "inventoryContains": ["booth_key"]
-      }
+        "inventoryContains": [
+          "booth_key"
+        ]
+      },
+      "sequence": 1
     },
     {
       "action": "choose",
       "choiceIndex": 2,
       "description": "Proceed to Threshold Stage (have booth_key)",
-      "targetSceneId": "sc_1_0_003"
+      "expectedScene": "sc_1_0_003",
+      "sequence": 2
     },
     {
       "action": "checkpoint",
       "description": "At Threshold Stage - attemptable courage check",
       "assertions": {
         "currentScene": "sc_1_0_003",
-        "stats": { "courage": 3 },
+        "stats": {
+          "courage": 3
+        },
         "choicesAvailable": 2
-      }
+      },
+      "sequence": 3
     },
     {
       "action": "choose",
       "choiceIndex": 0,
       "description": "Attempt courage check (attemptable: always enabled, courage < 5 will fail)",
-      "targetSceneId": "sc_1_0_902",
+      "expectedScene": "sc_1_0_902",
       "assertions": {
-        "flagsSet": ["crossing_failed"],
+        "flagsSet": [
+          "crossing_failed"
+        ],
         "stats": {
           "health": 9
         }
-      }
+      },
+      "sequence": 4
     },
     {
       "action": "checkpoint",
       "description": "Reached failure scene sc_1_0_902 - crossing failed",
       "assertions": {
         "currentScene": "sc_1_0_902",
-        "flagsSet": ["crossing_failed"],
-        "stats": { "health": 9, "courage": 3 },
-        "visitedCount": { "sc_1_0_001": 1, "sc_1_0_003": 1, "sc_1_0_902": 1 }
-      }
+        "flagsSet": [
+          "crossing_failed"
+        ],
+        "stats": {
+          "health": 9,
+          "courage": 3
+        },
+        "visitedCount": {
+          "sc_1_0_001": 1,
+          "sc_1_0_003": 1,
+          "sc_1_0_902": 1
+        }
+      },
+      "sequence": 5
     }
   ],
   "endingCriteria": {
     "sceneId": "sc_1_0_902",
-    "flagsRequired": ["crossing_failed"],
+    "flagsRequired": [
+      "crossing_failed"
+    ],
     "statsRequired": {
       "health": 9,
       "courage": 3
@@ -79,6 +111,10 @@
   "softlockDetection": {
     "maxSceneRevisits": 3,
     "maxStepsWithoutProgress": 15,
-    "exemptScenes": ["sc_1_0_900", "sc_1_0_901", "sc_1_0_902"]
+    "exemptScenes": [
+      "sc_1_0_900",
+      "sc_1_0_901",
+      "sc_1_0_902"
+    ]
   }
 }
