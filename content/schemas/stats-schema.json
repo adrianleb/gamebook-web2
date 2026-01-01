@@ -2,19 +2,57 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/adrianleb/gamebook-web2/content/schemas/stats-schema.json",
   "title": "Gamebook Stats System",
-  "description": "Stat definitions, archetypes, and check types for The Understage RPG mechanics",
+  "description": "Stat definitions, archetypes, and check types for The Understage RPG mechanics using array-based structure",
   "type": "object",
-  "required": ["stats", "checks"],
+  "required": ["stats", "archetypes"],
   "properties": {
     "$schema": {
       "type": "string"
     },
-    "stats": {
+    "description": {
+      "type": "string",
+      "description": "Stats system description"
+    },
+    "version": {
+      "type": "string",
+      "description": "Schema version"
+    },
+    "source": {
+      "type": "string",
+      "description": "Source document URL"
+    },
+    "designNotes": {
       "type": "object",
-      "description": "All stat definitions keyed by stat ID",
-      "additionalProperties": {
+      "description": "Game design notes for stat system behavior",
+      "properties": {
+        "totalStartingPoints": {
+          "type": "integer",
+          "description": "Total points available at character creation"
+        },
+        "minimumPerStat": {
+          "type": "integer",
+          "description": "Minimum value allowed per stat"
+        },
+        "maximumPerStat": {
+          "type": "integer",
+          "description": "Maximum value allowed per stat at creation"
+        },
+        "maxTotalPoints": {
+          "type": "integer",
+          "description": "Maximum total points across all stats"
+        },
+        "maxAdditionalPoints": {
+          "type": "integer",
+          "description": "Additional points that can be gained during play"
+        }
+      }
+    },
+    "stats": {
+      "type": "array",
+      "description": "All stat definitions as an array",
+      "items": {
         "type": "object",
-        "required": ["id", "name", "min", "max", "initial"],
+        "required": ["id", "name", "description"],
         "properties": {
           "id": {
             "type": "string",
@@ -26,103 +64,204 @@
             "minLength": 1,
             "description": "Display name"
           },
-          "shortName": {
-            "type": "string",
-            "description": "Abbreviated name for UI (e.g., 'STR' for 'Strength')"
-          },
           "description": {
             "type": "string",
             "description": "Description shown in character sheet"
           },
-          "min": {
+          "highStatUnlocks": {
+            "type": "array",
+            "description": "What a high value in this stat enables",
+            "items": {
+              "type": "string"
+            }
+          },
+          "startingMin": {
             "type": "integer",
-            "description": "Minimum possible value"
+            "description": "Minimum starting value"
           },
-          "max": {
+          "startingMax": {
             "type": "integer",
-            "description": "Maximum possible value"
+            "description": "Maximum starting value"
           },
-          "initial": {
+          "absoluteMax": {
             "type": "integer",
-            "description": "Starting value"
+            "description": "Absolute maximum value (including gains)"
           },
-          "color": {
-            "type": "string",
-            "pattern": "^#[0-9a-fA-F]{6}$",
-            "description": "Hex color for UI display"
-          },
-          "icon": {
-            "type": "string",
-            "description": "Icon identifier"
-          },
-          "hidden": {
+          "canDecrease": {
             "type": "boolean",
-            "default": false,
-            "description": "Hidden stats don't display in normal UI"
-          },
-          "derived": {
-            "type": "boolean",
-            "default": false,
-            "description": "Derived stats calculate from other stats"
-          },
-          "formula": {
-            "type": "string",
-            "description": "Formula for derived stats (e.g., 'strength + agility / 2')"
-          },
-          "category": {
-            "type": "string",
-            "enum": ["core", "resource", "derived", "special"],
-            "default": "core",
-            "description": "Stat category affects display and calculation"
+            "description": "Whether this stat can decrease during play"
           }
         }
       }
     },
     "archetypes": {
-      "type": "object",
+      "type": "array",
       "description": "Character archetypes with default stat distributions",
-      "additionalProperties": {
+      "items": {
         "type": "object",
-        "required": ["id", "name", "description", "stats"],
+        "required": ["name", "description", "distribution"],
         "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[a-z0-9_]+$"
-          },
           "name": {
             "type": "string",
-            "minLength": 1
+            "minLength": 1,
+            "description": "Archetype name"
           },
           "description": {
-            "type": "string"
+            "type": "string",
+            "description": "Archetype description"
           },
-          "stats": {
+          "distribution": {
             "type": "object",
-            "description": "Stat values for this archetype (keys match stats above)",
+            "description": "Stat values for this archetype (keys are stat IDs)",
             "additionalProperties": {
               "type": "integer"
             }
+          }
+        }
+      }
+    },
+    "checkThresholds": {
+      "type": "array",
+      "description": "Check difficulty tiers and thresholds",
+      "items": {
+        "type": "object",
+        "required": ["tier", "threshold", "description"],
+        "properties": {
+          "tier": {
+            "type": "string",
+            "description": "Tier name (e.g., Basic, Standard, Advanced, Expert)"
           },
-          "bonuses": {
+          "threshold": {
+            "type": "integer",
+            "description": "Stat value required for this tier"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of what this tier means"
+          }
+        }
+      }
+    },
+    "difficultyCurve": {
+      "type": "array",
+      "description": "Expected stat values and check distribution by act",
+      "items": {
+        "type": "object",
+        "required": ["act", "expectedStats", "checkDistribution"],
+        "properties": {
+          "act": {
+            "type": "integer",
+            "description": "Act number (1, 2, or 3)"
+          },
+          "expectedStats": {
+            "type": "string",
+            "description": "Expected stat range for this act"
+          },
+          "checkDistribution": {
             "type": "object",
-            "description": "Special bonuses or abilities",
+            "description": "Probability distribution of check difficulties",
             "additionalProperties": {
-              "type": "string"
+              "type": "number"
             }
+          }
+        }
+      }
+    },
+    "checkTypes": {
+      "type": "array",
+      "description": "Check type definitions for stat tests",
+      "items": {
+        "type": "object",
+        "required": ["type", "description", "format"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Unique check type identifier"
           },
-          "startingItems": {
-            "type": "array",
-            "description": "Item IDs granted to this archetype",
-            "items": {
+          "description": {
+            "type": "string",
+            "description": "How this check type works"
+          },
+          "format": {
+            "type": "string",
+            "description": "Display format for this check type"
+          },
+          "example": {
+            "type": "string",
+            "description": "Example of this check type"
+          },
+          "tiers": {
+            "type": "object",
+            "description": "Tier-specific outcomes (for tiered checks like archive_search)",
+            "additionalProperties": {
               "type": "string"
             }
           }
         }
       }
     },
+    "effectiveBonuses": {
+      "type": "object",
+      "description": "Temporary stat bonuses from flags, items, or NPC relationships",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "format": {
+          "type": "string"
+        },
+        "maxEffectiveBonus": {
+          "type": "integer",
+          "description": "Maximum effective bonus allowed"
+        },
+        "examples": {
+          "type": "array",
+          "description": "Example effective bonuses",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "bonus": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "difficultyTiers": {
+      "type": "object",
+      "description": "Difficulty thresholds for stat checks (optional, for compatibility)",
+      "properties": {
+        "easy": {
+          "type": "integer",
+          "description": "DC for easy checks"
+        },
+        "medium": {
+          "type": "integer",
+          "description": "DC for medium checks"
+        },
+        "hard": {
+          "type": "integer",
+          "description": "DC for hard checks"
+        },
+        "extreme": {
+          "type": "integer",
+          "description": "DC for extreme checks"
+        }
+      }
+    },
+    "checkFormat": {
+      "type": "string",
+      "enum": ["d20", "d100", "dice_pool", "static"],
+      "description": "Default check mechanic: d20+stat, d00-under, pool counting 5+, or static comparison",
+      "default": "d20"
+    },
     "checks": {
       "type": "object",
-      "description": "Check type definitions for stat tests",
+      "description": "Check type definitions for stat tests (optional, for compatibility)",
       "additionalProperties": {
         "type": "object",
         "required": ["id", "name", "stat"],
@@ -173,34 +312,6 @@
           }
         }
       }
-    },
-    "difficultyTiers": {
-      "type": "object",
-      "description": "Difficulty thresholds for stat checks",
-      "properties": {
-        "easy": {
-          "type": "integer",
-          "description": "DC for easy checks"
-        },
-        "medium": {
-          "type": "integer",
-          "description": "DC for medium checks"
-        },
-        "hard": {
-          "type": "integer",
-          "description": "DC for hard checks"
-        },
-        "extreme": {
-          "type": "integer",
-          "description": "DC for extreme checks"
-        }
-      }
-    },
-    "checkFormat": {
-      "type": "string",
-      "enum": ["d20", "d100", "dice_pool", "static"],
-      "description": "Default check mechanic: d20+stat, d00-under, pool counting 5+, or static comparison",
-      "default": "d20"
     }
   }
 }
