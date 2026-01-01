@@ -8,36 +8,44 @@
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["exploration", "atmospheric", "final_act"],
-    "author": "agent-b",
-    "createdAt": "2025-12-31",
-    "updatedAt": "2025-12-31"
+    "tags": ["approach", "solo_path", "tension_building"],
+    "author": "agent-a",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
   },
   "text": {
-    "location": "The Mainstage - Center",
+    "location": "The Mainstage",
     "paragraphs": [
-      "You step onto the stage alone. The Understudy fades into the wings, leaving you to cross the expanse alone.",
-      "The floorboards creak beneath your weight—not the hollow sound of rot, but the resonant groan of wood that has felt the weight of countless performances. Each step echoes: once, twice, three times. The third echo always lingers a fraction too long.",
-      "The desk at center stage grows larger as you approach. It is not ornate—simple pine, scarred and worn. But upon its surface, you see objects that make your breath catch: a quill that moves of its own accord, dipping into an inkwell that never runs dry; a stack of parchment, each page bearing a different name; a mirror that reflects not your face, but the faces of everyone you have ever loved.",
-      "As you draw close, you realize the mirror shows not the living, but the fictional. Characters from stories you cherished as a child, heroes and villains from books that shaped you, all pressed against the glass as if waiting for you to turn the page and let them out.",
-      "The quill scratches across the topmost parchment. You cannot read what it writes from here, but you recognize the rhythm—measured, deliberate, like an author searching for the perfect word to end a sentence that has spanned lifetimes.",
-      "\"You came without allies,\" a voice whispers from the empty chair behind the desk. The Editor is not there, but their presence fills the space like the pressure before a storm. \"Brave. Or foolish. The two are often mistaken for each other in the final act.\"",
-      "The quill pauses. On the parchment, words form: *PROMPTER ARRIVES. ALONE. CALCULATING ENDINGS.*",
-      "You stand at the threshold of the final scene. The Editor will reveal themselves soon. But for this moment, you face the weight of every story that has ever led to this moment—and the certainty that one of them is yours.",
-      "The path to the wings remains open. The choice of how to approach the final confrontation still yours."
+      "You walk alone toward the desk at center stage. Each step echoes in the cavernous theater, the sound returning to you distorted—layer upon layer of footsteps, as if a crowd walks with you though you stand alone.",
+      "The spotlight does not warm you. It feels cold, clinical, examining you like a specimen under glass. The shadows behind the desk writhe, taking shapes that dissolve when you try to focus on them.",
+      "As you near the desk, you see that its surface is not empty. A single sheet of paper lies there, covered in dense script that changes each time you blink. Sometimes it's a list of names. Sometimes it's a map of the Understage with regions crossed out. Sometimes it's your own story, written in a hand you've never seen.",
+      "A voice speaks from everywhere at once—the Editor's voice, vast and patient and utterly certain of its own rightness.",
+      "\"You come alone. Brave. Or foolish. I cannot decide which.\"",
+      "The shadows behind the desk coalesce into the suggestion of a figure, but never quite resolve. \"I am revising stories, Prompter. Eliminating suffering. Closing plot holes that have caused pain for generations. You've seen the Archives—you know what I speak of. Why preserve tragedies when joy can be written in their place?\"",
+      "The paper on the desk flutters, and for a moment you see your own name among those crossed out.",
+      "\"We will speak properly soon. But first—demonstrate your intent. Return to the entrance and choose your path with clarity. The solo approach requires certainty. Do you have it?\"",
+      "The way back to the descent point shimmers with possibility. The path forward—to the final confrontation—wait for your decision."
     ]
   },
   "npcs": [],
   "art": null,
   "audio": {
     "music": "mainstage_tension",
-    "sfx": ["quill_scratch", "echo_footsteps", "whisper_pressure"]
+    "sfx": ["spotlight_hum", "echoing_footsteps"]
   },
   "effectsOnEnter": [],
   "choices": [
     {
       "id": "choice_1",
-      "label": "Return to the stage entrance",
+      "label": "Proceed to The Last Curtain Call",
+      "to": "sc_3_4_098",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to Mainstage Descent",
       "to": "sc_3_4_001",
       "conditions": null,
       "onChoose": [],

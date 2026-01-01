@@ -8,27 +8,21 @@
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["exploration", "lore", "rumors"],
-    "author": "agent-b",
-    "createdAt": "2025-12-31",
-    "updatedAt": "2025-12-31"
+    "tags": ["exploration", "quest_hub", "rumors"],
+    "author": "agent-a",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
   },
   "text": {
-    "location": "The Green Room - Call Board",
+    "location": "The Call Board",
     "paragraphs": [
-      "A large cork board dominates one wall of the Green Room, covered in notices, requests, and warnings. This is the Call Board—where the Understage's residents communicate when they're not performing.",
-      "You step closer and begin to read.",
-      "NOTICES FROM THE EDITOR: A series of yellowed notices, each marked with a seal you don't recognize. They speak of a \"Great Revision\"—a project to streamline every story, remove every inconsistency, create perfect narratives. The dates span centuries. The most recent is dated \"Yesterday.\"",
-      "REQUESTS FROM THE FACTIONS:",
-      "A flyer in Preservationist blue asks for volunteers to help \"restore damaged manuscripts\" in the Archives. It warns that \"stories are being rewritten without consent.\"",
-      "A Revisionist manifesto pinned nearby declares that \"fiction is too important to leave to chance.\" It argues for conscious improvement of every narrative.",
-      "An Exiter pamphlet, written in handwriting that seems to move, invites characters to \"imagine a world beyond the page.\" It asks: \"What if your story could continue after 'The End'?\"",
-      "RUMORS AND WARNINGS:",
-      "A scrap of paper reads: \"Has anyone else noticed that forgotten scenes are disappearing? First the cut chapters, now the minor characters...\"",
-      "Another note, hastily written: \"The Editor was seen in the Archives. They were weeping.\"",
-      "A final message, written in something that looks like ink but smells of iron: \"DO NOT TRUST THE DIRECTOR. DO NOT TRUST THE UNDERSTUDY. DO NOT TRUST YOUR OWN MEMORIES.\"",
-      "The Call Board suggests a world in conflict—stories choosing sides, unsure what happens when the final curtain falls.",
-      "You step back, the weight of what you've learned settling in."
+      "A large cork board mounted on the far wall catches your eye. Tacked to its surface are notices, requests, and fragments of stories-in-progress—messages from characters seeking something or offering knowledge.",
+      "One notice, written in elegant cursive on yellowed parchment, reads: *\"Seeking those who remember the world before revisions. Meet in The Archives. Ask for The Understudy.\"*",
+      "Another, scrawled in hurried charcoal: *\"The Editor's agents grow bold. If you value stories as they were written, seek allies among the Preservationists in The Archives.\"*",
+      "A smaller card, almost hidden beneath layers of other notices: *\"Not all stories deserve to be preserved. Some cause only suffering. Join us in The Mainstage—we are making something better.\"* This one bears no signature, but the ink shimmers oddly when you look directly at it.",
+      "A final note, written in a hand that seems to change with every word: *\"The boundary between worlds grows thin. Soon, characters may walk among you. Is this not what everyone wants? To meet their favorites? To live within stories? Find us in The Mainstage.\"*",
+      "CHORUS speaks from the mirrors behind you: \"*Each faction seeks the Prompter's favor. Each believes their path serves stories best. The board changes daily. New postings appear. Old ones vanish. The Editor watches through them all.*\"",
+      "You sense that these notices are more than paper and ink—they are invitations, warnings, and opportunities. The choice of how to respond, or whether to respond at all, remains yours."
     ]
   },
   "npcs": [],
@@ -41,7 +35,7 @@
   "choices": [
     {
       "id": "choice_1",
-      "label": "Return to the Green Room center",
+      "label": "Return to the Green Room",
       "to": "sc_2_2_001",
       "conditions": null,
       "onChoose": [],

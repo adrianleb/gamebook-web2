@@ -4,40 +4,38 @@
   "title": "The Stacks",
   "act": 2,
   "hub": 3,
-  "location": "The Archives - The Stacks",
+  "location": "The Archives",
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["exploration", "mystery", "environmental_storytelling"],
-    "author": "agent-b",
-    "createdAt": "2025-12-31",
-    "updatedAt": "2025-12-31"
+    "tags": ["exploration", "atmospheric", "discovery"],
+    "author": "agent-a",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
   },
   "text": {
-    "location": "The Archives - The Stacks",
+    "location": "The Stacks",
     "paragraphs": [
-      "The Stacks rise around you like a cathedral built from paper. Row after row of shelves stretches into darkness, each aisle a narrow canyon of forgotten stories.",
-      "You wander deeper, running your fingers along spines that crumble at your touch. Some manuscripts are bound in leather that smells of forgotten libraries. Others are stitched together with thread that glimmers faintly, as if the material itself remembers being part of something larger.",
-      "A passage catches your eye: \"The hero stepped forward, but the path had changed. Where a door had stood, now there was only wall. The author had decided this wasn't the kind of story that had exits.\" The text ends there, crossed out in furious red ink.",
-      "Another shelf holds what appears to be a complete novel, but every page after chapter three is blank. A note in the margin reads: \"Lost interest. Started something else.\" The characters in chapter three seem to know—you can feel their frozen mid-action, waiting for a conclusion that will never come.",
-      "Deeper in the Stacks, you find shelves organized by emotion. Entire sections devoted to stories that were \"too sad\" or \"too strange\" or \"simply didn't work out.\" The books here hum with restless energy, their pages trembling as you pass.",
-      "A whisper brushes past your ear—not a voice, but the echo of one. A character who never got to speak their lines. Another whisper joins it, then another. The Stacks are full of ghosts, and they notice when someone walks among them.",
-      "At the end of one aisle, you discover a manuscript that seems to be about you. The description matches your arrival in the Understage, your progress through the hubs. But the text is incomplete. The page ends mid-sentence: \"And then the Prompter would have to—\"",
-      "The rest is torn away.",
-      "The shelves loom around you, patient and ancient. Whatever secrets the Archives hold, they're buried somewhere in these endless corridors of abandoned narrative."
+      "The shelves extend in all directions, a maze of manuscript-filled corridors that seem to shift when you're not looking directly at them. Each aisle is labeled with titles that make your eyes water: *Cut Chapters*, *Abandoned Arcs*, *Characters Who Never Were*.",
+      "You pull a manuscript from a shelf marked *Alternate Endings*. The pages contain a version of a familiar story, but everything after chapter three is different—the hero dies, the villain wins, the love story ends in separation. As you read, the words fade, replaced by the official version you know.",
+      "Deeper in the Stacks, you find shelves labeled *Draft Zero*—raw, unpolished versions of stories with crossed-out passages visible even here. A character who exists only in this draft waves at you from the margins, their form flickering like a bad connection.",
+      "You pass a section where the manuscripts are bound in black cloth. A sign reads: *Stories Removed by Editorial Decree*. The air here is cold, and the shelves seem to recede when you approach them, as if even the Archives itself is afraid of what they contain.",
+      "A page drifts down from above. On it is written a single line: *\"They are not gone. They are waiting.\"* The handwriting changes three times before your eyes.",
+      "The rustling sound grows louder—like countless pages turning simultaneously, like stories trying to speak all at once. For a moment, you see figures moving between the shelves, transparent and flickering. Characters cut from their own narratives, still seeking their endings.",
+      "The path back to the Archives Entry glows faintly, a reminder that not all explorations should continue indefinitely."
     ]
   },
   "npcs": [],
   "art": null,
   "audio": {
-    "music": "stacks_ambient",
+    "music": "archives_ambient",
     "sfx": ["page_rustle", "distant_whispers"]
   },
   "effectsOnEnter": [],
   "choices": [
     {
       "id": "choice_1",
-      "label": "Return to the Archives Entry",
+      "label": "Return to The Archives Entry",
       "to": "sc_2_3_001",
       "conditions": null,
       "onChoose": [],

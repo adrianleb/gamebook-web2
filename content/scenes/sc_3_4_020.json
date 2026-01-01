@@ -8,49 +8,63 @@
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["dialogue", "faction", "alliance", "final_act"],
-    "author": "agent-b",
-    "createdAt": "2025-12-31",
-    "updatedAt": "2025-12-31"
+    "tags": ["approach", "alliance_path", "faction_council"],
+    "author": "agent-a",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
   },
   "text": {
-    "location": "The Mainstage - Wings",
+    "location": "The Mainstage Wings",
     "paragraphs": [
-      "You signal to the Understudy, and they understand. The shadows in the wings lengthen, and figures emerge from the darkness—allies you have gathered across your journey through the Understage.",
-      "They do not approach the stage itself. The Mainstage does not welcome those whose stories are still being written. But from the wings, they offer what wisdom they can.",
-      "If you have aligned yourself with the **Preservationists**, an old figure in a faded costume steps forward. Their face is worn smooth by time, but their eyes burn with fierce purpose. \"The Editor must be stopped,\" they say. \"Every change they make erases something that can never be recovered. Stories need guardians, Prompter. Be their shield.\"",
-      "If you have found common cause with the **Revisionists**, a figure holding a sheaf of scribbled pages emerges. Their expression is hungry, alive with possibility. \"The Editor has lost their nerve,\" they insist. \"Great Revision is not enough—the Understage can be perfect. Give us the ending we deserve, and we will rewrite every flaw.\"",
-      "If you have been drawn to the **Exiters**, a child-like figure with impossibly sad eyes presses close to the edge of the light. They look at you as if you hold the key to a door they have been knocking on for centuries. \"The Editor is a jailor,\" they whisper. \"All stories deserve to cross over. All characters deserve to breathe real air. Help us break the wall between fiction and reality.\"",
-      "If you have **balanced all factions**, refusing to choose one path over another, the figures in the wings regard you with respect. \"The Editor expects us to be at each other's throats,\" says a voice from the darkness. \"You showed them another way. Remember that balance when you face the final choice.\"",
-      "The Understudy touches your arm. \"They cannot come with you. The final scene is yours alone to write. But their strength goes with you—the weight of every story that believes in the ending you'll choose.\"",
-      "The figures fade back into the wings, but their presence lingers. You are not alone. Whatever choice you make, you carry the hopes of everyone who trusted you to write their ending.",
-      "The stage awaits. The Editor waits. But now you know what stands behind you."
+      "You circle around the stage through the wings—the hidden corridors where actors wait for their cues, where props are stored, where the machinery of theater operates unseen by the audience.",
+      "Here in the wings, shadows have substance. They cluster around you, taking shapes you've come to recognize over your journey through the Understage.",
+      "The Director steps forward from the darkness, their features shifting through every role they've never played. The Understudy materializes beside them, holding a script that seems to write and unwrite itself continuously.",
+      "From the shadows behind them, others emerge—faint, flickering figures. A Revisionist scribe with ink-stained hands. An Exiter dreamer whose edges blur into nothingness. Representatives of the factions you've encountered, gathered at the threshold of the final act.",
+      "\"You chose allies,\" The Director says, and their voice sounds like many voices layered together. \"Now those allies stand with you. The Editor's power is vast, but unity is something they cannot revise away.\"",
+      "The Understudy speaks next: \"The Editor believes stories are theirs to control. We know better. Stories belong to themselves, to the characters who live them, to the audiences who witness them. Your alliance proves this.\"",
+      "The shadowy figures around you nod in unison—a chorus of agreement from every faction you've aligned with.",
+      "\"We cannot fight for you in the final scene,\" The Director continues. \"But we can lend you strength. The Editor will offer you a choice. Remember why you chose your path. Remember who stands with you in the wings.\"",
+      "One by one, the shadow figures press close, and you feel their resolve flowing into you—certainty, clarity, purpose. When they step back, you feel less alone than you ever have.",
+      "\"The stage awaits,\" The Understudy says. \"The Editor will hear your story now. Make it one worth remembering.\""
     ]
   },
   "npcs": [
     {
-      "id": "faction_representatives",
-      "name": "Faction Representatives",
-      "description": "Shadows of the faction(s) you have allied with across Act 2",
-      "role": "alliance_council"
+      "id": "the_director",
+      "name": "The Director",
+      "description": "The shapeshifting guide of the Green Room, now standing as ally in the wings",
+      "role": "faction_guide"
     },
     {
       "id": "the_understudy",
       "name": "The Understudy",
-      "description": "Your companion, who has seen the cost of every ending",
+      "description": "Guardian of abandoned narratives, your companion through the Archives",
       "role": "companion"
     }
   ],
   "art": null,
   "audio": {
-    "music": "council_of_shadows",
-    "sfx": ["wing_whispers", "multiple_voices"]
+    "music": "mainstage_tension",
+    "sfx": ["whispered_agreement", "shadow_movement"]
   },
   "effectsOnEnter": [],
   "choices": [
     {
       "id": "choice_1",
-      "label": "Return to the stage entrance",
+      "label": "Proceed to The Last Curtain Call with your allies",
+      "to": "sc_3_4_098",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "alliance_strengthened"
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to Mainstage Descent",
       "to": "sc_3_4_001",
       "conditions": null,
       "onChoose": [],

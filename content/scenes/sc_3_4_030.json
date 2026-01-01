@@ -8,43 +8,46 @@
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["exploration", "atmospheric", "lore", "final_act"],
-    "author": "agent-b",
-    "createdAt": "2025-12-31",
-    "updatedAt": "2025-12-31"
+    "tags": ["approach", "reflection_path", "memory_review"],
+    "author": "agent-a",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
   },
   "text": {
-    "location": "The Mainstage - Wings",
+    "location": "The Mainstage Wings",
     "paragraphs": [
-      "You circle around the edge of the stage, keeping to the shadows. The wings of this theater hold centuries of history—every scene that led to this moment, every choice that brought the Understage to the brink of its final revision.",
-      "Here you see props from performances that have not played in lifetimes: a crown that remembers the weight of a king who learned too late that power cannot buy happiness; a mirror that once reflected a heroine who gave everything for love and received only silence in return; a doorframe that still bears the scratches of those who tried to escape a story that would not let them leave.",
-      "Each object hums with memory. As you pass, they flicker with ghostlight—brief visions of the moments that defined them. The crown's wearer, weeping alone in a tower while his kingdom crumbled. The mirror's heroine, standing before it as her reflection whispered that she was never truly loved. The doorframe, slick with tears from countless hands that could not find purchase on the other side.",
-      "The Understudy moves silently beside you. \"The Editor collected these,\" they say softly. \"Every tragedy. Every failure. Every ending that went wrong. The Editor believes that by studying what broke, they can write a world where nothing ever has to break again.\"",
-      "They gesture to a prop table lined with objects you recognize: a lantern from the Prologue, its glass dark; a key from the Archives, its teeth worn smooth from attempts that never succeeded; a single white rose, petals dried and falling apart, that someone once carried to a final confrontation that never happened.",
-      "\"These are the test cases,\" the Understudy explains. \"The Editor's experiments. Each one represents a story that was revised, rewritten, revised again—and still ended in heartbreak. The Great Revision was supposed to fix them. But the more the Editor tried to perfect the Understage, the more they realized that perfection and story are incompatible.\"",
-      "You realize suddenly what the Editor fears: not death, not defeat, but a story that cannot be controlled. The wings are filled with evidence that every attempt to eliminate pain from fiction only creates new kinds of suffering.",
-      "The question is not whether the Editor can be defeated or persuaded or understood. The question is what kind of ending you are willing to write—and whether you have the courage to accept that some stories must hurt in order to mean anything at all.",
-      "The path leads back to the stage entrance. The final confrontation waits."
+      "You choose the long path around, circling through the wings that flank the stage. These corridors are lined with props and backdrops from every story you've encountered—fragments of narratives gathered like artifacts in a museum of your own journey.",
+      "Here is the obsidian bridge from your first arrival to the Understage, reduced to a painted backdrop. There is the velvet chair from The Green Room, its upholstery faded. The Archives' shelves line one wall, their manuscripts frozen in mid-fall.",
+      "As you walk, CHORUS whispers from every corner—not a single voice, but many, layering over each other: \"*Remember. Remember why you came. Remember what you saw. Remember what you chose.*\"",
+      "You see yourself reflected in mirrors along the corridor. Each reflection shows a different version of you: the Prompter who chose courage at the Threshold Stage, the Prompter who spoke with Maren in The Wings, the Prompter who stood in The Archives and witnessed the ghosts of abandoned stories.",
+      "A prop table catches your eye. On it rests a collection of objects—each one something you encountered, each one carrying the weight of choice. A key. A pass. A manuscript. A crown woven from dried flowers.",
+      "The Editor's voice echoes through the corridor, softer here than on stage, almost gentle.",
+      "\"You have come far, Prompter. Further than most. You've seen what stories can be—what they are, what they were, what they might become.\"",
+      "\"I offer you something no one else can: the power to ensure that every story has the ending it deserves. No more abandoned characters. No more painful truths. Only narratives that satisfy, that comfort, that make sense.\"",
+      "The corridor opens onto the stage from the side. You can see the desk at center, the spotlight cutting through the darkness, the shadows waiting behind.",
+      "\"Your journey has prepared you for this moment,\" the Editor says. \"Every choice has led here. Every story has been practice for the final one. Step onto the stage, and let us write the ending together.\"",
+      "You stand at the threshold, carrying the weight of every step that brought you here. The stage awaits."
     ]
   },
-  "npcs": [
-    {
-      "id": "the_understudy",
-      "name": "The Understudy",
-      "description": "Your companion, who knows the history of every object in these wings",
-      "role": "companion"
-    }
-  ],
+  "npcs": [],
   "art": null,
   "audio": {
-    "music": "wings_of_memory",
-    "sfx": ["ghostlight_flicker", "prop_memory_hum"]
+    "music": "mainstage_reflection",
+    "sfx": ["memory_echo", "chorus_whisper"]
   },
   "effectsOnEnter": [],
   "choices": [
     {
       "id": "choice_1",
-      "label": "Return to the stage entrance",
+      "label": "Step onto The Mainstage for The Last Curtain Call",
+      "to": "sc_3_4_098",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to Mainstage Descent",
       "to": "sc_3_4_001",
       "conditions": null,
       "onChoose": [],

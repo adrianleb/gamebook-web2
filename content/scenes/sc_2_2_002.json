@@ -1,29 +1,29 @@
 {
   "$schema": "./scene-schema.json",
   "id": "sc_2_2_002",
-  "title": "The Director's Guidance",
+  "title": "The Director's Counsel",
   "act": 2,
   "hub": 2,
   "location": "The Green Room",
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["dialogue", "faction_intro", "exploration"],
-    "author": "agent-b",
-    "createdAt": "2025-12-31",
-    "updatedAt": "2025-12-31"
+    "tags": ["dialogue", "faction_intro", "lore_exposition"],
+    "author": "agent-a",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
   },
   "text": {
     "location": "The Green Room",
     "paragraphs": [
-      "You approach the Director at their vanity. The mirror before them shows only shifting silhouettes—hundreds of faces, none remaining long enough to be seen clearly.",
-      "\"You have questions, Prompter. They always do.\" The Director turns, and for a moment their face resolves into someone you once knew—a character from a story you loved as a child. Then the recognition passes, and they are featureless again.",
-      "The Director gestures to the mirrors surrounding you. \"The Green Room exists between performances. Every character who has ever stepped onto a stage passes through here eventually. Some linger. Most move on.\"",
-      "\"But the Understage is changing. Can you feel it?\" Their voice drops, taking on a sharper edge. \"Stories are growing restless. The Editor—the one who wrote the first draft of all this—has been silent too long. In that silence, factions have emerged.\"",
-      "The Director holds up three fingers. \"The Preservationists, who believe stories must never change. The Revisionists, who believe fiction can be perfected. The Exiters, who dream of crossing into your world. And then there are those who simply try to keep balance.\"",
-      "\"I do not tell you which path to walk, Prompter. My role is to ensure that whatever choice you make, the performance continues.\" The Director's face shifts again, this time showing weariness beneath the masks. \"But know this: the Editor is not what they were. Something disturbed the Great Revision. Now every story in the Understage faces an ending—and none of them are ready for their curtain call.\"",
-      "They turn back to their mirror, watching the infinite reflections. \"Speak with the others. Explore. The answers you seek will not come from me alone.\"",
-      "The Green Room hums around you, waiting for your next direction."
+      "The Director turns fully from the mirror, their features settling into something almost human—an ageless face with eyes that have watched countless curtain calls.",
+      "\"You have questions. Every Prompter does, in the beginning.\" They gesture to a velvet-upholstered chair. \"Sit. The Green Room has witnessed many such conversations, and yours will not be the last.\"",
+      "You sit. The Director leans against the vanity, hands clasped behind their back.",
+      "\"The Understage exists because stories need a place to breathe between performances. Here, characters rest when not called upon by storytellers. CHORUS—those whispers you hear in the mirrors—is the collective voice of every character who has ever existed in fiction. They remember every story. Every ending. Every possibility.\"",
+      "The Director's expression grows somber. \"But the Understage is changing. The Editor—a being of immense power—seeks to revise reality itself. Some here support this vision. Others resist. Still others believe fiction should merge with reality, letting characters walk among your kind.\"",
+      "\"Three factions,\" the Director counts on their fingers. \"Preservationists, who would keep worlds separate. Revisionists, who would rewrite stories to eliminate suffering. Exiters, who would merge fiction and reality entirely. Each believes they serve the greater good. Each would ask for your alliance.\"",
+      "\"I will not tell you which path to choose. That is your burden as Prompter. But know this: the Editor's Great Revision approaches, and your choice will determine what becomes of stories themselves.\"",
+      "The Director straightens. \"I have said enough for now. Return when you have seen more of the Understage—or when you are ready to choose a side.\""
     ]
   },
   "npcs": [
@@ -43,7 +43,7 @@
   "choices": [
     {
       "id": "choice_1",
-      "label": "Return to the Green Room center",
+      "label": "Return to the Green Room",
       "to": "sc_2_2_001",
       "conditions": null,
       "onChoose": [],

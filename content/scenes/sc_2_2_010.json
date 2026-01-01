@@ -8,42 +8,34 @@
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["exploration", "atmosphere", "character_glimpses"],
-    "author": "agent-b",
-    "createdAt": "2025-12-31",
-    "updatedAt": "2025-12-31"
+    "tags": ["exploration", "atmospheric", "world_building"],
+    "author": "agent-a",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
   },
   "text": {
-    "location": "The Green Room - Dressing Rooms",
+    "location": "The Dressing Rooms",
     "paragraphs": [
-      "You push through a heavy velvet curtain and find yourself in a corridor of identical doors. Each door has a name taped to it—some in elegant script, others scrawled in haste, a few written in languages that shift when you try to read them.",
-      "These are the dressing rooms. Private spaces where characters prepare for their roles, store their possessions, and sometimes retreat when their stories become too much.",
-      "You pass door after door. A hero's costume hangs on a hook, the fabric stained with blood that isn't there. A villain's mirror shows only kindness. A lover's letter sits on a desk, words changing with every glance.",
-      "From one room, you hear sobbing—a protagonist who realizes their conflict was manufactured. From another, laughter—a side character discovering they're the main character of someone else's story.",
-      "CHORUS whispers through the corridor, softer here: \"*Every mask has a face beneath. Every character has a self beyond the story. We remember who we were before we were written.*\"",
-      "For a moment, you see a door with YOUR name on it. You're not sure if it's been there the whole time, or if it just appeared. When you blink, it's gone.",
-      "The dressing rooms remind you: everyone here is playing a role. But who decides what role they play?",
-      "The corridor loops back to the Green Room's main lounge."
+      "You push through a velvet curtain into a corridor of doors, each marked with names in languages that shift when you try to focus on them.",
+      "The first door stands slightly ajar. Inside, you glimpse a dressing room frozen mid-performance—costumes draped across furniture as if just discarded, a half-drunk cup of tea still steaming on a vanity. A name is scratched into the mirror: *Hamlet*.",
+      "The second door reveals a room filled with mirrors, each reflecting a different version of the same woman. In one reflection, she wears a crown. In another, rags. In a third, nothing at all. The mirrors ripple as you pass.",
+      "Deeper still, you find a room containing only a single chair and a script that writes itself. Words appear, vanish, and rearrange in patterns you almost understand—stories being drafted in real-time, discarded before they can be told.",
+      "CHORUS whispers through the walls: \"*Every character has a room here. Every story has a space between performances. The Green Room remembers what audiences forget.*\"",
+      "You feel the weight of countless narratives pressing against you—the joy, the tragedy, the endless cycle of performance and rest. These rooms are sanctuaries for those who exist only when called upon by storytellers.",
+      "Turning back, you find the curtain leading to the main Green Room."
     ]
   },
-  "npcs": [
-    {
-      "id": "chorus",
-      "name": "CHORUS",
-      "description": "The collective presence of every fictional character, speaking through mirrors and glass",
-      "role": "collective_consciousness"
-    }
-  ],
+  "npcs": [],
   "art": null,
   "audio": {
-    "music": "corridor_ambient",
-    "sfx": ["distant_sobbing", "laughter_fade"]
+    "music": "green_room_ambient",
+    "sfx": ["curtain_rustle", "mirror_ripple"]
   },
   "effectsOnEnter": [],
   "choices": [
     {
       "id": "choice_1",
-      "label": "Return to the Green Room center",
+      "label": "Return to the Green Room",
       "to": "sc_2_2_001",
       "conditions": null,
       "onChoose": [],

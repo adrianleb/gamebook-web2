@@ -8,22 +8,24 @@
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["dialogue", "lore", "character_study"],
-    "author": "agent-b",
-    "createdAt": "2025-12-31",
-    "updatedAt": "2025-12-31"
+    "tags": ["dialogue", "lore_exposition", "character_development"],
+    "author": "agent-a",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
   },
   "text": {
     "location": "The Archives",
     "paragraphs": [
-      "The Understudy watches you approach, their costume rippling between forms—a knight's armor, a nurse's uniform, a detective's trench coat, all in the span of a heartbeat.",
-      "\"You wonder about me,\" they say, and it's not a question. \"Everyone does. The Director directs. The Editor writes. But what does an Understudy do?\" They gesture around at the towering shelves. \"This. I keep what was discarded. I remember what no one else wants to remember.\"",
-      "Their voice softens, taking on the cadence of a thousand different roles. \"Do you know what it means to be almost someone? To have a voice, a history, a purpose written for you—and then to be told the story doesn't need you after all? The Editor cut characters by the thousands. Whole narratives excised because they didn't fit the vision. I am what remains.\"",
-      "The Understudy's form settles momentarily into the shape of someone young, someone holding a script with trembling hands. \"Every abandoned manuscript in these shelves has a ghost. Characters who were never born. Plots that never climaxed. Endings that were never reached. They call to me. I hear them in the silence between words.\"",
-      "\"The Editor's Great Revision was meant to perfect reality. But perfection requires sacrifice.\" The Understudy's eyes hold ancient sorrow. \"What happens to a world where every story can be edited? Where nothing is permanent because nothing is finished? The factions fight over the answer. Preservationists want to freeze what exists. Revisionists want to keep changing until nothing has meaning. Exiters want to flee to your world, as if stories don't end there too.\"",
-      "They sigh, and their costume shifts again—a jester's motley, then a servant's plain gray. \"I don't have answers, Prompter. I only have the ruins. But I can tell you this: the Editor's desk is not abandoned. Something sits there now. Something that wears the Editor's shape but doesn't understand what stories are for. Be cautious when you approach.\"",
-      "The rustling of pages grows louder for a moment, then fades.",
-      "\"The archives remember you,\" the Understudy says quietly. \"Even if you don't remember yourself. Explore. Seek. But remember—some fragments were discarded for good reason.\""
+      "The Understudy sets down their quill, gestures to a stack of parchment covered in notes that shift and rearrange themselves.",
+      "\"You wonder about the abandoned stories.\" It is not a question. \"Every Prompter does. You see the shelves, the manuscripts, the fragments—and you ask: what happened here? Why were these left unfinished?\"",
+      "They rise, and their costume ripples through a dozen identities in moments: a court jester, a tragic heroine, a nameless guard, a child who appeared in one scene and never again.",
+      "\"Some stories were abandoned by their authors. Real life intervened, or inspiration faded, or the story proved too difficult to complete. Those rest peacefully here, preserved in memory even if never fully told.\"",
+      "The Understudy's expression darkens. \"But others... others were taken. The Editor discovers stories deemed unworthy—too sad, too strange, too problematic by whatever standard they apply that week. And those stories are unmade, their characters scattered, their settings erased.\"",
+      "\"We Preservationists believe every story deserves to exist, even the painful ones. Without sadness, joy has no context. Without failure, triumph means nothing. The Editor would create a world of perfect narratives, sterile and safe. But what kind of story is that?\"",
+      "They lean closer, and for a moment you see the weight of every role they've never played reflected in their eyes.",
+      "\"I am The Understudy. I am what remains when characters are cut. I am the lines spoken in rehearsal but never performed. I am the backup plan, the reserve option, the one chosen only when the first choice fails. And I am tired of watching stories disappear.\"",
+      "The Understudy steps back, their costume settling on something neutral—a gray robe that could be anything or nothing.",
+      "\"If you seek to understand what the Editor truly plans, visit The Author's Desk at the heart of the Archives. But know this: what you find there cannot be unseen. Stories abandoned leave wounds in reality itself.\""
     ]
   },
   "npcs": [
@@ -37,13 +39,13 @@
   "art": null,
   "audio": {
     "music": "archives_ambient",
-    "sfx": ["costume_rustle", "whispered_voices"]
+    "sfx": ["page_rustle"]
   },
   "effectsOnEnter": [],
   "choices": [
     {
       "id": "choice_1",
-      "label": "Return to the Archives Entry",
+      "label": "Return to The Archives Entry",
       "to": "sc_2_3_001",
       "conditions": null,
       "onChoose": [],

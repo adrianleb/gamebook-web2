@@ -4,40 +4,39 @@
   "title": "The Prop Room",
   "act": 2,
   "hub": 3,
-  "location": "The Archives - The Prop Room",
+  "location": "The Archives",
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["exploration", "items", "mystery"],
-    "author": "agent-b",
-    "createdAt": "2025-12-31",
-    "updatedAt": "2025-12-31"
+    "tags": ["exploration", "item_discovery", "mystery"],
+    "author": "agent-a",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
   },
   "text": {
-    "location": "The Archives - The Prop Room",
+    "location": "The Prop Room",
     "paragraphs": [
-      "The Prop Room is a cavernous space filled with the debris of abandoned narratives. Racks of costumes hang from the ceiling like ghosts of unworn clothing. Shelves groan under the weight of objects that once mattered deeply to stories that no longer exist.",
-      "You pass a crown made of glass that shatters if you look at it directly—the artifact of a fairy tale cut from the final draft. Beside it sits a child's stuffed bear, one eye missing, waiting in a story that was never finished.",
-      "A sword hangs on the wall, its blade inscribed with prophecies that were never fulfilled. The metal hums faintly, as if still expecting a battle that will never come. You resist the urge to touch it—some objects remember their purpose too keenly.",
-      "In one corner, you find a collection of letters tied with ribbon. Love letters from a romance that ended before the confession scene. Farewell notes from a tragedy where no one died. The handwriting is beautiful, the words carefully chosen, all of it wasted.",
-      "A mirror hangs crookedly on one wall. When you glance into it, you don't see your reflection—you see a different version of yourself, wearing clothes you've never owned, standing in a room you've never visited. The mirror shows who you might have been in a story that was never written about you.",
-      "On a workbench in the center of the room, someone has arranged items in careful patterns: a key, a flower, a knife, a locket, a single playing card. Each object represents a choice that was never made, a path that was never taken. The arrangement feels like a message, but you can't quite read it.",
-      "The Prop Room's air is thick with potential energy. Every object here is waiting to be used again, waiting for a story to give it meaning. Some have been waiting so long they've begun to fade, their edges blurring, their substance thinning.",
-      "You find yourself reluctant to touch anything. These are the leftovers of other people's imagination, and it feels intrusive to disturb them.",
-      "Yet something calls to you—a small object on a high shelf, almost hidden in shadow. It seems to recognize you somehow."
+      "The Prop Room is smaller than the Stacks, but its contents are somehow more haunting. Shelves line every wall, displaying objects from stories that no longer exist.",
+      "A sword with a blade made of glass sits on a pedestal. A tag reads: *From the unwritten sequel where heroes became villains.* When you look closely, you see your own reflection transformed—wearing armor you've never worn, holding the glass sword with practiced ease.",
+      "A music box rests on a nearby shelf, its lid closed. Without opening it, you can hear the melody—a lullaby from a story that was abandoned before anyone could fall asleep to it. The tune is beautiful and impossibly sad.",
+      "In a glass case, a crown woven from dried flowers. The tag reads: *For the queen who was cut from the final draft.* The flowers crumble slightly when you exhale, as if even your breath accelerates their decay.",
+      "A collection of photographs shows people you've never met but somehow recognize—characters who never made it past chapter one, their faces familiar from versions of stories that were never published. They smile from the frames, frozen in moments that never happened.",
+      "An open book lies on a central table. The pages are blank, but when you stare at them, words flicker in and out of existence—whole scenes appearing and vanishing before you can read them. A story trying to write itself, over and over, unable to begin.",
+      "CHORUS whispers from the corners of the room: \"*Every object here is a ghost. Every prop remembers the hand that held it, the scene that gave it purpose. The Editor takes stories, but leaves behind what cannot be unmade. These remain. They wait. They hope.*\"",
+      "You realize that these objects are more than remnants—they are evidence. Proof of what has been lost. And perhaps, if gathered together, they could be used to restore what was taken."
     ]
   },
   "npcs": [],
   "art": null,
   "audio": {
-    "music": "prop_room_ambient",
-    "sfx": ["clinking_objects", "fabric_rustle"]
+    "music": "archives_ambient",
+    "sfx": ["music_box_distant", "glass_chime"]
   },
   "effectsOnEnter": [],
   "choices": [
     {
       "id": "choice_1",
-      "label": "Return to the Archives Entry",
+      "label": "Return to The Archives Entry",
       "to": "sc_2_3_001",
       "conditions": null,
       "onChoose": [],
