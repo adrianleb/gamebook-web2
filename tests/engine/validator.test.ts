@@ -296,6 +296,245 @@ describe('ContentValidator - validateScene', () => {
     });
   });
 
+  describe('Attemptable stat check validation', () => {
+    it('should pass validation for valid attemptable choice with onSuccess.to and onFailure.to', () => {
+      const manifestWithTargets = createMockManifest({
+        sceneIndex: {
+          ...createMockManifest().sceneIndex,
+          sc_1_0_901: {
+            title: 'Success Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+            description: 'Success branch',
+          },
+          sc_1_0_902: {
+            title: 'Failure Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+            description: 'Failure branch',
+          },
+        },
+      });
+
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Attempt check',
+            onSuccess: { to: 'sc_1_0_901' as SceneId },
+            onFailure: { to: 'sc_1_0_902' as SceneId },
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifestWithTargets);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should pass validation for attemptable choice with onFailure having effects but no to', () => {
+      const manifestWithSuccess = createMockManifest({
+        sceneIndex: {
+          ...createMockManifest().sceneIndex,
+          sc_1_0_901: {
+            title: 'Success Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+            description: 'Success branch',
+          },
+        },
+      });
+
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Attempt check',
+            onSuccess: { to: 'sc_1_0_901' as SceneId },
+            onFailure: {
+              effects: [{ type: 'modify-stat', stat: 'health', value: -1 }],
+            },
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifestWithSuccess);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should detect attemptable choice with both choice.to and onSuccess/onFailure', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Ambiguous choice',
+            to: 'sc_1_0_002' as SceneId,
+            onSuccess: { to: 'sc_1_0_002' as SceneId },
+            onFailure: { to: 'sc_1_0_001' as SceneId },
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.some(e => e.message.includes("Attemptable choice has 'to' field"))).toBe(true);
+    });
+
+    it('should detect attemptable choice missing onSuccess.to', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Incomplete attemptable',
+            onSuccess: { effects: [] },
+            onFailure: { to: 'sc_1_0_002' as SceneId },
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.some(e => e.message.includes('onSuccess.to is required'))).toBe(true);
+    });
+
+    it('should detect attemptable choice missing onSuccess branch entirely', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Only onFailure',
+            onFailure: { to: 'sc_1_0_002' as SceneId },
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.some(e => e.message.includes("missing 'onSuccess' branch"))).toBe(true);
+    });
+
+    it('should detect attemptable choice missing onFailure branch entirely', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Only onSuccess',
+            onSuccess: { to: 'sc_1_0_002' as SceneId },
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.some(e => e.message.includes("missing 'onFailure' branch"))).toBe(true);
+    });
+
+    it('should detect attemptable choice with onFailure having neither to nor effects', () => {
+      const manifestWithSuccess = createMockManifest({
+        sceneIndex: {
+          ...createMockManifest().sceneIndex,
+          sc_1_0_901: {
+            title: 'Success Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+            description: 'Success branch',
+          },
+        },
+      });
+
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Invalid onFailure',
+            onSuccess: { to: 'sc_1_0_901' as SceneId },
+            onFailure: {},
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifestWithSuccess);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.some(e => e.message.includes("onFailure must have either 'to' or 'effects'"))).toBe(true);
+    });
+
+    it('should detect broken link in onSuccess.to', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Broken success link',
+            onSuccess: { to: 'nonexistent' as SceneId },
+            onFailure: { to: 'sc_1_0_002' as SceneId },
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.some(e => e.message.includes('onSuccess.to target') && e.message.includes('not found'))).toBe(true);
+    });
+
+    it('should detect broken link in onFailure.to', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Broken failure link',
+            onSuccess: { to: 'sc_1_0_002' as SceneId },
+            onFailure: { to: 'nonexistent' as SceneId },
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.some(e => e.message.includes('onFailure.to target') && e.message.includes('not found'))).toBe(true);
+    });
+
+    it('should allow scene with both attemptable and simple choices', () => {
+      const manifestWithTargets = createMockManifest({
+        sceneIndex: {
+          ...createMockManifest().sceneIndex,
+          sc_1_0_901: {
+            title: 'Success Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+            description: 'Success branch',
+          },
+          sc_1_0_902: {
+            title: 'Failure Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+            description: 'Failure branch',
+          },
+        },
+      });
+
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Attempt check',
+            onSuccess: { to: 'sc_1_0_901' as SceneId },
+            onFailure: { to: 'sc_1_0_902' as SceneId },
+          },
+          {
+            label: 'Simple choice',
+            to: 'sc_1_0_002' as SceneId,
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifestWithTargets);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+  });
+
   describe('Effect validation', () => {
     it('should pass for valid effects', () => {
       const scene = createMockScene({

@@ -148,18 +148,85 @@ export class ContentValidator {
           });
         }
 
-        if (!choice.to) {
-          errors.push({
-            type: 'schema-error',
-            sceneId: scene.id,
-            message: `${choicePrefix}: Missing target scene`,
-          });
-        } else if (!(choice.to in manifest.sceneIndex)) {
-          errors.push({
-            type: 'broken-link',
-            sceneId: scene.id,
-            message: `${choicePrefix}: Target scene "${choice.to}" not found in manifest`,
-          });
+        // Check if this is an attemptable stat check (has onSuccess/onFailure)
+        const isAttemptable = choice.onSuccess || choice.onFailure;
+
+        if (isAttemptable) {
+          // Attemptable stat check: validate onSuccess/onFailure structure
+
+          // choice.to should NOT exist when attemptable (prevents ambiguity)
+          if (choice.to) {
+            errors.push({
+              type: 'schema-error',
+              sceneId: scene.id,
+              message: `${choicePrefix}: Attemptable choice has 'to' field - use onSuccess.to/onFailure.to instead`,
+            });
+          }
+
+          // Validate onSuccess branch (required for attemptable)
+          if (!choice.onSuccess) {
+            errors.push({
+              type: 'schema-error',
+              sceneId: scene.id,
+              message: `${choicePrefix}: Attemptable choice missing 'onSuccess' branch`,
+            });
+          } else {
+            if (!choice.onSuccess.to) {
+              errors.push({
+                type: 'schema-error',
+                sceneId: scene.id,
+                message: `${choicePrefix}: onSuccess.to is required for attemptable choices`,
+              });
+            } else if (!(choice.onSuccess.to in manifest.sceneIndex)) {
+              errors.push({
+                type: 'broken-link',
+                sceneId: scene.id,
+                message: `${choicePrefix}: onSuccess.to target "${choice.onSuccess.to}" not found in manifest`,
+              });
+            }
+          }
+
+          // Validate onFailure branch (required for attemptable)
+          if (!choice.onFailure) {
+            errors.push({
+              type: 'schema-error',
+              sceneId: scene.id,
+              message: `${choicePrefix}: Attemptable choice missing 'onFailure' branch`,
+            });
+          } else {
+            // onFailure must have either 'to' or 'effects' (or both)
+            const hasTo = choice.onFailure.to !== undefined;
+            const hasEffects = choice.onFailure.effects && choice.onFailure.effects.length > 0;
+
+            if (!hasTo && !hasEffects) {
+              errors.push({
+                type: 'schema-error',
+                sceneId: scene.id,
+                message: `${choicePrefix}: onFailure must have either 'to' or 'effects'`,
+              });
+            } else if (hasTo && !(choice.onFailure.to in manifest.sceneIndex)) {
+              errors.push({
+                type: 'broken-link',
+                sceneId: scene.id,
+                message: `${choicePrefix}: onFailure.to target "${choice.onFailure.to}" not found in manifest`,
+              });
+            }
+          }
+        } else {
+          // Simple choice: require choice.to
+          if (!choice.to) {
+            errors.push({
+              type: 'schema-error',
+              sceneId: scene.id,
+              message: `${choicePrefix}: Missing target scene`,
+            });
+          } else if (!(choice.to in manifest.sceneIndex)) {
+            errors.push({
+              type: 'broken-link',
+              sceneId: scene.id,
+              message: `${choicePrefix}: Target scene "${choice.to}" not found in manifest`,
+            });
+          }
         }
 
         // Validate conditions
