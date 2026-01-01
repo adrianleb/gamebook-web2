@@ -1,67 +1,111 @@
 {
   "meta": {
     "name": "softlock_scenarios",
-    "description": "Intentional softlock tests. Validates softlock detection catches various deadlock scenarios.",
+    "title": "Softlock Detection Test: Turn Back Loop",
+    "description": "Tests softlock detection by cycling between scenes. Validates that softlock detection catches when maxSceneRevisits threshold is exceeded.",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "2.0.0",
+    "tags": ["softlock", "detection", "edge-case"]
   },
   "startingState": {
-    "flags": [],
+    "currentScene": "sc_1_0_001",
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
+    "flags": ["game_started"],
     "inventory": [],
-    "stats": {},
-    "currentScene": "sc_1_0_001"
+    "faction": "preservationist"
   },
   "steps": [
     {
       "sequence": 1,
-      "action": "choose",
-      "description": "Enter potential loop area",
-      "choiceIndex": 0,
-      "expectedScene": "sc_1_0_loop_a"
+      "action": "checkpoint",
+      "description": "Starting at booth - baseline",
+      "assertions": {
+        "currentScene": "sc_1_0_001",
+        "visitedCount": { "sc_1_0_001": 2 }
+      }
     },
     {
       "sequence": 2,
       "action": "choose",
-      "description": "Return to previous scene (revisit 1)",
-      "choiceIndex": 1,
-      "expectedScene": "sc_1_0_001"
+      "choiceIndex": 2,
+      "expectedScene": "sc_1_0_004",
+      "description": "Go to Maren's (visit 1)"
     },
     {
       "sequence": 3,
       "action": "choose",
-      "description": "Enter loop again (revisit 2)",
-      "choiceIndex": 0,
-      "expectedScene": "sc_1_0_loop_a"
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_001",
+      "description": "Return to booth (revisit 1)"
     },
     {
       "sequence": 4,
       "action": "checkpoint",
-      "description": "Checkpoint at loop entry",
+      "description": "Checkpoint - booth revisit 1",
       "assertions": {
-        "visitedCount": {
-          "sc_1_0_loop_a": 2
-        }
+        "currentScene": "sc_1_0_001",
+        "visitedCount": { "sc_1_0_001": 3, "sc_1_0_004": 1 }
       }
     },
     {
       "sequence": 5,
       "action": "choose",
-      "description": "Return again (revisit 3)",
-      "choiceIndex": 1,
-      "expectedScene": "sc_1_0_001"
+      "choiceIndex": 2,
+      "expectedScene": "sc_1_0_004",
+      "description": "Go to Maren's again (revisit 1)"
     },
     {
       "sequence": 6,
       "action": "choose",
-      "description": "Enter loop third time (revisit 3 - should trigger softlock)",
-      "choiceIndex": 0,
-      "expectedScene": "sc_1_0_loop_a"
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_001",
+      "description": "Return to booth again (revisit 2)"
+    },
+    {
+      "sequence": 7,
+      "action": "checkpoint",
+      "description": "Checkpoint - booth revisit 2 (at threshold)",
+      "assertions": {
+        "currentScene": "sc_1_0_001",
+        "visitedCount": { "sc_1_0_001": 4, "sc_1_0_004": 2 }
+      }
+    },
+    {
+      "sequence": 8,
+      "action": "choose",
+      "choiceIndex": 2,
+      "expectedScene": "sc_1_0_004",
+      "description": "Go to Maren's third time (revisit 2)"
+    },
+    {
+      "sequence": 9,
+      "action": "choose",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_001",
+      "description": "Return to booth third time (revisit 3 - exceeds threshold)"
+    },
+    {
+      "sequence": 10,
+      "action": "checkpoint",
+      "description": "Checkpoint - softlock should be detected (booth visited 5 times)",
+      "assertions": {
+        "currentScene": "sc_1_0_001",
+        "visitedCount": { "sc_1_0_001": 5, "sc_1_0_004": 3 }
+      }
     }
   ],
+  "endingCriteria": {
+    "sceneId": "sc_1_0_001"
+  },
   "softlockDetection": {
     "enabled": true,
-    "maxSceneRevisits": 2,
+    "maxSceneRevisits": 3,
     "failOnDetection": false,
-    "continueOnDetection": true
+    "continueOnDetection": true,
+    "expectedSoftlock": true
   }
 }

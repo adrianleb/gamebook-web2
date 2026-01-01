@@ -1,42 +1,81 @@
 {
   "meta": {
     "name": "stat_boundary_test",
-    "description": "Tests stat check boundaries. Validates that stat gates work correctly at pass/fail thresholds.",
+    "title": "Stat Boundary Test: Courage Check Pass/Fail",
+    "description": "Tests stat check boundaries. Validates that courage >= 5 passes the threshold check while courage < 5 fails, with attemptable allowing both paths.",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "2.0.0",
+    "tags": ["stat-check", "boundary", "attemptable"]
   },
   "startingState": {
-    "flags": [],
-    "inventory": [],
+    "currentScene": "sc_1_0_001",
     "stats": {
-      "script": 7
+      "health": 10,
+      "courage": 6,
+      "insight": 5
     },
-    "currentScene": "sc_1_0_001"
+    "flags": ["game_started"],
+    "inventory": ["booth_key"],
+    "faction": "preservationist"
   },
   "steps": [
     {
       "sequence": 1,
       "action": "checkpoint",
-      "description": "Verify starting stat value",
+      "description": "Verify starting stat value (courage = 6, above threshold)",
       "assertions": {
-        "stats": {
-          "script": 7
-        }
+        "currentScene": "sc_1_0_001",
+        "stats": { "courage": 6 },
+        "inventoryContains": ["booth_key"]
       }
     },
     {
       "sequence": 2,
       "action": "choose",
-      "description": "Pass stat check (script >= 7)",
-      "choiceIndex": 0,
-      "expectedScene": "sc_1_0_success",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_003",
+      "description": "Go to Threshold Stage (have booth_key)"
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "At Threshold Stage - courage check available",
       "assertions": {
-        "flagsSet": ["stat_check_passed"]
+        "currentScene": "sc_1_0_003",
+        "stats": { "courage": 6 },
+        "choicesAvailable": 3
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_901",
+      "description": "Pass courage check (6 >= 5, succeeds)",
+      "assertions": {
+        "flagsSet": ["crossing_succeeded"],
+        "stats": { "courage": 6, "health": 10 }
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "checkpoint",
+      "description": "Reached success scene - stat check passed",
+      "assertions": {
+        "currentScene": "sc_1_0_901",
+        "flagsSet": ["crossing_succeeded"],
+        "stats": { "courage": 6, "health": 10 },
+        "visitedCount": { "sc_1_0_001": 2, "sc_1_0_003": 1, "sc_1_0_901": 1 }
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_100"
+    "sceneId": "sc_1_0_901",
+    "flagsRequired": ["crossing_succeeded"],
+    "statsRequired": {
+      "courage": 6,
+      "health": 10
+    }
   },
   "softlockDetection": {
     "enabled": true,

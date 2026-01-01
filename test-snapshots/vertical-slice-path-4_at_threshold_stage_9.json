@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-01-01T21:50:04.840Z",
+  "playthrough": "at_threshold_stage",
+  "step": 9,
+  "name": "at_threshold_stage",
+  "engineVersion": 1,
+  "contentVersion": "0.0.1",
+  "state": {
+    "version": 1,
+    "contentVersion": "0.0.1",
+    "timestamp": 1767304204839,
+    "currentSceneId": "sc_1_0_003",
+    "history": [
+      {
+        "sceneId": "sc_1_0_001",
+        "timestamp": 1767304204840,
+        "choiceLabel": "Thank Maren and return to the booth",
+        "visitedCount": 3
+      },
+      {
+        "sceneId": "sc_1_0_004",
+        "timestamp": 1767304204840,
+        "choiceLabel": "Speak with the figure in shadow",
+        "visitedCount": 1
+      },
+      {
+        "sceneId": "sc_1_0_003",
+        "timestamp": 1767304204840,
+        "choiceLabel": "Attempt the iron door",
+        "visitedCount": 1
+      }
+    ],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
+    "flags": {},
+    "inventory": {},
+    "factions": {}
+  }
+}

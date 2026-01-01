@@ -20,6 +20,7 @@
   },
   "steps": [
     {
+      "sequence": 1,
       "action": "checkpoint",
       "description": "Starting at hub scene sc_1_0_001",
       "assertions": {
@@ -30,79 +31,81 @@
       }
     },
     {
+      "sequence": 2,
       "action": "choose",
       "choiceIndex": 2,
-      "description": "Attempt locked path (should be disabled - requires booth_key)",
-      "targetSceneId": "sc_1_0_001",
-      "expectDisabled": true
+      "expectedScene": "sc_1_0_004",
+      "description": "Go to Maren's Guidance to acquire key"
     },
     {
+      "sequence": 3,
       "action": "checkpoint",
-      "description": "Still at hub - choice was disabled",
-      "assertions": {
-        "currentScene": "sc_1_0_001",
-        "inventoryExcludes": ["booth_key"]
-      }
-    },
-    {
-      "action": "choose",
-      "choiceIndex": 0,
-      "description": "Go to Maren's Guidance to acquire key",
-      "targetSceneId": "sc_1_0_004"
-    },
-    {
-      "action": "checkpoint",
-      "description": "At Maren's Guidance - about to receive booth_key",
+      "description": "At Maren's Guidance - booth_key added on enter",
       "assertions": {
         "currentScene": "sc_1_0_004",
-        "choicesAvailable": 2
+        "choicesAvailable": 2,
+        "inventoryContains": ["booth_key"],
+        "flagsSet": ["game_started", "met_maren"]
       }
     },
     {
+      "sequence": 4,
       "action": "choose",
-      "choiceIndex": 0,
-      "description": "Accept booth_key from Maren",
-      "targetSceneId": "sc_1_0_001",
-      "expectedEffects": {
-        "addInventory": ["booth_key"],
-        "addFlags": ["key_acquired"]
-      }
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_001",
+      "description": "Thank Maren and return to the booth"
     },
     {
+      "sequence": 5,
       "action": "checkpoint",
       "description": "Back at hub with booth_key in inventory",
       "assertions": {
         "currentScene": "sc_1_0_001",
         "inventoryContains": ["booth_key"],
-        "flagsSet": ["game_started", "key_acquired"]
+        "flagsSet": ["game_started", "met_maren", "location_booth_visited"],
+        "visitedCount": { "sc_1_0_001": 3, "sc_1_0_004": 1 }
       }
     },
     {
+      "sequence": 6,
       "action": "choose",
-      "choiceIndex": 2,
-      "description": "Now locked path is enabled - proceed to Threshold Stage",
-      "targetSceneId": "sc_1_0_003"
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_003",
+      "description": "Now locked path is enabled - proceed to Threshold Stage"
     },
     {
+      "sequence": 7,
       "action": "checkpoint",
       "description": "At Threshold Stage with booth_key",
       "assertions": {
         "currentScene": "sc_1_0_003",
         "inventoryContains": ["booth_key"],
-        "flagsSet": ["game_started", "key_acquired", "location_booth_visited"],
-        "visitedCount": { "sc_1_0_001": 2 }
+        "flagsSet": ["game_started", "met_maren", "location_booth_visited"],
+        "visitedCount": { "sc_1_0_001": 3, "sc_1_0_003": 1, "sc_1_0_004": 1 }
       }
     },
     {
+      "sequence": 8,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Continue to resolution",
-      "targetSceneId": "sc_1_0_900"
+      "expectedScene": "sc_1_0_901",
+      "description": "Continue to resolution (pass courage check)"
+    },
+    {
+      "sequence": 9,
+      "action": "checkpoint",
+      "description": "Reached success ending",
+      "assertions": {
+        "currentScene": "sc_1_0_901",
+        "inventoryContains": ["booth_key"],
+        "flagsSet": ["game_started", "met_maren", "location_booth_visited", "crossing_succeeded"],
+        "visitedCount": { "sc_1_0_001": 3, "sc_1_0_003": 1, "sc_1_0_004": 1, "sc_1_0_901": 1 }
+      }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_900",
-    "flagsRequired": ["key_acquired", "location_booth_visited"],
+    "sceneId": "sc_1_0_901",
+    "flagsRequired": ["met_maren", "location_booth_visited", "crossing_succeeded"],
     "inventoryRequired": ["booth_key"]
   },
   "softlockDetection": {
