@@ -1,6 +1,6 @@
 {
   "$schema": "./scene-schema.json",
-  "id": "sc_X_X_XXX",
+  "id": "sc_x_x_xxx",
   "title": "Scene Title",
   "act": 1,
   "hub": 1,
@@ -33,7 +33,7 @@
     {
       "id": "choice_1",
       "label": "Choice text starting with verb",
-      "to": "sc_X_X_XXX",
+      "to": "sc_x_x_xxx",
       "conditions": null,
       "onChoose": [],
       "disabledHint": null
