@@ -2,157 +2,45 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/adrianleb/gamebook-web2/content/schemas/items-schema.json",
   "title": "Gamebook Items Catalog",
-  "description": "Item definitions for inventory system including categories, properties, and combination rules",
+  "description": "Item definitions for inventory system using grouped array structure by act/section",
   "type": "object",
   "required": ["items", "categories"],
   "properties": {
     "$schema": {
       "type": "string"
     },
-    "items": {
+    "description": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "designNotes": {
       "type": "object",
-      "description": "Catalog of all items in the game, keyed by item ID",
-      "additionalProperties": {
-        "type": "object",
-        "required": ["id", "name", "category"],
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[a-z0-9_-]+$",
-            "description": "Unique item identifier"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 1,
-            "description": "Display name"
-          },
-          "plural": {
-            "type": "string",
-            "description": "Plural form (defaults to name + 's')"
-          },
-          "description": {
-            "type": "string",
-            "description": "Item description shown in inventory"
-          },
-          "category": {
-            "type": "string",
-            "description": "Must reference a key in the categories object"
-          },
-          "icon": {
-            "type": "string",
-            "description": "Icon identifier for UI display"
-          },
-          "maxQuantity": {
-            "type": "integer",
-            "minimum": 1,
-            "default": 99,
-            "description": "Maximum stackable quantity"
-          },
-          "consumable": {
-            "type": "boolean",
-            "default": false,
-            "description": "If true, item is consumed when used"
-          },
-          "value": {
-            "type": "integer",
-            "minimum": 0,
-            "description": "Optional gold/value amount"
-          },
-          "effects": {
-            "type": "array",
-            "description": "Effects applied when item is used",
-            "items": {
-              "$ref": "#/$defs/itemEffect"
-            }
-          },
-          "usable": {
-            "type": "boolean",
-            "default": false,
-            "description": "Can be used from inventory menu"
-          },
-          "usableInCombat": {
-            "type": "boolean",
-            "default": false,
-            "description": "Can be used during combat encounters"
-          },
-          "equipable": {
-            "type": "boolean",
-            "default": false,
-            "description": "Can be equipped to a slot"
-          },
-          "slot": {
-            "type": "string",
-            "enum": ["weapon", "armor", "accessory", "tool", "misc"],
-            "description": "Equipment slot (required if equipable=true)"
-          },
-          "bonuses": {
-            "type": "object",
-            "description": "Stat bonuses when equipped",
-            "additionalProperties": {
-              "type": "object",
-              "required": ["statId", "value"],
-              "properties": {
-                "statId": {
-                  "type": "string"
-                },
-                "value": {
-                  "type": ["integer", "number"]
-                }
-              }
-            }
-          },
-          "combinations": {
-            "type": "array",
-            "description": "Items this can combine with",
-            "items": {
-              "type": "object",
-              "required": ["withItemId", "result"],
-              "properties": {
-                "withItemId": {
-                  "type": "string"
-                },
-                "result": {
-                  "type": "string",
-                  "description": "Resulting item ID"
-                },
-                "quantity": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "default": 1
-                },
-                "description": {
-                  "type": "string",
-                  "description": "Flavor text for the combination"
-                }
-              }
-            }
-          },
-          "keyItem": {
-            "type": "boolean",
-            "default": false,
-            "description": "Key items cannot be dropped"
-          },
-          "hidden": {
-            "type": "boolean",
-            "default": false,
-            "description": "Hidden items don't appear in inventory until revealed"
-          },
-          "tags": {
-            "type": "array",
-            "description": "Custom tags for logic filtering",
-            "items": {
-              "type": "string"
-            }
+      "properties": {
+        "maxCarryLimit": {
+          "type": "integer"
+        },
+        "atCapacityBehavior": {
+          "type": "array",
+          "items": {
+            "type": "string"
           }
+        },
+        "plotCriticalCannotDrop": {
+          "type": "boolean"
         }
       }
     },
     "categories": {
-      "type": "object",
-      "description": "Item category definitions",
-      "additionalProperties": {
+      "type": "array",
+      "description": "Item category definitions as array",
+      "items": {
         "type": "object",
-        "required": ["id", "name", "icon"],
+        "required": ["id", "name"],
         "properties": {
           "id": {
             "type": "string",
@@ -162,17 +50,83 @@
             "type": "string",
             "minLength": 1
           },
-          "icon": {
-            "type": "string",
-            "description": "Icon identifier"
-          },
           "description": {
             "type": "string"
           },
-          "sortOrder": {
-            "type": "integer",
-            "default": 0,
-            "description": "Display order in inventory"
+          "examples": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "properties": {
+      "type": "array",
+      "description": "Item property definitions as array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "description"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9_-]+$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "object",
+      "description": "Item groups organized by act/section, each containing an array of items",
+      "properties": {
+        "vertical_slice": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        },
+        "act1": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        },
+        "act2_faction": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        },
+        "act2_archives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        },
+        "act2_relationship": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        },
+        "act3": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/item"
+          }
+        },
+        "combinations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/combination"
           }
         }
       }
@@ -188,77 +142,76 @@
     }
   },
   "$defs": {
-    "itemEffect": {
-      "oneOf": [
-        {
-          "type": "object",
-          "required": ["type", "statId", "value"],
-          "properties": {
-            "type": {
-              "const": "restore_stat"
-            },
-            "statId": {
-              "type": "string"
-            },
-            "value": {
-              "type": "number"
-            }
+    "item": {
+      "type": "object",
+      "required": ["id", "name", "category"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_-]+$",
+          "description": "Unique item identifier"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Display name"
+        },
+        "category": {
+          "type": "string",
+          "description": "Must reference an id in the categories array"
+        },
+        "properties": {
+          "type": "array",
+          "description": "Item properties from the properties array",
+          "items": {
+            "type": "string"
           }
         },
-        {
-          "type": "object",
-          "required": ["type", "flag"],
-          "properties": {
-            "type": {
-              "const": "set_flag"
-            },
-            "flag": {
-              "type": "string"
-            }
-          }
+        "description": {
+          "type": "string",
+          "description": "Item description shown in inventory"
         },
-        {
-          "type": "object",
-          "required": ["type", "itemId"],
-          "properties": {
-            "type": {
-              "const": "add_item"
-            },
-            "itemId": {
-              "type": "string"
-            },
-            "quantity": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
-          }
+        "effect": {
+          "type": "string",
+          "description": "What the item does"
         },
-        {
-          "type": "object",
-          "required": ["type"],
-          "properties": {
-            "type": {
-              "const": "teleport"
-            },
-            "sceneId": {
-              "type": "string"
-            }
-          }
+        "faction": {
+          "type": "string",
+          "description": "Faction alignment for faction-specific items"
         },
-        {
-          "type": "object",
-          "required": ["type", "text"],
-          "properties": {
-            "type": {
-              "const": "flavor_text"
-            },
-            "text": {
-              "type": "string"
-            }
-          }
+        "requirement": {
+          "type": "string",
+          "description": "Required flag or relationship to acquire"
+        },
+        "source": {
+          "type": "string",
+          "description": "Where the item comes from"
         }
-      ]
+      }
+    },
+    "combination": {
+      "type": "object",
+      "required": ["id", "name", "items", "effect"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2
+        },
+        "effect": {
+          "type": "string"
+        }
+      }
     }
   }
 }
