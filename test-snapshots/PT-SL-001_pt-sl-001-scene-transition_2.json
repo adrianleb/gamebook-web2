@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-01-01T21:32:55.850Z",
+  "playthrough": "pt-sl-001-scene-transition",
+  "step": 2,
+  "name": "pt-sl-001-scene-transition",
+  "engineVersion": 1,
+  "contentVersion": "0.0.1",
+  "state": {
+    "version": 1,
+    "contentVersion": "0.0.1",
+    "timestamp": 1767303175849,
+    "currentSceneId": "sc_1_0_002",
+    "history": [
+      {
+        "sceneId": "sc_1_0_001",
+        "timestamp": 1767303175850,
+        "visitedCount": 2
+      },
+      {
+        "sceneId": "sc_1_0_002",
+        "timestamp": 1767303175850,
+        "choiceLabel": "Step through the opening to the right",
+        "visitedCount": 1
+      }
+    ],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "flags": {},
+    "inventory": {},
+    "factions": {}
+  }
+}

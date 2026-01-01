@@ -954,7 +954,6 @@ describe('SceneLoader', () => {
           {
             id: 'choice_1',
             label: 'Attemptable courage check',
-            to: 'sc_test_success',
             conditions: {
               type: 'stat_check',
               stat: 'courage',
@@ -973,7 +972,6 @@ describe('SceneLoader', () => {
           {
             id: 'choice_2',
             label: 'Attemptable faction check',
-            to: 'sc_test_success',
             conditions: {
               type: 'stat_check',
               stat: 'revisionist',
