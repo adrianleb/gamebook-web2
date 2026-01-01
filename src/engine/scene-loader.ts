@@ -281,7 +281,8 @@ export class SceneLoader {
 
         // Check choice links
         for (const choice of scene.choices) {
-          if (!this.hasScene(choice.to)) {
+          // Skip validation if choice.to is undefined (e.g., attemptable choices use onSuccess/onFailure)
+          if (choice.to && !this.hasScene(choice.to)) {
             brokenLinks.push({ from: sceneId, to: choice.to });
           }
         }

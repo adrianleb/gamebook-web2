@@ -164,12 +164,12 @@ describe('HeadlessRunner', () => {
         {
           choice: { label: 'Go to middle', to: 'sc_1_middle' },
           index: 0,
-          enabled: true,
+          state: 'enabled',
         },
         {
           choice: { label: 'Go to ending', to: 'sc_1_ending' },
           index: 1,
-          enabled: true,
+          state: 'enabled',
         },
       ]);
       vi.spyOn(mockEngine, 'makeChoice').mockResolvedValue({
@@ -216,7 +216,7 @@ describe('HeadlessRunner', () => {
         {
           choice: { label: 'Only choice', to: 'sc_1_middle' },
           index: 0,
-          enabled: true,
+          state: 'enabled',
         },
       ]);
       vi.spyOn(mockEngine, 'getState').mockReturnValue({
@@ -258,7 +258,7 @@ describe('HeadlessRunner', () => {
         {
           choice: { label: 'Disabled choice', to: 'sc_1_middle' },
           index: 0,
-          enabled: false,
+          state: 'disabled',
           disabledHint: 'You need a key',
         },
       ]);

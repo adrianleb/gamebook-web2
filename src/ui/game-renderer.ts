@@ -471,7 +471,7 @@ export class GameRenderer {
       // Set choice text
       button.textContent = choice.choice.label;
 
-      if (choice.enabled) {
+      if (choice.state === 'enabled' || choice.state === 'risky') {
         button.setAttribute('aria-label', `Choice ${index + 1}: ${choice.choice.label}`);
         button.addEventListener('click', () => this.handleChoice(choice.index));
       } else {
@@ -836,7 +836,7 @@ export class GameRenderer {
           const choiceIndex = parseInt(e.key) - 1;
           const choices = this.engine.getAvailableChoices();
           const choice = choices[choiceIndex];
-          if (choice && choice.enabled) {
+          if (choice && (choice.state === 'enabled' || choice.state === 'risky')) {
             this.handleChoice(choiceIndex);
           }
           e.preventDefault();
