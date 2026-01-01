@@ -152,6 +152,7 @@ function extractSceneRefsFromEffects(effects, refs = new Set()) {
  * Collect all scene references from a scene (canonical schema format)
  * Uses 'effects' property (not onEnter/onExit)
  * Uses 'effects' in choices (not onChoose)
+ * Handles attemptable stat checks with onSuccess/onFailure branching
  */
 function collectSceneReferences(scene) {
   const refs = new Set();
@@ -162,9 +163,17 @@ function collectSceneReferences(scene) {
   // Check choices (canonical format: choice.effects)
   if (scene.choices) {
     for (const choice of scene.choices) {
-      // Target scene
+      // Target scene (canonical format)
       if (choice.to) {
         refs.add(choice.to);
+      }
+
+      // Attemptable stat check branches (Intent #155)
+      if (choice.onSuccess?.to) {
+        refs.add(choice.onSuccess.to);
+      }
+      if (choice.onFailure?.to) {
+        refs.add(choice.onFailure.to);
       }
 
       // Choice conditions
@@ -172,6 +181,10 @@ function collectSceneReferences(scene) {
 
       // Choice effects
       extractSceneRefsFromEffects(choice.effects, refs);
+
+      // Branch effects (onSuccess/onFailure may have effects with goto)
+      extractSceneRefsFromEffects(choice.onSuccess?.effects, refs);
+      extractSceneRefsFromEffects(choice.onFailure?.effects, refs);
     }
   }
 
