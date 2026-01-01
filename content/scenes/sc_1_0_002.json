@@ -46,7 +46,15 @@
       "to": "sc_1_0_900",
       "conditions": null,
       "onChoose": [],
-      "disabledHint": "The stage waits. The story continues."
+      "disabledHint": "The stage waits. But something else catches your eye..."
+    },
+    {
+      "id": "choice_2",
+      "label": "Investigate the sound of running footsteps",
+      "to": "sc_1_0_010",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "A figure flees through the darkness. Will you pursue?"
     }
   ],
   "flags": {

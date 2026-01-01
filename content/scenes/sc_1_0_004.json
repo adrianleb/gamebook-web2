@@ -56,6 +56,14 @@
   "choices": [
     {
       "id": "choice_1",
+      "label": "Ask Maren about what kind of Prompter you should be",
+      "to": "sc_1_0_030",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "Maren has guided Prompters before. Their wisdom runs deep."
+    },
+    {
+      "id": "choice_2",
       "label": "Thank Maren and return to the booth",
       "to": "sc_1_0_001",
       "conditions": null,

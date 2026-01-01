@@ -1,0 +1,75 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_010",
+  "title": "The Pursuit Begins",
+  "act": 1,
+  "hub": 0,
+  "location": "The Wings",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["action", "pursuers_branch", "branch_setup"],
+    "author": "agent-b",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
+  },
+  "text": {
+    "location": "The Wings - Pursuers Path",
+    "paragraphs": [
+      "You move through the Wings with purpose. The amber light of the Threshold Stage pulses ahead, but something else catches your attention—a sound. Fast. Rhythmic. Like bare feet striking floorboards in desperate flight.",
+      "You catch a glimpse of movement at the edge of your vision. A figure in a tattered costume, their face half-erased as if an author abandoned them mid-description. They're running. From what, you cannot tell.",
+      "The Prompter's Handbook in your memory speaks of escaped characters—beings who slipped their narrative bonds and fled into the Understage. Some are lost. Some are dangerous. All are searching for something.",
+      "The figure vanishes through a doorway you didn't notice before. Beyond, the corridor stretches into darkness—a space that shouldn't exist in the Wings.",
+      "Your heart quickens. This is what you're meant to do. Not wait in the booth. Not cross blindly. Find them. Understand them. Maybe even help them.",
+      "The sound of footsteps fades, but the path remains."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "escaped_figure",
+      "name": "Escaped Figure",
+      "description": "A character in a tattered costume, half-erased face, fleeing through impossible spaces",
+      "disposition": 3,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "action_pursuit_rising",
+    "sfx": ["running_footsteps", "fabric_rustle", "breath_fast"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "branch_pursuers"
+    },
+    {
+      "type": "modify_stat",
+      "stat": "courage",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Chase after the figure",
+      "to": "sc_1_0_011",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to the Prompter's Booth",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The path remains, but the figure escapes."
+    }
+  ],
+  "flags": {
+    "sets": ["branch_pursuers"],
+    "requires": [],
+    "checks": []
+  }
+}

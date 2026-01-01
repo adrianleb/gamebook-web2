@@ -1,0 +1,55 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_022",
+  "title": "The Researcher's Crossing",
+  "act": 1,
+  "hub": 0,
+  "location": "First Crossing",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["discovery", "researcher_branch", "branch_convergence"],
+    "author": "agent-b",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
+  },
+  "text": {
+    "location": "First Crossing",
+    "paragraphs": [
+      "The corridor of light leads you out of the mirror chamber. The reflections fade, but their insights remain.",
+      "You emerge onto the First Crossing—the obsidian bridge spanning the void between worlds. The air hums with potential. Stories wait in the spaces between the stones, whispering fragments of narratives yet to unfold.",
+      "You understand now what the abandoned drafts meant. The Understage isn't just a place—it's a question. What stories deserve to exist? Who decides? What would you change, if you had the power?",
+      "The answers wait ahead. The Archives hold the first drafts, the abandoned narratives, the stories cut before their time. The Green Room holds the factions who would answer those questions differently.",
+      "Maren's voice echoes from somewhere behind you: \"Every crossing changes the traveler. You've seen what was lost. Now you must decide what will be found.\"",
+      "The obsidian path stretches forward. Beyond it, the Green Room—a neutral space where characters from different stories gather. The Archives wait beyond that, holding first drafts and abandoned narratives.",
+      "You stand at the threshold. The Understage awaits its Prompter."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "atmospheric_understage_entrance",
+    "sfx": ["distant_whispers", "obsidian_footsteps"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "researcher_path_complete"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Continue to the First Crossing",
+      "to": "sc_1_1_099",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The crossing waits. The story continues."
+    }
+  ],
+  "flags": {
+    "sets": ["researcher_path_complete"],
+    "requires": ["branch_researcher"],
+    "checks": []
+  }
+}

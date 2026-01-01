@@ -1,0 +1,141 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_021",
+  "title": "The Abandoned Drafts",
+  "act": 1,
+  "hub": 0,
+  "location": "The Threshold Stage - Mirror Corridor",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["discovery", "researcher_branch", "branch_complication"],
+    "author": "agent-b",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
+  },
+  "text": {
+    "location": "The Threshold Stage - Mirror Corridor",
+    "paragraphs": [
+      "You examine the inscriptions more closely. Each tells a story cut short:",
+      "",
+      "\"ACT 1, SCENE 4: The protagonist learns their conflict was manufactured. Production halted due to 'creative differences.'\"",
+      "",
+      "\"ENDING VARIANT B: The villain redeems themselves. Cut for being 'too subversive.'\"",
+      "",
+      "\"CHARACTER ARC: The side character discovers they're the main character. Abandoned after test audiences found it 'confusing.'\"",
+      "",
+      "The mirrors begin to flicker. Images move within them—glimpses of scenes that never were. A hero putting down their sword. A lover choosing themselves over romance. A villain refusing to monologue.",
+      "Then a voice speaks from the mirror that shows the writing desk. Not your reflection—someone else.",
+      "\"They cut us,\" the voice says. \"The Authors. The Editors. Anyone with the power to decide what stories deserve to exist. We're the abandoned drafts. The discarded possibilities.\"",
+      "\"You're the Prompter now. Will you do better? Or will you cut us too?\"",
+      "The mirror cracks. The image fades. But in its place, you see a path—a corridor of light where there was only glass before."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "abandoned_draft_voice",
+      "name": "Voice of the Abandoned",
+      "description": "A collective voice of discarded story possibilities speaking through mirrors",
+      "disposition": 4,
+      "faction": "revisionist"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "emotional_revelation_rising",
+    "sfx": ["mirror_crack", "glass_shatter", "voice_echo"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "modify_faction",
+      "faction": "revisionist",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Promise to give their stories a chance",
+      "to": "sc_1_0_022",
+      "conditions": {
+        "type": "stat_check",
+        "stat": "insight",
+        "op": "gte",
+        "value": 5,
+        "attemptable": true
+      },
+      "onSuccess": {
+        "to": "sc_1_0_022",
+        "effects": [
+          {
+            "type": "modify_faction",
+            "faction": "revisionist",
+            "value": 2
+          },
+          {
+            "type": "set_flag",
+            "flag": "researcher_drafts_promised"
+          }
+        ]
+      },
+      "onFailure": {
+        "to": "sc_1_0_022",
+        "effects": [
+          {
+            "type": "set_flag",
+            "flag": "researcher_drafts_doubted"
+          }
+        ]
+      }
+    },
+    {
+      "id": "choice_2",
+      "label": "Ask why they were cut",
+      "to": "sc_1_0_022",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "researcher_curious"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "insight",
+          "value": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Some stories must be cut for the greater good",
+      "to": "sc_1_0_022",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "researcher_pragmatic"
+        },
+        {
+          "type": "modify_faction",
+          "faction": "preservationist",
+          "value": 1
+        }
+      ],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["branch_researcher"],
+    "checks": [
+      {
+        "type": "stat_check",
+        "stat": "insight",
+        "op": "gte",
+        "value": 5,
+        "passEffect": "modify_faction:revisionist+2"
+      }
+    ]
+  }
+}

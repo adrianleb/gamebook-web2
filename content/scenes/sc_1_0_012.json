@@ -1,0 +1,56 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_012",
+  "title": "The Pursuers' Crossing",
+  "act": 1,
+  "hub": 0,
+  "location": "First Crossing",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["action", "pursuers_branch", "branch_convergence"],
+    "author": "agent-b",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
+  },
+  "text": {
+    "location": "First Crossing",
+    "paragraphs": [
+      "The escaped characters react to your words. The corridor stabilizes. The path forward opens.",
+      "You lead them through the shifting space, and suddenly the Wings are behind you. Before you lies the First Crossing—the obsidian bridge spanning the void between worlds.",
+      "The escaped characters gasp. \"The crossing,\" the hero whispers. \"The boundary.\"",
+      "\"We can't go further,\" the villain says. \"Not yet. Our stories... they still hold us.\"",
+      "They step aside, making a path for you. \"You go first, Prompter. Find out what lies beyond. Remember us.\"",
+      "The obsidian bridge stretches into darkness. The air hums with potential. Stories wait in the spaces between the stones, whispering fragments of narratives yet to unfold.",
+      "Maren's voice echoes from somewhere behind you: \"Every crossing changes the traveler. You cannot step into stories and remain unchanged.\"",
+      "You stand at the threshold. The Understage awaits its Prompter."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "atmospheric_understage_entrance",
+    "sfx": ["distant_whispers", "obsidian_footsteps"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "pursuers_path_complete"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Continue to the First Crossing",
+      "to": "sc_1_1_099",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The crossing waits. The story continues."
+    }
+  ],
+  "flags": {
+    "sets": ["pursuers_path_complete"],
+    "requires": ["branch_pursuers"],
+    "checks": []
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_030",
+  "title": "Maren's Test",
+  "act": 1,
+  "hub": 0,
+  "location": "The Prompter's Booth",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["dialogue", "negotiator_branch", "branch_setup"],
+    "author": "agent-b",
+    "createdAt": "2026-01-01",
+    "updatedAt": "2026-01-01"
+  },
+  "text": {
+    "location": "The Prompter's Booth",
+    "paragraphs": [
+      "\"You have the key,\" Maren says. Their features shift—now young, now impossibly old. \"But do you have the answers?\"",
+      "They lean forward, candlelight dancing in eyes that have seen a thousand Prompters come and go.",
+      "\"The crossing waits. The Understage waits. But before you go, there is something we must discuss. Something every Prompter must face.\"",
+      "They gesture to the handbook on the desk. THE PROMPTER'S GUIDE TO THE UNDERSTAGE. The pages are filled with rules, procedures, protocols.",
+      "\"The book will tell you how to guide stories,\" Maren says. \"It will not tell you whose stories deserve guiding. It will not tell you what to do when the rules conflict. It will not tell you who you become when you hold the pen.\"",
+      "\"I've watched Prompters choose. Some preserve every story, even the broken ones. Some rewrite what they cannot accept. Some try to break the boundary between fiction and reality. And some... some refuse to choose at all.\"",
+      "They stand, their cloak flowing like ink in water.",
+      "\"Before you cross, tell me: What kind of Prompter will you be?\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "maren",
+      "name": "Maren",
+      "description": "A figure of indeterminate age, wrapped in a cloak that seems to absorb the candlelight. Their voice carries the weight of countless rehearsals.",
+      "disposition": 7,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "dialogue_weighty_choice",
+    "sfx": ["cloak_shift", "candle_flicker"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "branch_negotiator"
+    },
+    {
+      "type": "modify_stat",
+      "stat": "insight",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "\"I will preserve every story as written.\"",
+      "to": "sc_1_0_031",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "preservationist",
+          "value": 2
+        },
+        {
+          "type": "set_flag",
+          "flag": "negotiator_preservationist"
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "\"I will improve the stories that need changing.\"",
+      "to": "sc_1_0_031",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "revisionist",
+          "value": 2
+        },
+        {
+          "type": "set_flag",
+          "flag": "negotiator_revisionist"
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "\"I will help characters become real.\"",
+      "to": "sc_1_0_031",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "exiter",
+          "value": 2
+        },
+        {
+          "type": "set_flag",
+          "flag": "negotiator_exiter"
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "\"I need to learn more before I choose.\"",
+      "to": "sc_1_0_031",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "negotiator_independent"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "insight",
+          "value": 1
+        }
+      ],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["branch_negotiator"],
+    "requires": [],
+    "checks": []
+  }
+}
