@@ -1,0 +1,77 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-SL-002",
+    "description": "Complex State Save Point - Tests saving with complex state (items, flags, stats after stat check success)",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": ["booth_key"],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose 'Attempt the iron door' (has booth_key)",
+      "expectedScene": "sc_1_0_003",
+      "checkpoint": true,
+      "assertions": {
+        "inventoryContains": ["booth_key"],
+        "currentScene": "sc_1_0_003"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "checkpoint",
+      "description": "At threshold - verify courage check setup (courage=5, threshold=5)",
+      "assertions": {
+        "stats": { "courage": 5 }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Step into the darkness' (courage check: 5 >= 5 = SUCCESS)",
+      "expectedScene": "sc_1_0_901",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_1_0_901"
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "save_snapshot",
+      "snapshotName": "pt-sl-002-complex-state",
+      "description": "Save complex state (has booth_key, path through threshold, success ending)"
+    },
+    {
+      "sequence": 5,
+      "action": "load_snapshot",
+      "snapshotName": "pt-sl-002-complex-state",
+      "description": "Load saved state - verify all complex state preserved",
+      "assertions": {
+        "inventoryContains": ["booth_key"],
+        "currentScene": "sc_1_0_901"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_0_901",
+    "inventoryRequired": ["booth_key"]
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

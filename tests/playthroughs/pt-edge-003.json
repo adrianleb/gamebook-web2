@@ -1,0 +1,77 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-EDGE-003",
+    "description": "Maximum Stats Navigation - Tests game is playable with maximum stat values",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": ["booth_key"],
+    "stats": {
+      "health": 10,
+      "courage": 10,
+      "insight": 10
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify starting state with maximum stats (courage=10, insight=10)",
+      "assertions": {
+        "stats": { "courage": 10, "insight": 10 },
+        "inventoryContains": ["booth_key"],
+        "choicesAvailable": 3
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose 'Attempt the iron door' (has booth_key)",
+      "expectedScene": "sc_1_0_003",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_1_0_003",
+        "stats": { "courage": 10 }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "At threshold - courage check should pass (10 >= 5)",
+      "assertions": {
+        "stats": { "courage": 10 },
+        "choicesAvailable": 2
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Step into the darkness' (courage check: 10 >= 5 = SUCCESS)",
+      "expectedScene": "sc_1_0_901",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_1_0_901",
+        "stats": { "courage": 10 }
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_0_901",
+    "inventoryRequired": ["booth_key"],
+    "statsRequired": {
+      "courage": 10,
+      "insight": 10
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

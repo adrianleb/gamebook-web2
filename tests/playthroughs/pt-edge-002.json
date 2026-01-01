@@ -1,0 +1,67 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-EDGE-002",
+    "description": "Minimum Stats Navigation - Tests game is playable with minimum stat values",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": [],
+    "stats": {
+      "health": 10,
+      "courage": 0,
+      "insight": 3
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify starting state with minimum courage (0)",
+      "assertions": {
+        "stats": { "courage": 0 },
+        "choicesAvailable": 3
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Step through the opening to the right' (direct path - no stat check required)",
+      "expectedScene": "sc_1_0_002",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_1_0_002",
+        "stats": { "courage": 0 }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Continue toward the light' (reach resolution with minimum stats)",
+      "expectedScene": "sc_1_0_900",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_1_0_900",
+        "stats": { "courage": 0 }
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_0_900",
+    "flagsRequired": ["path_direct"],
+    "inventoryRequired": ["wings_pass"],
+    "statsRequired": {
+      "courage": 0
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
