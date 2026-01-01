@@ -517,14 +517,33 @@ export class SceneLoader {
     const rawEffects = raw.effectsOnEnter ?? raw.effects ?? [];
     const effects = this.normalizeEffects(rawEffects);
 
-    // Transform choices: normalize conditions, normalize effects, map onChoose to effects
-    const choices: Choice[] = raw.choices.map(choice => ({
-      label: choice.label,
-      to: choice.to,
-      conditions: this.normalizeConditions(choice.conditions),
-      effects: this.normalizeEffects(choice.effects ?? choice.onChoose),
-      disabledHint: choice.disabledHint,
-    }));
+    // Transform choices: normalize conditions, normalize effects, preserve attemptable structure
+    const choices: Choice[] = raw.choices.map(choice => {
+      const baseChoice = {
+        label: choice.label,
+        to: choice.to,
+        conditions: this.normalizeConditions(choice.conditions),
+        effects: this.normalizeEffects(choice.effects ?? choice.onChoose),
+        disabledHint: choice.disabledHint,
+      };
+
+      // Preserve attemptable stat check structure (onSuccess/onFailure)
+      if (choice.onSuccess || choice.onFailure) {
+        return {
+          ...baseChoice,
+          onSuccess: choice.onSuccess ? {
+            to: choice.onSuccess.to,
+            effects: choice.onSuccess.effects ? this.normalizeEffects(choice.onSuccess.effects) : undefined,
+          } : undefined,
+          onFailure: choice.onFailure ? {
+            to: choice.onFailure.to,
+            effects: choice.onFailure.effects ? this.normalizeEffects(choice.onFailure.effects) : undefined,
+          } : undefined,
+        };
+      }
+
+      return baseChoice;
+    });
 
     // Handle audio.music/audio.sfx flattening
     const music = raw.audio?.music ?? raw.music ?? undefined;

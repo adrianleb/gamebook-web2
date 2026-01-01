@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-01-01T21:32:55.854Z",
+  "playthrough": "pt-sl-002-complex-state",
+  "step": 4,
+  "name": "pt-sl-002-complex-state",
+  "engineVersion": 1,
+  "contentVersion": "0.0.1",
+  "state": {
+    "version": 1,
+    "contentVersion": "0.0.1",
+    "timestamp": 1767303175853,
+    "currentSceneId": "sc_1_0_901",
+    "history": [
+      {
+        "sceneId": "sc_1_0_001",
+        "timestamp": 1767303175853,
+        "visitedCount": 2
+      },
+      {
+        "sceneId": "sc_1_0_003",
+        "timestamp": 1767303175853,
+        "choiceLabel": "Attempt the iron door",
+        "visitedCount": 1
+      },
+      {
+        "sceneId": "sc_1_0_901",
+        "timestamp": 1767303175854,
+        "choiceLabel": "Step into the darkness",
+        "visitedCount": 1
+      }
+    ],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 3
+    },
+    "flags": {},
+    "inventory": {},
+    "factions": {
+      "preservationist": 2
+    }
+  }
+}
