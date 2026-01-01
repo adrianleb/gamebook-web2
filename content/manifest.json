@@ -291,7 +291,8 @@
       "hub": 1,
       "status": "complete",
       "description": "Act 1 Climax - First descent into Understage",
-      "mechanics": ["stat_check", "faction_preview"]
+      "mechanics": ["stat_check", "faction_preview"],
+      "unreachable": true
     },
     "sc_2_2_001": {
       "title": "Green Room Arrival",
