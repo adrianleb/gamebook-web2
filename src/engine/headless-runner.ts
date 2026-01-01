@@ -256,7 +256,7 @@ export class HeadlessRunner {
     const selectedChoice = availableChoices[step.choiceIndex];
 
     // Check if choice is enabled
-    if (!selectedChoice.enabled) {
+    if (selectedChoice.state !== 'enabled') {
       return {
         status: 'failed',
         failure: {
