@@ -162,9 +162,17 @@ function collectSceneReferences(scene) {
   // Check choices (canonical format: choice.effects)
   if (scene.choices) {
     for (const choice of scene.choices) {
-      // Target scene
+      // Target scene (standard choice)
       if (choice.to) {
         refs.add(choice.to);
+      }
+
+      // Attemptable stat check branching paths
+      if (choice.onSuccess?.to) {
+        refs.add(choice.onSuccess.to);
+      }
+      if (choice.onFailure?.to) {
+        refs.add(choice.onFailure.to);
       }
 
       // Choice conditions
@@ -172,6 +180,14 @@ function collectSceneReferences(scene) {
 
       // Choice effects
       extractSceneRefsFromEffects(choice.effects, refs);
+
+      // Attemptable branching effects
+      if (choice.onSuccess?.effects) {
+        extractSceneRefsFromEffects(choice.onSuccess.effects, refs);
+      }
+      if (choice.onFailure?.effects) {
+        extractSceneRefsFromEffects(choice.onFailure.effects, refs);
+      }
     }
   }
 
@@ -184,8 +200,8 @@ function collectSceneReferences(scene) {
 async function buildSceneIndex(manifest) {
   if (!manifest.sceneIndex) return;
 
-  for (const entry of Object.values(manifest.sceneIndex)) {
-    results.sceneIndex.set(entry.id, entry);
+  for (const [sceneId, entry] of Object.entries(manifest.sceneIndex)) {
+    results.sceneIndex.set(sceneId, entry);
   }
 
   // Start scene is always reachable (canonical format: manifest.startingScene)
