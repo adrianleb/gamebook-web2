@@ -7,15 +7,15 @@ Pre-release validation checklist for Phase 5 QA & Release.
 ### Functional Requirements
 
 - [ ] **All 5 endings** playtested and verified
-  - [ ] Ending 1: Alone (no alliance, low resolve)
-  - [ ] Ending 2: The Understudy's Path (alliance with Understudy)
-  - [ ] Ending 3: The Director's Favor (high favor, no alliance)
-  - [ ] Ending 4: CHORUS Ascendant (high CHORUS stat)
-  - [ ] Ending 5: Confrontation Victory (high all stats, alliance)
+  - [ ] Ending 1: The Revised Draft (revisionist >= 7, editorState=defeated)
+  - [ ] Ending 2: The Open Book (exiter >= 7, editorState=persuaded)
+  - [ ] Ending 3: The Closed Canon (preservationist >= 7, editorState=defeated)
+  - [ ] Ending 4: The Blank Page (independent, editorState=revealedTruth)
+  - [ ] Ending 5: The Eternal Rehearsal (fail-state, always reachable)
 
 - [ ] **No softlocks** outside intentional endings
   - [ ] Run `ending-graph.test.ts` - validates no dead ends
-  - [ ] Run all 5 ending playthroughs with max choices
+  - [ ] Run all 5 ending playthroughs: `tests/playthroughs/endings/ending-*.json`
   - [ ] Manual spot-check of conditional branches
 
 - [ ] **Save/load regression** tests pass for all hubs
@@ -32,7 +32,7 @@ Pre-release validation checklist for Phase 5 QA & Release.
 
 - [ ] **No console errors** in any tested path
   - [ ] Run browser DevTools during manual playthrough
-  - [ ] CI tests pass (174 tests)
+  - [ ] CI tests pass (206 tests, 52 skipped)
 
 - [ ] **First load completes** in reasonable time
   - [ ] Target: <10 seconds on typical connection
