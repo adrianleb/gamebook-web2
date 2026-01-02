@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-02T01:57:18.788Z",
+  "timestamp": "2026-01-02T02:13:04.623Z",
   "playthrough": "test_snapshot",
   "step": 1,
   "name": "test_snapshot",
@@ -8,7 +8,7 @@
   "state": {
     "version": 1,
     "contentVersion": "1.0.0",
-    "timestamp": 1767319038788,
+    "timestamp": 1767319984623,
     "currentSceneId": "sc_1_start",
     "history": [],
     "stats": {
