@@ -24,9 +24,11 @@ This document is the **canonical reference for all state variables** in The Unde
 
 | Stat ID | Display Name | Min | Max | Starting Value | Description |
 |---------|--------------|-----|-----|----------------|-------------|
-| `health` | Health | 0 | 10 | 10 | Player's health points. Reaching 0 typically triggers fail-state ending. Modified by stat check failures. |
-| `courage` | Courage | 0 | 10 | 5 | Bravery for risky actions. Used in stat checks for dangerous choices (e.g., crossing the Threshold Stage). |
-| `insight` | Insight | 0 | 10 | 3 | Perception and understanding. Used for discovery choices and uncovering hidden information. |
+| `script` | Script | 1 | 4 | 1-4 | Knowledge of narrative patterns, genre awareness, and preparation. Used for research, foresight, and seeing through deceptions. Cannot decrease. |
+| `stage_presence` | Stage Presence | 1 | 4 | 1-4 | Force of personality, dramatic timing, and command of attention. Used for social confrontations, inspiring allies, and bold entrances. Cannot decrease. |
+| `improv` | Improv | 1 | 4 | 1-4 | Adaptability, quick thinking, and unorthodox solutions. Used for escape routes, creative solutions, and breaking expected patterns. Cannot decrease. |
+
+**Note:** Stats use a 1-4 scale (not 0-10) per `content/stats.json`. Players allocate 6 starting points across the three stats with min 1/max 4 per stat.
 
 ### Stat Check Mechanics
 
@@ -34,16 +36,22 @@ Stat checks compare current stat value against a threshold using operators:
 
 | Operator | Meaning | Example |
 |----------|---------|---------|
-| `gte` | Greater than or equal | `courage >= 5` passes when courage is 5+ |
-| `lte` | Less than or equal | `health <= 3` for critical health warning |
+| `gte` | Greater than or equal | `stage_presence >= 3` passes when Stage Presence is 3+ |
+| `lte` | Less than or equal | `script <= 2` for difficulty gating |
 | `eq` | Exactly equal | Rare, used for specific thresholds |
-| `gt` | Greater than | `insight > 5` (strictly greater) |
-| `lt` | Less than | `health < 1` (zero health check) |
+| `gt` | Greater than | `improv > 2` (strictly greater) |
+| `lt` | Less than | `script < 3` for lower-tier content |
+
+**Threshold Tiers:**
+- **1 (Basic):** Anyone can attempt
+- **2 (Standard):** Requires some investment
+- **3 (Advanced):** Requires significant investment
+- **4 (Expert):** Requires near-maximum investment
 
 **Failure Consequences:** Stat check failures typically result in:
 - Alternative narrative path (different scene branch)
-- Stat modification (e.g., `health -1` for failing courage check)
 - Flag setting (e.g., `crossing_failed = true`)
+- Note: Stats cannot decrease - stat penalties were removed from the design
 
 ---
 
@@ -58,8 +66,8 @@ Flags track binary state throughout the game - either something happened or it d
 | `game_started` | false | Set on first scene load (sc_1_0_001) | sc_1_0_001 |
 | `location_booth_visited` | false | Tracks if player visited The Prompter's Booth | sc_1_0_001 |
 | `path_direct` | false | Player took the direct path to The Wings | sc_1_0_002 |
-| `crossing_succeeded` | false | Successfully crossed the Threshold Stage (courage check) | sc_1_0_003, sc_1_0_901 |
-| `crossing_failed` | false | Failed the crossing courage check | sc_1_0_003, sc_1_0_902 |
+| `crossing_succeeded` | false | Successfully crossed the Threshold Stage (stage_presence check) | sc_1_0_003 |
+| `crossing_failed` | false | Failed the crossing stage_presence check | sc_1_0_003, sc_1_0_902 |
 | `met_maren` | false | Player spoke with Maren character | sc_1_0_004 |
 
 ### Act Transition Flags
@@ -266,7 +274,7 @@ description: The conflict continues indefinitely. You remain a Prompter forever.
 
 | Variable Type | Can Decrease? | Can Increase? | Can Be Removed? |
 |---------------|---------------|---------------|-----------------|
-| Stats | Yes (e.g., health -1) | Yes (e.g., faction +1) | No (stats persist) |
+| Stats | No (stats are immutable after character creation) | N/A (set at character creation only) | No (stats persist) |
 | Flags | No (boolean) | No (boolean) | No (flags persist) |
 | Inventory | Yes (remove-item effect) | Yes (add-item effect) | Yes |
 | Factions | No (only accumulate) | Yes (modify_faction effect) | No |
@@ -308,11 +316,11 @@ When adding or modifying state variables, verify:
 
 ```typescript
 interface GameState {
-  // Stats (numeric, 0-10 range)
+  // Stats (numeric, 1-4 range per stats.json)
   stats: {
-    health: number;      // Min: 0, Max: 10, Default: 10
-    courage: number;     // Min: 0, Max: 10, Default: 5
-    insight: number;     // Min: 0, Max: 10, Default: 3
+    script: number;         // Min: 1, Max: 4, Set at character creation
+    stage_presence: number; // Min: 1, Max: 4, Set at character creation
+    improv: number;         // Min: 1, Max: 4, Set at character creation
   };
 
   // Factions (numeric, 0-10 range)
@@ -347,7 +355,7 @@ interface GameState {
 
 | Condition Type | Target | Operator | Example |
 |----------------|--------|----------|---------|
-| `stat_check` | `stats` | gte, lte, eq, gt, lt | `courage >= 5` |
+| `stat_check` | `stats` | gte, lte, eq, gt, lt | `stage_presence >= 3` |
 | `flag_check` | `flags` | has, not_has | `has: game_started` |
 | `has_item` | `inventory` | has | `has: booth_key` |
 | `faction_check` | `factions` | gte, lte, eq | `revisionist >= 7` |
@@ -356,8 +364,7 @@ interface GameState {
 
 | Effect Type | Target | Modifier | Example |
 |-------------|--------|----------|---------|
-| `set_stat` | `stats` | Sets absolute value | `health = 10` |
-| `modify_stat` | `stats` | Adds/subtracts value | `health -1` |
+| `set_stat` | `stats` | Sets absolute value | `script = 3` (rare, stats are normally immutable) |
 | `set_flag` | `flags` | Sets boolean true | `crossing_failed = true` |
 | `add_item` | `inventory` | Adds item ID | `+booth_key` |
 | `remove_item` | `inventory` | Removes item ID | `-booth_key` |
@@ -383,6 +390,7 @@ None identified during consolidation. All source documents (VERTICAL_SLICE.md, E
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2 | 2026-01-02 | **FIXED** Stat definitions to match canonical stats.json. Replaced legacy stats (health, courage, insight, charm) with canonical stats (script, stage_presence, improv). Updated stat scale from 0-10 to 1-4. Removed stat decrease/penalty mechanics (stats are immutable after character creation). Updated all examples and code references throughout. |
 | 1.1 | 2026-01-02 | **FIXED** Ending requirements to match actual sc_3_4_098 implementation. Removed incorrect editorState enum references (defeated/persuaded) from faction ending requirements. Changed Independent ending to use editorState_revealedTruth boolean flag. Added clarification that combined faction+editorState AND gates are DEFERRED per MILESTONES.md Issue #129. |
 | 1.0 | 2025-12-31 | Initial consolidation from VERTICAL_SLICE.md, ENDING_VALIDATION.md, manifest.json, and scene content files. Created as Phase 5 deliverable for canonical state variable reference. |
 
