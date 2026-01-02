@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-01T21:52:55.963Z",
+  "timestamp": "2026-01-02T02:21:47.304Z",
   "playthrough": "pre_wings_direct",
   "step": 4,
   "name": "pre_wings_direct",
@@ -8,17 +8,17 @@
   "state": {
     "version": 1,
     "contentVersion": "0.0.1",
-    "timestamp": 1767304375961,
+    "timestamp": 1767320507303,
     "currentSceneId": "sc_1_0_002",
     "history": [
       {
         "sceneId": "sc_1_0_001",
-        "timestamp": 1767304375962,
+        "timestamp": 1767320507304,
         "visitedCount": 2
       },
       {
         "sceneId": "sc_1_0_002",
-        "timestamp": 1767304375962,
+        "timestamp": 1767320507304,
         "choiceLabel": "Step through the opening to the right",
         "visitedCount": 1
       }
