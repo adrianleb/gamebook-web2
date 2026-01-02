@@ -41,9 +41,9 @@ steps:
 ```json
 {
   "stats": {
-    "health": 10,      // 0-10 range
-    "courage": 5,      // 0-10 range
-    "insight": 3       // 0-10 range
+    "script": 2,           // 1-4 range
+    "stage_presence": 2,   // 1-4 range
+    "improv": 2            // 1-4 range
   },
   "flags": {
     "game_started": true,
@@ -86,16 +86,16 @@ sc_1_0_001 ─[Choose: "Go to the wings"]──> sc_1_0_002 ─[Choose: "Continu
 
 | Step | Scene | Action | Checkpoint | Expected State |
 |------|-------|--------|------------|----------------|
-| 1 | sc_1_0_001 | (Starting state) | ✅ save_point | `game_started=false`, health=10, courage=5, inventory=[] |
+| 1 | sc_1_0_001 | (Starting state) | ✅ save_point | `game_started=false`, script=2, stage_presence=2, improv=2, inventory=[] |
 | 2 | sc_1_0_001 | Choose "Go to the wings" | ✅ softlock_check | Choice enabled (no requirements) |
-| 3 | sc_1_0_002 | (Arrived) | ✅ save_point | `path_direct=true`, has "wings_pass", health=10 |
+| 3 | sc_1_0_002 | (Arrived) | ✅ save_point | `path_direct=true`, has "wings_pass", script=2, stage_presence=2, improv=2 |
 | 4 | sc_1_0_002 | Choose "Continue forward" | ✅ softlock_check | Choice enabled |
 | 5 | resolution_direct | (End state) | ✅ mechanic_test | Reached resolution, no errors |
 
 **Final State Assertions:**
 ```json
 {
-  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
   "flags": {
     "game_started": true,
     "location_booth_visited": true,
@@ -139,7 +139,7 @@ sc_1_0_001 ─[Choose: "Talk to Maren"]──> sc_1_0_004 ─[Receive key]──
 **Final State Assertions:**
 ```json
 {
-  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
   "flags": {
     "game_started": true,
     "location_booth_visited": true,
@@ -162,7 +162,7 @@ sc_1_0_001 ─[Choose: "Talk to Maren"]──> sc_1_0_004 ─[Receive key]──
 
 ### PT-VS-003: Stat Check Success Path
 
-**Tests:** Stat check mechanics (courage >= 5), success branch
+**Tests:** Stat check mechanics (stage_presence >= 2), success branch
 
 **Entry Point:** `sc_1_0_001` (The Booth Awakens)
 
@@ -170,23 +170,23 @@ sc_1_0_001 ─[Choose: "Talk to Maren"]──> sc_1_0_004 ─[Receive key]──
 
 **Path:**
 ```
-sc_1_0_001 ─[With booth_key, courage=5]──> sc_1_0_003 ─[Courage check: SUCCESS]──> resolution_crossing_success
+sc_1_0_001 ─[With booth_key, stage_presence=2]──> sc_1_0_003 ─[Stage Presence check: SUCCESS]──> resolution_crossing_success
 ```
 
 **Steps:**
 
 | Step | Scene | Action | Checkpoint | Expected State |
 |------|-------|--------|------------|----------------|
-| 1 | sc_1_0_001 | (Has booth_key, courage=5) | ✅ save_point | inventory=["booth_key"], courage=5 |
+| 1 | sc_1_0_001 | (Has booth_key, stage_presence=2) | ✅ save_point | inventory=["booth_key"], stage_presence=2 |
 | 2 | sc_1_0_001 | Choose "Unlock the door" | ✅ softlock_check | Choice enabled (has key) |
-| 3 | sc_1_0_003 | (At threshold, courage check) | ✅ mechanic_test | Courage check: 5 >= 5 = **SUCCESS** |
+| 3 | sc_1_0_003 | (At threshold, stage presence check) | ✅ mechanic_test | Stage Presence check: 2 >= 2 = **SUCCESS** |
 | 4 | sc_1_0_003 | (Success branch) | ✅ save_point | `crossing_succeeded=true`, faction+1 |
 | 5 | resolution_crossing_success | (End state) | ✅ mechanic_test | Reached success resolution |
 
 **Final State Assertions:**
 ```json
 {
-  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
   "flags": {
     "game_started": true,
     "location_booth_visited": true,
@@ -199,7 +199,7 @@ sc_1_0_001 ─[With booth_key, courage=5]──> sc_1_0_003 ─[Courage check: S
 ```
 
 **Critical Mechanics Validated:**
-- Stat check evaluation (courage >= 5)
+- Stat check evaluation (stage_presence >= 2)
 - Success branch execution
 - Faction modification on success
 
@@ -209,31 +209,31 @@ sc_1_0_001 ─[With booth_key, courage=5]──> sc_1_0_003 ─[Courage check: S
 
 ### PT-VS-004: Stat Check Failure Path
 
-**Tests:** Stat check mechanics, failure branch, health penalty
+**Tests:** Stat check mechanics, failure branch
 
 **Entry Point:** `sc_1_0_001` (The Booth Awakens)
 
-**Prerequisites:** Must have `booth_key`, courage < 5 (manually set for testing)
+**Prerequisites:** Must have `booth_key`, stage_presence < 2 (manually set for testing)
 
 **Path:**
 ```
-sc_1_0_001 ─[With booth_key, courage=3]──> sc_1_0_003 ─[Courage check: FAILURE]──> resolution_crossing_failure
+sc_1_0_001 ─[With booth_key, stage_presence=1]──> sc_1_0_003 ─[Stage Presence check: FAILURE]──> resolution_crossing_failure
 ```
 
 **Steps:**
 
 | Step | Scene | Action | Checkpoint | Expected State |
 |------|-------|--------|------------|----------------|
-| 1 | sc_1_0_001 | (Has booth_key, courage=3) | ✅ save_point | inventory=["booth_key"], courage=3 |
+| 1 | sc_1_0_001 | (Has booth_key, stage_presence=1) | ✅ save_point | inventory=["booth_key"], stage_presence=1 |
 | 2 | sc_1_0_001 | Choose "Unlock the door" | ✅ softlock_check | Choice enabled (has key) |
-| 3 | sc_1_0_003 | (At threshold, courage check) | ✅ mechanic_test | Courage check: 3 >= 5 = **FAILURE** |
-| 4 | sc_1_0_003 | (Failure branch) | ✅ save_point | `crossing_failed=true`, health-1 |
+| 3 | sc_1_0_003 | (At threshold, stage presence check) | ✅ mechanic_test | Stage Presence check: 1 >= 2 = **FAILURE** |
+| 4 | sc_1_0_003 | (Failure branch) | ✅ save_point | `crossing_failed=true` |
 | 5 | resolution_crossing_failure | (End state) | ✅ mechanic_test | Reached failure resolution |
 
 **Final State Assertions:**
 ```json
 {
-  "stats": { "health": 9, "courage": 3, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 1, "improv": 2 },
   "flags": {
     "game_started": true,
     "location_booth_visited": true,
@@ -248,7 +248,6 @@ sc_1_0_001 ─[With booth_key, courage=3]──> sc_1_0_003 ─[Courage check: F
 **Critical Mechanics Validated:**
 - Stat check evaluation failure condition
 - Failure branch execution
-- Health stat modification (penalty)
 
 **Regression Checkpoints:** Steps 1, 3, 4
 
@@ -277,7 +276,7 @@ sc_1_1_099 ─[Choose: "Cross into the Understage"]──> sc_2_2_001
 **Final State Assertions:**
 ```json
 {
-  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
   "flags": {
     "game_started": true,
     "act1_complete": true,
@@ -319,12 +318,12 @@ These playthroughs specifically test state persistence across save/load operatio
 | 2 | sc_1_0_002 | **SAVE to Slot 1** | Save file created |
 | 3 | sc_1_0_002 | Choose "Continue forward" | Reach resolution |
 | 4 | resolution | **LOAD from Slot 1** | Back at sc_1_0_002 |
-| 5 | sc_1_0_002 | Verify state | `path_direct=true`, has "wings_pass", health=10 |
+| 5 | sc_1_0_002 | Verify state | `path_direct=true`, has "wings_pass", script=2, stage_presence=2, improv=2 |
 
 **State Snapshot (Slot 1):**
 ```json
 {
-  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
   "flags": {
     "game_started": true,
     "location_booth_visited": true,
@@ -363,7 +362,7 @@ These playthroughs specifically test state persistence across save/load operatio
 **State Snapshot (Slot 2):**
 ```json
 {
-  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
   "flags": {
     "game_started": true,
     "location_booth_visited": true,
@@ -397,7 +396,7 @@ These playthroughs test for softlock conditions (scenes with no valid choices).
 
 **Invalid States to Test:**
 - Empty inventory: Should still have 2+ choices available
-- Low courage (0): Should still have 2+ choices available
+- Low stage_presence (1): Should still have 2+ choices available
 - All flags false: Should still have 2+ choices available
 
 ---
@@ -446,7 +445,7 @@ sc_3_4_098 ─[Choose: "The Revised Draft (Revisionist)"]──> sc_3_4_901
 **Final State Assertions:**
 ```json
 {
-  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
   "flags": {
     "game_started": true,
     "act1_complete": true,
@@ -499,7 +498,7 @@ sc_3_4_098 ─[Choose: "The Open Book (Exiter)"]──> sc_3_4_902
 **Final State Assertions:**
 ```json
 {
-  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
   "flags": {
     "game_started": true,
     "act1_complete": true,
@@ -552,7 +551,7 @@ sc_3_4_098 ─[Choose: "The Closed Canon (Preservationist)"]──> sc_3_4_903
 **Final State Assertions:**
 ```json
 {
-  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
   "flags": {
     "game_started": true,
     "act1_complete": true,
@@ -606,7 +605,7 @@ sc_3_4_098 ─[Choose: "The Blank Page (Independent)"]──> sc_3_4_904
 **Final State Assertions:**
 ```json
 {
-  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
   "flags": {
     "game_started": true,
     "act1_complete": true,
@@ -662,7 +661,7 @@ sc_3_4_098 ─[Choose: "Refuse" / "The Eternal Rehearsal"]──> sc_3_4_999
 **Final State Assertions:**
 ```json
 {
-  "stats": { "health": 10, "courage": 5, "insight": 3 },
+  "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
   "flags": {
     "game_started": true,
     "act1_complete": true,
@@ -744,7 +743,7 @@ sc_3_4_098 ─[Choose: "Refuse" / "The Eternal Rehearsal"]──> sc_3_4_999
 **Tests:** Game is playable with minimum stat values
 
 **Procedure:**
-1. Start new game with courage=0 (manually set for testing)
+1. Start new game with stage_presence=1, improv=1, script=1 (manually set for testing)
 2. Navigate through direct path (PT-VS-001)
 3. Expected: Can reach resolution without stat check issues
 
@@ -755,7 +754,7 @@ sc_3_4_098 ─[Choose: "Refuse" / "The Eternal Rehearsal"]──> sc_3_4_999
 **Tests:** Game is playable with maximum stat values
 
 **Procedure:**
-1. Start new game with all stats=10
+1. Start new game with all stats=4
 2. Navigate through stat check path (PT-VS-003)
 3. Expected: Stat check passes, appropriate success branch
 
@@ -780,7 +779,7 @@ For automated testing, these playthrough scripts map to executable JSON files in
       "choice_label": "Go to the wings",
       "checkpoint": true,
       "assertions": {
-        "stats": { "health": 10, "courage": 5, "insight": 3 },
+        "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
         "flags": { "game_started": true, "location_booth_visited": true },
         "inventory": ["wings_pass"],
         "current_scene": "sc_1_0_002"
@@ -838,12 +837,12 @@ When adding new scenes or mechanics, use this checklist:
 
 ## Appendix: State Variable Reference
 
-### Stats (0-10 range)
+### Stats (1-4 range)
 | Stat | Starting | Description |
 |------|----------|-------------|
-| health | 10 | Player's health points |
-| courage | 5 | Bravery for risky actions |
-| insight | 3 | Perception and understanding |
+| script | 2 | Knowledge of narrative patterns, genre awareness, preparation |
+| stage_presence | 2 | Force of personality, dramatic timing, command of attention |
+| improv | 2 | Adaptability, quick thinking, unorthodox solutions |
 
 ### Flags
 | Flag | Type | Purpose |
