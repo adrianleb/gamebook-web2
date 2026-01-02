@@ -167,8 +167,7 @@
       "tier": "bittersweet",
       "requirements": {
         "faction": "revisionist",
-        "factionLevel": 7,
-        "editorState": "defeated"
+        "factionLevel": 7
       }
     },
     {
@@ -179,8 +178,7 @@
       "tier": "hopeful",
       "requirements": {
         "faction": "exiter",
-        "factionLevel": 7,
-        "editorState": "persuaded"
+        "factionLevel": 7
       }
     },
     {
@@ -191,8 +189,7 @@
       "tier": "melancholic",
       "requirements": {
         "faction": "preservationist",
-        "factionLevel": 7,
-        "editorState": "defeated"
+        "factionLevel": 7
       }
     },
     {
@@ -202,8 +199,7 @@
       "description": "Both Understage and its deeper threat end. Reality with no more new stories. Tragic but peaceful.",
       "tier": "tragic",
       "requirements": {
-        "faction": "independent",
-        "editorState": "revealedTruth"
+        "flag": "editorState_revealedTruth"
       }
     },
     {
@@ -212,9 +208,7 @@
       "title": "The Eternal Rehearsal",
       "description": "The conflict continues indefinitely. You remain a Prompter forever. Ambiguous.",
       "tier": "ambiguous",
-      "requirements": {
-        "finalChoice": "failed_or_refused"
-      }
+      "requirements": {}
     }
   ],
   "sceneIndex": {
@@ -502,7 +496,7 @@
       "act": 3,
       "hub": 4,
       "status": "complete",
-      "description": "Ending 1 - Revisionist (revisionist >= 7, editorState: defeated)",
+      "description": "Ending 1 - Revisionist (revisionist >= 7)",
       "ending": true,
       "endingId": 1
     },
@@ -512,7 +506,7 @@
       "act": 3,
       "hub": 4,
       "status": "complete",
-      "description": "Ending 2 - Exiter (exiter >= 7, editorState: persuaded)",
+      "description": "Ending 2 - Exiter (exiter >= 7)",
       "ending": true,
       "endingId": 2
     },
@@ -522,7 +516,7 @@
       "act": 3,
       "hub": 4,
       "status": "complete",
-      "description": "Ending 3 - Preservationist (preservationist >= 7, editorState: defeated)",
+      "description": "Ending 3 - Preservationist (preservationist >= 7)",
       "ending": true,
       "endingId": 3
     },
@@ -532,7 +526,7 @@
       "act": 3,
       "hub": 4,
       "status": "complete",
-      "description": "Ending 4 - Independent (editorState: revealedTruth)",
+      "description": "Ending 4 - Independent (flag: editorState_revealedTruth)",
       "ending": true,
       "endingId": 4
     },
