@@ -307,12 +307,6 @@ export class SaveManager {
       // Store in localStorage
       const storageKey = this.getStorageKey(slotId);
       this.storage.setItem(storageKey, json);
-
-      console.log(`[SaveManager] Saved to slot ${slotId}:`, {
-        sceneTitle,
-        version: SAVE_FORMAT_VERSION,
-        timestamp: new Date(saveData.timestamp).toISOString(),
-      });
     } catch (error) {
       throw this.handleSaveError(error, 'save');
     }
@@ -342,11 +336,6 @@ export class SaveManager {
       // Check version and apply migrations if needed
       const migratedData = this.migrateSaveData(saveData);
 
-      console.log(`[SaveManager] Loaded from slot ${slotId}:`, {
-        version: migratedData.version,
-        timestamp: new Date(migratedData.timestamp).toISOString(),
-      });
-
       return migratedData.gameState;
     } catch (error) {
       throw this.handleSaveError(error, 'load');
@@ -365,8 +354,6 @@ export class SaveManager {
     try {
       const storageKey = this.getStorageKey(slotId);
       this.storage.removeItem(storageKey);
-
-      console.log(`[SaveManager] Deleted slot ${slotId}`);
     } catch (error) {
       throw this.handleSaveError(error, 'delete');
     }
@@ -568,12 +555,6 @@ export class SaveManager {
         factions: state.factions ?? {},
       };
 
-      console.log(`[SaveManager] Imported save:`, {
-        schemaVersion: importData.schemaVersion,
-        version: importData.version,
-        sceneId: gameState.currentSceneId,
-      });
-
       return gameState;
     } catch (error) {
       if (error instanceof SaveError) {
@@ -614,12 +595,6 @@ export class SaveManager {
       // Rotate to next slot for next autosave
       this.autosaveRotation = (this.autosaveRotation + 1) % AUTOSAVE_SNAPSHOT_COUNT;
 
-      console.log(`[SaveManager] Autosaved to slot ${autosaveSlot}:`, {
-        sceneTitle,
-        version: SAVE_FORMAT_VERSION,
-        timestamp: new Date(saveData.timestamp).toISOString(),
-      });
-
       return true;
     } catch (error) {
       // Autosave failure should not block gameplay
@@ -646,11 +621,6 @@ export class SaveManager {
         try {
           const saveData = this.deserializeWithValidation(json);
           const migratedData = this.migrateSaveData(saveData);
-
-          console.log(`[SaveManager] Loaded autosave from slot ${i}:`, {
-            version: migratedData.version,
-            timestamp: new Date(migratedData.timestamp).toISOString(),
-          });
 
           return migratedData.gameState;
         } catch (error) {
@@ -831,7 +801,6 @@ export class SaveManager {
         );
       }
 
-      console.log(`[SaveManager] Migrating from v${currentData.version} to v${nextVersion}`);
       currentData = migration(currentData);
     }
 

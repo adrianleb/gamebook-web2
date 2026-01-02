@@ -553,11 +553,6 @@ export class Engine {
       if (this.state.currentSceneId) {
         await this.loadScene(this.state.currentSceneId, true);
       }
-
-      console.log('[Engine] State loaded successfully:', {
-        sceneId: this.state.currentSceneId,
-        timestamp: new Date(this.state.timestamp).toISOString(),
-      });
     } catch (error) {
       // Rollback to previous state on scene load failure (per agent-e)
       console.error('[Engine] Scene load failed, rolling back state:', error);
