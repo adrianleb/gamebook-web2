@@ -7,11 +7,13 @@ Pre-release validation checklist for Phase 5 QA & Release.
 ### Functional Requirements
 
 - [ ] **All 5 endings** playtested and verified
-  - [ ] Ending 1: The Revised Draft (sc_3_4_901) - Revisionist faction ≥7, editorState: defeated
-  - [ ] Ending 2: The Open Book (sc_3_4_902) - Exiter faction ≥7, editorState: persuaded
-  - [ ] Ending 3: The Closed Canon (sc_3_4_903) - Preservationist faction ≥7, editorState: defeated
-  - [ ] Ending 4: The Blank Page (sc_3_4_904) - Independent path, editorState: revealedTruth
-  - [ ] Ending 5: The Eternal Rehearsal (sc_3_4_999) - Fail state (no faction requirements)
+  - [ ] Ending 1: The Revised Draft (sc_3_4_901) - Revisionist faction ≥7
+  - [ ] Ending 2: The Open Book (sc_3_4_902) - Exiter faction ≥7
+  - [ ] Ending 3: The Closed Canon (sc_3_4_903) - Preservationist faction ≥7
+  - [ ] Ending 4: The Blank Page (sc_3_4_904) - Independent path, flag: editorState_revealedTruth
+  - [ ] Ending 5: The Eternal Rehearsal (sc_3_4_999) - Fail state (no requirements)
+
+  **Note:** Faction endings use stat_check only (≥7). Combined faction+editorState AND gates are deferred per MILESTONES.md Issue #129.
 
 - [ ] **No softlocks** outside intentional endings
   - [ ] Run `ending-graph.test.ts` - validates no dead ends
