@@ -7,11 +7,11 @@ Pre-release validation checklist for Phase 5 QA & Release.
 ### Functional Requirements
 
 - [ ] **All 5 endings** playtested and verified
-  - [ ] Ending 1: Alone (no alliance, low resolve)
-  - [ ] Ending 2: The Understudy's Path (alliance with Understudy)
-  - [ ] Ending 3: The Director's Favor (high favor, no alliance)
-  - [ ] Ending 4: CHORUS Ascendant (high CHORUS stat)
-  - [ ] Ending 5: Confrontation Victory (high all stats, alliance)
+  - [ ] Ending 1: The Revised Draft (sc_3_4_901) - Revisionist faction ≥7, editorState: defeated
+  - [ ] Ending 2: The Open Book (sc_3_4_902) - Exiter faction ≥7, editorState: persuaded
+  - [ ] Ending 3: The Closed Canon (sc_3_4_903) - Preservationist faction ≥7, editorState: defeated
+  - [ ] Ending 4: The Blank Page (sc_3_4_904) - Independent path, editorState: revealedTruth
+  - [ ] Ending 5: The Eternal Rehearsal (sc_3_4_999) - Fail state (no faction requirements)
 
 - [ ] **No softlocks** outside intentional endings
   - [ ] Run `ending-graph.test.ts` - validates no dead ends
@@ -32,7 +32,7 @@ Pre-release validation checklist for Phase 5 QA & Release.
 
 - [ ] **No console errors** in any tested path
   - [ ] Run browser DevTools during manual playthrough
-  - [ ] CI tests pass (174 tests)
+  - [ ] CI tests pass (206 tests)
 
 - [ ] **First load completes** in reasonable time
   - [ ] Target: <10 seconds on typical connection
