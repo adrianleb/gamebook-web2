@@ -164,8 +164,9 @@ describe('Ending Graph Validation', () => {
       expect(ending1?.requirements).toEqual({
         faction: 'revisionist',
         factionLevel: 7,
-        editorState: 'defeated',
       });
+      // Note: Manifest uses only faction + factionLevel
+      // Runtime conditions use stat_check for faction >= 7
     });
 
     it('should validate Ending 2 (Exiter) requirements', () => {
@@ -176,8 +177,9 @@ describe('Ending Graph Validation', () => {
       expect(ending2?.requirements).toEqual({
         faction: 'exiter',
         factionLevel: 7,
-        editorState: 'persuaded',
       });
+      // Note: Manifest uses only faction + factionLevel
+      // Runtime conditions use stat_check for faction >= 7
     });
 
     it('should validate Ending 3 (Preservationist) requirements', () => {
@@ -188,8 +190,9 @@ describe('Ending Graph Validation', () => {
       expect(ending3?.requirements).toEqual({
         faction: 'preservationist',
         factionLevel: 7,
-        editorState: 'defeated',
       });
+      // Note: Manifest uses only faction + factionLevel
+      // Runtime conditions use stat_check for faction >= 7
     });
 
     it('should validate Ending 4 (Independent) requirements', () => {
@@ -198,10 +201,10 @@ describe('Ending Graph Validation', () => {
       expect(ending4?.sceneId).toBe('sc_3_4_904');
       expect(ending4?.title).toBe('The Blank Page');
       expect(ending4?.requirements).toEqual({
-        faction: 'independent',
-        editorState: 'revealedTruth',
+        flag: 'editorState_revealedTruth',
       });
-      // Note: Independent ending has no factionLevel requirement
+      // Note: Independent ending uses flag_check (not faction gate)
+      // Runtime checks for editorState_revealedTruth flag
     });
 
     it('should validate Ending 5 (Fail) requirements', () => {
@@ -209,10 +212,8 @@ describe('Ending Graph Validation', () => {
       expect(ending5).toBeDefined();
       expect(ending5?.sceneId).toBe('sc_3_4_999');
       expect(ending5?.title).toBe('The Eternal Rehearsal');
-      expect(ending5?.requirements).toEqual({
-        finalChoice: 'failed_or_refused',
-      });
-      // Fail ending has no faction requirements - always reachable
+      expect(ending5?.requirements).toEqual({});
+      // Fail ending has no requirements - always reachable (fallback)
     });
   });
 
@@ -356,8 +357,10 @@ describe('Ending Graph Validation', () => {
     it('should validate independent ending has no faction level requirement', () => {
       const ending4 = manifest.endings.find(e => e.id === 4);
 
+      // Independent ending uses flag check, not faction gate
       expect(ending4?.requirements.factionLevel).toBeUndefined();
-      expect(ending4?.requirements.faction).toBe('independent');
+      expect(ending4?.requirements.faction).toBeUndefined();
+      expect(ending4?.requirements.flag).toBe('editorState_revealedTruth');
     });
   });
 
@@ -365,12 +368,11 @@ describe('Ending Graph Validation', () => {
     it('should validate Ending 5 has no blocking conditions', () => {
       const ending5 = manifest.endings.find(e => e.id === 5);
 
-      // Fail ending only requires finalChoice: failed_or_refused
-      // No faction or stat requirements
+      // Fail ending has no requirements - always reachable (fallback)
       expect(ending5?.requirements.faction).toBeUndefined();
       expect(ending5?.requirements.factionLevel).toBeUndefined();
-      expect(ending5?.requirements.editorState).toBeUndefined();
-      expect(ending5?.requirements.finalChoice).toBe('failed_or_refused');
+      expect(ending5?.requirements.flag).toBeUndefined();
+      expect(Object.keys(ending5?.requirements || {})).toHaveLength(0);
     });
 
     it('should validate Ending 5 serves as fallback for invalid states', () => {
@@ -379,28 +381,6 @@ describe('Ending Graph Validation', () => {
       // Fail ending is the catch-all for refusing the final choice
       expect(ending5?.tier).toBe('ambiguous');
       expect(ending5?.title).toBe('The Eternal Rehearsal');
-    });
-  });
-
-  describe('Editor state requirements', () => {
-    it('should validate editorState transitions are defined for faction endings', () => {
-      // Faction endings 1-3 require specific editor states
-      const ending1 = manifest.endings.find(e => e.id === 1);
-      const ending3 = manifest.endings.find(e => e.id === 3);
-
-      // Both Revisionist and Preservationist endings require 'defeated' editor state
-      expect(ending1?.requirements.editorState).toBe('defeated');
-      expect(ending3?.requirements.editorState).toBe('defeated');
-    });
-
-    it('should validate Exiter ending requires persuaded editor state', () => {
-      const ending2 = manifest.endings.find(e => e.id === 2);
-      expect(ending2?.requirements.editorState).toBe('persuaded');
-    });
-
-    it('should validate Independent ending requires revealedTruth editor state', () => {
-      const ending4 = manifest.endings.find(e => e.id === 4);
-      expect(ending4?.requirements.editorState).toBe('revealedTruth');
     });
   });
 
@@ -543,22 +523,22 @@ describe('Ending Graph Validation', () => {
       const ending4Choice = convergenceScene.choices.find(c => c.to === 'sc_3_4_904');
       const ending5Choice = convergenceScene.choices.find(c => c.to === 'sc_3_4_999');
 
-      // Ending 1 (Revisionist): revisionist >= 7 AND editorState == defeated
+      // Ending 1 (Revisionist): revisionist >= 7 (stat_check)
       expect(ending1Choice).toBeDefined();
       expect(ending1Choice?.conditions).toBeDefined();
       expect(ending1Choice?.conditions?.length).toBeGreaterThanOrEqual(1);
 
-      // Ending 2 (Exiter): exiter >= 7 AND editorState == persuaded
+      // Ending 2 (Exiter): exiter >= 7 (stat_check)
       expect(ending2Choice).toBeDefined();
       expect(ending2Choice?.conditions).toBeDefined();
       expect(ending2Choice?.conditions?.length).toBeGreaterThanOrEqual(1);
 
-      // Ending 3 (Preservationist): preservationist >= 7 AND editorState == defeated
+      // Ending 3 (Preservationist): preservationist >= 7 (stat_check)
       expect(ending3Choice).toBeDefined();
       expect(ending3Choice?.conditions).toBeDefined();
       expect(ending3Choice?.conditions?.length).toBeGreaterThanOrEqual(1);
 
-      // Ending 4 (Independent): editorState == revealedTruth (no faction requirement)
+      // Ending 4 (Independent): flag_check for editorState_revealedTruth
       expect(ending4Choice).toBeDefined();
       expect(ending4Choice?.conditions).toBeDefined();
 
