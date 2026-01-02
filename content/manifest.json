@@ -353,7 +353,7 @@
       "location": "The Green Room",
       "act": 2,
       "hub": 2,
-      "status": "draft",
+      "status": "complete",
       "description": "Hub 2 opening - Neutral meeting space with The Director and CHORUS",
       "mechanics": ["npc_introduction", "faction_preview", "hub_navigation"]
     },
@@ -389,7 +389,7 @@
       "location": "The Archives",
       "act": 2,
       "hub": 3,
-      "status": "draft",
+      "status": "complete",
       "description": "Hub 3 opening - First drafts, cut scenes, abandoned stories",
       "mechanics": ["hub_opening", "discovery", "mystery"]
     },
@@ -425,7 +425,7 @@
       "location": "The Archives",
       "act": 2,
       "hub": 3,
-      "status": "draft",
+      "status": "complete",
       "description": "Act 2 Climax - Discover the Editor's Great Revision plan",
       "mechanics": ["discovery_chain", "alliance_check", "act_transition"]
     },
@@ -434,7 +434,7 @@
       "location": "The Mainstage",
       "act": 3,
       "hub": 4,
-      "status": "draft",
+      "status": "complete",
       "description": "Act 3 Hub opening - Descent to the Mainstage with 4 approach options"
     },
     "sc_3_4_010": {
@@ -466,7 +466,7 @@
       "location": "The Mainstage",
       "act": 3,
       "hub": 4,
-      "status": "draft",
+      "status": "complete",
       "description": "Final confrontation - Convergence scene with 5 faction-gated endings",
       "mechanics": ["faction_gates", "final_choice"]
     },
@@ -475,7 +475,7 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "draft",
+      "status": "complete",
       "description": "Ending 1 - Revisionist (revisionist >= 7)",
       "ending": true,
       "endingId": 1
@@ -485,7 +485,7 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "draft",
+      "status": "complete",
       "description": "Ending 2 - Exiter (exiter >= 7)",
       "ending": true,
       "endingId": 2
@@ -495,7 +495,7 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "draft",
+      "status": "complete",
       "description": "Ending 3 - Preservationist (preservationist >= 7)",
       "ending": true,
       "endingId": 3
@@ -505,7 +505,7 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "draft",
+      "status": "complete",
       "description": "Ending 4 - Independent (flag: editorState_revealedTruth)",
       "ending": true,
       "endingId": 4
@@ -515,7 +515,7 @@
       "location": "Ending",
       "act": 3,
       "hub": 4,
-      "status": "draft",
+      "status": "complete",
       "description": "Ending 5 - Fail/refusal (always reachable)",
       "ending": true,
       "endingId": 5
@@ -524,8 +524,8 @@
   "implementationStatus": {
     "totalScenes": 32,
     "pending": 0,
-    "draft": 10,
-    "complete": 22,
+    "draft": 0,
+    "complete": 32,
     "reviewed": 0
   }
 }
