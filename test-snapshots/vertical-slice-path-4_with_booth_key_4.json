@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-01-01T21:50:04.840Z",
+  "playthrough": "with_booth_key",
+  "step": 4,
+  "name": "with_booth_key",
+  "engineVersion": 1,
+  "contentVersion": "0.0.1",
+  "state": {
+    "version": 1,
+    "contentVersion": "0.0.1",
+    "timestamp": 1767304204839,
+    "currentSceneId": "sc_1_0_004",
+    "history": [
+      {
+        "sceneId": "sc_1_0_001",
+        "timestamp": 1767304204839,
+        "visitedCount": 2
+      },
+      {
+        "sceneId": "sc_1_0_004",
+        "timestamp": 1767304204840,
+        "choiceLabel": "Speak with the figure in shadow",
+        "visitedCount": 1
+      }
+    ],
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
+    "flags": {},
+    "inventory": {},
+    "factions": {}
+  }
+}

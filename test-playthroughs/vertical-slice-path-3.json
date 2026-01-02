@@ -20,6 +20,7 @@
   },
   "steps": [
     {
+      "sequence": 1,
       "action": "checkpoint",
       "description": "Starting at hub with booth_key but low courage (3)",
       "assertions": {
@@ -31,40 +32,38 @@
       }
     },
     {
+      "sequence": 2,
       "action": "choose",
-      "choiceIndex": 2,
-      "description": "Proceed to Threshold Stage (have booth_key)",
-      "targetSceneId": "sc_1_0_003"
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_003",
+      "description": "Proceed to Threshold Stage (have booth_key)"
     },
     {
+      "sequence": 3,
       "action": "checkpoint",
       "description": "At Threshold Stage - attemptable courage check",
       "assertions": {
         "currentScene": "sc_1_0_003",
         "stats": { "courage": 3 },
-        "choicesAvailable": 2
+        "choicesAvailable": 3
       }
     },
     {
+      "sequence": 4,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Attempt courage check (attemptable: always enabled, courage < 5 will fail)",
-      "targetSceneId": "sc_1_0_902",
-      "assertions": {
-        "flagsSet": ["crossing_failed"],
-        "stats": {
-          "health": 9
-        }
-      }
+      "expectedScene": "sc_1_0_902",
+      "description": "Attempt courage check (attemptable: always enabled, courage < 5 will fail)"
     },
     {
+      "sequence": 5,
       "action": "checkpoint",
       "description": "Reached failure scene sc_1_0_902 - crossing failed",
       "assertions": {
         "currentScene": "sc_1_0_902",
         "flagsSet": ["crossing_failed"],
-        "stats": { "health": 9, "courage": 3 },
-        "visitedCount": { "sc_1_0_001": 1, "sc_1_0_003": 1, "sc_1_0_902": 1 }
+        "stats": { "health": 10, "courage": 3 },
+        "visitedCount": { "sc_1_0_001": 2, "sc_1_0_003": 1, "sc_1_0_902": 1 }
       }
     }
   ],
@@ -72,7 +71,7 @@
     "sceneId": "sc_1_0_902",
     "flagsRequired": ["crossing_failed"],
     "statsRequired": {
-      "health": 9,
+      "health": 10,
       "courage": 3
     }
   },

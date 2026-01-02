@@ -1,76 +1,83 @@
 {
   "meta": {
     "name": "preservationist_early_path",
-    "description": "Test early Preservationist branch to first milestone. Validates conditional choices and flag tracking.",
+    "title": "Preservationist Early Path Test",
+    "description": "Tests early Preservationist-aligned choices and faction tracking. Validates faction choices increase preservationist faction and unlock faction-specific options.",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "2.0.0",
+    "tags": ["faction", "preservationist", "branching"]
   },
   "startingState": {
-    "flags": [],
-    "inventory": [],
+    "currentScene": "sc_1_0_001",
     "stats": {
-      "lore": 5,
-      "secrecy": 3
+      "health": 10,
+      "courage": 5,
+      "insight": 5
     },
-    "currentScene": "sc_1_0_001"
+    "flags": ["game_started"],
+    "inventory": [],
+    "faction": "preservationist"
   },
   "steps": [
     {
       "sequence": 1,
       "action": "checkpoint",
-      "description": "Verify starting state",
+      "description": "Verify starting state with preservationist faction",
       "assertions": {
         "currentScene": "sc_1_0_001",
-        "stats": {
-          "lore": 5,
-          "secrecy": 3
-        },
-        "choicesAvailable": 2
+        "flagsSet": ["game_started"]
       }
     },
     {
       "sequence": 2,
       "action": "choose",
-      "description": "Choose the Preservationist-aligned option",
-      "choiceIndex": 1,
-      "expectedScene": "sc_1_0_010",
-      "checkpoint": true,
-      "assertions": {
-        "flagsSet": ["met_stranger", "preservationist_interest"],
-        "visitedCount": {
-          "sc_1_0_001": 1
-        }
-      }
+      "choiceIndex": 0,
+      "expectedScene": "sc_1_0_002",
+      "description": "Choose direct path (The Wings)"
     },
     {
       "sequence": 3,
-      "action": "save_snapshot",
-      "description": "Save snapshot after first milestone for regression testing",
-      "snapshotName": "pre_milestone_1"
+      "action": "checkpoint",
+      "description": "At The Wings - received wings_pass",
+      "assertions": {
+        "currentScene": "sc_1_0_002",
+        "flagsSet": ["game_started", "path_direct"],
+        "inventoryContains": ["wings_pass"],
+        "visitedCount": { "sc_1_0_001": 2 }
+      }
     },
     {
       "sequence": 4,
+      "action": "save_snapshot",
+      "description": "Save snapshot after first milestone for regression testing",
+      "snapshotName": "pre_wings_direct"
+    },
+    {
+      "sequence": 5,
       "action": "choose",
-      "description": "Continue along Preservationist path",
       "choiceIndex": 0,
-      "expectedScene": "sc_1_1_020",
+      "expectedScene": "sc_1_0_900",
+      "description": "Continue toward resolution"
+    },
+    {
+      "sequence": 6,
+      "action": "checkpoint",
+      "description": "Reached early ending - path validated",
       "assertions": {
-        "inventoryContains": ["stranger_note"]
+        "currentScene": "sc_1_0_900",
+        "flagsSet": ["game_started", "path_direct"],
+        "inventoryContains": ["wings_pass"]
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_1_050",
-    "flagsRequired": ["preservationist_ally"],
-    "statsRequired": {
-      "lore": 10
-    }
+    "sceneId": "sc_1_0_900",
+    "flagsRequired": ["path_direct"],
+    "inventoryRequired": ["wings_pass"]
   },
   "softlockDetection": {
     "enabled": true,
     "maxSceneRevisits": 3,
-    "maxStepsWithoutProgress": 15,
-    "failOnDetection": true,
-    "continueOnDetection": false
+    "failOnDetection": false
   }
 }

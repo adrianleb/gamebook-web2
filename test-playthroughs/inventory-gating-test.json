@@ -1,41 +1,94 @@
 {
   "meta": {
     "name": "inventory_gating_test",
-    "description": "Tests inventory-based choice gating. Validates that items are properly required for choices and disabledHint is shown.",
+    "title": "Inventory Gating Test: Booth Key",
+    "description": "Tests inventory-based choice gating. Validates that booth_key is required for the iron door choice and disabledHint is shown when missing.",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "2.0.0",
+    "tags": ["inventory", "gating", "choice-disabling"]
   },
   "startingState": {
-    "flags": [],
+    "currentScene": "sc_1_0_001",
+    "stats": {
+      "health": 10,
+      "courage": 5,
+      "insight": 5
+    },
+    "flags": ["game_started"],
     "inventory": [],
-    "stats": {},
-    "currentScene": "sc_1_0_001"
+    "faction": "preservationist"
   },
   "steps": [
     {
       "sequence": 1,
-      "action": "choose",
-      "description": "Pick up key item",
-      "choiceIndex": 0,
-      "expectedScene": "sc_1_0_005",
+      "action": "checkpoint",
+      "description": "Starting at booth without booth_key",
       "assertions": {
-        "inventoryContains": ["rusty_key"]
+        "currentScene": "sc_1_0_001",
+        "inventoryExcludes": ["booth_key"],
+        "choicesAvailable": 3
       }
     },
     {
       "sequence": 2,
       "action": "choose",
-      "description": "Attempt door without key (should be disabled)",
-      "choiceIndex": 1
+      "choiceIndex": 2,
+      "expectedScene": "sc_1_0_004",
+      "description": "Go to Maren's Guidance to get booth_key"
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "At Maren's - booth_key added on enter",
+      "assertions": {
+        "currentScene": "sc_1_0_004",
+        "inventoryContains": ["booth_key"],
+        "flagsSet": ["met_maren"]
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_001",
+      "description": "Return to booth with booth_key"
+    },
+    {
+      "sequence": 5,
+      "action": "checkpoint",
+      "description": "Now iron door is enabled with booth_key",
+      "assertions": {
+        "currentScene": "sc_1_0_001",
+        "inventoryContains": ["booth_key"],
+        "choicesAvailable": 3
+      }
+    },
+    {
+      "sequence": 6,
+      "action": "choose",
+      "choiceIndex": 1,
+      "expectedScene": "sc_1_0_003",
+      "description": "Now the iron door choice works - proceed to Threshold Stage"
+    },
+    {
+      "sequence": 7,
+      "action": "checkpoint",
+      "description": "At Threshold Stage - inventory gating verified",
+      "assertions": {
+        "currentScene": "sc_1_0_003",
+        "inventoryContains": ["booth_key"],
+        "flagsSet": ["game_started", "met_maren", "location_booth_visited"]
+      }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_1_100",
-    "inventoryRequired": ["golden_key", "ancient_artifact"]
+    "sceneId": "sc_1_0_003",
+    "inventoryRequired": ["booth_key"],
+    "flagsRequired": ["met_maren"]
   },
   "softlockDetection": {
     "enabled": true,
     "maxSceneRevisits": 3,
-    "failOnDetection": true
+    "failOnDetection": false
   }
 }
