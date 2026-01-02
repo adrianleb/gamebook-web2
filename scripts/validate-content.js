@@ -10,6 +10,8 @@
  * - Cross-file reference validation (scene targets exist)
  * - Unreachable scene detection
  * - Missing link detection
+ * - Stat reference validation (stats must exist in stats.json)
+ * - Item reference validation (items must exist in items.json)
  *
  * Updated for canonical schema format (kebab-case, simple field names)
  */
@@ -19,6 +21,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
+import { ContentValidator } from '../dist/engine/validator.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -219,7 +222,7 @@ async function buildSceneIndex(manifest) {
 /**
  * Check cross-file references
  */
-async function checkReferences(scenesDir, manifest) {
+async function checkReferences(scenesDir, manifest, stats, items) {
   if (!results.sceneIndex.size) return;
 
   // Load all scenes and collect references
@@ -269,6 +272,30 @@ async function checkReferences(scenesDir, manifest) {
       `${results.unreachableScenes.size} unreachable scene(s) (not referenced by any content): ` +
       Array.from(results.unreachableScenes).join(', ')
     );
+  }
+
+  // Validate stat references using ContentValidator
+  if (stats && manifest && loadedScenes.size > 0) {
+    const validator = new ContentValidator();
+    const statResult = validator.validateStats(stats, manifest, loadedScenes);
+    if (!statResult.valid) {
+      results.passed = false;
+      for (const error of statResult.errors) {
+        results.errors.push(`Stat validation: ${error.sceneId} - ${error.message}`);
+      }
+    }
+  }
+
+  // Validate item references using ContentValidator
+  if (items && manifest && loadedScenes.size > 0) {
+    const validator = new ContentValidator();
+    const itemResult = validator.validateItems(items, manifest, loadedScenes);
+    if (!itemResult.valid) {
+      results.passed = false;
+      for (const error of itemResult.errors) {
+        results.errors.push(`Item validation: ${error.sceneId} - ${error.message}`);
+      }
+    }
   }
 }
 
@@ -348,7 +375,7 @@ async function validate() {
   // Check cross-file references
   if (manifest) {
     console.log('Checking cross-file references...');
-    await checkReferences(scenesDir, manifest);
+    await checkReferences(scenesDir, manifest, stats, items);
     console.log('');
   }
 
