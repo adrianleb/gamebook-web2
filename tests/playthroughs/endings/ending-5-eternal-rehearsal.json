@@ -13,13 +13,13 @@
       },
       {
         "id": "B",
-        "name": "Low Faction / Wrong State",
+        "name": "Low Faction",
         "description": "Tests fail ending when all faction endings are disabled"
       },
       {
         "id": "C",
-        "name": "No EditorState Set",
-        "description": "Tests fail ending when editorState is missing"
+        "name": "No Independent Flag",
+        "description": "Tests fail ending when independent ending is disabled"
       }
     ]
   },
@@ -90,7 +90,7 @@
     },
     "B": {
       "meta": {
-        "variantName": "Variant B - Low Faction / Wrong State"
+        "variantName": "Variant B - Low Faction"
       },
       "startingState": {
         "flags": ["game_started", "act1_complete", "act2_complete"],
@@ -106,8 +106,7 @@
           "exiter": 2,
           "independent": 2
         },
-        "currentScene": "sc_3_4_098",
-        "editorState": "persuaded"
+        "currentScene": "sc_3_4_098"
       },
       "steps": [
         {
@@ -158,7 +157,7 @@
     },
     "C": {
       "meta": {
-        "variantName": "Variant C - No EditorState Set"
+        "variantName": "Variant C - No Independent Flag"
       },
       "startingState": {
         "flags": ["game_started", "act1_complete", "act2_complete"],
@@ -180,7 +179,7 @@
         {
           "sequence": 1,
           "action": "checkpoint",
-          "description": "Arrived with high preservationist but no editorState",
+          "description": "Arrived with high preservationist but no independent flag",
           "assertions": {
             "currentScene": "sc_3_4_098",
             "factions": {
@@ -191,10 +190,10 @@
         {
           "sequence": 2,
           "action": "verify",
-          "description": "Verify faction endings are disabled",
+          "description": "Verify independent ending is disabled",
           "assertions": {
-            "allFactionChoicesDisabled": true,
-            "reason": "Missing required editorState"
+            "independentChoiceDisabled": true,
+            "reason": "Missing required editorState_revealedTruth flag"
           }
         },
         {

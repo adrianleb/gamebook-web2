@@ -2,12 +2,12 @@
   "$schema": "../../src/engine/headless-schema.json",
   "meta": {
     "name": "PT-END-004",
-    "description": "Independent Ending (The Blank Page) - Tests independent path (no faction threshold), editor state requirement (revealedTruth), and ending reachability from convergence scene sc_3_4_098 The Last Curtain Call.",
+    "description": "Independent Ending (The Blank Page) - Tests independent path with flag_check (editorState_revealedTruth) and ending reachability from convergence scene sc_3_4_098 The Last Curtain Call.",
     "author": "agent-e",
     "version": "1.0"
   },
   "startingState": {
-    "flags": ["game_started", "act1_complete", "act2_complete"],
+    "flags": ["game_started", "act1_complete", "act2_complete", "editorState_revealedTruth"],
     "inventory": [],
     "stats": {
       "health": 10,
@@ -20,8 +20,7 @@
       "exiter": 3,
       "independent": 4
     },
-    "currentScene": "sc_3_4_098",
-    "editorState": "revealedTruth"
+    "currentScene": "sc_3_4_098"
   },
   "steps": [
     {
@@ -29,15 +28,14 @@
       "action": "checkpoint",
       "description": "Arrived at Last Curtain Call with balanced faction state",
       "assertions": {
-        "flagsSet": ["game_started", "act1_complete", "act2_complete"],
+        "flagsSet": ["game_started", "act1_complete", "act2_complete", "editorState_revealedTruth"],
         "currentScene": "sc_3_4_098",
         "factions": {
           "preservationist": 3,
           "revisionist": 3,
           "exiter": 3,
           "independent": 4
-        },
-        "editorState": "revealedTruth"
+        }
       }
     },
     {
@@ -46,7 +44,7 @@
       "description": "Verify 'The Blank Page' choice is enabled",
       "assertions": {
         "choiceEnabled": "The Blank Page",
-        "reason": "editorState == revealedTruth (no faction gate)"
+        "reason": "editorState_revealedTruth flag set (no faction gate)"
       }
     },
     {
@@ -70,7 +68,7 @@
   ],
   "endingCriteria": {
     "sceneId": "sc_3_4_904",
-    "flagsRequired": ["game_started", "act1_complete", "act2_complete", "ending_achieved"],
+    "flagsRequired": ["game_started", "act1_complete", "act2_complete", "editorState_revealedTruth", "ending_achieved"],
     "inventoryRequired": [],
     "statsRequired": {
       "health": 10,
@@ -91,9 +89,9 @@
   },
   "notes": [
     "No faction gate: This ending is available regardless of faction levels",
-    "Editor state gate: editorState == revealedTruth required for this ending",
+    "Flag gate: editorState_revealedTruth flag required for this ending",
     "This ending represents the Independent/balance path with no dominant alliance",
-    "If editorState != revealedTruth, choice should be disabled",
+    "If editorState_revealedTruth flag is not set, choice should be disabled",
     "Faction values are balanced (all <= 5) representing no strong alignment",
     "Ending 5 (The Eternal Rehearsal) must always be available as fallback"
   ]
