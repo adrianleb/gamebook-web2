@@ -2,9 +2,9 @@
   "$schema": "../../src/engine/headless-schema.json",
   "meta": {
     "name": "PT-EDGE-001",
-    "description": "Empty Inventory Navigation - Tests game is playable with empty inventory (direct path)",
+    "description": "Empty Inventory Navigation - Tests game is playable with empty inventory (direct path to First Crossing)",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "1.1"
   },
   "startingState": {
     "flags": [],
@@ -51,18 +51,19 @@
       "sequence": 4,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Choose 'Continue toward the light' (reach resolution)",
-      "expectedScene": "sc_1_0_900",
+      "description": "Choose 'Continue toward the light' (reach First Crossing)",
+      "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {
-        "currentScene": "sc_1_0_900",
-        "inventoryContains": ["wings_pass"]
+        "currentScene": "sc_1_1_099",
+        "inventoryContains": ["wings_pass"],
+        "flagsSet": ["act1_complete", "first_crossing_reached"]
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_900",
-    "flagsRequired": ["path_direct"],
+    "sceneId": "sc_1_1_099",
+    "flagsRequired": ["path_direct", "act1_complete", "first_crossing_reached"],
     "inventoryRequired": ["wings_pass"]
   },
   "softlockDetection": {

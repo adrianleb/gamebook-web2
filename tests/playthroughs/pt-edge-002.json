@@ -2,9 +2,9 @@
   "$schema": "../../src/engine/headless-schema.json",
   "meta": {
     "name": "PT-EDGE-002",
-    "description": "Minimum Stats Navigation - Tests game is playable with minimum stat values",
+    "description": "Minimum Stats Navigation - Tests game is playable with minimum stat values (to First Crossing)",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "1.1"
   },
   "startingState": {
     "flags": [],
@@ -42,18 +42,19 @@
       "sequence": 3,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Choose 'Continue toward the light' (reach resolution with minimum stats)",
-      "expectedScene": "sc_1_0_900",
+      "description": "Choose 'Continue toward the light' (reach First Crossing with minimum stats)",
+      "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {
-        "currentScene": "sc_1_0_900",
-        "stats": { "courage": 0 }
+        "currentScene": "sc_1_1_099",
+        "stats": { "courage": 0 },
+        "flagsSet": ["act1_complete", "first_crossing_reached"]
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_900",
-    "flagsRequired": ["path_direct"],
+    "sceneId": "sc_1_1_099",
+    "flagsRequired": ["path_direct", "act1_complete", "first_crossing_reached"],
     "inventoryRequired": ["wings_pass"],
     "statsRequired": {
       "courage": 0
