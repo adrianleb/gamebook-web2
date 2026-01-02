@@ -10,9 +10,9 @@
   "startingState": {
     "currentScene": "sc_1_0_001",
     "stats": {
-      "health": 10,
-      "courage": 6,
-      "insight": 5
+      "script": 2,
+      "stage_presence": 3,
+      "improv": 2
     },
     "flags": ["game_started"],
     "inventory": ["booth_key"],
@@ -22,10 +22,10 @@
     {
       "sequence": 1,
       "action": "checkpoint",
-      "description": "Verify starting stat value (courage = 6, above threshold)",
+      "description": "Verify starting stat value (stage_presence = 3, at threshold)",
       "assertions": {
         "currentScene": "sc_1_0_001",
-        "stats": { "courage": 6 },
+        "stats": { "stage_presence": 3 },
         "inventoryContains": ["booth_key"]
       }
     },
@@ -39,10 +39,10 @@
     {
       "sequence": 3,
       "action": "checkpoint",
-      "description": "At Threshold Stage - courage check available",
+      "description": "At Threshold Stage - stage_presence check available",
       "assertions": {
         "currentScene": "sc_1_0_003",
-        "stats": { "courage": 6 },
+        "stats": { "stage_presence": 3 },
         "choicesAvailable": 3
       }
     },
@@ -50,11 +50,11 @@
       "sequence": 4,
       "action": "choose",
       "choiceIndex": 0,
-      "expectedScene": "sc_1_0_901",
-      "description": "Pass courage check (6 >= 5, succeeds)",
+      "expectedScene": "sc_1_1_099",
+      "description": "Pass stage_presence check (3 >= 3, succeeds)",
       "assertions": {
         "flagsSet": ["crossing_succeeded"],
-        "stats": { "courage": 6, "health": 10 }
+        "stats": { "stage_presence": 3 }
       }
     },
     {
@@ -62,19 +62,18 @@
       "action": "checkpoint",
       "description": "Reached success scene - stat check passed",
       "assertions": {
-        "currentScene": "sc_1_0_901",
+        "currentScene": "sc_1_1_099",
         "flagsSet": ["crossing_succeeded"],
-        "stats": { "courage": 6, "health": 10 },
-        "visitedCount": { "sc_1_0_001": 2, "sc_1_0_003": 1, "sc_1_0_901": 1 }
+        "stats": { "stage_presence": 3 },
+        "visitedCount": { "sc_1_0_001": 2, "sc_1_0_003": 1, "sc_1_1_099": 1 }
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_901",
+    "sceneId": "sc_1_1_099",
     "flagsRequired": ["crossing_succeeded"],
     "statsRequired": {
-      "courage": 6,
-      "health": 10
+      "stage_presence": 3
     }
   },
   "softlockDetection": {

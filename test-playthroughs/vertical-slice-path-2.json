@@ -10,9 +10,9 @@
   "startingState": {
     "currentScene": "sc_1_0_001",
     "stats": {
-      "health": 10,
-      "courage": 5,
-      "insight": 5
+      "script": 2,
+      "stage_presence": 3,
+      "improv": 2
     },
     "flags": ["game_started"],
     "inventory": [],
@@ -88,29 +88,29 @@
       "sequence": 8,
       "action": "choose",
       "choiceIndex": 0,
-      "expectedScene": "sc_1_0_901",
-      "description": "Continue to resolution (pass courage check)"
+      "expectedScene": "sc_1_1_099",
+      "description": "Continue to resolution (pass stage_presence check)"
     },
     {
       "sequence": 9,
       "action": "checkpoint",
       "description": "Reached success ending",
       "assertions": {
-        "currentScene": "sc_1_0_901",
+        "currentScene": "sc_1_1_099",
         "inventoryContains": ["booth_key"],
         "flagsSet": ["game_started", "met_maren", "location_booth_visited", "crossing_succeeded"],
-        "visitedCount": { "sc_1_0_001": 3, "sc_1_0_003": 1, "sc_1_0_004": 1, "sc_1_0_901": 1 }
+        "visitedCount": { "sc_1_0_001": 3, "sc_1_0_003": 1, "sc_1_0_004": 1, "sc_1_1_099": 1 }
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_901",
+    "sceneId": "sc_1_1_099",
     "flagsRequired": ["met_maren", "location_booth_visited", "crossing_succeeded"],
     "inventoryRequired": ["booth_key"]
   },
   "softlockDetection": {
     "maxSceneRevisits": 3,
     "maxStepsWithoutProgress": 15,
-    "exemptScenes": ["sc_1_0_900"]
+    "exemptScenes": ["sc_1_1_099"]
   }
 }

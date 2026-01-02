@@ -11,8 +11,8 @@
     "currentScene": "sc_1_0_001",
     "stats": {
       "health": 10,
-      "courage": 3,
-      "insight": 5
+      "stage_presence": 1,
+      "improv": 5
     },
     "flags": ["game_started"],
     "inventory": ["booth_key"],
@@ -22,11 +22,11 @@
     {
       "sequence": 1,
       "action": "checkpoint",
-      "description": "Starting at hub with booth_key but low courage (3)",
+      "description": "Starting at hub with booth_key but low stage_presence (1)",
       "assertions": {
         "currentScene": "sc_1_0_001",
         "stats": {
-          "courage": 3
+          "stage_presence": 1
         },
         "inventoryContains": ["booth_key"]
       }
@@ -41,10 +41,10 @@
     {
       "sequence": 3,
       "action": "checkpoint",
-      "description": "At Threshold Stage - attemptable courage check",
+      "description": "At Threshold Stage - attemptable stage_presence check",
       "assertions": {
         "currentScene": "sc_1_0_003",
-        "stats": { "courage": 3 },
+        "stats": { "stage_presence": 1 },
         "choicesAvailable": 3
       }
     },
@@ -53,7 +53,7 @@
       "action": "choose",
       "choiceIndex": 0,
       "expectedScene": "sc_1_0_902",
-      "description": "Attempt courage check (attemptable: always enabled, courage < 5 will fail)"
+      "description": "Attempt stage_presence check (attemptable: always enabled, stage_presence < 3 will fail)"
     },
     {
       "sequence": 5,
@@ -62,7 +62,7 @@
       "assertions": {
         "currentScene": "sc_1_0_902",
         "flagsSet": ["crossing_failed"],
-        "stats": { "health": 10, "courage": 3 },
+        "stats": { "health": 10, "stage_presence": 1 },
         "visitedCount": { "sc_1_0_001": 2, "sc_1_0_003": 1, "sc_1_0_902": 1 }
       }
     }
@@ -72,12 +72,12 @@
     "flagsRequired": ["crossing_failed"],
     "statsRequired": {
       "health": 10,
-      "courage": 3
+      "stage_presence": 1
     }
   },
   "softlockDetection": {
     "maxSceneRevisits": 3,
     "maxStepsWithoutProgress": 15,
-    "exemptScenes": ["sc_1_0_900", "sc_1_0_901", "sc_1_0_902"]
+    "exemptScenes": ["sc_1_1_099", "sc_1_0_902"]
   }
 }

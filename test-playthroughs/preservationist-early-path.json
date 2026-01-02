@@ -10,9 +10,9 @@
   "startingState": {
     "currentScene": "sc_1_0_001",
     "stats": {
-      "health": 10,
-      "courage": 5,
-      "insight": 5
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
     },
     "flags": ["game_started"],
     "inventory": [],
@@ -56,7 +56,7 @@
       "sequence": 5,
       "action": "choose",
       "choiceIndex": 0,
-      "expectedScene": "sc_1_0_900",
+      "expectedScene": "sc_1_1_099",
       "description": "Continue toward resolution"
     },
     {
@@ -64,14 +64,14 @@
       "action": "checkpoint",
       "description": "Reached early ending - path validated",
       "assertions": {
-        "currentScene": "sc_1_0_900",
+        "currentScene": "sc_1_1_099",
         "flagsSet": ["game_started", "path_direct"],
         "inventoryContains": ["wings_pass"]
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_900",
+    "sceneId": "sc_1_1_099",
     "flagsRequired": ["path_direct"],
     "inventoryRequired": ["wings_pass"]
   },

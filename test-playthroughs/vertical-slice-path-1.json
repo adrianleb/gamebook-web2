@@ -10,9 +10,9 @@
   "startingState": {
     "currentScene": "sc_1_0_001",
     "stats": {
-      "health": 10,
-      "courage": 5,
-      "insight": 5
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
     },
     "flags": ["game_started"],
     "inventory": [],
@@ -51,7 +51,7 @@
       "sequence": 4,
       "action": "choose",
       "choiceIndex": 0,
-      "expectedScene": "sc_1_0_900",
+      "expectedScene": "sc_1_1_099",
       "description": "Continue to resolution scene"
     },
     {
@@ -59,19 +59,19 @@
       "action": "checkpoint",
       "description": "Reached resolution - ending achieved",
       "assertions": {
-        "currentScene": "sc_1_0_900",
+        "currentScene": "sc_1_1_099",
         "flagsSet": ["game_started", "path_direct"],
         "visitedCount": { "sc_1_0_001": 2, "sc_1_0_002": 1 }
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_900",
+    "sceneId": "sc_1_1_099",
     "flagsRequired": ["path_direct"]
   },
   "softlockDetection": {
     "maxSceneRevisits": 3,
     "maxStepsWithoutProgress": 15,
-    "exemptScenes": ["sc_1_0_900"]
+    "exemptScenes": ["sc_1_1_099"]
   }
 }
