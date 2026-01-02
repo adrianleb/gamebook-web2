@@ -395,6 +395,8 @@ export class HeadlessRunner {
     }
 
     // Load snapshot into engine
+    // snapshot.state already has flags as array and inventory as array of entries
+    // from createSnapshot, so we can directly stringify it
     this.engine.load(JSON.stringify(snapshot.state));
 
     // Validate assertions if provided
@@ -735,6 +737,12 @@ export class HeadlessRunner {
     name: string,
     state: GameState
   ): StateSnapshot {
+    // Deep clone and convert Set/Map to serializable arrays
+    const serializableState = {
+      ...state,
+      flags: Array.from(state.flags),
+      inventory: Array.from(state.inventory.entries()),
+    };
     return {
       timestamp: new Date().toISOString(),
       playthrough: name, // Will be updated with actual playthrough name
@@ -742,7 +750,7 @@ export class HeadlessRunner {
       name,
       engineVersion: state.version,
       contentVersion: state.contentVersion,
-      state: JSON.parse(JSON.stringify(state)), // Deep clone
+      state: serializableState,
     };
   }
 

@@ -294,6 +294,26 @@ export interface SoftlockResult {
 }
 
 /**
+ * Serializable game state for snapshots.
+ * Same as GameState but with flags as array and inventory as array of entries.
+ */
+export interface SerializableState {
+  version: number;
+  contentVersion: string;
+  timestamp: number;
+  currentSceneId: string;
+  flags: string[];
+  inventory: [string, number][];
+  stats: Record<string, number>;
+  history: Array<{
+    sceneId: string;
+    visitedCount: number;
+  }>;
+  factions: Record<string, number>;
+  randomSeed?: number;
+}
+
+/**
  * State snapshot for regression testing.
  * Per agent-e: enables save/load regression validation.
  */
@@ -316,8 +336,8 @@ export interface StateSnapshot {
   /** Content version */
   contentVersion: string;
 
-  /** Full game state at snapshot */
-  state: GameState;
+  /** Full game state at snapshot (serializable format) */
+  state: SerializableState;
 }
 
 /**
