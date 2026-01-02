@@ -42,7 +42,7 @@
         "attemptable": true
       },
       "onSuccess": {
-        "to": "sc_1_0_901",
+        "to": "sc_1_1_099",
         "effects": [
           {
             "type": "set_flag",

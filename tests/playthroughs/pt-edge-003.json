@@ -53,16 +53,16 @@
       "action": "choose",
       "choiceIndex": 0,
       "description": "Choose 'Step into the darkness' (courage check: 10 >= 5 = SUCCESS)",
-      "expectedScene": "sc_1_0_901",
+      "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {
-        "currentScene": "sc_1_0_901",
+        "currentScene": "sc_1_1_099",
         "stats": { "courage": 10 }
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_901",
+    "sceneId": "sc_1_1_099",
     "inventoryRequired": ["booth_key"],
     "statsRequired": {
       "courage": 10,

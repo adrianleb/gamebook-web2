@@ -42,10 +42,10 @@
       "action": "choose",
       "choiceIndex": 0,
       "description": "Choose 'Step into the darkness' (courage check: 5 >= 5 = SUCCESS)",
-      "expectedScene": "sc_1_0_901",
+      "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {
-        "currentScene": "sc_1_0_901"
+        "currentScene": "sc_1_1_099"
       }
     },
     {
@@ -61,12 +61,12 @@
       "description": "Load saved state - verify all complex state preserved",
       "assertions": {
         "inventoryContains": ["booth_key"],
-        "currentScene": "sc_1_0_901"
+        "currentScene": "sc_1_1_099"
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_901",
+    "sceneId": "sc_1_1_099",
     "inventoryRequired": ["booth_key"]
   },
   "softlockDetection": {

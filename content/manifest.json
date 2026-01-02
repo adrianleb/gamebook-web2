@@ -329,35 +329,15 @@
       "description": "Negotiator branch convergence - Maren's guidance leads to First Crossing",
       "mechanics": ["negotiator_branch", "act1_complete"]
     },
-    "sc_1_0_900": {
-      "title": "Vertical Slice Resolution",
-      "location": "The Threshold Stage",
-      "act": 1,
-      "hub": 0,
-      "status": "complete",
-      "description": "Vertical slice ending - Direct path resolution",
-      "ending": true,
-      "endingId": "vertical_slice_direct"
-    },
-    "sc_1_0_901": {
-      "title": "The Crossing Succeeded",
-      "location": "The Threshold Stage",
-      "act": 1,
-      "hub": 0,
-      "status": "complete",
-      "description": "Vertical slice ending - Courage check success",
-      "ending": true,
-      "endingId": "vertical_slice_courage"
-    },
     "sc_1_0_902": {
       "title": "The Crossing Failed",
       "location": "The Threshold Stage",
       "act": 1,
       "hub": 0,
       "status": "complete",
-      "description": "Vertical slice ending - Attemptable stat check failure with health penalty",
+      "description": "Stat check failure ending - Player fails the threshold crossing attempt",
       "ending": true,
-      "endingId": "vertical_slice_failure"
+      "endingId": "threshold_failure"
     },
     "sc_1_1_099": {
       "title": "The First Crossing",
@@ -542,10 +522,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 34,
+    "totalScenes": 32,
     "pending": 0,
     "draft": 0,
-    "complete": 34,
+    "complete": 32,
     "reviewed": 0
   }
 }

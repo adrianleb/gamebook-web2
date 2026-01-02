@@ -8,7 +8,7 @@
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["ending", "failure", "vertical_slice"],
+    "tags": ["ending", "failure"],
     "author": "agent-b",
     "createdAt": "2025-12-29",
     "updatedAt": "2025-12-29"
@@ -20,10 +20,7 @@
       "The darkness presses against you like a physical weight, whispering of all the stories that end badly, all the heroes who faltered, all the doors that close forever. Your heart hammers against your ribs. The resistance is absolute.",
       "You cannot do it. Not yet. The fear is too old, too heavy, too real.",
       "You stagger back from the threshold, gasping for air, your vision swimming. The iron door slams shut with a sound like breaking bone.",
-      "The Understage rejects you this day.",
-      "--- VERTICAL SLICE COMPLETE ---",
-      "Your courage was not sufficient to cross the threshold. The Preservationists note your hesitation.",
-      "Thank you for experiencing The Understage vertical slice."
+      "The Understage rejects you this day."
     ]
   },
   "npcs": [],
