@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-01T21:32:55.850Z",
+  "timestamp": "2026-01-02T01:51:28.362Z",
   "playthrough": "pt-sl-001-scene-transition",
   "step": 2,
   "name": "pt-sl-001-scene-transition",
@@ -8,18 +8,24 @@
   "state": {
     "version": 1,
     "contentVersion": "0.0.1",
-    "timestamp": 1767303175849,
+    "timestamp": 1767318688361,
     "currentSceneId": "sc_1_0_002",
     "history": [
       {
         "sceneId": "sc_1_0_001",
-        "timestamp": 1767303175850,
+        "timestamp": 1767318688361,
         "visitedCount": 2
       },
       {
         "sceneId": "sc_1_0_002",
-        "timestamp": 1767303175850,
+        "timestamp": 1767318688361,
         "choiceLabel": "Step through the opening to the right",
+        "visitedCount": 1
+      },
+      {
+        "sceneId": "sc_1_0_900",
+        "timestamp": 1767318688364,
+        "choiceLabel": "Continue toward the light",
         "visitedCount": 1
       }
     ],
@@ -28,8 +34,17 @@
       "courage": 5,
       "insight": 3
     },
-    "flags": {},
-    "inventory": {},
+    "flags": [
+      "game_started",
+      "location_booth_visited",
+      "path_direct"
+    ],
+    "inventory": [
+      [
+        "wings_pass",
+        1
+      ]
+    ],
     "factions": {}
   }
 }
