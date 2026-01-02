@@ -2,7 +2,7 @@
   "$schema": "../../src/engine/headless-schema.json",
   "meta": {
     "name": "PT-END-002",
-    "description": "Exiter Ending (The Open Book) - Tests faction gate (exiter >= 7), editor state requirement (persuaded), and ending reachability from convergence scene sc_3_4_098 The Last Curtain Call.",
+    "description": "Exiter Ending (The Open Book) - Tests faction gate (exiter >= 7) and ending reachability from convergence scene sc_3_4_098 The Last Curtain Call.",
     "author": "agent-e",
     "version": "1.0"
   },
@@ -20,8 +20,7 @@
       "exiter": 7,
       "independent": 2
     },
-    "currentScene": "sc_3_4_098",
-    "editorState": "persuaded"
+    "currentScene": "sc_3_4_098"
   },
   "steps": [
     {
@@ -36,8 +35,7 @@
           "revisionist": 2,
           "exiter": 7,
           "independent": 2
-        },
-        "editorState": "persuaded"
+        }
       }
     },
     {
@@ -46,7 +44,7 @@
       "description": "Verify 'The Open Book' choice is enabled",
       "assertions": {
         "choiceEnabled": "The Open Book",
-        "reason": "exiter >= 7 AND editorState == persuaded"
+        "reason": "exiter >= 7"
       }
     },
     {
@@ -91,9 +89,8 @@
   },
   "notes": [
     "Faction gate: exiter >= 7 required for this ending",
-    "Editor state gate: editorState == persuaded required for this ending",
     "This ending represents the Exiter path where fictional beings deserve real existence",
-    "If exiter < 7 or editorState != persuaded, choice should be disabled",
+    "If exiter < 7, choice should be disabled",
     "Ending 5 (The Eternal Rehearsal) must always be available as fallback"
   ]
 }

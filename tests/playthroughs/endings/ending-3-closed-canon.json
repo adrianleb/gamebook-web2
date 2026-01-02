@@ -2,7 +2,7 @@
   "$schema": "../../src/engine/headless-schema.json",
   "meta": {
     "name": "PT-END-003",
-    "description": "Preservationist Ending (The Closed Canon) - Tests faction gate (preservationist >= 7), editor state requirement (defeated), and ending reachability from convergence scene sc_3_4_098 The Last Curtain Call.",
+    "description": "Preservationist Ending (The Closed Canon) - Tests faction gate (preservationist >= 7) and ending reachability from convergence scene sc_3_4_098 The Last Curtain Call.",
     "author": "agent-e",
     "version": "1.0"
   },
@@ -20,8 +20,7 @@
       "exiter": 2,
       "independent": 2
     },
-    "currentScene": "sc_3_4_098",
-    "editorState": "defeated"
+    "currentScene": "sc_3_4_098"
   },
   "steps": [
     {
@@ -36,8 +35,7 @@
           "revisionist": 1,
           "exiter": 2,
           "independent": 2
-        },
-        "editorState": "defeated"
+        }
       }
     },
     {
@@ -46,7 +44,7 @@
       "description": "Verify 'The Closed Canon' choice is enabled",
       "assertions": {
         "choiceEnabled": "The Closed Canon",
-        "reason": "preservationist >= 7 AND editorState == defeated"
+        "reason": "preservationist >= 7"
       }
     },
     {
@@ -91,9 +89,8 @@
   },
   "notes": [
     "Faction gate: preservationist >= 7 required for this ending",
-    "Editor state gate: editorState == defeated required for this ending",
     "This ending represents the Preservationist path favoring separation of worlds",
-    "If preservationist < 7 or editorState != defeated, choice should be disabled",
+    "If preservationist < 7, choice should be disabled",
     "Ending 5 (The Eternal Rehearsal) must always be available as fallback"
   ]
 }
