@@ -499,16 +499,49 @@ export class ContentValidator {
   /**
    * Validate stats reference valid stat IDs from stats.json.
    * Called when stats.json is available.
+   *
+   * stats.json structure: { stats: [{id, name, ...}, ...] }
+   * We extract valid stat IDs from the stats array.
+   *
+   * @param stats - Loaded stats.json content
+   * @param manifest - Game manifest
+   * @param scenes - Optional map of loaded scenes for full validation
+   * @returns Validation result with stat reference errors
    */
   validateStats(
     stats: Record<string, unknown>,
-    manifest: GameManifest
+    manifest: GameManifest,
+    scenes?: Map<SceneId, SceneData>
   ): ValidationResult {
     const errors: ValidationError[] = [];
-    const validStatIds = new Set(Object.keys(stats));
+    const validStatIds = new Set<string>();
 
-    // Check that all referenced stats exist
-    // This would be called with stats.json content
+    // Extract valid stat IDs from stats.json structure
+    // stats.json has format: { stats: [{id: "script", ...}, {id: "stage_presence", ...}, ...] }
+    const statsArray = stats.stats as Array<{id: string}>;
+    if (Array.isArray(statsArray)) {
+      for (const stat of statsArray) {
+        if (stat.id) {
+          validStatIds.add(stat.id);
+        }
+      }
+    }
+
+    // If scenes provided, validate all stat references in scene content
+    if (scenes) {
+      for (const [sceneId, scene] of scenes) {
+        const statRefs = this.collectStatReferences(scene);
+        for (const statRef of statRefs) {
+          if (!validStatIds.has(statRef)) {
+            errors.push({
+              type: 'invalid-stat',
+              sceneId,
+              message: `Stat '${statRef}' not defined in stats.json (valid: ${Array.from(validStatIds).join(', ')})`,
+            });
+          }
+        }
+      }
+    }
 
     return {
       valid: errors.length === 0,
@@ -520,22 +553,229 @@ export class ContentValidator {
   /**
    * Validate items reference valid item IDs from items.json.
    * Called when items.json is available.
+   *
+   * items.json structure: { items: { vertical_slice: [{id, ...}, ...], act1: [...], ... } }
+   * We extract valid item IDs from all nested arrays in the items object.
+   *
+   * @param items - Loaded items.json content
+   * @param manifest - Game manifest
+   * @param scenes - Optional map of loaded scenes for full validation
+   * @returns Validation result with item reference errors
    */
   validateItems(
     items: Record<string, unknown>,
-    manifest: GameManifest
+    manifest: GameManifest,
+    scenes?: Map<SceneId, SceneData>
   ): ValidationResult {
     const errors: ValidationError[] = [];
-    const validItemIds = new Set(Object.keys(items));
+    const validItemIds = new Set<string>();
 
-    // Check that all referenced items exist
-    // This would be called with items.json content
+    // Extract valid item IDs from items.json structure
+    // items.json has format: { items: { vertical_slice: [{id: "booth_key", ...}, ...], act1: [...], ... } }
+    const itemsObj = items.items as Record<string, Array<{id: string}>>;
+    if (itemsObj && typeof itemsObj === 'object') {
+      for (const category of Object.values(itemsObj)) {
+        if (Array.isArray(category)) {
+          for (const item of category) {
+            if (item.id) {
+              validItemIds.add(item.id);
+            }
+          }
+        }
+      }
+    }
+
+    // If scenes provided, validate all item references in scene content
+    if (scenes) {
+      for (const [sceneId, scene] of scenes) {
+        const itemRefs = this.collectItemReferences(scene);
+        for (const itemRef of itemRefs) {
+          if (!validItemIds.has(itemRef)) {
+            errors.push({
+              type: 'invalid-item',
+              sceneId,
+              message: `Item '${itemRef}' not defined in items.json (valid: ${Array.from(validItemIds).sort().slice(0, 10).join(', ')}${validItemIds.size > 10 ? '...' : ''})`,
+            });
+          }
+        }
+      }
+    }
 
     return {
       valid: errors.length === 0,
       errors,
       warnings: [],
     };
+  }
+
+  /**
+   * Collect stat references from a scene for validation.
+   * Returns all stat IDs referenced in conditions and effects.
+   */
+  private collectStatReferences(scene: SceneData): Set<string> {
+    const refs = new Set<string>();
+
+    // Check choices for stat references in conditions
+    if (scene.choices) {
+      for (const choice of scene.choices) {
+        // Choice conditions
+        if (choice.conditions) {
+          this.collectStatsFromConditions(choice.conditions, refs);
+        }
+      }
+    }
+
+    // Check scene-level effects for stat references
+    if (scene.effects) {
+      this.collectStatsFromEffects(scene.effects, refs);
+    }
+
+    // Check choice effects (including onSuccess/onFailure branches)
+    if (scene.choices) {
+      for (const choice of scene.choices) {
+        if (choice.effects) {
+          this.collectStatsFromEffects(choice.effects, refs);
+        }
+        if (choice.onSuccess?.effects) {
+          this.collectStatsFromEffects(choice.onSuccess.effects, refs);
+        }
+        if (choice.onFailure?.effects) {
+          this.collectStatsFromEffects(choice.onFailure.effects, refs);
+        }
+      }
+    }
+
+    return refs;
+  }
+
+  /**
+   * Collect stat IDs from condition tree.
+   */
+  private collectStatsFromConditions(conditions: unknown, refs: Set<string>): void {
+    if (!conditions) return;
+
+    if (Array.isArray(conditions)) {
+      for (const cond of conditions) {
+        this.collectStatsFromConditions(cond, refs);
+      }
+      return;
+    }
+
+    const cond = conditions as Record<string, unknown>;
+    const type = cond.type as string;
+
+    // Stat condition
+    if (type === 'stat' && cond.stat && typeof cond.stat === 'string') {
+      refs.add(cond.stat);
+    }
+
+    // Nested conditions (and, or, not)
+    if ((type === 'and' || type === 'or' || type === 'not') && cond.conditions) {
+      this.collectStatsFromConditions(cond.conditions, refs);
+    }
+  }
+
+  /**
+   * Collect stat IDs from effects array.
+   */
+  private collectStatsFromEffects(effects: unknown, refs: Set<string>): void {
+    if (!effects) return;
+
+    const effectArray = Array.isArray(effects) ? effects : [effects];
+    for (const effect of effectArray) {
+      const eff = effect as Record<string, unknown>;
+      const type = eff.type as string;
+
+      // Stat effects: set-stat, modify-stat
+      if ((type === 'set-stat' || type === 'modify-stat') && eff.stat && typeof eff.stat === 'string') {
+        refs.add(eff.stat as string);
+      }
+    }
+  }
+
+  /**
+   * Collect item references from a scene for validation.
+   * Returns all item IDs referenced in conditions and effects.
+   */
+  private collectItemReferences(scene: SceneData): Set<string> {
+    const refs = new Set<string>();
+
+    // Check choices for item references in conditions
+    if (scene.choices) {
+      for (const choice of scene.choices) {
+        // Choice conditions
+        if (choice.conditions) {
+          this.collectItemsFromConditions(choice.conditions, refs);
+        }
+      }
+    }
+
+    // Check scene-level effects for item references
+    if (scene.effects) {
+      this.collectItemsFromEffects(scene.effects, refs);
+    }
+
+    // Check choice effects (including onSuccess/onFailure branches)
+    if (scene.choices) {
+      for (const choice of scene.choices) {
+        if (choice.effects) {
+          this.collectItemsFromEffects(choice.effects, refs);
+        }
+        if (choice.onSuccess?.effects) {
+          this.collectItemsFromEffects(choice.onSuccess.effects, refs);
+        }
+        if (choice.onFailure?.effects) {
+          this.collectItemsFromEffects(choice.onFailure.effects, refs);
+        }
+      }
+    }
+
+    return refs;
+  }
+
+  /**
+   * Collect item IDs from condition tree.
+   */
+  private collectItemsFromConditions(conditions: unknown, refs: Set<string>): void {
+    if (!conditions) return;
+
+    if (Array.isArray(conditions)) {
+      for (const cond of conditions) {
+        this.collectItemsFromConditions(cond, refs);
+      }
+      return;
+    }
+
+    const cond = conditions as Record<string, unknown>;
+    const type = cond.type as string;
+
+    // Item condition
+    if (type === 'item' && cond.item && typeof cond.item === 'string') {
+      refs.add(cond.item);
+    }
+
+    // Nested conditions (and, or, not)
+    if ((type === 'and' || type === 'or' || type === 'not') && cond.conditions) {
+      this.collectItemsFromConditions(cond.conditions, refs);
+    }
+  }
+
+  /**
+   * Collect item IDs from effects array.
+   */
+  private collectItemsFromEffects(effects: unknown, refs: Set<string>): void {
+    if (!effects) return;
+
+    const effectArray = Array.isArray(effects) ? effects : [effects];
+    for (const effect of effectArray) {
+      const eff = effect as Record<string, unknown>;
+      const type = eff.type as string;
+
+      // Item effects: add-item, remove-item
+      if ((type === 'add-item' || type === 'remove-item') && eff.item && typeof eff.item === 'string') {
+        refs.add(eff.item as string);
+      }
+    }
   }
 }
 

@@ -2,17 +2,17 @@
   "$schema": "../../src/engine/headless-schema.json",
   "meta": {
     "name": "PT-VS-004",
-    "description": "Stat Check Failure Path - Tests stat check mechanics, failure branch, health penalty",
+    "description": "Stat Check Failure Path - Tests stat check mechanics, failure branch",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "1.1"
   },
   "startingState": {
     "flags": [],
     "inventory": ["booth_key"],
     "stats": {
-      "health": 10,
-      "courage": 3,
-      "insight": 3
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
     },
     "currentScene": "sc_1_0_001"
   },
@@ -20,10 +20,10 @@
     {
       "sequence": 1,
       "action": "checkpoint",
-      "description": "Starting with booth_key and low courage=3",
+      "description": "Starting with booth_key and low stage_presence=2 (below threshold 3)",
       "assertions": {
         "inventoryContains": ["booth_key"],
-        "stats": { "courage": 3, "health": 10 }
+        "stats": { "script": 2, "stage_presence": 2, "improv": 2 }
       }
     },
     {
@@ -36,15 +36,15 @@
       "assertions": {
         "inventoryContains": ["booth_key"],
         "currentScene": "sc_1_0_003",
-        "stats": { "courage": 3 }
+        "stats": { "script": 2, "stage_presence": 2, "improv": 2 }
       }
     },
     {
       "sequence": 3,
       "action": "checkpoint",
-      "description": "At threshold - 'Step into the darkness' should be disabled (courage 3 < 5)",
+      "description": "At threshold - 'Step into the darkness' should be disabled (stage_presence 2 < threshold 3)",
       "assertions": {
-        "stats": { "courage": 3 },
+        "stats": { "script": 2, "stage_presence": 2, "improv": 2 },
         "choicesAvailable": 1,
         "disabledChoicesValidated": true
       }
@@ -66,8 +66,9 @@
     "flagsRequired": ["location_booth_visited"],
     "inventoryRequired": ["booth_key"],
     "statsRequired": {
-      "courage": 3,
-      "health": 10
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
     }
   },
   "softlockDetection": {
@@ -76,10 +77,9 @@
     "failOnDetection": true
   },
   "notes": [
-    "QA FINDING: The scene sc_1_0_902 (The Crossing Failed) exists but is NOT REACHABLE from sc_1_0_003.",
-    "When courage < 5, the 'Step into the darkness' choice is simply disabled with hint text.",
-    "There is no explicit failure resolution scene - the player must turn back to sc_1_0_001.",
-    "This differs from VERTICAL_SLICE.md spec which expects sc_1_0_902 as a failure resolution.",
-    "Consider: Should low courage trigger an automatic transition to sc_1_0_902 instead of disabling the choice?"
+    "UPDATED: Migrated from legacy stats (courage→stage_presence, health/insight removed).",
+    "Stage presence check: threshold 3, player has 2 (below threshold).",
+    "The attemptable stat check now uses onSuccess/onFailure branching.",
+    "This test path expects the choice to be disabled when stats are below threshold."
   ]
 }

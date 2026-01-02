@@ -10,9 +10,9 @@
     "flags": ["game_started", "act1_complete", "act2_complete"],
     "inventory": [],
     "stats": {
-      "health": 10,
-      "courage": 5,
-      "insight": 3
+      "script": 2,
+      "stage_presence": 2,
+      "script": 2
     },
     "factions": {
       "preservationist": 2,
@@ -71,9 +71,9 @@
     "flagsRequired": ["game_started", "act1_complete", "act2_complete", "ending_achieved"],
     "inventoryRequired": [],
     "statsRequired": {
-      "health": 10,
-      "courage": 5,
-      "insight": 3
+      "script": 2,
+      "stage_presence": 2,
+      "script": 2
     },
     "factionsRequired": {
       "preservationist": 2,

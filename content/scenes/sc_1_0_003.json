@@ -36,9 +36,9 @@
       "label": "Step into the darkness",
       "conditions": {
         "type": "stat_check",
-        "stat": "courage",
+        "stat": "stage_presence",
         "op": "gte",
-        "value": 5,
+        "value": 3,
         "attemptable": true
       },
       "onSuccess": {
@@ -61,11 +61,6 @@
           {
             "type": "set_flag",
             "flag": "crossing_failed"
-          },
-          {
-            "type": "modify_stat",
-            "stat": "health",
-            "value": -1
           }
         ]
       }
@@ -93,9 +88,9 @@
     "checks": [
       {
         "type": "stat_check",
-        "stat": "courage",
+        "stat": "stage_presence",
         "op": "gte",
-        "value": 5,
+        "value": 3,
         "passEffect": "set_flag:crossing_succeeded"
       }
     ]
