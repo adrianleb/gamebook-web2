@@ -10,9 +10,9 @@
     "flags": [],
     "inventory": ["booth_key"],
     "stats": {
-      "script": 2,
-      "stage_presence": 4,
-      "script": 4
+      "health": 10,
+      "courage": 10,
+      "insight": 10
     },
     "currentScene": "sc_1_0_001"
   },
@@ -22,7 +22,7 @@
       "action": "checkpoint",
       "description": "Verify starting state with maximum stats (courage=10, insight=10)",
       "assertions": {
-        "stats": { "stage_presence": 4, "script": 4 },
+        "stats": { "courage": 10, "insight": 10 },
         "inventoryContains": ["booth_key"],
         "choicesAvailable": 3
       }
@@ -36,7 +36,7 @@
       "checkpoint": true,
       "assertions": {
         "currentScene": "sc_1_0_003",
-        "stats": { "stage_presence": 4 }
+        "stats": { "courage": 10 }
       }
     },
     {
@@ -44,7 +44,7 @@
       "action": "checkpoint",
       "description": "At threshold - courage check should pass (10 >= 5)",
       "assertions": {
-        "stats": { "stage_presence": 4 },
+        "stats": { "courage": 10 },
         "choicesAvailable": 2
       }
     },
@@ -53,20 +53,20 @@
       "action": "choose",
       "choiceIndex": 0,
       "description": "Choose 'Step into the darkness' (courage check: 10 >= 5 = SUCCESS)",
-      "expectedScene": "sc_1_0_901",
+      "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {
-        "currentScene": "sc_1_0_901",
-        "stats": { "stage_presence": 4 }
+        "currentScene": "sc_1_1_099",
+        "stats": { "courage": 10 }
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_901",
+    "sceneId": "sc_1_1_099",
     "inventoryRequired": ["booth_key"],
     "statsRequired": {
-      "stage_presence": 4,
-      "script": 4
+      "courage": 10,
+      "insight": 10
     }
   },
   "softlockDetection": {
