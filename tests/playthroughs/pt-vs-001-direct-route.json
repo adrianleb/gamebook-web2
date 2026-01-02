@@ -2,9 +2,9 @@
   "$schema": "../../src/engine/headless-schema.json",
   "meta": {
     "name": "PT-VS-001",
-    "description": "Direct Route (Baseline Navigation) - Tests choice navigation, basic scene transitions, no gating mechanics",
+    "description": "Direct Route (Baseline Navigation) - Tests choice navigation, Act 1→Act 2 transition, First Crossing scene",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "1.1"
   },
   "startingState": {
     "flags": [],
@@ -47,23 +47,24 @@
       "sequence": 3,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Choose 'Continue toward the light'",
-      "expectedScene": "sc_1_0_900",
+      "description": "Choose 'Continue toward the light' - Now goes to First Crossing (Act 1→Act 2 transition)",
+      "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {
-        "flagsSet": ["game_started", "location_booth_visited", "path_direct"],
+        "flagsSet": ["game_started", "location_booth_visited", "path_direct", "act1_complete", "first_crossing_reached"],
         "inventoryContains": ["wings_pass"],
-        "currentScene": "sc_1_0_900"
+        "currentScene": "sc_1_1_099"
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_900",
-    "flagsRequired": ["game_started", "location_booth_visited", "path_direct"],
+    "sceneId": "sc_1_1_099",
+    "flagsRequired": ["game_started", "location_booth_visited", "path_direct", "act1_complete", "first_crossing_reached"],
     "inventoryRequired": ["wings_pass"],
     "statsRequired": {
       "health": 10,
-      "courage": 5
+      "courage": 5,
+      "insight": 3
     }
   },
   "softlockDetection": {
