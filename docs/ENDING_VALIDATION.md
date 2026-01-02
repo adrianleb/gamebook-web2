@@ -18,13 +18,13 @@ This validation document references those definitions; any changes to ending req
 
 ### Ending Summary
 
-| ID | Scene | Title | Tier | Faction | Level | Editor State |
-|----|-------|-------|------|---------|-------|--------------|
-| 1 | sc_3_4_901 | The Revised Draft | bittersweet | revisionist | 7 | defeated |
-| 2 | sc_3_4_902 | The Open Book | hopeful | exiter | 7 | persuaded |
-| 3 | sc_3_4_903 | The Closed Canon | melancholic | preservationist | 7 | defeated |
-| 4 | sc_3_4_904 | The Blank Page | tragic | independent | - | revealedTruth |
-| 5 | sc_3_4_999 | The Eternal Rehearsal | ambiguous | - | - | failed_or_refused |
+| ID | Scene | Title | Tier | Faction | Level | Additional Requirement |
+|----|-------|-------|------|---------|-------|----------------------|
+| 1 | sc_3_4_901 | The Revised Draft | bittersweet | revisionist | 7 | None |
+| 2 | sc_3_4_902 | The Open Book | hopeful | exiter | 7 | None |
+| 3 | sc_3_4_903 | The Closed Canon | melancholic | preservationist | 7 | None |
+| 4 | sc_3_4_904 | The Blank Page | tragic | independent | - | flag: editorState_revealedTruth |
+| 5 | sc_3_4_999 | The Eternal Rehearsal | ambiguous | - | - | None |
 
 **Convergence Scene:** `sc_3_4_098` (The Last Curtain Call) - all endings branch from this scene.
 
@@ -43,17 +43,15 @@ Defined in `content/manifest.json` lines 80-104 (Act 2 Hub 2: The Green Room).
 | `exiter` | Fictional beings deserve real existence | 0 | Accumulates through Act 2 choices |
 | `independent` | Balance between factions | 0 | No explicit factionLevel requirement |
 
-### Editor State Transitions
+### Editor State Flags
 
-The `editorState` flag transitions through Act 3 scenes:
+**Note:** The `editorState` enum (defeated/persuaded) referenced in earlier design documents is **NOT implemented** in sc_3_4_098. Current implementation uses:
 
-| State | Description | Path |
-|-------|-------------|------|
-| `defeated` | Editor defeated in conflict | Combat/confrontation path |
-| `persuaded` | Editor persuaded diplomatically | Social/negotiation path |
-| `revealedTruth` | Learned the deeper truth | Investigation/exploration path |
+| Flag | Type | Purpose | Ending |
+|------|------|---------|--------|
+| `editorState_revealedTruth` | Boolean flag | Set when player discovers deeper truth about The Editor and the Understage | Ending 4 (Independent) |
 
-**Validation requirement:** Verify state transitions are achievable through Act 3 scene choices.
+**Combined faction+editorState AND gates are DEFERRED** per MILESTONES.md Issue #129 until full Act 3 Hub 1-3 content is implemented.
 
 ---
 
@@ -61,12 +59,13 @@ The `editorState` flag transitions through Act 3 scenes:
 
 ### Faction Endings (IDs 1-3)
 
-**Pattern:** `faction >= 7` AND `editorState` match
+**Pattern:** `faction >= 7` (stat_check only)
+
+**Note:** Combined faction+editorState AND gates are DEFERRED per MILESTONES.md Issue #129.
 
 **Reachability Validation:**
 1. Verify faction can reach level 7 through Act 2 choices
-2. Verify corresponding `editorState` is achievable in Act 3
-3. Verify no softlock behind mutually exclusive conditions
+2. Verify no softlock behind mutually exclusive conditions
 
 **Threshold Validation:**
 - Faction levels use 0-10 scale (standard stat check scale)
@@ -78,10 +77,8 @@ The `editorState` flag transitions through Act 3 scenes:
 requirements:
   faction: revisionist
   factionLevel: 7
-  editorState: defeated
 validation:
   - revisionist >= 7 achievable in Act 2
-  - editorState == defeated achievable in Act 3
   - scene sc_3_4_901 exists and is reachable from sc_3_4_098
 ```
 
@@ -90,10 +87,8 @@ validation:
 requirements:
   faction: exiter
   factionLevel: 7
-  editorState: persuaded
 validation:
   - exiter >= 7 achievable in Act 2
-  - editorState == persuaded achievable in Act 3
   - scene sc_3_4_902 exists and is reachable from sc_3_4_098
 ```
 
@@ -102,29 +97,26 @@ validation:
 requirements:
   faction: preservationist
   factionLevel: 7
-  editorState: defeated
 validation:
   - preservationist >= 7 achievable in Act 2
-  - editorState == defeated achievable in Act 3
   - scene sc_3_4_903 exists and is reachable from sc_3_4_098
 ```
 
 ### Independent Ending (ID 4)
 
-**Pattern:** No explicit factionLevel, only `editorState`
+**Pattern:** Boolean flag check (no faction requirement)
 
 **Reachability Validation:**
-1. Verify `editorState: revealedTruth` is achievable without high faction investment
+1. Verify `editorState_revealedTruth` flag is achievable without high faction investment
 2. Verify this path represents "balance" (no faction dominance)
 
 **Ending 4: The Blank Page (Independent)**
 ```yaml
 requirements:
-  faction: independent
-  editorState: revealedTruth
+  flag: editorState_revealedTruth
 validation:
   - No factionLevel requirement (balance path)
-  - editorState == revealedTruth achievable in Act 3
+  - flag editorState_revealedTruth is settable in Act 3
   - scene sc_3_4_904 exists and is reachable from sc_3_4_098
 ```
 
@@ -194,9 +186,7 @@ When Chunk 4 is implemented, create JSON playthrough files for each ending:
       "preservationist": 2,
       "exiter": 1
     },
-    "flags": {
-      "editorState": "defeated"
-    }
+    "flags": {}
   },
   "endingCriteria": {
     "sceneId": "sc_3_4_901"
@@ -238,8 +228,8 @@ When Chunk 4 (Act 3 with endings) is assigned, verify:
 
 ### Post-Implementation
 - [ ] ReachabilityValidator passes: all 5 endings reachable from sc_3_4_098
-- [ ] Faction gates work: choices disabled without sufficient faction level
-- [ ] Editor state gates work: choices disabled without correct state
+- [ ] Faction gates work: choices disabled without sufficient faction level (>= 7)
+- [ ] Independent ending flag check works: choice disabled without editorState_revealedTruth
 - [ ] Ending 5 (fail) is always reachable (no blocking conditions)
 - [ ] No orphan scenes in Act 3 content graph
 - [ ] No circular references (except intentional narrative loops)
@@ -249,9 +239,9 @@ When Chunk 4 (Act 3 with endings) is assigned, verify:
 - [ ] Play through to Ending 1 (revisionist) with revisionist >= 7
 - [ ] Play through to Ending 2 (exiter) with exiter >= 7
 - [ ] Play through to Ending 3 (preservationist) with preservationist >= 7
-- [ ] Play through to Ending 4 (independent) with editorState = revealedTruth
+- [ ] Play through to Ending 4 (independent) with flag editorState_revealedTruth set
 - [ ] Play through to Ending 5 (fail) by refusing final choice
-- [ ] Attempt incorrect ending paths (verify blocked by faction/state)
+- [ ] Attempt incorrect ending paths (verify blocked by faction/flag requirements)
 
 ---
 
@@ -264,13 +254,12 @@ When Chunk 4 is complete, add ending playthrough sections to TEST_PLAYTHROUGHS.m
 
 ### PT-END-001: Revisionist Ending
 
-**Tests:** Faction gate (revisionist >= 7), editorState: defeated
+**Tests:** Faction gate (revisionist >= 7)
 
 **Entry Point:** sc_3_4_098 (The Last Curtain Call)
 
 **Prerequisites:**
 - revisionist faction >= 7
-- editorState == defeated
 
 **Expected Outcome:** Reach sc_3_4_901 (The Revised Draft)
 
@@ -326,6 +315,7 @@ node scripts/validate-endings.js
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-01-02 | **FIXED** Ending requirements to match actual sc_3_4_098 implementation. Removed incorrect editorState enum references (defeated/persuaded) from faction endings. Changed Independent ending to use editorState_revealedTruth boolean flag. Updated all validation sections to reflect that combined faction+editorState AND gates are DEFERRED per MILESTONES.md Issue #129. |
 | 1.0 | 2025-12-29 | Initial framework definition for Phase 3 ending validation |
 
 ---

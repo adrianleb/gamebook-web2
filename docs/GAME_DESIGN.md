@@ -82,15 +82,13 @@ Flags track binary state throughout the game - either something happened or it d
 
 ### Editor State Flags (Act 3)
 
-The Editor's state transitions through Act 3 scenes and determines which endings are available.
+**IMPORTANT:** The `editorState` enum (defeated/persuaded) referenced in earlier design documents is **NOT implemented** in sc_3_4_098.
 
 | Flag ID | Default | Purpose | Sets Ending Requirement |
 |---------|---------|---------|------------------------|
-| `editorState_defeated` | false | Editor defeated in conflict (combat/confrontation path) | Ending 1 (Revisionist), Ending 3 (Preservationist) |
-| `editorState_persuaded` | false | Editor persuaded diplomatically (social/negotiation path) | Ending 2 (Exiter) |
 | `editorState_revealedTruth` | false | Learned the deeper truth about Understage (investigation path) | Ending 4 (Independent) |
 
-**Note:** These flags are mutually exclusive in a single playthrough (only one can be true). They represent the player's approach to the final confrontation in sc_3_4_098.
+**Note:** Combined faction+editorState AND gates are DEFERRED per MILESTONES.md Issue #129 until full Act 3 Hub 1-3 content is implemented. Current sc_3_4_098 implementation uses stat_check only for faction endings.
 
 ### Ending Flags
 
@@ -162,23 +160,27 @@ Faction values increase through player choices in Act 2 (The Green Room, The Arc
 
 The 5 endings are gated behind faction thresholds in sc_3_4_098 (The Last Curtain Call):
 
-| Ending | Faction | Threshold | Editor State Required |
+| Ending | Faction | Threshold | Additional Requirement |
 |--------|---------|-----------|----------------------|
-| 1: The Revised Draft | `revisionist` | >= 7 | `editorState_defeated` |
-| 2: The Open Book | `exiter` | >= 7 | `editorState_persuaded` |
-| 3: The Closed Canon | `preservationist` | >= 7 | `editorState_defeated` |
-| 4: The Blank Page | None (independent path) | None | `editorState_revealedTruth` |
+| 1: The Revised Draft | `revisionist` | >= 7 | None |
+| 2: The Open Book | `exiter` | >= 7 | None |
+| 3: The Closed Canon | `preservationist` | >= 7 | None |
+| 4: The Blank Page | None (independent path) | None | flag: `editorState_revealedTruth` |
 | 5: The Eternal Rehearsal | Fail-state | Always reachable | None |
 
 **Threshold Logic:** Level 7 requires ~70% investment in that faction throughout Act 2. Players must prioritize one faction over others to reach specific endings.
 
 **Independent Path:** Ending 4 has no faction threshold - it's achieved by balancing all factions (no single faction reaches 7) and discovering the deeper truth (`editorState_revealedTruth`).
 
+**Note:** Combined faction+editorState AND gates are DEFERRED per MILESTONES.md Issue #129.
+
 ---
 
 ## Ending Requirements (Canonical Reference)
 
 All ending requirements are canonically defined in `content/manifest.json` lines 161-218. This section summarizes those requirements for quick reference.
+
+**IMPORTANT:** The actual sc_3_4_098.json implementation uses stat_check only (>=7) for faction endings. The `editorState` enum (defeated/persuaded) is NOT implemented. Combined faction+editorState AND gates are DEFERRED per MILESTONES.md Issue #129.
 
 ### Ending 1: The Revised Draft (Revisionist)
 
@@ -188,7 +190,6 @@ tier: bittersweet
 requirements:
   faction: revisionist
   factionLevel: 7
-  editorState: defeated
 description: You take the Editor's power and choose which stories survive.
 ```
 
@@ -200,7 +201,6 @@ tier: hopeful
 requirements:
   faction: exiter
   factionLevel: 7
-  editorState: persuaded
 description: The boundary dissolves peacefully. Fiction and reality merge.
 ```
 
@@ -212,7 +212,6 @@ tier: melancholic
 requirements:
   faction: preservationist
   factionLevel: 7
-  editorState: defeated
 description: The Understage is sealed completely. Stories become static.
 ```
 
@@ -222,8 +221,7 @@ description: The Understage is sealed completely. Stories become static.
 sceneId: sc_3_4_904
 tier: tragic
 requirements:
-  faction: independent
-  editorState: revealedTruth
+  flag: editorState_revealedTruth
 description: Both Understage and its deeper threat end. Reality with no more new stories.
 ```
 
@@ -385,6 +383,7 @@ None identified during consolidation. All source documents (VERTICAL_SLICE.md, E
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1 | 2026-01-02 | **FIXED** Ending requirements to match actual sc_3_4_098 implementation. Removed incorrect editorState enum references (defeated/persuaded) from faction ending requirements. Changed Independent ending to use editorState_revealedTruth boolean flag. Added clarification that combined faction+editorState AND gates are DEFERRED per MILESTONES.md Issue #129. |
 | 1.0 | 2025-12-31 | Initial consolidation from VERTICAL_SLICE.md, ENDING_VALIDATION.md, manifest.json, and scene content files. Created as Phase 5 deliverable for canonical state variable reference. |
 
 ---
