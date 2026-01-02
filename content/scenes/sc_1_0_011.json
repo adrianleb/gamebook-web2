@@ -68,10 +68,9 @@
       "to": "sc_1_0_012",
       "conditions": {
         "type": "stat_check",
-        "stat": "charm",
+        "stat": "stage_presence",
         "op": "gte",
-        "value": 4,
-        "attemptable": true
+        "value": 3
       },
       "onSuccess": {
         "to": "sc_1_0_012",
@@ -93,11 +92,6 @@
           {
             "type": "set_flag",
             "flag": "pursuers_escaped_distrusted"
-          },
-          {
-            "type": "modify_stat",
-            "stat": "health",
-            "value": -1
           }
         ]
       }
@@ -132,7 +126,7 @@
         },
         {
           "type": "modify_stat",
-          "stat": "courage",
+          "stat": "stage_presence",
           "value": 1
         }
       ],
@@ -145,10 +139,10 @@
     "checks": [
       {
         "type": "stat_check",
-        "stat": "charm",
+        "stat": "stage_presence",
         "op": "gte",
-        "value": 4,
-        "passEffect": "modify_faction:exiter+2"
+        "value": 3,
+        "passEffect": "modify-faction:exiter+2"
       }
     ]
   }

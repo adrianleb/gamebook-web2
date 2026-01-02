@@ -59,10 +59,9 @@
       "to": "sc_1_0_022",
       "conditions": {
         "type": "stat_check",
-        "stat": "insight",
+        "stat": "script",
         "op": "gte",
-        "value": 5,
-        "attemptable": true
+        "value": 3
       },
       "onSuccess": {
         "to": "sc_1_0_022",
@@ -100,7 +99,7 @@
         },
         {
           "type": "modify_stat",
-          "stat": "insight",
+          "stat": "script",
           "value": 1
         }
       ],
@@ -131,10 +130,10 @@
     "checks": [
       {
         "type": "stat_check",
-        "stat": "insight",
+        "stat": "script",
         "op": "gte",
-        "value": 5,
-        "passEffect": "modify_faction:revisionist+2"
+        "value": 3,
+        "passEffect": "modify-faction:revisionist+2"
       }
     ]
   }

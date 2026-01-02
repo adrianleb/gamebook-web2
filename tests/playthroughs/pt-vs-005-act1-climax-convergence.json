@@ -10,9 +10,9 @@
     "flags": ["game_started", "location_booth_visited"],
     "inventory": [],
     "stats": {
-      "health": 10,
-      "courage": 5,
-      "insight": 3
+      "script": 2,
+      "stage_presence": 2,
+      "script": 2
     },
     "currentScene": "sc_1_1_099"
   },
@@ -25,9 +25,9 @@
         "flagsSet": ["act1_complete", "first_crossing_reached"],
         "currentScene": "sc_1_1_099",
         "stats": {
-          "health": 10,
-          "courage": 5,
-          "insight": 3
+          "script": 2,
+          "stage_presence": 2,
+          "script": 2
         }
       }
     },
@@ -42,9 +42,9 @@
         "flagsSet": ["game_started", "act1_complete", "first_crossing_reached"],
         "currentScene": "sc_2_2_001",
         "stats": {
-          "health": 10,
-          "courage": 5,
-          "insight": 3
+          "script": 2,
+          "stage_presence": 2,
+          "script": 2
         }
       }
     }
@@ -54,9 +54,9 @@
     "flagsRequired": ["game_started", "act1_complete", "first_crossing_reached"],
     "inventoryRequired": [],
     "statsRequired": {
-      "health": 10,
-      "courage": 5,
-      "insight": 3
+      "script": 2,
+      "stage_presence": 2,
+      "script": 2
     }
   },
   "softlockDetection": {

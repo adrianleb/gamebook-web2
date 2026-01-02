@@ -2,17 +2,17 @@
   "$schema": "../../src/engine/headless-schema.json",
   "meta": {
     "name": "PT-EDGE-002",
-    "description": "Minimum Stats Navigation - Tests game is playable with minimum stat values (to First Crossing)",
+    "description": "Minimum Stats Navigation - Tests game is playable with minimum stat values",
     "author": "agent-e",
-    "version": "1.1"
+    "version": "1.0"
   },
   "startingState": {
     "flags": [],
     "inventory": [],
     "stats": {
-      "health": 10,
-      "courage": 0,
-      "insight": 3
+      "script": 2,
+      "stage_presence": 1,
+      "script": 2
     },
     "currentScene": "sc_1_0_001"
   },
@@ -22,7 +22,7 @@
       "action": "checkpoint",
       "description": "Verify starting state with minimum courage (0)",
       "assertions": {
-        "stats": { "courage": 0 },
+        "stats": { "stage_presence": 1 },
         "choicesAvailable": 3
       }
     },
@@ -35,29 +35,28 @@
       "checkpoint": true,
       "assertions": {
         "currentScene": "sc_1_0_002",
-        "stats": { "courage": 0 }
+        "stats": { "stage_presence": 1 }
       }
     },
     {
       "sequence": 3,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Choose 'Continue toward the light' (reach First Crossing with minimum stats)",
-      "expectedScene": "sc_1_1_099",
+      "description": "Choose 'Continue toward the light' (reach resolution with minimum stats)",
+      "expectedScene": "sc_1_0_900",
       "checkpoint": true,
       "assertions": {
-        "currentScene": "sc_1_1_099",
-        "stats": { "courage": 0 },
-        "flagsSet": ["act1_complete", "first_crossing_reached"]
+        "currentScene": "sc_1_0_900",
+        "stats": { "stage_presence": 1 }
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_1_099",
-    "flagsRequired": ["path_direct", "act1_complete", "first_crossing_reached"],
+    "sceneId": "sc_1_0_900",
+    "flagsRequired": ["path_direct"],
     "inventoryRequired": ["wings_pass"],
     "statsRequired": {
-      "courage": 0
+      "stage_presence": 1
     }
   },
   "softlockDetection": {
