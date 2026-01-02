@@ -2,9 +2,9 @@
   "$schema": "../../src/engine/headless-schema.json",
   "meta": {
     "name": "PT-SL-001",
-    "description": "Scene Transition Save Point - Tests saving during scene transition, state restoration",
+    "description": "Scene Transition Save Point - Tests saving during scene transition, state restoration (to First Crossing)",
     "author": "agent-e",
-    "version": "1.0"
+    "version": "1.1"
   },
   "startingState": {
     "flags": [],
@@ -40,11 +40,12 @@
       "sequence": 3,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Choose 'Continue toward the light' (reach resolution)",
-      "expectedScene": "sc_1_0_900",
+      "description": "Choose 'Continue toward the light' (reach First Crossing)",
+      "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {
-        "currentScene": "sc_1_0_900"
+        "currentScene": "sc_1_1_099",
+        "flagsSet": ["act1_complete", "first_crossing_reached"]
       }
     },
     {
