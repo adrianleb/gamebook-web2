@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "timestamp": "2026-01-03T01:18:12.611Z",
+=======
+  "timestamp": "2026-01-02T23:57:58.053Z",
+>>>>>>> 03e2a6a (refactor: consolidate duplicate test playthrough directories)
   "playthrough": "test_snapshot",
   "step": 1,
   "name": "test_snapshot",
@@ -8,7 +12,11 @@
   "state": {
     "version": 1,
     "contentVersion": "1.0.0",
+<<<<<<< HEAD
     "timestamp": 1767403092611,
+=======
+    "timestamp": 1767398278053,
+>>>>>>> 03e2a6a (refactor: consolidate duplicate test playthrough directories)
     "currentSceneId": "sc_1_start",
     "history": [],
     "stats": {

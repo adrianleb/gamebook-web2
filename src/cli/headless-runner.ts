@@ -142,7 +142,7 @@ Options:
   --no-autosave          Disable autosave during playthrough (per agent-e)
 
 Examples:
-  headless-runner run --script test-playthroughs/good_ending.json
+  headless-runner run --script tests/playthroughs/endings/ending-1-revised-draft.json
   headless-runner run --script test.json --verbose --validate-text-wrap
 `,
 
@@ -169,8 +169,8 @@ Exit codes:
   2 - Configuration error (missing files, invalid schema)
 
 Examples:
-  headless-runner run-all --dir test-playthroughs/
-  headless-runner run-all --dir tests/ --ci --junit-report test-results.xml
+  headless-runner run-all --dir tests/playthroughs/
+  headless-runner run-all --dir tests/playthroughs/ --ci --junit-report test-results.xml
 `,
 
     coverage: `
@@ -184,8 +184,8 @@ Options:
   --output <file>        Write coverage report to file (JSON format)
 
 Examples:
-  headless-runner coverage --dir test-playthroughs/
-  headless-runner coverage --dir tests/ --output coverage-report.json
+  headless-runner coverage --dir tests/playthroughs/
+  headless-runner coverage --dir tests/playthroughs/ --output coverage-report.json
 `,
   };
 
