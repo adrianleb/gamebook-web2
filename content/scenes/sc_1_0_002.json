@@ -43,7 +43,7 @@
     {
       "id": "choice_1",
       "label": "Continue toward the light",
-      "to": "sc_1_0_900",
+      "to": "sc_1_1_099",
       "conditions": null,
       "onChoose": [],
       "disabledHint": "The stage waits. But something else catches your eye..."
