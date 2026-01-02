@@ -422,13 +422,12 @@ The following playthroughs test the Phase 3 Ending graph (Act 3 Hub 4: The Last 
 
 ### PT-END-001: Revisionist Ending (The Revised Draft)
 
-**Tests:** Faction gate (revisionist >= 7), editor state requirement (defeated), ending reachability
+**Tests:** Faction gate (revisionist >= 7), ending reachability
 
 **Entry Point:** `sc_3_4_098` (The Last Curtain Call)
 
 **Prerequisites:**
 - revisionist faction >= 7
-- editorState == defeated
 
 **Path:**
 ```
@@ -439,8 +438,8 @@ sc_3_4_098 ─[Choose: "The Revised Draft (Revisionist)"]──> sc_3_4_901
 
 | Step | Scene | Action | Checkpoint | Expected State |
 |------|-------|--------|------------|----------------|
-| 1 | sc_3_4_098 | (Arrived, revisionist=7) | ✅ save_point | High revisionist alignment, editorState=defeated |
-| 2 | sc_3_4_098 | Hover "The Revised Draft" | ✅ mechanic_test | Choice **enabled** (revisionist >= 7, editorState=defeated) |
+| 1 | sc_3_4_098 | (Arrived, revisionist=7) | ✅ save_point | High revisionist alignment |
+| 2 | sc_3_4_098 | Hover "The Revised Draft" | ✅ mechanic_test | Choice **enabled** (revisionist >= 7) |
 | 3 | sc_3_4_098 | Choose "The Revised Draft" | ✅ softlock_check | Transitions to sc_3_4_901 |
 | 4 | sc_3_4_901 | (Arrived at ending) | ✅ mechanic_test | Reached ending 1, narrative displays |
 
@@ -452,7 +451,6 @@ sc_3_4_098 ─[Choose: "The Revised Draft (Revisionist)"]──> sc_3_4_901
     "game_started": true,
     "act1_complete": true,
     "act2_complete": true,
-    "editorState": "defeated",
     "ending_achieved": "revised_draft"
   },
   "inventory": [],
@@ -468,7 +466,6 @@ sc_3_4_098 ─[Choose: "The Revised Draft (Revisionist)"]──> sc_3_4_901
 
 **Critical Mechanics Validated:**
 - Faction gate: revisionist >= 7 enables ending choice
-- Editor state gate: editorState=defeated required for this ending
 - No softlock: At least one ending choice always enabled
 - Ending scene reachable from convergence scene
 
@@ -478,13 +475,12 @@ sc_3_4_098 ─[Choose: "The Revised Draft (Revisionist)"]──> sc_3_4_901
 
 ### PT-END-002: Exiter Ending (The Open Book)
 
-**Tests:** Faction gate (exiter >= 7), editor state requirement (persuaded), ending reachability
+**Tests:** Faction gate (exiter >= 7), ending reachability
 
 **Entry Point:** `sc_3_4_098` (The Last Curtain Call)
 
 **Prerequisites:**
 - exiter faction >= 7
-- editorState == persuaded
 
 **Path:**
 ```
@@ -495,8 +491,8 @@ sc_3_4_098 ─[Choose: "The Open Book (Exiter)"]──> sc_3_4_902
 
 | Step | Scene | Action | Checkpoint | Expected State |
 |------|-------|--------|------------|----------------|
-| 1 | sc_3_4_098 | (Arrived, exiter=7) | ✅ save_point | High exiter alignment, editorState=persuaded |
-| 2 | sc_3_4_098 | Hover "The Open Book" | ✅ mechanic_test | Choice **enabled** (exiter >= 7, editorState=persuaded) |
+| 1 | sc_3_4_098 | (Arrived, exiter=7) | ✅ save_point | High exiter alignment |
+| 2 | sc_3_4_098 | Hover "The Open Book" | ✅ mechanic_test | Choice **enabled** (exiter >= 7) |
 | 3 | sc_3_4_098 | Choose "The Open Book" | ✅ softlock_check | Transitions to sc_3_4_902 |
 | 4 | sc_3_4_902 | (Arrived at ending) | ✅ mechanic_test | Reached ending 2, narrative displays |
 
@@ -508,7 +504,6 @@ sc_3_4_098 ─[Choose: "The Open Book (Exiter)"]──> sc_3_4_902
     "game_started": true,
     "act1_complete": true,
     "act2_complete": true,
-    "editorState": "persuaded",
     "ending_achieved": "open_book"
   },
   "inventory": [],
@@ -524,7 +519,6 @@ sc_3_4_098 ─[Choose: "The Open Book (Exiter)"]──> sc_3_4_902
 
 **Critical Mechanics Validated:**
 - Faction gate: exiter >= 7 enables ending choice
-- Editor state gate: editorState=persuaded required for this ending
 - No softlock: At least one ending choice always enabled
 - Ending scene reachable from convergence scene
 
@@ -534,13 +528,12 @@ sc_3_4_098 ─[Choose: "The Open Book (Exiter)"]──> sc_3_4_902
 
 ### PT-END-003: Preservationist Ending (The Closed Canon)
 
-**Tests:** Faction gate (preservationist >= 7), editor state requirement (defeated), ending reachability
+**Tests:** Faction gate (preservationist >= 7), ending reachability
 
 **Entry Point:** `sc_3_4_098` (The Last Curtain Call)
 
 **Prerequisites:**
 - preservationist faction >= 7
-- editorState == defeated
 
 **Path:**
 ```
@@ -551,8 +544,8 @@ sc_3_4_098 ─[Choose: "The Closed Canon (Preservationist)"]──> sc_3_4_903
 
 | Step | Scene | Action | Checkpoint | Expected State |
 |------|-------|--------|------------|----------------|
-| 1 | sc_3_4_098 | (Arrived, preservationist=7) | ✅ save_point | High preservationist alignment, editorState=defeated |
-| 2 | sc_3_4_098 | Hover "The Closed Canon" | ✅ mechanic_test | Choice **enabled** (preservationist >= 7, editorState=defeated) |
+| 1 | sc_3_4_098 | (Arrived, preservationist=7) | ✅ save_point | High preservationist alignment |
+| 2 | sc_3_4_098 | Hover "The Closed Canon" | ✅ mechanic_test | Choice **enabled** (preservationist >= 7) |
 | 3 | sc_3_4_098 | Choose "The Closed Canon" | ✅ softlock_check | Transitions to sc_3_4_903 |
 | 4 | sc_3_4_903 | (Arrived at ending) | ✅ mechanic_test | Reached ending 3, narrative displays |
 
@@ -564,7 +557,6 @@ sc_3_4_098 ─[Choose: "The Closed Canon (Preservationist)"]──> sc_3_4_903
     "game_started": true,
     "act1_complete": true,
     "act2_complete": true,
-    "editorState": "defeated",
     "ending_achieved": "closed_canon"
   },
   "inventory": [],
@@ -580,7 +572,6 @@ sc_3_4_098 ─[Choose: "The Closed Canon (Preservationist)"]──> sc_3_4_903
 
 **Critical Mechanics Validated:**
 - Faction gate: preservationist >= 7 enables ending choice
-- Editor state gate: editorState=defeated required for this ending
 - No softlock: At least one ending choice always enabled
 - Ending scene reachable from convergence scene
 
@@ -590,13 +581,13 @@ sc_3_4_098 ─[Choose: "The Closed Canon (Preservationist)"]──> sc_3_4_903
 
 ### PT-END-004: Independent Ending (The Blank Page)
 
-**Tests:** Independent path (no faction threshold), editor state requirement (revealedTruth), ending reachability
+**Tests:** Independent path (no faction threshold), flag requirement (editorState_revealedTruth), ending reachability
 
 **Entry Point:** `sc_3_4_098` (The Last Curtain Call)
 
 **Prerequisites:**
 - No dominant faction (all <= 5)
-- editorState == revealedTruth
+- editorState_revealedTruth flag set to true
 
 **Path:**
 ```
@@ -607,8 +598,8 @@ sc_3_4_098 ─[Choose: "The Blank Page (Independent)"]──> sc_3_4_904
 
 | Step | Scene | Action | Checkpoint | Expected State |
 |------|-------|--------|------------|----------------|
-| 1 | sc_3_4_098 | (Arrived, balanced factions) | ✅ save_point | All factions <= 5, editorState=revealedTruth |
-| 2 | sc_3_4_098 | Hover "The Blank Page" | ✅ mechanic_test | Choice **enabled** (editorState=revealedTruth) |
+| 1 | sc_3_4_098 | (Arrived, balanced factions) | ✅ save_point | All factions <= 5, editorState_revealedTruth=true |
+| 2 | sc_3_4_098 | Hover "The Blank Page" | ✅ mechanic_test | Choice **enabled** (editorState_revealedTruth flag set) |
 | 3 | sc_3_4_098 | Choose "The Blank Page" | ✅ softlock_check | Transitions to sc_3_4_904 |
 | 4 | sc_3_4_904 | (Arrived at ending) | ✅ mechanic_test | Reached ending 4, narrative displays |
 
@@ -620,7 +611,7 @@ sc_3_4_098 ─[Choose: "The Blank Page (Independent)"]──> sc_3_4_904
     "game_started": true,
     "act1_complete": true,
     "act2_complete": true,
-    "editorState": "revealedTruth",
+    "editorState_revealedTruth": true,
     "ending_achieved": "blank_page"
   },
   "inventory": [],
@@ -636,7 +627,7 @@ sc_3_4_098 ─[Choose: "The Blank Page (Independent)"]──> sc_3_4_904
 
 **Critical Mechanics Validated:**
 - No faction threshold: Independent path available regardless of faction levels
-- Editor state gate: editorState=revealedTruth required for this ending
+- Flag requirement: editorState_revealedTruth flag required for this ending
 - Balance path: Represents "no dominant alliance" playthrough
 - Ending scene reachable from convergence scene
 
@@ -699,37 +690,37 @@ sc_3_4_098 ─[Choose: "Refuse" / "The Eternal Rehearsal"]──> sc_3_4_999
 
 **Test Variants (Invalid State Validation):**
 
-**Variant A: Low faction, wrong state**
+**Variant A: Low faction levels**
 | Step | Scene | Action | Expected Result |
 |------|-------|--------|-----------------|
-| 1 | sc_3_4_098 | (revisionist=3, editorState=persuaded) | ✅ save_point |
+| 1 | sc_3_4_098 | (all factions < 7) | ✅ save_point |
 | 2 | sc_3_4_098 | Hover faction endings | All faction choices **disabled** (below threshold) |
 | 3 | sc_3_4_098 | Hover "The Eternal Rehearsal" | Choice **enabled** (always available) |
 
-**Variant B: No editorState set**
+**Variant B: Missing flag for Independent ending**
 | Step | Scene | Action | Expected Result |
 |------|-------|--------|-----------------|
-| 1 | sc_3_4_098 | (preservationist=7, editorState not set) | ✅ save_point |
-| 2 | sc_3_4_098 | Hover faction endings | All **disabled** (missing editorState) |
+| 1 | sc_3_4_098 | (balanced factions, editorState_revealedTruth not set) | ✅ save_point |
+| 2 | sc_3_4_098 | Hover "The Blank Page" | Choice **disabled** (missing flag) |
 | 3 | sc_3_4_098 | Hover "The Eternal Rehearsal" | Choice **enabled** (always available) |
 
-**Note:** This is the CRITICAL fallback ending per ENDING_VALIDATION.md. It MUST always be reachable regardless of player state. If all other endings are gated (wrong faction, wrong editorState), this ending ensures the player can always complete the game.
+**Note:** This is the CRITICAL fallback ending per ENDING_VALIDATION.md. It MUST always be reachable regardless of player state. If all other endings are gated (wrong faction level, missing flag), this ending ensures the player can always complete the game.
 
 ---
 
 ### Ending Gate Validation Summary
 
-| Ending | Scene | Faction | Level | Editor State | Gate Condition |
-|--------|-------|---------|-------|--------------|----------------|
-| PT-END-001 | sc_3_4_901 | revisionist | >= 7 | defeated | revisionist >= 7 AND editorState == defeated |
-| PT-END-002 | sc_3_4_902 | exiter | >= 7 | persuaded | exiter >= 7 AND editorState == persuaded |
-| PT-END-003 | sc_3_4_903 | preservationist | >= 7 | defeated | preservationist >= 7 AND editorState == defeated |
-| PT-END-004 | sc_3_4_904 | independent | - | revealedTruth | editorState == revealedTruth (no faction gate) |
+| Ending | Scene | Faction | Level | Flag/State | Gate Condition |
+|--------|-------|---------|-------|------------|----------------|
+| PT-END-001 | sc_3_4_901 | revisionist | >= 7 | - | revisionist >= 7 |
+| PT-END-002 | sc_3_4_902 | exiter | >= 7 | - | exiter >= 7 |
+| PT-END-003 | sc_3_4_903 | preservationist | >= 7 | - | preservationist >= 7 |
+| PT-END-004 | sc_3_4_904 | independent | - | editorState_revealedTruth | editorState_revealedTruth flag set (no faction gate) |
 | PT-END-005 | sc_3_4_999 | - | - | - | **Always enabled** (no conditions) |
 
 **Critical Validation Requirements:**
-- Faction endings (1-3): Require faction level >= 7 AND matching editorState
-- Independent ending (4): No faction gate, only editorState requirement
+- Faction endings (1-3): Require faction level >= 7 only
+- Independent ending (4): No faction gate, requires editorState_revealedTruth flag
 - Fail ending (5): **NO conditions** - must always be enabled
 - At minimum: Ending 5 must always be available to prevent softlock
 
@@ -874,7 +865,7 @@ When adding new scenes or mechanics, use this checklist:
 | act2_complete | bool | Set when completing Act 2 content |
 | editor_revealed | bool | Set when Editor character is revealed |
 | mainstage_ascent | bool | Set when ascending to Mainstage (Act 3) |
-| editorState | enum | Act 3 ending gate: defeated, persuaded, or revealedTruth |
+| editorState_revealedTruth | bool | Set when player discovers deeper truth about The Editor (Independent ending gate) |
 | ending_achieved | string | Set when reaching an ending scene |
 
 ### Inventory Items
@@ -889,7 +880,13 @@ When adding new scenes or mechanics, use this checklist:
 | preservationist | 0 | Faction favoring separation of worlds (Preservationist ending requires >=7) |
 | revisionist | 0 | Faction favoring rewriting stories (Revisionist ending requires >=7) |
 | exiter | 0 | Faction favoring escaping narrative (Exiter ending requires >=7) |
-| independent | 0 | Balanced path between factions (Independent ending requires editorState=revealedTruth) |
+| independent | 0 | Balanced path between factions (Independent ending requires editorState_revealedTruth flag) |
+
+**Note:** The `editorState` enum (defeated/persuaded/revealedTruth) referenced in earlier design documents is NOT implemented in sc_3_4_098. Current implementation uses:
+- Faction stat checks (>= 7) for faction endings
+- Boolean flag `editorState_revealedTruth` for Independent ending
+- No conditions for fail-state ending
+- Combined faction + editorState AND gates are DEFERRED per MILESTONES.md Issue #129
 
 ---
 
@@ -994,12 +991,13 @@ npm run test tests/engine/accessibility.test.ts
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.6 | 2026-01-02 | **FIXED** PT-END-001 through PT-END-005 ending gate documentation to match actual sc_3_4_098 implementation. Removed incorrect editorState enum requirements (defeated/persuaded) from faction endings. Changed PT-END-004 to use editorState_revealedTruth boolean flag instead of enum. Updated Ending Gate Validation Summary table and State Variable Reference with clarification that combined faction+editorState AND gates are DEFERRED per MILESTONES.md Issue #129. |
+| 1.5 | 2026-01-01 | Added PT-SL-001, PT-SL-002 (Save/Load regression tests) - tests state persistence across scene transitions and complex states using save_snapshot/load_snapshot actions. Added PT-EDGE-001, PT-EDGE-002, PT-EDGE-003 (Edge case tests) - validates empty inventory navigation, minimum stats (courage=0), and maximum stats (courage=10, insight=10) edge cases. NOTE: PT-END-001 through PT-END-005 exist in tests/playthroughs/endings/ directory with different schema (factions field, editorState). PT-LOCK and PT-P4-ACC tests require different testing approaches (softlockDetection config covers softlock tests, Phase 4 accessibility tests require unit/integration testing). |
+| 1.4 | 2025-12-30 | Added Phase 4 accessibility tests (PT-P4-ACC-001 through PT-P4-ACC-005) |
 | 1.3 | 2025-12-29 | Added PT-END-001 through PT-END-005 (Act 3 Ending validation) - validates all 5 endings (sc_3_4_901 through sc_3_4_904, sc_3_4_999), faction gates (>=7), editorState requirements (defeated/persuaded/revealedTruth), and fail-state fallback ending. Updated State Variable Reference with editorState flag and all 4 factions. |
 | 1.2 | 2025-12-29 | Added PT-VS-006 (Act 2 Hub 3 Entry) and PT-VS-007 (Act 2 Climax Alliance Check) - validates sc_2_3_001 Archives Entry and sc_2_3_099 The Revelation scenes, documents all 4 faction states (preservationist, revisionist, exiter, independent), and adds faction alliance acknowledgment test variants |
 | 1.1 | 2025-12-29 | Added PT-VS-005 (Act 1 Climax Convergence) - validates sc_1_1_099 First Crossing scene, Act 1→Act 2 transition, and new state variables (act1_complete, first_crossing_reached) |
 | 1.0 | 2025-12-29 | Initial version with vertical slice playthroughs (PT-VS-001 through PT-VS-004) |
-| 1.4 | 2026-01-01 | Added PT-SL-001, PT-SL-002 (Save/Load regression tests) - tests state persistence across scene transitions and complex states using save_snapshot/load_snapshot actions. Added PT-EDGE-001, PT-EDGE-002, PT-EDGE-003 (Edge case tests) - validates empty inventory navigation, minimum stats (courage=0), and maximum stats (courage=10, insight=10) edge cases. NOTE: PT-END-001 through PT-END-005 exist in tests/playthroughs/endings/ directory with different schema (factions field, editorState). PT-LOCK and PT-P4-ACC tests require different testing approaches (softlockDetection config covers softlock tests, Phase 4 accessibility tests require unit/integration testing). |
-| 1.1 | 2025-12-30 | Added Phase 4 accessibility tests (PT-P4-ACC-001 through PT-P4-ACC-005) |
 
 ---
 
