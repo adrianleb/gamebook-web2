@@ -13,6 +13,8 @@
  * Accessibility: WCAG 2.1 compliant, ARIA attributes maintained.
  */
 
+import { conditionEvaluator } from '../engine/condition-evaluator.js';
+
 /**
  * Keyboard navigation manager for choice lists.
  * Skips disabled buttons and maintains focus within the choices panel.
@@ -21,14 +23,27 @@ export class ChoiceKeyboardNav {
   /**
    * @param {string} choicesListSelector - Selector for the choices list container
    * @param {Function} onChoiceSelect - Callback when choice is selected (choiceIndex) => void
+   * @param {Object} state - Current game state for condition evaluation (optional)
    */
-  constructor(choicesListSelector, onChoiceSelect) {
+  constructor(choicesListSelector, onChoiceSelect, state = null) {
     this.choicesListSelector = choicesListSelector;
     this.onChoiceSelect = onChoiceSelect;
+    this.state = state;
     this.choicesList = null;
     this.enabledButtons = [];
     this.focusedIndex = -1;
     this.boundKeyDown = null;
+  }
+
+  /**
+   * Update the game state for condition evaluation.
+   * Call this when state changes (e.g., after making a choice).
+   *
+   * @param {Object} state - Current game state
+   */
+  setState(state) {
+    this.state = state;
+    this.updateEnabledButtons();
   }
 
   /**
@@ -219,18 +234,22 @@ export class ChoiceKeyboardNav {
 
 /**
  * Helper function to create a disabled choice button with ARIA attributes.
+ *
  * @param {Object} choice - Choice object from engine
  * @param {number} index - Choice index for data attributes
+ * @param {Object} state - Current game state for condition evaluation
  * @returns {HTMLButtonElement} Configured button element
  */
-export function createChoiceButton(choice, index) {
+export function createChoiceButton(choice, index, state = null) {
   const button = document.createElement('button');
   button.className = 'choice-button';
   button.setAttribute('data-choice-number', index + 1);
   button.setAttribute('data-choice-index', index);
   button.setAttribute('data-test-id', `choice-button-${index}`);
 
-  const isDisabled = choice.conditions && !evaluateConditions(choice.conditions);
+  // Evaluate conditions to determine if choice should be disabled
+  // If no state provided, enable all choices (backward compatibility)
+  const isDisabled = state && choice.conditions && !evaluateConditions(choice.conditions, state);
 
   if (isDisabled) {
     button.disabled = true;
@@ -256,14 +275,28 @@ export function createChoiceButton(choice, index) {
 }
 
 /**
- * Mock condition evaluator - replace with actual engine import.
+ * Evaluate conditions using the engine's ConditionEvaluator.
+ *
  * @param {Array} conditions - Array of condition objects
- * @returns {boolean} True if conditions are met
+ * @param {Object} state - Current game state
+ * @returns {boolean} True if all conditions are met
  */
-function evaluateConditions(conditions) {
-  // This is a placeholder - integrate with actual ConditionEvaluator
-  // For now, assume conditions fail to demonstrate disabled state
-  return false;
+function evaluateConditions(conditions, state) {
+  if (!state) {
+    console.warn('[evaluateConditions] No state provided - assuming conditions fail');
+    return false;
+  }
+
+  if (!conditions || conditions.length === 0) {
+    return true; // No conditions = always enabled
+  }
+
+  try {
+    return conditionEvaluator.evaluateAll(conditions, state);
+  } catch (error) {
+    console.error('[evaluateConditions] Error evaluating conditions:', error);
+    return false; // Fail safe on error
+  }
 }
 
 /**
@@ -292,7 +325,7 @@ export function updateChoiceDisabledState(button, isDisabled, hint = 'Locked') {
  * Export a singleton instance for convenience.
  */
 export const defaultKeyboardNav = {
-  create: (selector, callback) => new ChoiceKeyboardNav(selector, callback),
+  create: (selector, callback, state) => new ChoiceKeyboardNav(selector, callback, state),
   createButton: createChoiceButton,
   updateDisabledState: updateChoiceDisabledState,
 };
