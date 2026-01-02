@@ -33,13 +33,6 @@
     {
       "type": "set-flag",
       "flag": "crossing_failed"
-    },
-    {
-      "type": "modify-stat",
-      "stat": "health",
-      "operator": "sub",
-      "value": 1,
-      "min": 0
     }
   ],
   "choices": [],
