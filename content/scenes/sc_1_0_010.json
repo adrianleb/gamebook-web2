@@ -45,7 +45,7 @@
     },
     {
       "type": "modify_stat",
-      "stat": "courage",
+      "stat": "stage_presence",
       "value": 1
     }
   ],

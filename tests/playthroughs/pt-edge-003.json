@@ -10,9 +10,9 @@
     "flags": [],
     "inventory": ["booth_key"],
     "stats": {
-      "health": 10,
-      "courage": 10,
-      "insight": 10
+      "script": 2,
+      "stage_presence": 4,
+      "script": 4
     },
     "currentScene": "sc_1_0_001"
   },
@@ -22,7 +22,7 @@
       "action": "checkpoint",
       "description": "Verify starting state with maximum stats (courage=10, insight=10)",
       "assertions": {
-        "stats": { "courage": 10, "insight": 10 },
+        "stats": { "stage_presence": 4, "script": 4 },
         "inventoryContains": ["booth_key"],
         "choicesAvailable": 3
       }
@@ -36,7 +36,7 @@
       "checkpoint": true,
       "assertions": {
         "currentScene": "sc_1_0_003",
-        "stats": { "courage": 10 }
+        "stats": { "stage_presence": 4 }
       }
     },
     {
@@ -44,7 +44,7 @@
       "action": "checkpoint",
       "description": "At threshold - courage check should pass (10 >= 5)",
       "assertions": {
-        "stats": { "courage": 10 },
+        "stats": { "stage_presence": 4 },
         "choicesAvailable": 2
       }
     },
@@ -57,7 +57,7 @@
       "checkpoint": true,
       "assertions": {
         "currentScene": "sc_1_0_901",
-        "stats": { "courage": 10 }
+        "stats": { "stage_presence": 4 }
       }
     }
   ],
@@ -65,8 +65,8 @@
     "sceneId": "sc_1_0_901",
     "inventoryRequired": ["booth_key"],
     "statsRequired": {
-      "courage": 10,
-      "insight": 10
+      "stage_presence": 4,
+      "script": 4
     }
   },
   "softlockDetection": {

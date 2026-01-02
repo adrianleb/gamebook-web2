@@ -38,7 +38,7 @@
     },
     {
       "type": "modify_stat",
-      "stat": "insight",
+      "stat": "script",
       "value": 1
     }
   ],

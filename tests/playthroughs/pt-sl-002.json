@@ -10,9 +10,9 @@
     "flags": [],
     "inventory": ["booth_key"],
     "stats": {
-      "health": 10,
-      "courage": 5,
-      "insight": 3
+      "script": 2,
+      "stage_presence": 2,
+      "script": 2
     },
     "currentScene": "sc_1_0_001"
   },
@@ -34,7 +34,7 @@
       "action": "checkpoint",
       "description": "At threshold - verify courage check setup (courage=5, threshold=5)",
       "assertions": {
-        "stats": { "courage": 5 }
+        "stats": { "stage_presence": 2 }
       }
     },
     {
