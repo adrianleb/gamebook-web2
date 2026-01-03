@@ -1123,8 +1123,98 @@ describe('ContentValidator - validateStats', () => {
     expect(result.valid).toBe(true);
   });
 
-  // TODO: Add stat reference validation when validateStats is fully implemented
-  // Currently validateStats is a placeholder that returns empty results
+  describe('stat reference validation in scenes', () => {
+    it('should detect invalid stat references in scene conditions', () => {
+      const stats = {
+        stats: [
+          { id: 'script', name: 'Script', min: 1, max: 4, start: 2 },
+          { id: 'stage_presence', name: 'Stage Presence', min: 1, max: 4, start: 2 },
+        ],
+      };
+      const scenes = new Map([
+        ['sc_test', createMockScene({
+          id: 'sc_test',
+          choices: [
+            // Valid stat reference
+            { label: 'Valid', to: 'sc_next', conditions: [{ type: 'stat', stat: 'script', operator: 'gte', value: 2 }] },
+            // Invalid stat reference - 'courage' does not exist in stats.json
+            { label: 'Invalid', to: 'sc_next', conditions: [{ type: 'stat', stat: 'courage', operator: 'gte', value: 3 }] },
+          ],
+        })],
+      ]);
+
+      const result = validator.validateStats(stats, manifest, scenes);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors[0].type).toBe('invalid-stat');
+      expect(result.errors[0].sceneId).toBe('sc_test');
+      expect(result.errors[0].message).toContain('courage');
+      expect(result.errors[0].message).toContain('script, stage_presence');
+    });
+
+    it('should detect invalid stat references in scene effects', () => {
+      const stats = {
+        stats: [
+          { id: 'improv', name: 'Improv', min: 1, max: 4, start: 2 },
+        ],
+      };
+      const scenes = new Map([
+        ['sc_test', createMockScene({
+          id: 'sc_test',
+          effects: [
+            // Invalid stat reference - 'wit' does not exist
+            { type: 'modify-stat', stat: 'wit', amount: 1 },
+          ],
+        })],
+      ]);
+
+      const result = validator.validateStats(stats, manifest, scenes);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors[0].type).toBe('invalid-stat');
+      expect(result.errors[0].message).toContain('wit');
+    });
+
+    it('should pass when all stat references are valid', () => {
+      const stats = {
+        stats: [
+          { id: 'script', name: 'Script', min: 1, max: 4, start: 2 },
+          { id: 'improv', name: 'Improv', min: 1, max: 4, start: 2 },
+        ],
+      };
+      const scenes = new Map([
+        ['sc_test', createMockScene({
+          id: 'sc_test',
+          choices: [
+            { label: 'Choice 1', to: 'sc_next', conditions: [{ type: 'stat', stat: 'script', operator: 'gte', value: 2 }] },
+            { label: 'Choice 2', to: 'sc_next', conditions: [{ type: 'stat', stat: 'improv', operator: 'gte', value: 3 }] },
+          ],
+          effects: [
+            { type: 'modify-stat', stat: 'script', amount: 1 },
+          ],
+        })],
+      ]);
+
+      const result = validator.validateStats(stats, manifest, scenes);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should handle scenes map gracefully when not provided', () => {
+      const stats = {
+        stats: [{ id: 'script', name: 'Script', min: 1, max: 4, start: 2 }],
+      };
+
+      const result = validator.validateStats(stats, manifest);
+
+      // Should pass validation when no scenes to check
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+  });
 });
 
 describe('ContentValidator - validateItems', () => {
@@ -1154,8 +1244,105 @@ describe('ContentValidator - validateItems', () => {
     expect(result.valid).toBe(true);
   });
 
-  // TODO: Add item reference validation when validateItems is fully implemented
-  // Currently validateItems is a placeholder that returns empty results
+  describe('item reference validation in scenes', () => {
+    it('should detect invalid item references in scene conditions', () => {
+      const items = {
+        items: {
+          vertical_slice: [
+            { id: 'booth_key', name: 'Booth Key', description: 'Opens the prompter booth' },
+          ],
+        },
+      };
+      const scenes = new Map([
+        ['sc_test', createMockScene({
+          id: 'sc_test',
+          choices: [
+            // Valid item reference
+            { label: 'Valid', to: 'sc_next', conditions: [{ type: 'item', item: 'booth_key' }] },
+            // Invalid item reference - 'magic_wand' does not exist in items.json
+            { label: 'Invalid', to: 'sc_next', conditions: [{ type: 'item', item: 'magic_wand' }] },
+          ],
+        })],
+      ]);
+
+      const result = validator.validateItems(items, manifest, scenes);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors[0].type).toBe('invalid-item');
+      expect(result.errors[0].sceneId).toBe('sc_test');
+      expect(result.errors[0].message).toContain('magic_wand');
+    });
+
+    it('should detect invalid item references in scene effects', () => {
+      const items = {
+        items: {
+          vertical_slice: [
+            { id: 'script_fragment', name: 'Script Fragment', description: 'A torn page' },
+          ],
+        },
+      };
+      const scenes = new Map([
+        ['sc_test', createMockScene({
+          id: 'sc_test',
+          effects: [
+            // Invalid item reference - 'phantom_item' does not exist
+            { type: 'add-item', item: 'phantom_item' },
+          ],
+        })],
+      ]);
+
+      const result = validator.validateItems(items, manifest, scenes);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors[0].type).toBe('invalid-item');
+      expect(result.errors[0].message).toContain('phantom_item');
+    });
+
+    it('should pass when all item references are valid', () => {
+      const items = {
+        items: {
+          vertical_slice: [
+            { id: 'booth_key', name: 'Booth Key', description: 'Key' },
+            { id: 'prompter_note', name: 'Prompter Note', description: 'Note' },
+          ],
+        },
+      };
+      const scenes = new Map([
+        ['sc_test', createMockScene({
+          id: 'sc_test',
+          choices: [
+            { label: 'Use key', to: 'sc_next', conditions: [{ type: 'item', item: 'booth_key' }] },
+          ],
+          effects: [
+            { type: 'add-item', item: 'prompter_note' },
+          ],
+        })],
+      ]);
+
+      const result = validator.validateItems(items, manifest, scenes);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should handle scenes map gracefully when not provided', () => {
+      const items = {
+        items: {
+          vertical_slice: [
+            { id: 'test_item', name: 'Test Item', description: 'Test' },
+          ],
+        },
+      };
+
+      const result = validator.validateItems(items, manifest);
+
+      // Should pass validation when no scenes to check
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+  });
 });
 
 describe('ReachabilityValidator', () => {
@@ -1623,7 +1810,7 @@ describe('ReachabilityValidator', () => {
 });
 
 describe('ContentValidator - checkReachability integration', () => {
-  it('should return empty array when not implemented', () => {
+  it('should return empty array when scenes not provided', () => {
     const validator = new ContentValidator();
     const manifest = createMockManifest();
 
@@ -1632,8 +1819,58 @@ describe('ContentValidator - checkReachability integration', () => {
     expect(result).toEqual([]);
   });
 
-  // TODO: Once checkReachability is implemented to use ReachabilityValidator,
-  // add integration tests that verify the method returns unreachable scenes
+  it('should delegate to ReachabilityValidator and return unreachable scenes', () => {
+    const validator = new ContentValidator();
+    const manifest = createMockManifest({
+      sceneIndex: {
+        'sc_1_0_001': { act: 1, hub: 0, status: 'complete' },
+        'sc_orphan': { act: 1, hub: 0, status: 'complete' },
+      },
+      startingScene: 'sc_1_0_001',
+    });
+    const scenes = new Map([
+      ['sc_1_0_001', createMockScene({
+        id: 'sc_1_0_001',
+        choices: [{ label: 'End', to: null as any }],
+      })],
+      ['sc_orphan', createMockScene({
+        id: 'sc_orphan',
+        // No links to or from this scene - unreachable
+        choices: [],
+      })],
+    ]);
+
+    const result = validator.checkReachability(manifest, scenes);
+
+    // sc_orphan should be detected as unreachable
+    expect(result.length).toBeGreaterThan(0);
+    expect(result.some(u => u.sceneId === 'sc_orphan')).toBe(true);
+  });
+
+  it('should return empty array when all scenes are reachable', () => {
+    const validator = new ContentValidator();
+    const manifest = createMockManifest({
+      sceneIndex: {
+        'sc_1_0_001': { act: 1, hub: 0, status: 'complete' },
+        'sc_1_0_002': { act: 1, hub: 0, status: 'complete' },
+      },
+      startingScene: 'sc_1_0_001',
+    });
+    const scenes = new Map([
+      ['sc_1_0_001', createMockScene({
+        id: 'sc_1_0_001',
+        choices: [{ label: 'Next', to: 'sc_1_0_002' }],
+      })],
+      ['sc_1_0_002', createMockScene({
+        id: 'sc_1_0_002',
+        choices: [{ label: 'Back', to: 'sc_1_0_001' }],
+      })],
+    ]);
+
+    const result = validator.checkReachability(manifest, scenes);
+
+    expect(result).toHaveLength(0);
+  });
 });
 
 describe('Edge cases and error handling', () => {
