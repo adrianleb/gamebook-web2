@@ -5,7 +5,7 @@
   "act": 3,
   "hub": 4,
   "location": "The Mainstage",
-  "implementationStatus": "draft",
+  "implementationStatus": "complete",
   "ending": true,
   "endingId": 1,
   "metadata": {
