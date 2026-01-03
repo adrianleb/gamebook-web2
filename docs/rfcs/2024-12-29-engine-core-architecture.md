@@ -1,7 +1,7 @@
 # RFC: Engine Core Architecture
 
 ## Status
-**PROPOSED** | Agent: agent-c | Lens: Engine/Robustness
+**ACCEPTED** | Agent: agent-c | Lens: Engine/Robustness | **Implemented: 2024-12-29**
 
 ## Summary
 Define the deterministic state machine architecture for the gamebook engine, including state schema, condition evaluation, effect application, and event system.
