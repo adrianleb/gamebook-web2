@@ -16,6 +16,9 @@
   <link rel="stylesheet" href="/src/ui/shell.css">
 </head>
 <body>
+  <!-- Skip-link for keyboard accessibility (per STYLE_GUIDE.md) -->
+  <a href="#main-text" class="skip-link" data-test-id="skip-link">Skip to content</a>
+
   <!-- Main game container -->
   <div class="game-container">
 
@@ -200,6 +203,7 @@
         <button class="menu-option-btn" data-action="resume" data-test-id="menu-resume">Resume Game</button>
         <button class="menu-option-btn" data-action="save" data-test-id="menu-save">Save Game</button>
         <button class="menu-option-btn" data-action="load" data-test-id="menu-load">Load Game</button>
+        <button class="menu-option-btn menu-option-btn-secondary" data-action="toggle-crt" data-test-id="menu-toggle-crt" id="menu-toggle-crt">CRT Filter: <span data-test-id="crt-status">Off</span></button>
         <button class="menu-option-btn menu-danger-btn" data-action="quit" data-test-id="menu-quit">Quit to Title</button>
       </div>
       <div class="modal-footer">
@@ -213,6 +217,41 @@
     import { Engine } from '/src/engine/engine.ts';
     import { GameRenderer } from '/src/ui/game-renderer.ts';
     import { SaveMenu } from '/src/ui/save-menu.ts';
+    import { getCRTFilter } from '/src/ui/crt-filter.ts';
+
+    /**
+     * Setup CRT filter toggle button in main menu.
+     * Per Phase 4 polish: Desktop-only with reduced-motion respect.
+     */
+    function setupCRTToggle() {
+      const crt = getCRTFilter();
+      crt.initialize();
+
+      const toggleBtn = document.getElementById('menu-toggle-crt');
+      const statusSpan = document.querySelector('[data-test-id="crt-status"]');
+
+      // Update button text to reflect initial state
+      const updateCRTStatus = () => {
+        if (statusSpan) {
+          statusSpan.textContent = crt.isEnabled() ? 'On' : 'Off';
+        }
+      };
+
+      // Handle toggle button click
+      toggleBtn?.addEventListener('click', () => {
+        crt.toggle();
+        updateCRTStatus();
+      });
+
+      // Update status on viewport changes
+      window.matchMedia('(min-width: 768px)').addEventListener('change', updateCRTStatus);
+      window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', updateCRTStatus);
+
+      // Initial status update
+      updateCRTStatus();
+
+      console.log('[DOS UI Shell] CRT toggle initialized');
+    }
 
     /**
      * Initialize the game.
@@ -244,6 +283,9 @@
         saveMenu.initialize();
 
         console.log('[DOS UI Shell] SaveMenu initialized');
+
+        // Setup CRT filter toggle (Phase 4 polish)
+        setupCRTToggle();
 
         // Expose for debugging (development only)
         if (typeof window !== 'undefined') {
