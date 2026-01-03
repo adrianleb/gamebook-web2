@@ -10,9 +10,9 @@
     "flags": [],
     "inventory": [],
     "stats": {
-      "health": 10,
-      "courage": 5,
-      "insight": 3
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
     },
     "currentScene": "sc_1_0_001"
   },
@@ -25,8 +25,8 @@
         "flagsSet": ["game_started", "location_booth_visited"],
         "inventoryExcludes": ["wings_pass", "booth_key"],
         "stats": {
-          "health": 10,
-          "courage": 5
+          "script": 2,
+          "stage_presence": 2
         }
       }
     },
@@ -62,9 +62,9 @@
     "flagsRequired": ["game_started", "location_booth_visited", "path_direct", "act1_complete", "first_crossing_reached"],
     "inventoryRequired": ["wings_pass"],
     "statsRequired": {
-      "health": 10,
-      "courage": 5,
-      "insight": 3
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
     }
   },
   "softlockDetection": {

@@ -34,7 +34,7 @@
         "stats": {
           "script": 2,
           "stage_presence": 2,
-          "script": 2
+          "improv": 2
         },
         "factions": {
           "preservationist": 2,
@@ -98,7 +98,7 @@
         "stats": {
           "script": 2,
           "stage_presence": 2,
-          "script": 2
+          "improv": 2
         },
         "factions": {
           "preservationist": 2,
@@ -165,7 +165,7 @@
         "stats": {
           "script": 2,
           "stage_presence": 2,
-          "script": 2
+          "improv": 2
         },
         "factions": {
           "preservationist": 7,

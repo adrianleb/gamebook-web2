@@ -356,7 +356,7 @@ describe('ContentValidator - validateScene', () => {
             label: 'Attempt check',
             onSuccess: { to: 'sc_1_0_901' as SceneId },
             onFailure: {
-              effects: [{ type: 'modify-stat', stat: 'health', value: -1 }],
+              effects: [{ type: 'modify-stat', stat: 'script', value: -1 }],
             },
           },
         ],
@@ -540,7 +540,7 @@ describe('ContentValidator - validateScene', () => {
       const scene = createMockScene({
         effects: [
           { type: 'set-flag', flag: 'TEST_FLAG' },
-          { type: 'set-stat', stat: 'courage', value: 5 },
+          { type: 'set-stat', stat: 'stage_presence', value: 5 },
         ],
       });
       const result = validator.validateScene(scene, manifest);
@@ -592,7 +592,7 @@ describe('ContentValidator - validateCondition', () => {
 
         // Add required fields based on type
         if (type === 'stat') {
-          condition.stat = 'courage';
+          condition.stat = 'stage_presence';
           condition.operator = 'gte';
           condition.value = 5;
         } else if (type === 'flag') {
@@ -633,7 +633,7 @@ describe('ContentValidator - validateCondition', () => {
     it('should detect missing operator', () => {
       const scene = createMockScene({
         choices: [
-          { label: 'Test', to: 'sc_1_0_002' as SceneId, conditions: [{ type: 'stat', stat: 'courage', value: 5 }] },
+          { label: 'Test', to: 'sc_1_0_002' as SceneId, conditions: [{ type: 'stat', stat: 'stage_presence', value: 5 }] },
         ],
       });
       const result = validator.validateScene(scene, manifest);
@@ -645,7 +645,7 @@ describe('ContentValidator - validateCondition', () => {
     it('should detect missing value', () => {
       const scene = createMockScene({
         choices: [
-          { label: 'Test', to: 'sc_1_0_002' as SceneId, conditions: [{ type: 'stat', stat: 'courage', operator: 'gte' }] },
+          { label: 'Test', to: 'sc_1_0_002' as SceneId, conditions: [{ type: 'stat', stat: 'stage_presence', operator: 'gte' }] },
         ],
       });
       const result = validator.validateScene(scene, manifest);
@@ -657,7 +657,7 @@ describe('ContentValidator - validateCondition', () => {
     it('should validate complete stat condition', () => {
       const scene = createMockScene({
         choices: [
-          { label: 'Test', to: 'sc_1_0_002' as SceneId, conditions: [{ type: 'stat', stat: 'courage', operator: 'gte', value: 5 }] },
+          { label: 'Test', to: 'sc_1_0_002' as SceneId, conditions: [{ type: 'stat', stat: 'stage_presence', operator: 'gte', value: 5 }] },
         ],
       });
       const result = validator.validateScene(scene, manifest);
@@ -914,8 +914,8 @@ describe('ContentValidator - validateEffect', () => {
       const validTypes = [
         { type: 'set-flag', flag: 'TEST' },
         { type: 'clear-flag', flag: 'TEST' },
-        { type: 'set-stat', stat: 'courage', value: 5 },
-        { type: 'modify-stat', stat: 'courage', value: 1 },
+        { type: 'set-stat', stat: 'stage_presence', value: 5 },
+        { type: 'modify-stat', stat: 'stage_presence', value: 1 },
         { type: 'add-item', item: 'test_item', count: 1 },
         { type: 'remove-item', item: 'test_item', count: 1 },
         { type: 'goto', sceneId: 'sc_1_0_002' },
@@ -944,7 +944,7 @@ describe('ContentValidator - validateEffect', () => {
 
     it('should detect missing value in set-stat', () => {
       const scene = createMockScene({
-        effects: [{ type: 'set-stat', stat: 'courage' }],
+        effects: [{ type: 'set-stat', stat: 'stage_presence' }],
       });
       const result = validator.validateScene(scene, manifest);
 
@@ -965,8 +965,8 @@ describe('ContentValidator - validateEffect', () => {
     it('should validate complete stat effects', () => {
       const scene = createMockScene({
         effects: [
-          { type: 'set-stat', stat: 'courage', value: 5 },
-          { type: 'modify-stat', stat: 'courage', value: 1 },
+          { type: 'set-stat', stat: 'stage_presence', value: 5 },
+          { type: 'modify-stat', stat: 'stage_presence', value: 1 },
         ],
       });
       const result = validator.validateScene(scene, manifest);
@@ -1114,8 +1114,8 @@ describe('ContentValidator - validateStats', () => {
 
   it('should validate without errors for valid stats', () => {
     const stats = {
-      courage: { id: 'courage', name: 'Courage', min: 0, max: 10, start: 5 },
-      wit: { id: 'wit', name: 'Wit', min: 0, max: 10, start: 5 },
+      stage_presence: { id: 'stage_presence', name: 'Stage Presence', min: 1, max: 4, start: 2 },
+      improv: { id: 'improv', name: 'Improv', min: 1, max: 4, start: 2 },
     };
 
     const result = validator.validateStats(stats, manifest);

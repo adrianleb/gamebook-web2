@@ -77,7 +77,7 @@
     "failOnDetection": true
   },
   "notes": [
-    "UPDATED: Migrated from legacy stats (courage→stage_presence, health/insight removed).",
+    "UPDATED: Migrated from legacy stats (courage→stage_presence, health/insight→script/improv).",
     "Stage presence check: threshold 3, player has 2 (below threshold).",
     "The attemptable stat check now uses onSuccess/onFailure branching.",
     "This test path expects the choice to be disabled when stats are below threshold."

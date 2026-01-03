@@ -81,14 +81,14 @@ const mockScenes: Record<string, SceneData> = {
     text: 'You are in a test room.',
     effects: [
       { type: 'set-flag', flag: 'GAME_STARTED' },
-      { type: 'set-stat', stat: 'courage', value: 5 },
+      { type: 'set-stat', stat: 'stage_presence', value: 5 },
     ],
     choices: [
       {
         label: 'Continue',
         to: 'sc_1_0_002',
         conditions: [
-          { type: 'stat', stat: 'courage', operator: 'gte', value: 5 },
+          { type: 'stat', stat: 'stage_presence', operator: 'gte', value: 5 },
         ],
       },
       {
@@ -129,7 +129,7 @@ describe('Phase 4: Accessibility - Engine Regression Tests', () => {
       // Phase 3: Scene reachability should work unchanged
       const choices = engine.getAvailableChoices();
       expect(choices.length).toBe(2);
-      expect(choices[0].state).toBe('enabled'); // courage >= 5
+      expect(choices[0].state).toBe('enabled'); // stage_presence >= 5
       expect(choices[1].state).toBe('enabled'); // no conditions
 
       await engine.makeChoice(0);
@@ -140,7 +140,7 @@ describe('Phase 4: Accessibility - Engine Regression Tests', () => {
       // Phase 3: Stat checks should work unchanged
       const condition = {
         type: 'stat' as const,
-        stat: 'courage' as const,
+        stat: 'stage_presence' as const,
         operator: 'gte' as const,
         value: 5,
       };
@@ -171,11 +171,11 @@ describe('Phase 4: Accessibility - Engine Regression Tests', () => {
 
     it('should not break stat modification', () => {
       // Phase 3: Stat set/modify should work unchanged
-      engine.applyEffect({ type: 'set-stat', stat: 'wit', value: 7 });
-      expect(engine.getState().stats.wit).toBe(7);
+      engine.applyEffect({ type: 'set-stat', stat: 'improv', value: 7 });
+      expect(engine.getState().stats.improv).toBe(7);
 
-      engine.applyEffect({ type: 'modify-stat', stat: 'courage', value: 2 });
-      expect(engine.getState().stats.courage).toBe(7); // 5 + 2
+      engine.applyEffect({ type: 'modify-stat', stat: 'stage_presence', value: 2 });
+      expect(engine.getState().stats.stage_presence).toBe(7); // 5 + 2
     });
   });
 
@@ -208,7 +208,7 @@ describe('Phase 4: Accessibility - Engine Regression Tests', () => {
       expect(loadedState.currentSceneId).toBe('sc_1_0_002');
       expect(loadedState.flags.has('GAME_STARTED')).toBe(true);
       expect(loadedState.inventory.get('test_item')).toBe(1);
-      expect(loadedState.stats.courage).toBe(5);
+      expect(loadedState.stats.stage_presence).toBe(5);
     });
 
     it('should maintain history across save/load', async () => {
@@ -279,14 +279,14 @@ describe('Phase 4: Accessibility - Engine Regression Tests', () => {
   describe('PT-P4-ACC-004: Complex State Scenarios', () => {
     it('should handle complex state with all mechanics', async () => {
       // Apply multiple state changes
-      engine.applyEffect({ type: 'set-stat', stat: 'health', value: 10 });
+      engine.applyEffect({ type: 'set-stat', stat: 'script', value: 10 });
       engine.applyEffect({ type: 'set-flag', flag: 'TEST_FLAG_1' });
       engine.applyEffect({ type: 'set-flag', flag: 'TEST_FLAG_2' });
       engine.applyEffect({ type: 'add-item', item: 'item1', count: 3 });
       engine.applyEffect({ type: 'add-item', item: 'item2', count: 1 });
 
       const stateBefore = engine.getState();
-      expect(stateBefore.stats.health).toBe(10);
+      expect(stateBefore.stats.script).toBe(10);
       expect(stateBefore.flags.has('TEST_FLAG_1')).toBe(true);
       expect(stateBefore.inventory.get('item1')).toBe(3);
 
@@ -303,7 +303,7 @@ describe('Phase 4: Accessibility - Engine Regression Tests', () => {
       newEngine.load(saveData);
 
       const stateAfter = newEngine.getState();
-      expect(stateAfter.stats.health).toBe(10);
+      expect(stateAfter.stats.script).toBe(10);
       expect(stateAfter.flags.has('TEST_FLAG_1')).toBe(true);
       expect(stateAfter.flags.has('TEST_FLAG_2')).toBe(true);
       expect(stateAfter.inventory.get('item1')).toBe(3);
@@ -322,13 +322,13 @@ describe('Phase 4: Accessibility - Engine Regression Tests', () => {
     });
 
     it('should handle disabled choices correctly', () => {
-      // Lower courage below threshold
-      engine.applyEffect({ type: 'set-stat', stat: 'courage', value: 3 });
+      // Lower stage_presence below threshold
+      engine.applyEffect({ type: 'set-stat', stat: 'stage_presence', value: 3 });
 
       const choices = engine.getAvailableChoices();
 
       // First choice should still be enabled (condition re-evaluated)
-      // Actually, with courage=3, the first choice should be disabled
+      // Actually, with stage_presence=3, the first choice should be disabled
       expect(choices[0].state).toBe('disabled');
       expect(choices[1].state).toBe('enabled');
     });

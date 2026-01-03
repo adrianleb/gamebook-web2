@@ -12,7 +12,7 @@
     "stats": {
       "script": 2,
       "stage_presence": 2,
-      "script": 2
+      "improv": 2
     },
     "currentScene": "sc_1_0_001"
   },
@@ -32,7 +32,7 @@
     {
       "sequence": 2,
       "action": "checkpoint",
-      "description": "At threshold - verify courage check setup (courage=5, threshold=5)",
+      "description": "At threshold - verify stage_presence check setup (stage_presence=2, threshold=2)",
       "assertions": {
         "stats": { "stage_presence": 2 }
       }
@@ -41,7 +41,7 @@
       "sequence": 3,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Choose 'Step into the darkness' (courage check: 5 >= 5 = SUCCESS)",
+      "description": "Choose 'Step into the darkness' (stage_presence check: 2 >= 2 = SUCCESS)",
       "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {

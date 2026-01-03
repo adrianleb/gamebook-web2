@@ -10,9 +10,9 @@
     "flags": [],
     "inventory": ["booth_key"],
     "stats": {
-      "health": 10,
-      "courage": 10,
-      "insight": 10
+      "script": 4,
+      "stage_presence": 4,
+      "improv": 4
     },
     "currentScene": "sc_1_0_001"
   },
@@ -20,9 +20,9 @@
     {
       "sequence": 1,
       "action": "checkpoint",
-      "description": "Verify starting state with maximum stats (courage=10, insight=10)",
+      "description": "Verify starting state with maximum stats (stage_presence=4, improv=4)",
       "assertions": {
-        "stats": { "courage": 10, "insight": 10 },
+        "stats": { "stage_presence": 4, "improv": 4 },
         "inventoryContains": ["booth_key"],
         "choicesAvailable": 3
       }
@@ -36,15 +36,15 @@
       "checkpoint": true,
       "assertions": {
         "currentScene": "sc_1_0_003",
-        "stats": { "courage": 10 }
+        "stats": { "stage_presence": 4 }
       }
     },
     {
       "sequence": 3,
       "action": "checkpoint",
-      "description": "At threshold - courage check should pass (10 >= 5)",
+      "description": "At threshold - stage_presence check should pass (4 >= 3)",
       "assertions": {
-        "stats": { "courage": 10 },
+        "stats": { "stage_presence": 4 },
         "choicesAvailable": 2
       }
     },
@@ -52,12 +52,12 @@
       "sequence": 4,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Choose 'Step into the darkness' (courage check: 10 >= 5 = SUCCESS)",
+      "description": "Choose 'Step into the darkness' (stage_presence check: 4 >= 3 = SUCCESS)",
       "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {
         "currentScene": "sc_1_1_099",
-        "stats": { "courage": 10 }
+        "stats": { "stage_presence": 4 }
       }
     }
   ],
@@ -65,8 +65,9 @@
     "sceneId": "sc_1_1_099",
     "inventoryRequired": ["booth_key"],
     "statsRequired": {
-      "courage": 10,
-      "insight": 10
+      "script": 4,
+      "stage_presence": 4,
+      "improv": 4
     }
   },
   "softlockDetection": {

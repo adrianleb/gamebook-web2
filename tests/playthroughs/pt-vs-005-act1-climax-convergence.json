@@ -12,7 +12,7 @@
     "stats": {
       "script": 2,
       "stage_presence": 2,
-      "script": 2
+      "improv": 2
     },
     "currentScene": "sc_1_1_099"
   },
@@ -27,7 +27,7 @@
         "stats": {
           "script": 2,
           "stage_presence": 2,
-          "script": 2
+          "improv": 2
         }
       }
     },
@@ -44,7 +44,7 @@
         "stats": {
           "script": 2,
           "stage_presence": 2,
-          "script": 2
+          "improv": 2
         }
       }
     }
@@ -56,7 +56,7 @@
     "statsRequired": {
       "script": 2,
       "stage_presence": 2,
-      "script": 2
+      "improv": 2
     }
   },
   "softlockDetection": {

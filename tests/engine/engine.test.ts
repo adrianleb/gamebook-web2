@@ -89,7 +89,7 @@ const mockScenes: Record<string, SceneData> = {
     text: 'You are in a test room.',
     effects: [
       { type: 'set-flag', flag: 'GAME_STARTED' },
-      { type: 'set-stat', stat: 'courage', value: 5 },
+      { type: 'set-stat', stat: 'stage_presence', value: 5 },
     ],
     choices: [
       {
@@ -100,7 +100,7 @@ const mockScenes: Record<string, SceneData> = {
         label: 'Go right',
         to: 'sc_1_0_003',
         conditions: [
-          { type: 'stat', stat: 'courage', operator: 'gte', value: 5 },
+          { type: 'stat', stat: 'stage_presence', operator: 'gte', value: 5 },
         ],
       },
       {
@@ -130,7 +130,7 @@ const mockScenes: Record<string, SceneData> = {
     title: 'Scene 3',
     text: 'You went right.',
     effects: [
-      { type: 'modify-stat', stat: 'courage', value: 1 },
+      { type: 'modify-stat', stat: 'stage_presence', value: 1 },
     ],
     choices: [
       {
@@ -167,7 +167,7 @@ describe('Engine Core', () => {
     it('should apply initial scene effects', () => {
       const state = engine.getState();
       expect(state.flags.has('GAME_STARTED')).toBe(true);
-      expect(state.stats.courage).toBe(5);
+      expect(state.stats.stage_presence).toBe(5);
     });
 
     it('should track scene history', () => {
@@ -182,7 +182,7 @@ describe('Engine Core', () => {
     it('should evaluate stat conditions correctly', () => {
       const condition: Condition = {
         type: 'stat',
-        stat: 'courage',
+        stat: 'stage_presence',
         operator: 'gte',
         value: 5,
       };
@@ -206,7 +206,7 @@ describe('Engine Core', () => {
         type: 'and',
         conditions: [
           { type: 'flag', flag: 'GAME_STARTED' },
-          { type: 'stat', stat: 'courage', operator: 'gte', value: 3 },
+          { type: 'stat', stat: 'stage_presence', operator: 'gte', value: 3 },
         ],
       };
 
@@ -219,7 +219,7 @@ describe('Engine Core', () => {
         type: 'or',
         conditions: [
           { type: 'flag', flag: 'NONEXISTENT_FLAG' },
-          { type: 'stat', stat: 'courage', operator: 'gte', value: 3 },
+          { type: 'stat', stat: 'stage_presence', operator: 'gte', value: 3 },
         ],
       };
 
@@ -244,29 +244,29 @@ describe('Engine Core', () => {
     it('should apply set-stat effect', () => {
       const effect: Effect = {
         type: 'set-stat',
-        stat: 'wit',
+        stat: 'improv',
         value: 7,
       };
 
       const event = engine.applyEffect(effect);
       const state = engine.getState();
 
-      expect(state.stats.wit).toBe(7);
-      expect(event.path).toBe('stats.wit');
+      expect(state.stats.improv).toBe(7);
+      expect(event.path).toBe('stats.improv');
       expect(event.newValue).toBe(7);
     });
 
     it('should apply modify-stat effect', () => {
       const effect: Effect = {
         type: 'modify-stat',
-        stat: 'courage',
+        stat: 'stage_presence',
         value: 2,
       };
 
       const event = engine.applyEffect(effect);
       const state = engine.getState();
 
-      expect(state.stats.courage).toBe(7); // 5 + 2
+      expect(state.stats.stage_presence).toBe(7); // 5 + 2
       expect(event.oldValue).toBe(5);
       expect(event.newValue).toBe(7);
     });
@@ -350,7 +350,7 @@ describe('Engine Core', () => {
 
       expect(choices.length).toBe(3);
       expect(choices[0].state).toBe('enabled');
-      expect(choices[1].state).toBe('enabled'); // courage >= 5
+      expect(choices[1].state).toBe('enabled'); // stage_presence >= 5
       expect(choices[2].state).toBe('disabled'); // missing flag
       expect(choices[2].disabledHint).toBe('You need a secret key');
     });
@@ -461,13 +461,13 @@ describe('Engine Core', () => {
       // applyEffect() returns the event directly, does not emit to handlers
       const event = engine.applyEffect({
         type: 'modify-stat',
-        stat: 'courage',
+        stat: 'stage_presence',
         value: 1,
       });
 
       expect(event).toMatchObject({
         type: 'effect-applied',
-        path: 'stats.courage',
+        path: 'stats.stage_presence',
         renderScope: 'status',
         urgency: 'low',
       });
@@ -517,14 +517,14 @@ describe('Engine Core', () => {
       for (let i = 0; i < 100; i++) {
         engine.applyEffect({
           type: 'modify-stat',
-          stat: 'courage',
+          stat: 'stage_presence',
           value: 10,
         });
       }
 
       // Stats can overflow (no max limit in current implementation)
       // This is intentional - content authors control stat ranges
-      expect(engine.getState().stats.courage).toBeGreaterThan(0);
+      expect(engine.getState().stats.stage_presence).toBeGreaterThan(0);
     });
 
     it('should handle circular scene references', async () => {
@@ -580,7 +580,7 @@ describe('Engine Core', () => {
             conditions: [
               {
                 type: 'stat',
-                stat: 'courage',
+                stat: 'stage_presence',
                 operator: 'gte',
                 value: 5,
                 attemptable: true,
@@ -618,7 +618,7 @@ describe('Engine Core', () => {
 
       expect(choices.length).toBe(1);
       expect(choices[0].state).toBe('risky');
-      expect(choices[0].statCheck).toBe('Courage +5');
+      expect(choices[0].statCheck).toBe('Stage_presence +5');
     });
 
     it('should branch to onSuccess when stat check passes', async () => {
@@ -633,7 +633,7 @@ describe('Engine Core', () => {
             conditions: [
               {
                 type: 'stat',
-                stat: 'courage',
+                stat: 'stage_presence',
                 operator: 'gte',
                 value: 5,
                 attemptable: true,
@@ -689,7 +689,7 @@ describe('Engine Core', () => {
             conditions: [
               {
                 type: 'stat',
-                stat: 'courage',
+                stat: 'stage_presence',
                 operator: 'gte',
                 value: 10,
                 attemptable: true,
@@ -746,7 +746,7 @@ describe('Engine Core', () => {
             conditions: [
               {
                 type: 'stat',
-                stat: 'courage',
+                stat: 'stage_presence',
                 operator: 'gte',
                 value: 3,
                 attemptable: true,
@@ -796,7 +796,7 @@ describe('Engine Core', () => {
             conditions: [
               {
                 type: 'stat',
-                stat: 'courage',
+                stat: 'stage_presence',
                 operator: 'gte',
                 value: 10,
                 attemptable: true,
@@ -850,7 +850,7 @@ describe('Engine Core', () => {
             conditions: [
               {
                 type: 'stat',
-                stat: 'courage',
+                stat: 'stage_presence',
                 operator: 'gte',
                 value: 5,
                 attemptable: true,
