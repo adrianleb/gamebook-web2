@@ -5,7 +5,7 @@
   "act": 2,
   "hub": 2,
   "location": "The Green Room",
-  "implementationStatus": "draft",
+  "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
     "tags": ["hub_opening", "faction_intro", "neutral_space"],
