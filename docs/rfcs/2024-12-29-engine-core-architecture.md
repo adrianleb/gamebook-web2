@@ -31,7 +31,7 @@ interface GameState {
   history: SceneHistoryEntry[];
 
   // Player state
-  stats: Record<string, number>;        // e.g., { courage: 5, wit: 3 }
+  stats: Record<string, number>;        // e.g., { script: 2, stage_presence: 3, improv: 2 }
   flags: Set<string>;                   // e.g., ["met_pursuer", "has_key"]
   inventory: string[];                  // Item IDs
 
@@ -47,7 +47,7 @@ interface SceneHistoryEntry {
 
 interface StateChangeEvent {
   type: 'scene-loaded' | 'condition-evaluated' | 'effect-applied' | 'state-changed';
-  path: string;        // e.g., 'stats.courage', 'inventory.[2]'
+  path: string;        // e.g., 'stats.script', 'inventory.[2]'
   oldValue: any;
   newValue: any;
   timestamp: number;

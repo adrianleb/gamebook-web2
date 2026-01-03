@@ -82,7 +82,7 @@ Events are emitted synchronously during state transitions:
 ```typescript
 interface StateChangeEvent {
   type: 'scene-loaded' | 'condition-evaluated' | 'effect-applied' | 'state-changed';
-  path: string;           // e.g., 'stats.courage', 'inventory.[2]'
+  path: string;           // e.g., 'stats.script', 'inventory.[2]'
   oldValue: unknown;
   newValue: unknown;
   timestamp: number;
