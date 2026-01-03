@@ -467,7 +467,7 @@ Per agent-e (Validator Lens) perspective, **70% automated / 30% manual** testing
 
 | Area | Coverage | Tests |
 |------|----------|-------|
-| **Ending Reachability** | 100% automated | 5 ending playthroughs in `test-playthroughs/` |
+| **Ending Reachability** | 100% automated | 5 ending playthroughs in `tests/playthroughs/endings/` |
 | **State Regression** | 100% automated | 174 tests validate state transitions, flags, inventory, stats |
 | **Save/Load** | 100% automated | `save-load.test.ts` covers serialization/deserialization |
 | **Softlock Detection** | 90% automated | Graph-based detection in `ending-graph.test.ts` |
