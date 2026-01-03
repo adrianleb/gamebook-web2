@@ -113,7 +113,7 @@ Before release, ensure:
 
 **Automated Test Results (as of 2026-01-03):**
 - **206 tests passing** (52 skipped for draft content, 0 failures)
-- **27/28 scenes validating** (only `_template.json` has expected placeholder errors)
+- **33/34 scenes validating** (only `_template.json` has expected placeholder errors)
 - **5 ending playthroughs** verified reachable (PT-END-001 through PT-END-005)
 - **Performance benchmarks** all exceed targets by 10-2000x
 
