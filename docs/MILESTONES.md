@@ -626,7 +626,7 @@ The QA & Release milestone is **COMPLETE**. All automated exit gate requirements
 - ✅ Phase 5: QA & Release
 
 **Project Summary:**
-- **28 scenes** across 3 acts with full narrative content
+- **32 scenes** across 3 acts with full narrative content
 - **5 unique endings** based on faction alignment
 - **206 passing tests** with comprehensive validation
 - **DOS-inspired UI** with CRT filter and audio system
