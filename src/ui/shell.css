@@ -1044,6 +1044,25 @@ body.test-mode .stat-bar::before {
   border-color: var(--text-danger);
 }
 
+/* Secondary menu button style (for settings/toggles) */
+.menu-option-btn-secondary {
+  font-size: var(--font-base);
+  background: var(--bg-secondary);
+  border-color: var(--border-dim);
+  color: var(--text-secondary);
+}
+
+.menu-option-btn-secondary:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-primary);
+  color: var(--text-primary);
+}
+
+.menu-option-btn-secondary[data-test-id="crt-status"] {
+  font-weight: var(--font-bold);
+  color: var(--text-accent);
+}
+
 /* Respect prefers-reduced-motion for modal animations */
 @media (prefers-reduced-motion: reduce) {
   .modal-overlay.visible,
