@@ -94,7 +94,7 @@
   }
 
   .menu-button {
-    min-height: 36px;
+    min-height: 44px;
     min-width: 60px;
     padding: 4px var(--space-1);
     font-size: var(--font-base);
@@ -102,11 +102,11 @@
 
   /* More compact text viewport */
   .text-viewport {
-    padding: var(--space-2);
+    padding: var(--space-1);
     min-height: 250px;
     max-height: 400px;
     font-size: var(--font-base);
-    line-height: 1.6;
+    line-height: 1.8;
   }
 
   /* Compact choices */
@@ -116,8 +116,8 @@
   }
 
   .choice-button {
-    min-height: 38px;
-    padding: 6px var(--space-2);
+    min-height: 44px;
+    padding: 4px var(--space-2);
     font-size: var(--font-base);
   }
 
@@ -186,6 +186,7 @@
     min-height: 200px;
     max-height: 300px;
     padding: var(--space-1);
+    line-height: 1.8;
   }
 
   /* Stack header actions vertically on very small screens */
@@ -312,12 +313,12 @@ body {
 .text-viewport {
   background: var(--bg-secondary);
   border: 2px solid var(--border-primary);
-  padding: var(--space-2);
+  padding: var(--space-1);
   min-height: 280px;
   max-height: 450px;
   overflow-y: auto;
   font-size: var(--font-base);
-  line-height: 1.6;
+  line-height: 1.8;
 }
 
 .text-viewport.transitioning {
@@ -401,8 +402,8 @@ body {
   display: flex;
   align-items: center;
   width: 100%;
-  min-height: 40px;
-  padding: 6px var(--space-2);
+  min-height: 44px;
+  padding: 4px var(--space-2);
   font-family: 'VT323', monospace;
   font-size: var(--font-base);
   text-align: left;
