@@ -522,10 +522,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 32,
+    "totalScenes": 34,
     "pending": 0,
     "draft": 0,
-    "complete": 32,
+    "complete": 34,
     "reviewed": 0
   }
 }
