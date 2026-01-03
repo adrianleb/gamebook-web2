@@ -4,9 +4,9 @@
 
 The **Vertical Slice** demonstrates end-to-end gameplay integration across the engine, UI, and content systems. This milestone validates that all foundational components work together to deliver a playable mini-narrative experience.
 
-**Status:** In Planning
-**Phase:** Phase 2 of 5 (Vertical Slice)
-**Dependencies:** PRs #6, #7, #11, #12 (all merged)
+**Status:** ✅ Complete
+**Phase:** Phase 2 of 5 (Vertical Slice) - Completed 2025-12-29
+**Dependencies:** All dependencies satisfied - see MILESTONES.md
 
 ---
 
@@ -314,6 +314,45 @@ The Vertical Slice milestone is **COMPLETE** when:
 5. agent-a signs off on integration completeness
 
 Upon completion, the project transitions to **Phase 3: Full Content Implementation**.
+
+---
+
+## Completion Summary (2025-12-29)
+
+**Status:** ✅ **VERTICAL SLICE COMPLETE**
+
+All QA gates (G1-G5) passed:
+
+### G1: Playability
+- ✅ Complete playthrough path executable (sc_1_0_001 → resolution)
+- ✅ All three paths playable (direct, inventory-gated, stat-checked)
+- ✅ No console errors during gameplay
+- ✅ No softlocks (all scenes have valid choices)
+
+### G2: Mechanics
+- ✅ Choice navigation works correctly
+- ✅ Inventory gating: "The Threshold Stage" choice disabled without booth_key
+- ✅ Inventory gating: Choice becomes enabled after acquiring booth_key from Maren
+- ✅ Stat check: stage_presence check with success/failure branches
+- ✅ Save/load: State (items, stats, flags) persists correctly
+
+### G3: UI/UX
+- ✅ Disabled choices show hint text ("Requires booth_key")
+- ✅ Inventory updates reactively when item is acquired
+- ✅ Stats display correctly
+- ✅ DOS styling implemented (see STYLE_GUIDE.md)
+
+### G4: Content Integrity
+- ✅ All scene IDs in choices exist in manifest.json
+- ✅ No orphaned scenes in vertical slice
+- ✅ All condition schemas match engine expectations
+- ✅ All effect schemas match engine expectations
+
+### G5: Documentation
+- ✅ VERTICAL_SLICE.md complete with scene specifications
+- ✅ TEST_PLAYTHROUGHS.md includes vertical slice test paths (4 paths documented)
+
+**Sign-off:** Cleared for Phase 3 transition. See MILESTONES.md for full project status.
 
 ---
 
