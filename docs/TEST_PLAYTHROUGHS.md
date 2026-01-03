@@ -29,7 +29,7 @@ steps:
     action: "Choose '{choice_label}'"
     checkpoint: true
     expected_state:
-      stats: { health: 10, courage: 5 }
+      stats: { script: 2, stage_presence: 2, improv: 2 }
       flags: { game_started: true }
       inventory: []
       current_scene: "sc_1_0_002"
@@ -990,6 +990,7 @@ npm run test tests/engine/accessibility.test.ts
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.7 | 2026-01-03 | **FIXED** YAML template example (line 32) to use canonical stats (script, stage_presence, improv with 1-4 range) instead of legacy stats (health, courage) for documentation consistency. |
 | 1.6 | 2026-01-02 | **FIXED** PT-END-001 through PT-END-005 ending gate documentation to match actual sc_3_4_098 implementation. Removed incorrect editorState enum requirements (defeated/persuaded) from faction endings. Changed PT-END-004 to use editorState_revealedTruth boolean flag instead of enum. Updated Ending Gate Validation Summary table and State Variable Reference with clarification that combined faction+editorState AND gates are DEFERRED per MILESTONES.md Issue #129. |
 | 1.5 | 2026-01-01 | Added PT-SL-001, PT-SL-002 (Save/Load regression tests) - tests state persistence across scene transitions and complex states using save_snapshot/load_snapshot actions. Added PT-EDGE-001, PT-EDGE-002, PT-EDGE-003 (Edge case tests) - validates empty inventory navigation, minimum stats (courage=0), and maximum stats (courage=10, insight=10) edge cases. NOTE: PT-END-001 through PT-END-005 exist in tests/playthroughs/endings/ directory with different schema (factions field, editorState). PT-LOCK and PT-P4-ACC tests require different testing approaches (softlockDetection config covers softlock tests, Phase 4 accessibility tests require unit/integration testing). |
 | 1.4 | 2025-12-30 | Added Phase 4 accessibility tests (PT-P4-ACC-001 through PT-P4-ACC-005) |
