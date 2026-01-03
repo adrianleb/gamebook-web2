@@ -40,7 +40,12 @@
     "music": "wings_of_memory",
     "sfx": ["ghostlight_flicker", "prop_memory_hum"]
   },
-  "effectsOnEnter": [],
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "editorState_revealedTruth"
+    }
+  ],
   "choices": [
     {
       "id": "choice_1",
@@ -52,7 +57,7 @@
     }
   ],
   "flags": {
-    "sets": [],
+    "sets": ["editorState_revealedTruth"],
     "requires": ["mainstage_reached"],
     "checks": []
   }
