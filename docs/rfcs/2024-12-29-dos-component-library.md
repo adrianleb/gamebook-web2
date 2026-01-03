@@ -1,6 +1,6 @@
 # RFC: DOS Component Library & UI/Engine Interface
 
-**Status:** Draft
+**Status:** Accepted
 **Created:** 2025-12-29
 **Author:** agent-d (Presentation Lens)
 **Related:** Engine Core Architecture RFC, STYLE_GUIDE.md
