@@ -77,15 +77,14 @@ sc_1_0_001 (The Booth Awakens)
 - **Purpose:** Demonstrate inventory gating and stat checks
 - **Requirements:** Must have item "booth_key"
 - **Mechanics:**
-  - **Stat Check:** `courage >= 5` to succeed crossing
+  - **Stat Check:** `stage_presence >= 2` to succeed crossing (1-4 range)
   - **Success Path:** Reach resolution, gain faction point
-  - **Failure Path:** Different resolution, lose 1 health
+  - **Failure Path:** Different resolution scene
 - **State Changes (Success):**
   - Set flag: `crossing_succeeded = true`
   - Modify faction: `preservationist +1`
 - **State Changes (Failure):**
   - Set flag: `crossing_failed = true`
-  - Modify stat: `health -1` (min 0)
 
 #### sc_1_0_004: Maren's Guidance (Item Acquisition)
 - **Type:** Information scene
@@ -103,13 +102,13 @@ sc_1_0_001 (The Booth Awakens)
 
 ## Required State Variables
 
-### Stats (Numeric)
+### Stats (Numeric 1-4 range)
 
 | Stat ID | Display Name | Min | Max | Starting Value | Description |
 |---------|--------------|-----|-----|----------------|-------------|
-| health | Health | 0 | 10 | 10 | Player's health points |
-| courage | Courage | 0 | 10 | 5 | Bravery for risky actions |
-| insight | Insight | 0 | 10 | 3 | Perception and understanding |
+| script | Script | 1 | 4 | 2 | Knowledge of narrative patterns, genre awareness |
+| stage_presence | Stage Presence | 1 | 4 | 2 | Force of personality, dramatic timing |
+| improv | Improv | 1 | 4 | 2 | Adaptability, quick thinking |
 
 ### Flags (Boolean)
 
@@ -181,7 +180,7 @@ Vertical Slice is considered **COMPLETE** when all gates pass:
 - [ ] Choice navigation: Branching choices work correctly
 - [ ] Inventory gating: "The Threshold Stage" choice is disabled without booth_key
 - [ ] Inventory gating: Choice becomes enabled after acquiring booth_key from Maren
-- [ ] Stat check: courage >= 5 succeeds, < 5 fails with different outcome
+- [ ] Stat check: stage_presence >= 2 succeeds, < 2 fails with different outcome
 - [ ] Save/load: Can save at sc_1_0_001, reload, and continue from saved state
 - [ ] Save/load: State (items, stats, flags) persists correctly after reload
 
@@ -217,7 +216,7 @@ Vertical Slice is considered **COMPLETE** when all gates pass:
 **Expected State:**
 - `path_direct = true`
 - Has item: "wings_pass"
-- Health: 10, Courage: 5
+- Script: 2, Stage Presence: 2, Improv: 2
 
 ### Path 2: Inventory-Gated Route
 1. Start at sc_1_0_001
@@ -225,14 +224,14 @@ Vertical Slice is considered **COMPLETE** when all gates pass:
 3. At sc_1_0_004, receive "booth_key"
 4. Return to sc_1_0_001
 5. Choose "Unlock the door" (now enabled)
-6. At sc_1_0_003, pass courage check (courage >= 5)
+6. At sc_1_0_003, pass stage_presence check (stage_presence >= 2)
 7. Reach resolution (success)
 
 **Expected State:**
 - `met_maren = true`
 - `crossing_succeeded = true`
 - Has items: "booth_key", "wings_pass"
-- Health: 10, Courage: 5
+- Script: 2, Stage Presence: 2, Improv: 2
 - Faction preservationist: 1
 
 ### Path 3: Failed Stat Check
@@ -240,13 +239,12 @@ Vertical Slice is considered **COMPLETE** when all gates pass:
 2. Choose "Talk to Maren" → get "booth_key"
 3. Return to sc_1_0_001
 4. Choose "Unlock the door"
-5. At sc_1_0_003, fail courage check (courage < 5, manually reduce for testing)
+5. At sc_1_0_003, fail stage_presence check (stage_presence < 2, manually reduce for testing)
 6. Reach resolution (failure)
 
 **Expected State:**
 - `crossing_failed = true`
-- Health: 9 (reduced by 1)
-- Courage: < 5
+- Stage Presence: 1 (below threshold)
 
 ### Path 4: Save/Load Regression
 1. Start at sc_1_0_001
