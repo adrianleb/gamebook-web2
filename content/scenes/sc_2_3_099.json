@@ -57,6 +57,10 @@
       "type": "modify_faction",
       "faction": "independent",
       "amount": 1
+    },
+    {
+      "type": "set_flag",
+      "flag": "alliance_determined"
     }
   ],
   "choices": [
@@ -75,7 +79,7 @@
     }
   ],
   "flags": {
-    "sets": ["revelation_discovered", "act2_complete", "editor_revealed"],
+    "sets": ["revelation_discovered", "act2_complete", "editor_revealed", "alliance_determined"],
     "requires": ["archives_reached"],
     "checks": []
   }
