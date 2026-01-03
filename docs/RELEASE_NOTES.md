@@ -4,12 +4,12 @@
 
 ## Overview
 
-The Understage v1.0.0 is a complete browser-based adaptation of the gamebook, featuring a deterministic state engine, DOS-inspired UI aesthetic, and full save/load functionality. This release includes all 32 scenes across 3 acts, with 5 unique endings based on player choices and faction alignment.
+The Understage v1.0.0 is a complete browser-based adaptation of the gamebook, featuring a deterministic state engine, DOS-inspired UI aesthetic, and full save/load functionality. This release includes all 34 scenes across 3 acts, with 5 unique endings based on player choices and faction alignment.
 
 ## Key Features
 
 ### Content
-- **32 scenes** across 3 Acts with full narrative content
+- **34 scenes** across 3 Acts with full narrative content
 - **5 unique endings** based on faction alignment and player choices
 - **Deterministic engine** - same choices always produce same outcomes
 - **Branching narrative** with stat checks, inventory gating, and conditional paths
@@ -39,7 +39,7 @@ The Understage v1.0.0 is a complete browser-based adaptation of the gamebook, fe
 
 ## Content Structure
 
-### Act 1: The Breach (13 scenes)
+### Act 1: The Breach (15 scenes)
 - **Hub 0: The Prompter's Booth** - Introduction to The Understage and initial choices
   - `sc_1_0_001`: The Booth Awakens (starting scene)
   - `sc_1_0_002`: The Wings (direct path)
@@ -129,8 +129,8 @@ All performance metrics are from automated testing in the headless engine:
 ## Content Status
 
 **Implementation Status:**
-- **Total Scenes:** 32
-- **Complete:** 32 scenes
+- **Total Scenes:** 34
+- **Complete:** 34 scenes
 - **Draft:** 0 scenes
 - **Pending:** 0 scenes
 
@@ -210,7 +210,7 @@ npm run playthrough tests/playthroughs/endings/pt-end-001.json
 ### v1.0.0 (January 3, 2026)
 - Initial release
 - All 5 phases complete (Inception, Vertical Slice, Full Content, Polish, QA & Release)
-- 32 complete scenes, 5 endings, full save/load system
+- 34 complete scenes, 5 endings, full save/load system
 - DOS-inspired UI with CRT filter and audio
 - 206+ passing tests with comprehensive validation
 
