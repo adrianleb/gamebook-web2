@@ -130,11 +130,11 @@ All performance metrics are from automated testing in the headless engine:
 
 **Implementation Status:**
 - **Total Scenes:** 32
-- **Complete:** 22 scenes
-- **Draft:** 10 scenes (Act 2 hub openings, Act 2 Climax, Act 3 hub openings, final confrontation, all endings)
+- **Complete:** 32 scenes
+- **Draft:** 0 scenes
 - **Pending:** 0 scenes
 
-**Note:** Draft scenes are fully playable with narrative content. The "draft" designation indicates opportunities for narrative polish and expansion, which may be addressed in future releases.
+All scenes are fully implemented with narrative content, NPCs, choices, conditions, and effects. The v1.0.0 release represents a complete, playable experience across all 3 acts with 5 unique endings.
 
 ## Known Issues
 
@@ -210,7 +210,7 @@ npm run playthrough tests/playthroughs/endings/pt-end-001.json
 ### v1.0.0 (January 3, 2026)
 - Initial release
 - All 5 phases complete (Inception, Vertical Slice, Full Content, Polish, QA & Release)
-- 32 scenes (22 complete, 10 draft), 5 endings, full save/load system
+- 32 complete scenes, 5 endings, full save/load system
 - DOS-inspired UI with CRT filter and audio
 - 206+ passing tests with comprehensive validation
 
