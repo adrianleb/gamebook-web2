@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-02T23:58:37.894Z",
+  "timestamp": "2026-01-03T01:18:12.611Z",
   "playthrough": "test_snapshot",
   "step": 1,
   "name": "test_snapshot",
@@ -8,11 +8,11 @@
   "state": {
     "version": 1,
     "contentVersion": "1.0.0",
-    "timestamp": 1767398317894,
+    "timestamp": 1767403092611,
     "currentSceneId": "sc_1_start",
     "history": [],
     "stats": {
-      "health": 100
+      "script": 100
     },
     "flags": {},
     "inventory": {},

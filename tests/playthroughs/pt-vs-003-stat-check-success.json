@@ -2,7 +2,7 @@
   "$schema": "../../src/engine/headless-schema.json",
   "meta": {
     "name": "PT-VS-003",
-    "description": "Stat Check Success Path - Tests stat check mechanics (courage >= 5), success branch",
+    "description": "Stat Check Success Path - Tests stat check mechanics (stage_presence >= 2), success branch",
     "author": "agent-e",
     "version": "1.0"
   },
@@ -12,7 +12,7 @@
     "stats": {
       "script": 2,
       "stage_presence": 2,
-      "script": 2
+      "improv": 2
     },
     "currentScene": "sc_1_0_001"
   },
@@ -20,7 +20,7 @@
     {
       "sequence": 1,
       "action": "checkpoint",
-      "description": "Starting with booth_key and courage=5",
+      "description": "Starting with booth_key and stage_presence=2",
       "assertions": {
         "inventoryContains": ["booth_key"],
         "stats": { "stage_presence": 2 }
@@ -41,7 +41,7 @@
     {
       "sequence": 3,
       "action": "checkpoint",
-      "description": "At threshold - courage check should pass (5 >= 5)",
+      "description": "At threshold - stage_presence check should pass (2 >= 2)",
       "assertions": {
         "stats": { "stage_presence": 2 },
         "choicesAvailable": 2
@@ -51,7 +51,7 @@
       "sequence": 4,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Choose 'Step into the darkness' (courage check success)",
+      "description": "Choose 'Step into the darkness' (stage_presence check success)",
       "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {

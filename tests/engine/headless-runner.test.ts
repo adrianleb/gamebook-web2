@@ -407,7 +407,7 @@ describe('HeadlessRunner', () => {
             action: 'checkpoint',
             assertions: {
               stats: {
-                health: 100,
+                script: 100,
                 mana: 50,
               },
             },
@@ -424,7 +424,7 @@ describe('HeadlessRunner', () => {
         currentSceneId: 'sc_1_start',
         history: [],
         stats: {
-          health: 100,
+          script: 100,
           mana: 50,
         },
         flags: new Set(),
@@ -493,7 +493,7 @@ describe('HeadlessRunner', () => {
           flagsRequired: ['FINAL_FLAG'],
           inventoryRequired: ['artifact'],
           statsRequired: {
-            health: 50,
+            script: 50,
           },
         },
       };
@@ -508,7 +508,7 @@ describe('HeadlessRunner', () => {
         currentSceneId: 'sc_1_ending', // At ending
         history: [],
         stats: {
-          health: 75, // Above required 50
+          script: 75, // Above required 50
         },
         flags: new Set(['FINAL_FLAG']),
         inventory,
@@ -705,7 +705,7 @@ describe('HeadlessRunner', () => {
         timestamp: Date.now(),
         currentSceneId: 'sc_1_start',
         history: [],
-        stats: { health: 100 },
+        stats: { script: 100 },
         flags: new Set(['TEST_FLAG']),
         inventory: new Map([['test_item', 1]]),
         factions: {},

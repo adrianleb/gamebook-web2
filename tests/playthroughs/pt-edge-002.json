@@ -10,9 +10,9 @@
     "flags": [],
     "inventory": [],
     "stats": {
-      "script": 2,
+      "script": 1,
       "stage_presence": 1,
-      "script": 2
+      "improv": 1
     },
     "currentScene": "sc_1_0_001"
   },
@@ -20,7 +20,7 @@
     {
       "sequence": 1,
       "action": "checkpoint",
-      "description": "Verify starting state with minimum courage (0)",
+      "description": "Verify starting state with minimum stats (all 1s)",
       "assertions": {
         "stats": { "stage_presence": 1 },
         "choicesAvailable": 3
@@ -42,21 +42,23 @@
       "sequence": 3,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Choose 'Continue toward the light' (reach resolution with minimum stats)",
-      "expectedScene": "sc_1_0_900",
+      "description": "Choose 'Continue toward the light' (reach First Crossing with minimum stats)",
+      "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {
-        "currentScene": "sc_1_0_900",
+        "currentScene": "sc_1_1_099",
         "stats": { "stage_presence": 1 }
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_0_900",
+    "sceneId": "sc_1_1_099",
     "flagsRequired": ["path_direct"],
     "inventoryRequired": ["wings_pass"],
     "statsRequired": {
-      "stage_presence": 1
+      "script": 1,
+      "stage_presence": 1,
+      "improv": 1
     }
   },
   "softlockDetection": {

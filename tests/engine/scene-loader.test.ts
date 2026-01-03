@@ -221,7 +221,7 @@ describe('SceneLoader', () => {
         text: 'Test text',
         effectsOnEnter: [
           { type: 'set-flag', flag: 'test_flag' },
-          { type: 'set-stat', stat: 'courage', value: 5 },
+          { type: 'set-stat', stat: 'stage_presence', value: 5 },
         ],
         choices: [
           {
@@ -671,7 +671,7 @@ describe('SceneLoader', () => {
             to: 'sc_test_001',
             conditions: {
               type: 'stat_check',
-              stat: 'courage',
+              stat: 'stage_presence',
               op: 'gte',
               value: 5,
             },
@@ -684,7 +684,7 @@ describe('SceneLoader', () => {
             to: 'sc_test_001',
             conditions: {
               type: 'stat_check',
-              stat: 'health',
+              stat: 'script',
               op: 'gte',
               value: 10,
             },
@@ -705,12 +705,12 @@ describe('SceneLoader', () => {
         expect(sceneData.choices.length).toBe(2);
 
         expect(sceneData.choices[0].conditions?.[0].type).toBe('stat');
-        expect(sceneData.choices[0].conditions?.[0].stat).toBe('courage');
+        expect(sceneData.choices[0].conditions?.[0].stat).toBe('stage_presence');
         expect(sceneData.choices[0].conditions?.[0].operator).toBe('gte');
         expect(sceneData.choices[0].conditions?.[0].value).toBe(5);
 
         expect(sceneData.choices[1].conditions?.[0].type).toBe('stat');
-        expect(sceneData.choices[1].conditions?.[0].stat).toBe('health');
+        expect(sceneData.choices[1].conditions?.[0].stat).toBe('script');
         expect(sceneData.choices[1].conditions?.[0].operator).toBe('gte');
         expect(sceneData.choices[1].conditions?.[0].value).toBe(10);
       } finally {
@@ -953,10 +953,10 @@ describe('SceneLoader', () => {
         choices: [
           {
             id: 'choice_1',
-            label: 'Attemptable courage check',
+            label: 'Attemptable stage_presence check',
             conditions: {
               type: 'stat_check',
-              stat: 'courage',
+              stat: 'stage_presence',
               op: 'gte',
               value: 5,
               attemptable: true,
@@ -993,7 +993,7 @@ describe('SceneLoader', () => {
             to: 'sc_test_success',
             conditions: {
               type: 'stat_check',
-              stat: 'health',
+              stat: 'script',
               op: 'gte',
               value: 10,
             },
@@ -1012,7 +1012,7 @@ describe('SceneLoader', () => {
         // Attemptable stat check should preserve the flag
         expect(sceneData.choices[0].conditions?.[0].attemptable).toBe(true);
         expect(sceneData.choices[0].conditions?.[0].type).toBe('stat');
-        expect(sceneData.choices[0].conditions?.[0].stat).toBe('courage');
+        expect(sceneData.choices[0].conditions?.[0].stat).toBe('stage_presence');
 
         // Attemptable faction check should preserve the flag after transformation
         expect(sceneData.choices[1].conditions?.[0].attemptable).toBe(true);

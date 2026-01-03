@@ -102,7 +102,7 @@ function createMockGameState(overrides = {}): any {
         visitedCount: 1,
       },
     ],
-    stats: { courage: 5, wit: 3 },
+    stats: { stage_presence: 5, improv: 3 },
     flags: new Set(['GAME_STARTED']),
     inventory: new Map([['booth_key', 1]]),
     factions: {},
@@ -233,15 +233,15 @@ describe('SaveManager Unit Tests', () => {
 
     it('should load game state from slot', async () => {
       const gameState = createMockGameState({
-        stats: { courage: 7, wit: 4 },
+        stats: { stage_presence: 7, improv: 4 },
       });
 
       await saveManager.save(1, gameState, 'Test Scene', 100);
       const loadedState = await saveManager.load(1);
 
       expect(loadedState.currentSceneId).toBe('sc_1_0_001');
-      expect(loadedState.stats.courage).toBe(7);
-      expect(loadedState.stats.wit).toBe(4);
+      expect(loadedState.stats.stage_presence).toBe(7);
+      expect(loadedState.stats.improv).toBe(4);
       expect(loadedState.flags.has('GAME_STARTED')).toBe(true);
     });
 
@@ -295,7 +295,7 @@ describe('SaveManager Unit Tests', () => {
 
     it('should include all required fields in export', () => {
       const gameState = createMockGameState({
-        stats: { courage: 5, wit: 3 },
+        stats: { stage_presence: 5, improv: 3 },
         flags: new Set(['FLAG_A', 'FLAG_B']),
         inventory: new Map([['key_item', 1], ['consumable', 5]]),
       });
@@ -360,7 +360,7 @@ describe('SaveManager Unit Tests', () => {
         state: {
           currentSceneId: 'sc_1_0_003',
           history: [],
-          stats: { courage: 8 },
+          stats: { stage_presence: 8 },
           flags: ['IMPORTED_FLAG'],
           inventory: [['potion', 3]],
           factions: {},
@@ -370,7 +370,7 @@ describe('SaveManager Unit Tests', () => {
       const gameState = saveManager.importFromJSON(validExport);
 
       expect(gameState.currentSceneId).toBe('sc_1_0_003');
-      expect(gameState.stats.courage).toBe(8);
+      expect(gameState.stats.stage_presence).toBe(8);
       expect(gameState.flags.has('IMPORTED_FLAG')).toBe(true);
       expect(gameState.inventory.get('potion')).toBe(3);
     });
