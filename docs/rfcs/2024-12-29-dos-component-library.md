@@ -115,7 +115,7 @@ Per engine RFC, with UI-specific enhancements:
 interface StateChangeEvent {
   // Core fields (from engine RFC)
   type: 'scene-loaded' | 'condition-evaluated' | 'effect-applied' | 'state-changed' | 'font-ready';
-  path: string;           // e.g., 'stats.courage', 'inventory.[2]'
+  path: string;           // e.g., 'stats.script', 'inventory.[2]'
   oldValue: any;
   newValue: any;
 
