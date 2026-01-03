@@ -575,7 +575,7 @@ See `docs/RELEASE_CHECKLIST.md` for:
 **QA Execution Results:**
 - ✅ **206 tests passing** (52 skipped for draft content, 0 failures)
 - ✅ **All 5 endings** verified reachable via automated playthroughs
-- ✅ **Content validation** passes (27/28 scenes - only `_template.json` has expected errors)
+- ✅ **Content validation** passes (33/34 scenes - only `_template.json` has expected errors)
 - ✅ **Performance benchmarks** all exceed targets by 10-2000x
 - ✅ **Save/load system** fully functional with version tagging
 
@@ -626,7 +626,7 @@ The QA & Release milestone is **COMPLETE**. All automated exit gate requirements
 - ✅ Phase 5: QA & Release
 
 **Project Summary:**
-- **32 scenes** across 3 acts with full narrative content
+- **34 scenes** across 3 acts with full narrative content
 - **5 unique endings** based on faction alignment
 - **206 passing tests** with comprehensive validation
 - **DOS-inspired UI** with CRT filter and audio system
