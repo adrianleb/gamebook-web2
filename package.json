@@ -1,6 +1,6 @@
 {
   "name": "gamebook-web2",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Deterministic gamebook engine for web",
   "type": "module",
   "scripts": {
