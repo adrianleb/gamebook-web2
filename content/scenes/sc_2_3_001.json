@@ -5,7 +5,7 @@
   "act": 2,
   "hub": 3,
   "location": "The Archives",
-  "implementationStatus": "draft",
+  "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
     "tags": ["hub_opening", "discovery", "mystery"],
