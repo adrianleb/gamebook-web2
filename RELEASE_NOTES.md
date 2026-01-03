@@ -4,12 +4,12 @@
 
 ## Overview
 
-The Understage v1.0.0 is a complete browser-based adaptation of the gamebook, featuring a deterministic state engine, DOS-inspired UI aesthetic, and full save/load functionality. This release includes all 28 scenes across 3 acts, with 5 unique endings based on player choices and faction alignment.
+The Understage v1.0.0 is a complete browser-based adaptation of the gamebook, featuring a deterministic state engine, DOS-inspired UI aesthetic, and full save/load functionality. This release includes all 34 scenes across 3 acts, with 5 unique endings based on player choices and faction alignment.
 
 ## Key Features
 
 ### Content
-- **28 scenes** across 3 Acts with full narrative content
+- **34 scenes** across 3 Acts with full narrative content
 - **5 unique endings** based on faction alignment and player choices
 - **Deterministic engine** - same choices always produce same outcomes
 - **Branching narrative** with stat checks, inventory gating, and conditional paths
@@ -155,7 +155,7 @@ npm run playthrough tests/playthroughs/endings/pt-end-001.json
 ### v1.0.0 (January 3, 2026)
 - Initial release
 - All 5 phases complete (Inception, Vertical Slice, Full Content, Polish, QA & Release)
-- 28 scenes, 5 endings, full save/load system
+- 34 scenes, 5 endings, full save/load system
 - DOS-inspired UI with CRT filter and audio
 - 206 passing tests with comprehensive validation
 
