@@ -1,0 +1,79 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-Act2-H2-Reality-Anchor-Item",
+    "description": "Reality Anchor Item Acquisition - Validates add_item effect (reality_anchors) on scene entry to sc_2_2_061",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached", "MET_GATEKEEPER", "DISCOVERED_EXITER_HQ"],
+    "inventory": ["wayfinder"],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "exiter": 1
+    },
+    "currentScene": "sc_2_2_060"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Navigate to Gate Tour (sc_2_2_061)",
+      "expectedScene": "sc_2_2_061",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_2_2_061",
+        "inventory": ["wayfinder", "reality_anchors"],
+        "factions": { "exiter": 2 }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "checkpoint",
+      "description": "Verify reality_anchors item was granted via effectsOnEnter",
+      "assertions": {
+        "currentScene": "sc_2_2_061",
+        "inventoryContains": ["reality_anchors"],
+        "flagsSet": ["MET_GATEKEEPER", "DISCOVERED_EXITER_HQ"]
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Ask what lies beyond specific thresholds' - navigate to sc_2_2_062",
+      "expectedScene": "sc_2_2_062",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_2_2_062",
+        "factions": { "exiter": 3 }
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "checkpoint",
+      "description": "Verify threshold_fragment item granted via effectsOnEnter",
+      "assertions": {
+        "currentScene": "sc_2_2_062",
+        "inventoryContains": ["threshold_fragment"],
+        "flagsSet": ["MET_GATEKEEPER", "DISCOVERED_EXITER_HQ"]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_062",
+    "inventoryRequired": ["wayfinder", "reality_anchors", "threshold_fragment"],
+    "factionsRequired": { "exiter": 3 }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

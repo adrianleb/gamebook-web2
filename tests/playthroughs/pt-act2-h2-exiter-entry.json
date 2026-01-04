@@ -1,0 +1,72 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-Act2-H2-Exiter-Entry",
+    "description": "Exiter Faction Entry Path - Tests modify_faction effect when joining faction, add_item effect (wayfinder), and flag setting (MET_GATEKEEPER, DISCOVERED_EXITER_HQ)",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "exiter": 0,
+      "preservationist": 0,
+      "revisionist": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_2_2_060"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Starting at Threshold Gate - verify entry flags and wayfinder item granted",
+      "assertions": {
+        "currentScene": "sc_2_2_060",
+        "flagsSet": ["MET_GATEKEEPER", "DISCOVERED_EXITER_HQ"],
+        "inventory": ["wayfinder"],
+        "factions": { "exiter": 0 }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Ask about the Threshold Gate' - validates modify_faction effect",
+      "expectedScene": "sc_2_2_061",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_2_2_061",
+        "factions": { "exiter": 1 }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "Verify at Gate Tour - faction increased to 1, reality_anchors item granted",
+      "assertions": {
+        "currentScene": "sc_2_2_061",
+        "flagsSet": ["MET_GATEKEEPER", "DISCOVERED_EXITER_HQ"],
+        "inventory": ["wayfinder", "reality_anchors"],
+        "factions": { "exiter": 1 }
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_061",
+    "flagsRequired": ["MET_GATEKEEPER", "DISCOVERED_EXITER_HQ"],
+    "inventoryRequired": ["wayfinder", "reality_anchors"],
+    "factionsRequired": { "exiter": 1 }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
