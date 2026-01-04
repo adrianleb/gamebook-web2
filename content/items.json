@@ -152,6 +152,15 @@
         "effect": "One use per hub: gain temporary access to any faction-gated content or bonus"
       },
       {
+        "id": "elara_token",
+        "name": "Elara's Token",
+        "category": "token",
+        "faction": "exiter",
+        "properties": ["consumable"],
+        "description": "Granted for completing Escaped Character quest. A crystalline token that shows paths between stories.",
+        "effect": "One use: reveal all available exits from current location, including hidden ones"
+      },
+      {
         "id": "directors_sigil",
         "name": "Director's Sigil",
         "category": "token",
