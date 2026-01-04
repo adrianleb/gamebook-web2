@@ -1,0 +1,67 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-Act2-H2-Exiter-NOT-Gating",
+    "description": "Exiter Faction NOT Condition Gating - Validates that choices are disabled when flag IS_SET (quest already discovered) and enabled when flag is NOT_SET",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached"],
+    "inventory": ["wayfinder"],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "exiter": 0
+    },
+    "currentScene": "sc_2_2_060"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Starting at Threshold Gate - quest choice should be ENABLED (flag NOT_SET)",
+      "assertions": {
+        "currentScene": "sc_2_2_060",
+        "choiceEnabled": { "choiceIndex": 1, "enabled": true }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose 'Ask about the escaped character quest' - sets discovery flag",
+      "expectedScene": "sc_2_2_023",
+      "checkpoint": true
+    },
+    {
+      "sequence": 3,
+      "action": "navigate",
+      "description": "Return to Threshold Gate (navigate back to sc_2_2_060)",
+      "targetScene": "sc_2_2_060",
+      "checkpoint": true
+    },
+    {
+      "sequence": 4,
+      "action": "checkpoint",
+      "description": "Verify quest choice is now DISABLED (flag IS_SET - NOT condition active)",
+      "assertions": {
+        "currentScene": "sc_2_2_060",
+        "flagsSet": ["QUEST_ESCAPED_CHARACTER_DISCOVERED"],
+        "choiceEnabled": { "choiceIndex": 1, "enabled": false }
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_060",
+    "flagsRequired": ["QUEST_ESCAPED_CHARACTER_DISCOVERED"]
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
