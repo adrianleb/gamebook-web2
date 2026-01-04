@@ -1,0 +1,103 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_042",
+  "title": "The Sealed Archive",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Sealed Archive",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["locked_content", "preservationist", "quest_reward", "lore"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - The Sealed Archive",
+    "paragraphs": [
+      "The iron door creaks open, revealing a smaller vault—the Sealed Archive. Here, the air is thick with age and importance.",
+      "Shelves of crystal and gold hold manuscripts that glow faintly: The first draft of Hamlet, with a happier ending. The original version of The Little Mermaid, where she survives. Stories as they were conceived, before publishers and prejudices demanded changes.",
+      "The Conservator leads you to a pedestal at the room's center. Upon it rests a sheaf of pages, brittle with centuries—the missing third act of 'The Winter's Apprentice.'",
+      "\"You earned this.\" The Conservator's voice holds rare warmth. \"The original ending, restored. Read it, and know what the Revisionists tried to erase.\"",
+      "You examine the pages. The familiar story of a young apprentice who learns to control ice—but the ending is different. Instead of sacrificing herself to save her village, she finds another way. She negotiates with the frost spirits. She learns their language. She creates a peace that lasts beyond a single dramatic sacrifice.",
+      "\"A quieter ending.\" The Conservator nods. \"Less dramatic. But more true. The Revisionists replaced it with tragedy because they believed suffering sells. We preserve it because we believe truth matters more than spectacle.\"",
+      "They gesture to a crystal cabinet containing a single iron key on a blue ribbon. \"The Sealed Archive Key. With this, you may return whenever you wish. Access to all first drafts. All original endings. The truth of every story.\"",
+      "You take the key—cold, heavy, impossibly old.",
+      "\"One more thing.\" The Conservator's expression grows grave. \"The Editor weeps because stories are vanishing. Not rewritten—erased. Entire narratives removed from existence. The Revisionists claim they're only 'improving' fiction. But improvement is not erasure. Something else is happening in the Understage. Someone is unmaking stories altogether.\"",
+      "The warning lingers as you leave the Sealed Archive—a key to truth in your hand, a mystery in your heart."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_conservator",
+      "name": "The Conservator",
+      "description": "Elderly guardian of the Archives, granting you access to the Sealed Archive",
+      "role": "faction_leader"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "sealed_archive_ambient",
+    "sfx": ["iron_door_creak", "magical_glow"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "SEALED_ARCHIVE_ACCESS_GRANTED"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Thank the Conservator and return to the Green Room",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "preservationist",
+          "amount": 2
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Ask the Conservator about the vanishing stories",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "CONSERVATOR_VANISHING_WARNING"
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Study more first drafts (Script +2, Stage Presence +1)",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_stat",
+          "stat": "script",
+          "value": 2
+        },
+        {
+          "type": "modify_stat",
+          "stat": "stage_presence",
+          "value": 1
+        }
+      ],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["SEALED_ARCHIVE_ACCESS_GRANTED"],
+    "requires": ["ARCHIVES_TOUR_COMPLETE"],
+    "checks": []
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_041",
+  "title": "Archive Tour",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Archives",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["exploration", "lore", "preservationist", "worldbuilding"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - The Archives",
+    "paragraphs": [
+      "The Conservator leads you through a hidden door into the Archives—a cavernous space where shelves stretch into darkness, each row labeled with eras, genres, authors.",
+      "\"Every story ever written.\" The Conservator's voice echoes softly. \"The first drafts. The discarded chapters. The versions that existed before editors and compromises. Here, we keep them safe.\"",
+      "You pass sections labeled TRAGEDY—shelves of weeping manuscripts, their ink permanently stained with tears. COMEDY—scripts that seem to hum with laughter even on the page. ROMANCE—novels bound in rose-colored leather, their pages perfumed with phantom flowers.",
+      "\"The Revisionists would have you believe that stories can be improved.\" The Conservator's face hardens. \"But what is 'improvement'? Whose version is better? Every change erases something true. Every revision murders a reality that once existed.\"",
+      "They stop before a heavy iron door—a vault within the Archives. \"The Sealed Archive. The most precious texts. The earliest versions. The endings that were rewritten. Only those who have proven their dedication may enter.\"",
+      "From a pocket, the Conservator produces a small card—an archival ticket, pale blue with silver script. \"This grants access to the public Archives. You may study here, learn what we protect. The Sealed Archive requires greater trust.\"",
+      "The air here is still, timeless—a cathedral of stories unchanged.",
+      "\"Know this,\" the Conservator says as they turn back. \"The Editor weeps because stories are being stolen. Not rewritten—removed. Entire narratives, vanished from the Archives. Someone is undoing fiction itself.\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_conservator",
+      "name": "The Conservator",
+      "description": "Elderly guardian of the Archives, showing you the depths of story preservation",
+      "role": "faction_leader"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "archive_ambient",
+    "sfx": ["footsteps_echo", "page_turn"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "ARCHIVES_TOUR_COMPLETE"
+    },
+    {
+      "type": "add_item",
+      "item": "archival_ticket"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Study the Archives (Script +1)",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_stat",
+          "stat": "script",
+          "value": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Ask about the Sealed Archive",
+      "to": "sc_2_2_042",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Ask about the Editor's weeping",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "LEARNED_EDITOR_WEEPING"
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "Return to the Green Room center",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["ARCHIVES_TOUR_COMPLETE"],
+    "requires": ["MET_CONSERVATOR"],
+    "checks": []
+  }
+}
