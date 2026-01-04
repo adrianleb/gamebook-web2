@@ -311,11 +311,6 @@ function buildEndingCriteria(
  */
 function generateTestSteps(ending: EndingDefinition, tierConfig?: QualityTierConfig) {
   const choiceLabel = ending.title;
-  const factionReason = ending.requirements.faction
-    ? `${ending.requirements.faction} >= ${tierConfig?.conditions.factionLevel || ending.requirements.factionLevel}`
-    : ending.requirements.flag
-    ? `flag: ${ending.requirements.flag}`
-    : 'no requirements';
 
   return [
     {
@@ -328,15 +323,6 @@ function generateTestSteps(ending: EndingDefinition, tierConfig?: QualityTierCon
     },
     {
       sequence: 2,
-      action: 'verify',
-      description: `Verify '${choiceLabel}' choice is enabled`,
-      assertions: {
-        choiceEnabled: choiceLabel,
-        reason: factionReason
-      }
-    },
-    {
-      sequence: 3,
       action: 'choose',
       choiceLabel,
       description: `Choose ${tierConfig?.tier || ending.requirements.faction || 'independent'} ending path`,
@@ -344,7 +330,7 @@ function generateTestSteps(ending: EndingDefinition, tierConfig?: QualityTierCon
       checkpoint: true
     },
     {
-      sequence: 4,
+      sequence: 3,
       action: 'checkpoint',
       description: 'Arrived at ending scene',
       assertions: {

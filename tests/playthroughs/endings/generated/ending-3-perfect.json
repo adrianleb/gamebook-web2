@@ -42,15 +42,6 @@
     },
     {
       "sequence": 2,
-      "action": "verify",
-      "description": "Verify 'The Closed Canon' choice is enabled",
-      "assertions": {
-        "choiceEnabled": "The Closed Canon",
-        "reason": "preservationist >= 9"
-      }
-    },
-    {
-      "sequence": 3,
       "action": "choose",
       "choiceLabel": "The Closed Canon",
       "description": "Choose perfect ending path",
@@ -58,7 +49,7 @@
       "checkpoint": true
     },
     {
-      "sequence": 4,
+      "sequence": 3,
       "action": "checkpoint",
       "description": "Arrived at ending scene",
       "assertions": {

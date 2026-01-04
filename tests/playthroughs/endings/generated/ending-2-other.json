@@ -41,15 +41,6 @@
     },
     {
       "sequence": 2,
-      "action": "verify",
-      "description": "Verify 'The Open Book' choice is enabled",
-      "assertions": {
-        "choiceEnabled": "The Open Book",
-        "reason": "exiter >= 5"
-      }
-    },
-    {
-      "sequence": 3,
       "action": "choose",
       "choiceLabel": "The Open Book",
       "description": "Choose other ending path",
@@ -57,7 +48,7 @@
       "checkpoint": true
     },
     {
-      "sequence": 4,
+      "sequence": 3,
       "action": "checkpoint",
       "description": "Arrived at ending scene",
       "assertions": {

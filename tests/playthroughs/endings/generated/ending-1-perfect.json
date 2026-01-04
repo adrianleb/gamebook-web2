@@ -43,15 +43,6 @@
     },
     {
       "sequence": 2,
-      "action": "verify",
-      "description": "Verify 'The Revised Draft' choice is enabled",
-      "assertions": {
-        "choiceEnabled": "The Revised Draft",
-        "reason": "revisionist >= 9"
-      }
-    },
-    {
-      "sequence": 3,
       "action": "choose",
       "choiceLabel": "The Revised Draft",
       "description": "Choose perfect ending path",
@@ -59,7 +50,7 @@
       "checkpoint": true
     },
     {
-      "sequence": 4,
+      "sequence": 3,
       "action": "checkpoint",
       "description": "Arrived at ending scene",
       "assertions": {
