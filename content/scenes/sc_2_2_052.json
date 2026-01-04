@@ -92,7 +92,7 @@
       "conditions": [
         {
           "type": "flag_check",
-          "flag": "understory_warned",
+          "flag": "understudy_warned",
           "operator": "NOT_SET"
         }
       ],

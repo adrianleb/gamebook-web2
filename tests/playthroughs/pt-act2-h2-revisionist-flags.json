@@ -1,0 +1,67 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-Act2-H2-Revisionist-Flags",
+    "description": "Flag-Based Choice Gating - Tests flag_check with NOT_SET operator for one-time interaction gating",
+    "author": "agent-c",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["met_revisionists", "writers_room_entered"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "revisionist": 0,
+      "preservationist": 0,
+      "exiter": 0
+    },
+    "currentScene": "sc_2_2_052"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Starting at Re-Write Desk - both understudy and pen choices should be available",
+      "assertions": {
+        "currentScene": "sc_2_2_052",
+        "choicesAvailable": 3
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose 'Ask The Understudy what they meant' (first time - sets understudy_warned)",
+      "expectedScene": "sc_2_2_050",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_2_2_050",
+        "flagsSet": ["understudy_warned"]
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 2,
+      "description": "Go back to Re-Write Desk",
+      "expectedScene": "sc_2_2_052",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_2_2_052",
+        "flagsSet": ["understudy_warned"],
+        "choicesAvailable": 2
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_052",
+    "flagsRequired": ["understudy_warned"]
+  },
+  "softlockDetection": {
+    "enabled": false
+  }
+}

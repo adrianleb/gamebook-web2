@@ -475,6 +475,13 @@ export class SceneLoader {
       result.value = Number(condition.value ?? 0);
     } else if (normalizedType === 'flag') {
       result.flag = String(condition.flag ?? '');
+      // Handle NOT_SET operator by wrapping in a 'not' condition
+      if (condition.operator === 'NOT_SET' || condition.op === 'NOT_SET') {
+        return {
+          type: 'not',
+          conditions: [result]
+        } as Condition;
+      }
     } else if (normalizedType === 'item') {
       result.item = String(condition.item ?? '');
       result.itemCount = Number(condition.itemCount ?? condition.count ?? 1);
