@@ -65,7 +65,7 @@
         {
           "type": "modify_faction",
           "faction": "revisionist",
-          "value": 1
+          "amount": 1
         },
         {
           "type": "set_flag",
