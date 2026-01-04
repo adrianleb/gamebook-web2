@@ -1,0 +1,93 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-END-003-good",
+    "description": "The Closed Canon (good tier) - Tests Good: Standard preservationist ending (>= 7)",
+    "author": "agent-e (generated)",
+    "version": "1.0",
+    "generated": true,
+    "sourceEnding": 3,
+    "tier": "good"
+  },
+  "startingState": {
+    "flags": [
+      "game_started",
+      "act1_complete",
+      "act2_complete",
+      "mainstage_reached"
+    ],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 7,
+      "revisionist": 1,
+      "exiter": 1,
+      "independent": 1
+    },
+    "currentScene": "sc_3_4_098"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Arrived at Last Curtain Call with good ending requirements",
+      "assertions": {
+        "currentScene": "sc_3_4_098"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceLabel": "The Closed Canon",
+      "description": "Choose good ending path",
+      "expectedScene": "sc_3_4_903",
+      "checkpoint": true
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "Arrived at ending scene",
+      "assertions": {
+        "currentScene": "sc_3_4_903",
+        "flagsSet": [
+          "ending_achieved"
+        ]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_903",
+    "flagsRequired": [
+      "game_started",
+      "act1_complete",
+      "act2_complete",
+      "ending_achieved"
+    ],
+    "inventoryRequired": [],
+    "statsRequired": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factionsRequired": {
+      "preservationist": 7,
+      "revisionist": 1,
+      "exiter": 1,
+      "independent": 1
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "Faction gate: preservationist >= 7 required for this ending",
+    "Ending 5 (The Eternal Rehearsal) must always be available as fallback",
+    "Quality tier: GOOD - Good: Standard preservationist ending (>= 7)"
+  ]
+}

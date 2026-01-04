@@ -1,0 +1,100 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-END-002-perfect",
+    "description": "The Open Book (perfect tier) - Tests Perfect: Max exiter (9) + CHORUS ally + peaceful resolution",
+    "author": "agent-e (generated)",
+    "version": "1.0",
+    "generated": true,
+    "sourceEnding": 2,
+    "tier": "perfect"
+  },
+  "startingState": {
+    "flags": [
+      "game_started",
+      "act1_complete",
+      "act2_complete",
+      "mainstage_reached",
+      "CHORUS_ALLY",
+      "PEACEFUL_RESOLUTION"
+    ],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 1,
+      "revisionist": 1,
+      "exiter": 9,
+      "independent": 1
+    },
+    "currentScene": "sc_3_4_098"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Arrived at Last Curtain Call with perfect ending requirements",
+      "assertions": {
+        "currentScene": "sc_3_4_098"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceLabel": "The Open Book",
+      "description": "Choose perfect ending path",
+      "expectedScene": "sc_3_4_902",
+      "checkpoint": true
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "Arrived at ending scene",
+      "assertions": {
+        "currentScene": "sc_3_4_902",
+        "flagsSet": [
+          "ending_achieved"
+        ]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_902",
+    "flagsRequired": [
+      "game_started",
+      "act1_complete",
+      "act2_complete",
+      "ending_achieved",
+      "CHORUS_ALLY",
+      "PEACEFUL_RESOLUTION"
+    ],
+    "inventoryRequired": [],
+    "statsRequired": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factionsRequired": {
+      "preservationist": 1,
+      "revisionist": 1,
+      "exiter": 9,
+      "independent": 1
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "Faction gate: exiter >= 9 required for this ending",
+    "Additional flags required: CHORUS_ALLY, PEACEFUL_RESOLUTION",
+    "Perfect tier requirement: No NPC sacrifices (SACRIFICED_* flags not set)",
+    "Perfect tier requirement: 1 or more allies",
+    "Ending 5 (The Eternal Rehearsal) must always be available as fallback",
+    "Quality tier: PERFECT - Perfect: Max exiter (9) + CHORUS ally + peaceful resolution"
+  ]
+}

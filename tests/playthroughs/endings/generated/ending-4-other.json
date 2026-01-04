@@ -1,0 +1,96 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-END-004-other",
+    "description": "The Blank Page (other tier) - Tests Independent: Truth path (no quality tiers)",
+    "author": "agent-e (generated)",
+    "version": "1.0",
+    "generated": true,
+    "sourceEnding": 4,
+    "tier": "other"
+  },
+  "startingState": {
+    "flags": [
+      "game_started",
+      "act1_complete",
+      "act2_complete",
+      "mainstage_reached",
+      "editorState_revealedTruth"
+    ],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 3,
+      "revisionist": 3,
+      "exiter": 3,
+      "independent": 4
+    },
+    "currentScene": "sc_3_4_098"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Arrived at Last Curtain Call with other ending requirements",
+      "assertions": {
+        "currentScene": "sc_3_4_098"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceLabel": "The Blank Page",
+      "description": "Choose other ending path",
+      "expectedScene": "sc_3_4_904",
+      "checkpoint": true
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "Arrived at ending scene",
+      "assertions": {
+        "currentScene": "sc_3_4_904",
+        "flagsSet": [
+          "ending_achieved"
+        ]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_904",
+    "flagsRequired": [
+      "game_started",
+      "act1_complete",
+      "act2_complete",
+      "ending_achieved",
+      "editorState_revealedTruth"
+    ],
+    "inventoryRequired": [],
+    "statsRequired": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factionsRequired": {
+      "preservationist": 3,
+      "revisionist": 3,
+      "exiter": 3,
+      "independent": 4
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "Flag gate: editorState_revealedTruth required for this ending",
+    "Additional flags required: editorState_revealedTruth",
+    "Ending 5 (The Eternal Rehearsal) must always be available as fallback",
+    "Quality tier: OTHER - Independent: Truth path (no quality tiers)"
+  ]
+}

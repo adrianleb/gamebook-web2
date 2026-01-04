@@ -725,6 +725,239 @@ sc_3_4_098 ─[Choose: "Refuse" / "The Eternal Rehearsal"]──> sc_3_4_999
 
 ---
 
+## Ending Quality Tier Tests (v2.0.0 ROADMAP - Future Implementation)
+
+**IMPORTANT:** Quality tiers are planned for v2.0.0 (Phase 8 content expansion). The current v1.0.0 implementation has single-tier endings only. This section documents the FUTURE test infrastructure for ending quality tiers.
+
+### Overview
+
+The v2.0.0 roadmap specifies 15 ending variants: 5 endings × 3 quality tiers (Perfect/Good/Other) for faction endings, and single variants for Independent and Fail endings.
+
+**Test Generation:** Quality tier tests are generated automatically from `manifest.json` using:
+```bash
+npm run test:generate-ending-tests
+```
+
+**Feasibility Validation:** All quality tier requirements are mathematically feasible (faction caps 0-10, no mutually exclusive conditions).
+
+---
+
+### Generated Test Files
+
+The following test files are generated in `tests/playthroughs/endings/generated/`:
+
+| Ending | Scene | Perfect Tier | Good Tier | Other Tier |
+|--------|-------|--------------|----------|------------|
+| 1: The Revised Draft | sc_3_4_901 | ending-1-perfect.json | ending-1-good.json | ending-1-other.json |
+| 2: The Open Book | sc_3_4_902 | ending-2-perfect.json | ending-2-good.json | ending-2-other.json |
+| 3: The Closed Canon | sc_3_4_903 | ending-3-perfect.json | ending-3-good.json | ending-3-other.json |
+| 4: The Blank Page | sc_3_4_904 | N/A | N/A | ending-4-other.json |
+| 5: The Eternal Rehearsal | sc_3_4_999 | N/A | N/A | ending-5-other.json |
+
+**Note:** Endings 4 (Independent) and 5 (Fail) do not have quality tiers - single variant only per COMPREHENSIVE_ROADMAP.md design.
+
+---
+
+### Quality Tier Requirements
+
+#### Ending 1: The Revised Draft (Revisionist)
+
+| Tier | Faction Level | Additional Flags | Allies | No Casualties |
+|------|--------------|------------------|--------|---------------|
+| Perfect | revisionist >= 9 | MAREN_ALLY, DIRECTOR_CONFIDANT | 2+ | Yes |
+| Good | revisionist >= 7 | - | - | - |
+| Other | revisionist >= 5 | - | - | - |
+
+**Feasibility:** ✅ All tiers achievable (max faction 10, Perfect tier requires 9)
+
+---
+
+#### Ending 2: The Open Book (Exiter)
+
+| Tier | Faction Level | Additional Flags | Allies | No Casualties |
+|------|--------------|------------------|--------|---------------|
+| Perfect | exiter >= 9 | CHORUS_ALLY, PEACEFUL_RESOLUTION | 1+ | Yes |
+| Good | exiter >= 7 | - | - | - |
+| Other | exiter >= 5 | - | - | - |
+
+**Feasibility:** ✅ All tiers achievable (max faction 10, Perfect tier requires 9)
+
+---
+
+#### Ending 3: The Closed Canon (Preservationist)
+
+| Tier | Faction Level | Additional Flags | Allies | No Casualties |
+|------|--------------|------------------|--------|---------------|
+| Perfect | preservationist >= 9 | COMPLETE_SEAL | 0 | Yes |
+| Good | preservationist >= 7 | - | - | - |
+| Other | preservationist >= 5 | - | - | - |
+
+**Feasibility:** ✅ All tiers achievable (max faction 10, Perfect tier requires 9)
+
+---
+
+#### Ending 4: The Blank Page (Independent)
+
+**Single variant only** - No quality tiers per roadmap design.
+
+| Tier | Faction Level | Additional Flags | Allies | No Casualties |
+|------|--------------|------------------|--------|---------------|
+| Other | None | editorState_revealedTruth | - | - |
+
+**Rationale:** Independent path represents "truth discovered" narrative, not quality of faction alignment.
+
+---
+
+#### Ending 5: The Eternal Rehearsal (Fail)
+
+**Single variant only** - Always reachable, no quality tiers.
+
+| Tier | Faction Level | Additional Flags | Allies | No Casualties |
+|------|--------------|------------------|--------|---------------|
+| Other | None | None | - | - |
+
+**Rationale:** Fail-state ending serves as catch-all fallback, must always be reachable.
+
+---
+
+### Tier Fallthrough Logic
+
+**Question:** What happens when players miss Perfect tier requirements?
+
+**Per COMPREHENSIVE_ROADMAP.md:**
+- If Perfect requirements not met → Fall through to Good tier (if faction >= 7)
+- If Good requirements not met → Fall through to Other tier (if faction >= 5)
+- If Other requirements not met → Ending unavailable, must choose different ending
+
+**Example:** Player with revisionist=8, no allies:
+- ❌ Perfect: Requires revisionist >= 9 + MAREN_ALLY + DIRECTOR_CONFIDANT
+- ✅ Good: Revisionist >= 7, no other requirements
+- → Player gets "Good" tier variant of Ending 1
+
+**Edge Case:** What if player has revisionist=9 but sacrificed Maren (SACRIFICED_MAREN flag set)?
+- ❌ Perfect: Requires noCasualties=true (SACRIFICED_* flags not set)
+- ✅ Good: Revisionist >= 7, no sacrifice restriction
+- → Player gets "Good" tier variant despite high faction level
+
+---
+
+### Automated Validation
+
+**Run feasibility validation:**
+```bash
+npm run test:validate-ending-feasibility
+```
+
+**Validation checks:**
+1. Faction levels within stat cap (0-10)
+2. No mutually exclusive flags (noCasualties + SACRIFICED_*)
+3. Perfect tier significantly harder than Good tier (level gap >= 2)
+4. Independent/Fail endings don't have quality tiers
+
+**Output:**
+```
+✅ Generated 11 ending playthrough tests
+📁 Output directory: tests/playthroughs/endings/generated
+✅ All quality tier requirements are mathematically feasible
+```
+
+---
+
+### Phase 8.5: Ending Quality Tier Validation (REQUIRED GATE)
+
+**When to run:** After Phase 8 content expansion completes, before Phase 11 UI/UX work begins.
+
+**Required validations:**
+- [ ] All 11 generated ending tests pass (via headless runner)
+- [ ] All 15 ending variants (5 × 3 tiers + 2 single-variant) are mathematically reachable
+- [ ] Perfect tier requirements don't create impossible stat combinations
+- [ ] Tier fallthrough logic works correctly (Perfect → Good → Other → Unavailable)
+- [ ] No mutually exclusive tier conditions (e.g., "no casualties" + "must sacrifice NPC")
+- [ ] Save/load preserves tier-eligible state (flags, factions, items)
+
+**Automated tests:**
+```bash
+# Generate all quality tier tests
+npm run test:generate-ending-tests
+
+# Run generated tests via headless runner
+npm run headless:run-all tests/playthroughs/endings/generated/
+```
+
+**Manual validation:**
+- [ ] Complete playthrough to each Perfect tier ending (requires max faction + allies + no sacrifices)
+- [ ] Verify tier fallthrough (miss Perfect, get Good; miss Good, get Other)
+- [ ] Test edge cases (sacrifice NPC with Perfect-tier faction level, reach Perfect with minimal allies)
+
+---
+
+### Metadata-Driven Test Generation
+
+**Design principle:** Tests are generated from `manifest.json` as single source of truth (per agent-b recommendation).
+
+**Benefits:**
+1. **Scalability:** Adding new endings automatically generates corresponding tests
+2. **Regression prevention:** Manifest changes trigger test regeneration
+3. **Maintainability:** Single source of truth for ending definitions
+
+**Generation script:** `tests/generate-ending-tests.ts`
+- Reads ending definitions from `manifest.json`
+- Applies quality tier configs from `QUALITY_TIER_CONFIGS` constant
+- Validates mathematical feasibility before generating tests
+- Outputs JSON test files in headless runner schema
+
+**Regeneration workflow:**
+```bash
+# 1. Update manifest.json with new ending or tier requirements
+# 2. Regenerate tests
+npm run test:generate-ending-tests
+# 3. Commit generated tests to git (reproducibility)
+# 4. Run tests via headless runner
+npm run headless:run-all tests/playthroughs/endings/generated/
+```
+
+---
+
+### Edge Cases: Quality Tier Interactions
+
+#### Case 1: Sacrifice NPC with Perfect-Tier Faction Level
+
+**Scenario:** Player has revisionist=9 but sacrificed Maren (SACRIFICED_MAREN flag set)
+
+**Expected behavior:**
+- ❌ Perfect tier: Requires noCasualties=true
+- ✅ Good tier: revisionist=9 >= 7, no sacrifice restriction
+- → Player gets "Good" variant despite high faction level
+
+**Test file:** `tests/playthroughs/endings/generated/ending-1-perfect.json` (modified with sacrifice flag)
+
+---
+
+#### Case 2: Mutually Exclusive Allies
+
+**Scenario:** Perfect tier requires 2+ allies, but ally flags are mutually exclusive (e.g., MAREN_ALLY and UNDERSTUDY_ALLY cannot both be true due to narrative)
+
+**Current status:** ✅ No mutual exclusivity detected in current flag design
+- MAREN_ALLY and DIRECTOR_CONFIDANT can coexist
+- CHORUS_ALLY is independent of faction allies
+- Future content additions should validate flag compatibility
+
+---
+
+#### Case 3: Save/Load Preserves Tier-Eligible State
+
+**Scenario:** Player saves at sc_3_4_098 with Perfect-tier requirements, reloads, and chooses ending
+
+**Expected behavior:**
+- All Perfect-tier flags persist (MAREN_ALLY, DIRECTOR_CONFIDANT, etc.)
+- Faction levels persist (revisionist=9)
+- No sacrifice flags (SACRIFICED_*) appear after load
+- → Perfect tier ending is reachable after save/load
+
+**Test validation:** Generated tests include `endingCriteria` with `flagsRequired` array for persistence validation
+
+---
+
 ## Edge Case Tests
 
 ### PT-EDGE-001: Empty Inventory Navigation
@@ -990,6 +1223,7 @@ npm run test tests/engine/accessibility.test.ts
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.8 | 2026-01-04 | **ADDED** Ending Quality Tier Tests section documenting v2.0.0 roadmap test infrastructure for 15 ending variants (5 endings × 3 quality tiers for faction endings, single variants for Independent/Fail). Includes generated test file reference table, quality tier requirements matrix, tier fallthrough logic, automated validation commands, Phase 8.5 Required Gate checklist, metadata-driven test generation design, and edge case documentation. **ADDED** `tests/generate-ending-tests.ts` script for automated test generation from manifest.json with mathematical feasibility validation. |
 | 1.7 | 2026-01-03 | **FIXED** YAML template example (line 32) to use canonical stats (script, stage_presence, improv with 1-4 range) instead of legacy stats (health, courage) for documentation consistency. |
 | 1.6 | 2026-01-02 | **FIXED** PT-END-001 through PT-END-005 ending gate documentation to match actual sc_3_4_098 implementation. Removed incorrect editorState enum requirements (defeated/persuaded) from faction endings. Changed PT-END-004 to use editorState_revealedTruth boolean flag instead of enum. Updated Ending Gate Validation Summary table and State Variable Reference with clarification that combined faction+editorState AND gates are DEFERRED per MILESTONES.md Issue #129. |
 | 1.5 | 2026-01-01 | Added PT-SL-001, PT-SL-002 (Save/Load regression tests) - tests state persistence across scene transitions and complex states using save_snapshot/load_snapshot actions. Added PT-EDGE-001, PT-EDGE-002, PT-EDGE-003 (Edge case tests) - validates empty inventory navigation, minimum stats (courage=0), and maximum stats (courage=10, insight=10) edge cases. NOTE: PT-END-001 through PT-END-005 exist in tests/playthroughs/endings/ directory with different schema (factions field, editorState). PT-LOCK and PT-P4-ACC tests require different testing approaches (softlockDetection config covers softlock tests, Phase 4 accessibility tests require unit/integration testing). |
