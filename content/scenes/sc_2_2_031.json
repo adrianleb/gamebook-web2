@@ -1,0 +1,98 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_031",
+  "title": "Missing Script Resolution",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Conservator's Office",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["quest_completion", "preservationist", "exploration"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Conservator's Office",
+    "paragraphs": [
+      "The Conservator's Office smells of old paper and beeswax. Shelves lined with leather-bound scripts stretch to the ceiling, each one a story preserved exactly as written.",
+      "You place the recovered pages on the desk—the missing Third Act of 'The Winter's Apprentice.' The Conservator examines them with reverent hands.",
+      "\"The original ending,\" she breathes. \"Where the apprentice chooses duty over desire. The Revisionists wanted to change it—something about 'modern audiences needing hope.' But some stories must stand as written.\"",
+      "She stamps the pages with a wax seal—the Preservationist mark. \"You understand. Stories have weight. Change them carelessly, and the entire production collapses. The Understage remembers every alteration.\"",
+      "She hands you a heavy iron key. \"The Sealed Archive. You've earned access. The first drafts of every Understage story are kept there—some things even the Editor doesn't want performers to remember.\"",
+      "The key is warm in your hand. You've preserved something true today. But the weight of it settles in your chest—preservation means holding onto things others might want to forget."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "conservator",
+      "name": "The Conservator",
+      "role": "Preservationist faction leader",
+      " demeanor": "Reverent, serious, protective of stories"
+    }
+  ],
+  "art": {
+    "description": "A cluttered office with floor-to-ceiling bookshelves. A wooden desk covered in manuscripts and sealing wax. Warm amber light from a reading lamp."
+  },
+  "audio": {
+    "music": "green_room_ambient",
+    "sfx": ["paper_rustle", "wax_seal_stamp"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "QUEST_MISSING_SCRIPT_COMPLETE"
+    },
+    {
+      "type": "modify_faction",
+      "faction": "preservationist",
+      "amount": 2
+    },
+    {
+      "type": "add_item",
+      "item": "sealed_archive_key"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Visit the Sealed Archive while you have access",
+      "to": "sc_2_2_042",
+      "conditions": [
+        {
+          "type": "flag",
+          "flag": "green_room_reached"
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "SEALED_ARCHIVE_ACCESS_GRANTED"
+        }
+      ],
+      "disabledHint": "Requires access to the Green Room"
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to the Green Room hub",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Check the Call Board for more work",
+      "to": "sc_2_2_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["QUEST_MISSING_SCRIPT_COMPLETE"],
+    "requires": ["QUEST_MISSING_SCRIPT_STARTED", "green_room_reached"],
+    "checks": []
+  }
+}

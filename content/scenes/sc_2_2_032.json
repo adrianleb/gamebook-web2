@@ -1,0 +1,100 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_032",
+  "title": "Troubled Actor Resolution",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Writer's Room",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["quest_completion", "revisionist", "exploration"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Writer's Room",
+    "paragraphs": [
+      "The Writer's Room is a chaotic space of corkboards, index cards, and half-empty coffee mugs. Pericles sits at a central table, surrounded by crumpled pages—each one a failed attempt to rewrite his tragic ending.",
+      "You pull up a chair and listen. For hours, you talk through his story. Not changing the tragedy, but understanding it. The weight of three hundred years of playing the same heartbroken role. The exhaustion of being defined by suffering.",
+      "\"I never considered WHY the ending hurts,\" Pericles says, studying his script with new eyes. \"What if the tragedy isn't that I lose everything. What if the tragedy is that I never CHOSE anything?\"",
+      "He writes a single line on a fresh page. Then another. The Revisionist across the table nods approval.",
+      "\"Better,\" the Revisionist says. \"Not a happy ending. But a CHOSEN ending. There's power in that.\"",
+      "Pericles hands you a pen—a sleek fountain pen with blue ink. \"For helping me find my voice. Sometimes the most radical act is choosing your own story.\"",
+      "As you leave, you hear Pericles reading his new lines aloud. They still hurt. But they're his."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "pericles",
+      "name": "Pericles",
+      "role": "Tragic hero from Shakespeare's Pericles",
+      "demeanor": "Weary, thoughtful, finding agency"
+    },
+    {
+      "id": "revisionist_representative",
+      "name": "The Revisionist",
+      "role": "Revisionist faction representative",
+      "demeanor": "Encouraging, respectful of story structure"
+    }
+  ],
+  "art": {
+    "description": "A creative workspace filled with story fragments. A worn wooden table covered in ink stains and coffee rings. Corkboards with index cards showing story variations."
+  },
+  "audio": {
+    "music": "green_room_ambient",
+    "sfx": ["pen_scratching", "coffee_pour"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "QUEST_TROUBLED_ACTOR_COMPLETE"
+    },
+    {
+      "type": "modify_faction",
+      "faction": "revisionist",
+      "amount": 2
+    },
+    {
+      "type": "add_item",
+      "item": "writers_pen"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Explore the Writer's Room further",
+      "to": "sc_2_2_050",
+      "conditions": [
+        {
+          "type": "flag",
+          "flag": "green_room_reached"
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "Requires access to the Green Room"
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to the Green Room hub",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Check the Call Board for more work",
+      "to": "sc_2_2_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["QUEST_TROUBLED_ACTOR_COMPLETE"],
+    "requires": ["QUEST_TROUBLED_ACTOR_STARTED", "green_room_reached"],
+    "checks": []
+  }
+}

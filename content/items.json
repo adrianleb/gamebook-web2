@@ -125,6 +125,33 @@
     ],
     "act2_faction": [
       {
+        "id": "sealed_archive_key",
+        "name": "Sealed Archive Key",
+        "category": "key",
+        "faction": "preservationist",
+        "properties": ["plot_critical"],
+        "description": "Granted for completing Missing Script quest. One-time access to the Sealed Archive where first drafts are preserved.",
+        "effect": "Access to sc_2_2_042 (Sealed Archive)"
+      },
+      {
+        "id": "writers_pen",
+        "name": "Writer's Pen",
+        "category": "prop",
+        "faction": "revisionist",
+        "properties": ["consumable"],
+        "description": "Granted for completing Troubled Actor quest. One-time use to rewrite a minor narrative element.",
+        "effect": "Single-use rewrite of one choice or scene element"
+      },
+      {
+        "id": "diplomats_token",
+        "name": "Diplomat's Token",
+        "category": "token",
+        "faction": "independent",
+        "properties": ["consumable"],
+        "description": "Granted for completing Balance of Power quest. A blank token that appears as whatever token is needed.",
+        "effect": "One use per hub: gain temporary access to any faction-gated content or bonus"
+      },
+      {
         "id": "directors_sigil",
         "name": "Director's Sigil",
         "category": "token",
