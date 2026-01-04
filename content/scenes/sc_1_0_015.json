@@ -1,0 +1,90 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_015",
+  "title": "The Dressing Room Mirror",
+  "act": 1,
+  "hub": 0,
+  "location": "The Wings",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["exploration", "atmosphere", "character_moment"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Wings - Dressing Room Mirror",
+    "paragraphs": [
+      "The corridor leads you to a small dressing room—vanity table, cracked mirror, a single chair. This space has been used recently. A candle burns on the vanity, though you saw no one enter.",
+      "You approach the mirror. The surface is fractured, a spiderweb of cracks dividing your reflection into a dozen fragments. But in each fragment, you see something different.",
+      "In one shard: A Prompter in royal robes, crowned with the weight of infinite stories.",
+      "In another: A Prompter in rags, starving in a labyrinth of their own making.",
+      "In a third: A Prompter who is not you—a woman, perhaps, or someone whose face shifts like Maren's.",
+      "In a fourth: A Prompter who has become the stories, their body composed of text and stage directions.",
+      "The reflections move independently. Some smile. Some weep. Some stare back with accusation.",
+      "\"Every Prompter sees themselves differently,\" Maren's voice says from the doorway. You didn't hear them approach. \"The mirror shows not who you are, but who you might become. Every choice branches into new possibilities. Every ending is also a beginning.\"",
+      "They step into the room, and the mirror fractures further—now there are a hundred Maren reflections, each slightly different.",
+      "\"What do you see?\" they ask. \"That is the most important question. The mirror cannot show you anything you do not already believe is possible.\"",
+      "The candle flickers. The reflections ripple like water. For a moment, you see not your own face, but the faces of those who came before—a hundred Prompters, each finding their own path through the Understage.",
+      "Then the image stabilizes. Just you, just Maren, just the cracked mirror.",
+      "\"The door to the stage waits,\" Maren says gently. \"But there is no shame in waiting. No shame in understanding yourself before you face what lies beyond.\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "maren",
+      "name": "Maren",
+      "description": "A figure of indeterminate age, wrapped in a cloak that seems to absorb the candlelight. Their reflection fractures into a dozen versions in the mirror.",
+      "disposition": 6,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ambient_mystical_reflection",
+    "sfx": ["mirror_crackle", "candle_flicker", "footsteps_soft"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "mirror_vision_seen"
+    },
+    {
+      "type": "modify_stat",
+      "stat": "stage_presence",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Ask Maren about the other Prompters",
+      "to": "sc_1_0_004",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "Maren has guided many before you."
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to the corridor and continue exploring",
+      "to": "sc_1_0_013",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The Wings hold more secrets."
+    },
+    {
+      "id": "choice_3",
+      "label": "Head toward the Threshold Stage",
+      "to": "sc_1_0_002",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The stage waits."
+    }
+  ],
+  "flags": {
+    "sets": ["mirror_vision_seen"],
+    "requires": [],
+    "checks": []
+  }
+}

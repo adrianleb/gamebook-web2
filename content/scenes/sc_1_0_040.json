@@ -1,0 +1,94 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_040",
+  "title": "The Stagehand's Offer",
+  "act": 1,
+  "hub": 0,
+  "location": "The Wings",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["npc_introduction", "choice", "branch_extension"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Wings - Behind the Curtains",
+    "paragraphs": [
+      "As you pursue the escaped figure through the Wings, someone steps into your path. You stop short.",
+      "It's not the escaped character. It's someone else entirely—a figure dressed in the rough clothes of a stagehand, carrying a bundle of ropes and pulleys. Their face is smeared with greasepaint, but their eyes are sharp, observant.",
+      "\"You're the new Prompter,\" they say. It's not a question. \"I'm the Stagehand. I keep this place running when no one's watching.\"",
+      "They glance in the direction the escaped figure fled. \"That one won't stop running. Not until someone catches them—or until they run off the edge of the world. The Wings are full of stories like that. Characters who escaped their endings, scenes that refuse to complete, moments that stretch into eternity.\"",
+      "The Stagehand shifts their burden, looking at you appraisingly. \"I could help you catch them. I know these corridors better than anyone. But I could also help you understand what you're really chasing. Why these characters escape. What they're running from. What they hope to find.\"",
+      "They hold out a grease-stained hand. \"The Prompter's Handbook won't tell you everything. It won't tell you about the spaces between scenes, the moments between breaths, the stories that happen when no one is watching. But I will... for a price.\"",
+      "The Stagehand's eyes glint with something—opportunity, or perhaps warning.",
+      "\"What do you say, Prompter? Will you make a deal with the help?\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "stagehand",
+      "name": "The Stagehand",
+      "description": "A practical figure in grease-stained clothes, carrying ropes and pulleys. Sharp eyes that see everything in the Wings.",
+      "disposition": 5,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ambient_transaction_in_the_wings",
+    "sfx": ["ropes_shift", "footsteps_worker", "fabric_rustle"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "met_stagehand"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Accept the Stagehand's deal",
+      "to": "sc_1_0_041",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "A bargain made in shadows."
+    },
+    {
+      "id": "choice_2",
+      "label": "Refuse and continue the pursuit",
+      "to": "sc_1_0_011",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "preservationist",
+          "value": 1
+        }
+      ],
+      "disabledHint": "Some paths must be walked alone."
+    },
+    {
+      "id": "choice_3",
+      "label": "Ask what price they want",
+      "to": "sc_1_0_041",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "Forewarned is forearmed."
+    },
+    {
+      "id": "choice_4",
+      "label": "Return to the booth to think",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The Stagehand waits. They're used to waiting."
+    }
+  ],
+  "flags": {
+    "sets": ["met_stagehand"],
+    "requires": [],
+    "checks": []
+  }
+}

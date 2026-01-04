@@ -1,0 +1,97 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_041",
+  "title": "The Stagehand's Price",
+  "act": 1,
+  "hub": 0,
+  "location": "The Wings",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["dialogue", "choice", "branch_extension"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Wings - Behind the Curtains",
+    "paragraphs": [
+      "\"The price?\" The Stagehand laughs—a short, practical sound. \"I'm not asking for your soul, Prompter. I'm not asking for anything dramatic. My price is simple: a favor, to be collected later.\"",
+      "They lean against a rack of costumes, studying you with those sharp eyes.",
+      "\"See, the Understage has rules. Laws of narrative, physics of story. Most Prompters never learn them all. They stumble through, breaking things without understanding, creating problems that someone else has to fix.\"",
+      "The Stagehand gestures to the labyrinth around you. \"I'm the someone who fixes things. I tie up loose ends. I patch plot holes. I make sure the stories work even when Prompters make mistakes. It's hard work, and it never ends.\"",
+      "\"So here's my price: one favor. Someday, I'll ask you for something. A scene redirected. A character spared. A choice made differently. When I ask, you'll say yes. That's all.\"",
+      "They hold your gaze. \"No tricks. No hidden clauses. No dramatic betrayals. I've been doing this a long time, Prompter. I've watched Prompters come and go for... well, longer than Maren has been the Guide, let's put it that way.\"",
+      "The Stagehand's expression softens slightly. \"I could tell you stories about Prompters who came before. The one who tried to rewrite every ending. The one who fell in love with a character and refused to let their story end. The one who made themselves king of the Green Room and ruled for thirty years before the Editor noticed.\"",
+      "\"But those are stories for later. Right now, you have a choice to make.\"",
+      "They extend their grease-stained hand again.",
+      "\"Do we have a deal?\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "stagehand",
+      "name": "The Stagehand",
+      "description": "A practical figure in grease-stained clothes. Older than they appear—much older.",
+      "disposition": 6,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ambient_transaction_weighted",
+    "sfx": ["ropes_shift", "silence_heavy", "breath_held"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "stagehand_offer_understood"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Accept the deal",
+      "to": "sc_1_0_042",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "stagehand_deal_made"
+        },
+        {
+          "type": "add_item",
+          "item": "stagehand_favor"
+        }
+      ],
+      "disabledHint": "A bargain struck. The debt will come due."
+    },
+    {
+      "id": "choice_2",
+      "label": "Refuse - you don't make deals lightly",
+      "to": "sc_1_0_011",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "preservationist",
+          "value": 1
+        }
+      ],
+      "disabledHint": "The Stagehand shrugs. They're used to refusal."
+    },
+    {
+      "id": "choice_3",
+      "label": "Ask why Maren never mentioned you",
+      "to": "sc_1_0_042",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "A question worth answering."
+    }
+  ],
+  "flags": {
+    "sets": ["stagehand_offer_understood"],
+    "requires": [],
+    "checks": []
+  }
+}

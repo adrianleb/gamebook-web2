@@ -1,0 +1,97 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_014",
+  "title": "The Costume Gallery",
+  "act": 1,
+  "hub": 0,
+  "location": "The Wings",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["exploration", "items", "environmental_storytelling"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Wings - Costume Gallery",
+    "paragraphs": [
+      "The corridor opens into a vast gallery—hundreds of costumes arranged on mannequins, hung on racks, draped over furniture. Royal gowns threadbare with age. Armor that looks like it was worn in battles that never happened. Masks covering faces that aren't there.",
+      "Each costume tells a story. You walk among them, reading the narratives in fabric and thread.",
+      "A soldier's uniform, stained with vanished blood. The tag inside reads: 'Sir Harald - The Battle That Never Was - Cancelled 1842.'",
+      "A wedding dress, hem muddy as if the bride fled through rain. A note pinned to the bodice: 'Elena's Escape - Rewrite Ordered 1901 - Never Completed.'",
+      "A child's prince costume, tiny and perfect. A handwritten label: 'Young Arthur - The Sacrifice Prince - Decommissioned 1923.'",
+      "These are not just costumes. They are the remnants of stories that were abandoned, rewritten, or lost. Each garment holds the ghost of a character who almost existed.",
+      "At the back of the gallery, you find something different—a simple cloak, well-made but unremarkable. Unlike the others, it shows no signs of age. A card attached reads: 'For the Next Prompter.'",
+      "The cloak seems to hum with potential. Taking it feels like accepting a responsibility you don't fully understand.",
+      "But there are other items here too. A silver locket that whispers when you hold it. A leather journal filled with blank pages. A dagger that feels warm to the touch, as if it remembers blood it never shed.",
+      "You can only carry so much. What do you take?"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ambient_melancholy_discovery",
+    "sfx": ["fabric_rustle", "footsteps_wooden_floor", "item_pickup"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "costume_gallery_visited"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Take the Prompter's Cloak",
+      "to": "sc_1_0_015",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "add_item",
+          "item": "prompters_cloak"
+        }
+      ],
+      "disabledHint": "A mantle of authority and mystery."
+    },
+    {
+      "id": "choice_2",
+      "label": "Take the Whispering Locket",
+      "to": "sc_1_0_015",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "add_item",
+          "item": "whispering_locket"
+        }
+      ],
+      "disabledHint": "It carries secrets from abandoned stories."
+    },
+    {
+      "id": "choice_3",
+      "label": "Take the Warm Dagger",
+      "to": "sc_1_0_015",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "add_item",
+          "item": "warm_dagger"
+        }
+      ],
+      "disabledHint": "A weapon that remembers violence it never committed."
+    },
+    {
+      "id": "choice_4",
+      "label": "Take nothing and leave",
+      "to": "sc_1_0_013",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "Some stories are better left untaken."
+    }
+  ],
+  "flags": {
+    "sets": ["costume_gallery_visited"],
+    "requires": [],
+    "checks": []
+  }
+}

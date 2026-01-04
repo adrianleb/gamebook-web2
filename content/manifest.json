@@ -248,6 +248,33 @@
       "description": "Item acquisition - Get booth_key, branch to negotiator path",
       "mechanics": ["item_acquisition", "dialogue"]
     },
+    "sc_1_0_005": {
+      "title": "The Handbook's Pages",
+      "location": "The Prompter's Booth",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Booth exploration - Read the Prompter's Handbook, learn about Understage geography and the Editor",
+      "mechanics": ["exploration", "worldbuilding", "lore"]
+    },
+    "sc_1_0_006": {
+      "title": "Maren's Story",
+      "location": "The Prompter's Booth",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Character depth - Discover Maren's backstory as a failed Prompter from centuries past",
+      "mechanics": ["dialogue", "character_study", "revelation"]
+    },
+    "sc_1_0_007": {
+      "title": "The Stagehand's Silence",
+      "location": "The Prompter's Booth",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Character moment - Maren reveals their failure at the Final Confrontation and the lesson they learned",
+      "mechanics": ["dialogue", "emotional_catharsis", "wisdom"]
+    },
     "sc_1_0_010": {
       "title": "The Pursuit Begins",
       "location": "The Wings - Pursuers Path",
@@ -274,6 +301,33 @@
       "status": "complete",
       "description": "Pursuers branch convergence - Lead escaped characters to the First Crossing",
       "mechanics": ["pursuers_branch", "act1_complete"]
+    },
+    "sc_1_0_013": {
+      "title": "The Corridor of Echoes",
+      "location": "The Wings - Corridor of Echoes",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Wings exploration - Deeper exploration of the Wings with echoes from past performances",
+      "mechanics": ["exploration", "atmosphere", "environmental_storytelling"]
+    },
+    "sc_1_0_014": {
+      "title": "The Costume Gallery",
+      "location": "The Wings - Costume Gallery",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Wings exploration - Gallery of abandoned costumes from lost stories, item acquisition",
+      "mechanics": ["exploration", "items", "emotional_discovery"]
+    },
+    "sc_1_0_015": {
+      "title": "The Dressing Room Mirror",
+      "location": "The Wings - Dressing Room Mirror",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Wings exploration - Cracked mirror shows multiple possible versions of the Prompter",
+      "mechanics": ["exploration", "atmosphere", "character_reflection"]
     },
     "sc_1_0_020": {
       "title": "The Mirror Corridor",
@@ -302,6 +356,33 @@
       "description": "Researcher branch convergence - Mirror insights lead to First Crossing",
       "mechanics": ["researcher_branch", "act1_complete"]
     },
+    "sc_1_0_023": {
+      "title": "The Empty House",
+      "location": "The Threshold Stage - Empty Theatre",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Threshold Stage exploration - See the empty audience seats, learn about the Great Revision from Maren",
+      "mechanics": ["exploration", "lore", "atmosphere"]
+    },
+    "sc_1_0_024": {
+      "title": "The Prompter's Mark",
+      "location": "The Threshold Stage - Center Stage",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Threshold Stage exploration - See marks left by previous Prompters who stood on this stage",
+      "mechanics": ["exploration", "lore", "character_moment"]
+    },
+    "sc_1_0_025": {
+      "title": "The Edge of Darkness",
+      "location": "The Threshold Stage - The Edge",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Threshold Stage climax preparation - Choose your path to cross into the Understage",
+      "mechanics": ["climax_preparation", "atmosphere", "choice"]
+    },
     "sc_1_0_030": {
       "title": "Maren's Test",
       "location": "The Prompter's Booth",
@@ -328,6 +409,33 @@
       "status": "complete",
       "description": "Negotiator branch convergence - Maren's guidance leads to First Crossing",
       "mechanics": ["negotiator_branch", "act1_complete"]
+    },
+    "sc_1_0_040": {
+      "title": "The Stagehand's Offer",
+      "location": "The Wings - Behind the Curtains",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Branch extension - Meet the Stagehand, a mysterious figure who offers a deal",
+      "mechanics": ["npc_introduction", "choice", "branch_extension"]
+    },
+    "sc_1_0_041": {
+      "title": "The Stagehand's Price",
+      "location": "The Wings - Behind the Curtains",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Branch extension - The Stagehand explains their price: one favor, to be collected later",
+      "mechanics": ["dialogue", "choice", "deal_making"]
+    },
+    "sc_1_0_042": {
+      "title": "The Stagehand's Secret",
+      "location": "The Wings - Behind the Curtains",
+      "act": 1,
+      "hub": 0,
+      "status": "complete",
+      "description": "Branch extension - Learn the Stagehand's true nature and their relationship to Maren",
+      "mechanics": ["dialogue", "lore", "revelation"]
     },
     "sc_1_0_902": {
       "title": "The Crossing Failed",
@@ -522,10 +630,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 34,
+    "totalScenes": 46,
     "pending": 0,
     "draft": 0,
-    "complete": 34,
+    "complete": 46,
     "reviewed": 0
   }
 }

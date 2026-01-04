@@ -1,0 +1,71 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_007",
+  "title": "The Stagehand's Silence",
+  "act": 1,
+  "hub": 0,
+  "location": "The Prompter's Booth",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["dialogue", "character_study", "lore"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Prompter's Booth",
+    "paragraphs": [
+      "\"My failure?\" Maren's voice is soft, almost lost in the rustle of pages. \"I believed I could save everyone. Every story. Every character. I thought the Understage was a prison, and the Prompter was the liberator.\"",
+      "They shake their head slowly. \"I was wrong. The Understage is not a prison. It is a sanctuary. Stories end because they must. Characters fade because their stories are complete. To force them to continue... that is the true cruelty.\"",
+      "\"I reached the Final Confrontation with all the power of a hundred alliances. Every faction supported me. Every door was open. And when the Editor offered me the choice... I could not choose. I could not accept that some stories must end.\"",
+      "\"So I did nothing. I refused the choice. The Editor laughed—not with cruelty, but with terrible understanding. They said: 'Then you shall remain, until you understand what you refuse to accept.'\"",
+      "Maren's form shimmers in the candlelight. For a moment, you see not a figure in shadow, but a young Prompter standing at the edge of an endless stage, surrounded by stories that cannot end.",
+      "\"Three centuries I have waited. Three hundred Prompters I have guided. And do you know what I have learned?\"",
+      "They lean forward, and for the first time, their features stabilize—you see a face lined with wisdom, with compassion, with grief.",
+      "\"The brave choice is not to save everything. The brave choice is to accept that some things must be lost. The brave choice is to end well what cannot continue.\"",
+      "Maren sits back, returning to shadow. \"But you are not me. Perhaps you will find another way. Perhaps you will succeed where I failed. Or perhaps... you will learn the same lesson, in your own time.\"",
+      "The handbook closes with finality. The candle burns low. Your path awaits."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "maren",
+      "name": "Maren",
+      "description": "A figure of indeterminate age, wrapped in a cloak that seems to absorb the candlelight. For a moment, you see a face lined with wisdom and grief.",
+      "disposition": 8,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ambient_emotional_catharsis",
+    "sfx": ["candle_flicker_low", "cloak_settle", "book_close_soft"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "maren_secret_revealed"
+    },
+    {
+      "type": "modify_stat",
+      "stat": "improv",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Thank Maren for their guidance and consider your path",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "Maren's wisdom guides you forward."
+    }
+  ],
+  "flags": {
+    "sets": ["maren_secret_revealed"],
+    "requires": [],
+    "checks": []
+  }
+}
