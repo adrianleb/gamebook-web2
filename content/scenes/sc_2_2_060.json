@@ -88,34 +88,6 @@
     },
     {
       "id": "choice_3",
-      "label": "Ask about the other factions",
-      "to": "sc_2_2_060",
-      "conditions": [
-        {
-          "type": "NOT",
-          "conditions": [
-            {
-              "type": "flag_check",
-              "flag": "GATEKEEPER_FACTION_EXPLAIN"
-            }
-          ]
-        }
-      ],
-      "onChoose": [
-        {
-          "type": "set_flag",
-          "flag": "GATEKEEPER_FACTION_EXPLAIN"
-        },
-        {
-          "type": "modify_faction",
-          "faction": "exiter",
-          "amount": 1
-        }
-      ],
-      "disabledHint": "The Gatekeeper has already explained the factions."
-    },
-    {
-      "id": "choice_4",
       "label": "Return to the Green Room center",
       "to": "sc_2_2_001",
       "conditions": null,
