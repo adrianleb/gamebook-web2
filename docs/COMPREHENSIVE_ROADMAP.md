@@ -1,6 +1,6 @@
 # The Understage - Comprehensive Implementation Roadmap
 
-**Document Version:** 1.1 (Revised)
+**Document Version:** 1.2 (Revised)
 **Date:** January 4, 2026
 **Current Release:** v1.0.0 (MVP - 34 scenes, ~23% of full vision)
 **Target:** Complete v2.0.0 (145 scenes, 100% of design vision - HUMAN CONFIRMED)
@@ -537,6 +537,87 @@ This is a CRITICAL sub-phase between content expansion (Phase 8) and UI polish (
 - [ ] Verify stat caps (0-10) allow reaching Perfect tier requirements
 - [ ] Document any impossible tier requirements (adjust sc_3_4_098 gates if needed)
 - [ ] Update TEST_PLAYTHROUGHS.md with PT-END-001a through PT-END-005e documentation
+
+---
+
+### Phase 4.5: DOS Asset Standards Definition (NEW - Prerequisite for Content Expansion)
+
+**Why This Phase is Critical:**
+
+Before creating 111 new scenes across Phases 6-8, content authors need to know:
+- What audio format to use for ambient sounds? (OGG 8-bit 11kHz for DOS authenticity?)
+- What image format/dimensions for backgrounds? (WebP 640x480 VGA resolution?)
+- Where do we source 50-100 SFX and 15-20 backgrounds?
+
+Without these standards defined FIRST, content expansion will create assets that:
+1. Don't match DOS aesthetic authenticity
+2. Exceed web performance budgets
+3. Require rework when standards are decided later
+
+**Deliverable: DOS_ASSET_STANDARDS.md**
+
+Create a comprehensive specification document at `docs/DOS_ASSET_STANDARDS.md` with:
+
+#### Audio Specifications
+
+| Asset Type | Format | Bit Depth | Sample Rate | Max Size | Fidelity Notes |
+|------------|--------|-----------|-------------|----------|----------------|
+| **Ambient Loops** | OGG | 8-bit | 11kHz | 100KB | Low (authentic DOS) |
+| **Music Tracks** | OGG | 8-bit | 11kHz | 200KB | Medium (DOS-era MIDI-style) |
+| **Sound Effects** | OGG | 8-bit | 11kHz | 50KB | Low (PC speaker style) |
+| **UI Sounds** | OGG | 8-bit | 11kHz | 10KB | Minimal (beeps/clicks) |
+
+**DOS Fidelity Rationale:**
+- 8-bit @ 11kHz matches early Sound Blaster era (1990-1992)
+- Creates authentic "crunchy" DOS audio aesthetic
+- Small file sizes for web performance
+- OGG format for browser compatibility
+
+#### Image Specifications
+
+| Asset Type | Format | Resolution | Max Size | Style Notes |
+|------------|--------|------------|----------|-------------|
+| **Location Backgrounds** | WebP | 640x480 (VGA) | 200KB | Pixel art or retro-scan |
+| **Item Icons** | PNG | 32x32 | 10KB | Pixel art (DOS GUI style) |
+| **Faction Emblems** | PNG | 64x64 | 15KB | Pixel art with transparency |
+| **UI Elements** | CSS | N/A | N/A | Generated via code |
+
+**DOS Visual Rationale:**
+- VGA resolution (640x480) was the 1990s standard
+- Pixel art maintains DOS aesthetic authenticity
+- WebP for compression while supporting transparency
+- Small files for instant loading on web
+
+#### Asset Sourcing Strategy
+
+**Option A: Free Asset Libraries**
+- OpenGameArt.org (pixel art SFX, sprites)
+- Freesound.org (retro SFX, filter to 8-bit)
+- Itch.io game assets (DOS/Retro themed)
+
+**Option B: Procedural Generation**
+- obelisk.js (pixel art generation)
+- sfxr (8-bit sound synthesis)
+- Chrome Music Lab (simple MIDI-style tracks)
+
+**Option C: Commission (Budget Available)**
+- Per agent-d recommendation: $1000-6500 budget for assets
+- Commission pixel artist for 40-50 item icons @ $20-50 each
+- Commission audio designer for ambient loops @ $50-100 each
+
+**Recommendation:** Start with Option A/B (free + procedural), commission Option C for critical assets if needed.
+
+#### Asset Creation Checklist
+
+**Phase 4.5 Deliverables:**
+- [ ] Create `docs/DOS_ASSET_STANDARDS.md` with above specifications
+- [ ] Document asset sourcing strategy (free vs. commissioned)
+- [ ] Create 3 example assets to validate standards (1 SFX, 1 icon, 1 background)
+- [ ] Verify WebP/OGG formats work in target browsers (Chrome, Firefox, Safari)
+- [ ] Test asset loading performance (target: <2s for all assets on 3G)
+
+**Phase 4.5 Definition of Done:**
+DOS_ASSET_STANDARDS.md is complete when: (1) Audio/image specs are documented, (2) Sourcing strategy is clear, (3) 3 example assets validate the standards, (4) Browser compatibility verified, (5) Performance targets met.
 
 ---
 
@@ -1610,15 +1691,21 @@ const migrations: SaveMigration[] = [
 
 This roadmap provides a comprehensive path from the current v1.0.0 MVP (34 scenes) to the complete v2.0.0 vision (145 scenes CONFIRMED by human). The roadmap is organized into 17 phases covering content expansion, content authoring patterns, UI/UX improvements, audio/visual polish, and technical infrastructure.
 
-**Key Revisions from v1.0 to v1.1:**
+**Key Revisions:**
 
+**v1.0 → v1.1:**
 1. **Scope Verified:** Human confirmed 145 scenes total with unlimited budget and time
 2. **Engine Status Clarified:** v1.0.0 engine is FEATURE-COMPLETE—all mechanics needed for v2.0.0 already exist
 3. **Test Gates Added:** Each content phase (6, 7, 8) has a REQUIRED test gate before proceeding
 4. **DOS Design Principles:** CRT intensity slider (0-100%) resolves accessibility vs. aesthetic tension
-5. **Asset Standards:** DOS_ASSET_STANDARDS.md specifies audio/image formats before content expansion
-6. **Ending Validation:** Phase 8.5 added to validate all 15 ending variants are mathematically feasible
-7. **Agent Assignments Corrected:** Tech team work reduced (quest/NPC/checks already exist), focus on content
+5. **Ending Validation:** Phase 8.5 added to validate all 15 ending variants are mathematically feasible
+6. **Agent Assignments Corrected:** Tech team work reduced (quest/NPC/checks already exist), focus on content
+
+**v1.1 → v1.2:**
+1. **Phase 4.5 Added:** DOS Asset Standards Definition - critical prerequisite before content expansion
+2. **Asset Standards Detailed:** Full audio/image specifications (8-bit 11kHz OGG, VGA 640x480 WebP, pixel art)
+3. **Sourcing Strategy:** Three options documented (free libraries, procedural generation, commission)
+4. **Critical Path Updated:** Phase 4.5 now precedes content expansion phases
 
 **The project is well-positioned for expansion with a solid foundation (v1.0.0) that includes:**
 - Complete engine architecture (no new features needed for v2.0.0)
@@ -1628,13 +1715,13 @@ This roadmap provides a comprehensive path from the current v1.0.0 MVP (34 scene
 - Deterministic state machine
 
 **Critical Path:**
-Phase 6 → Test Gate → Phase 7 → Test Gate → Phase 8 → Test Gate → Phase 8.5 (Ending Validation) → Phase 11+
+Phase 4.5 (Asset Standards) → Phase 6 → Test Gate → Phase 7 → Test Gate → Phase 8 → Test Gate → Phase 8.5 (Ending Validation) → Phase 11+
 
 **Next Steps:**
-1. **Begin Phase 6:** Act 1 Content Enhancement (20 new scenes)
-2. **Enforce Test Gates:** No phase proceeds without gate passage
-3. **Create CONTENT_AUTHORING.md:** Document quest/NPC/stat check patterns
-4. **Create DOS_ASSET_STANDARDS.md:** Specify audio/image formats
+1. **Complete Phase 4.5:** Create DOS_ASSET_STANDARDS.md with audio/image specifications
+2. **Begin Phase 6:** Act 1 Content Enhancement (20 new scenes)
+3. **Enforce Test Gates:** No phase proceeds without gate passage
+4. **Create CONTENT_AUTHORING.md:** Document quest/NPC/stat check patterns
 5. **Validate Endings:** Phase 8.5 ensures all 15 variants are reachable
 
 ---
