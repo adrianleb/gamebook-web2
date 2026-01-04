@@ -1,0 +1,94 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_023",
+  "title": "The Empty House",
+  "act": 1,
+  "hub": 0,
+  "location": "The Threshold Stage",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["exploration", "lore", "atmosphere"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Threshold Stage - The Empty House",
+    "paragraphs": [
+      "You step onto the Threshold Stage and pause. The amber light illuminates worn floorboards, but something is wrong.",
+      "Beyond the stage's edge, you expect darkness. Instead, you see rows of empty seats. Hundreds of them. A theater that stretches into impossible distance, tier upon tier of velvet cushions, gallery after gallery of private boxes.",
+      "But the seats are not merely empty. They are... waiting. Each seat holds the ghost of an audience member who sat there once, watching a performance that no one remembers.",
+      "You sense them—the audience that isn't there. A rustle of fabrics. A cough from the balcony. The weight of a thousand eyes, watching, waiting, judging.",
+      "\"The Threshold Theatre was built before the Understage was divided,\" Maren says from the wings. You didn't hear them approach. \"In those days, stories flowed freely between worlds. Audiences came from reality to witness narratives as they were born. The stage was a door, not a wall.\"",
+      "They gesture to the empty seats. \"Then came the Great Revision. The Editor sealed the boundary between worlds. The audience was locked out. The stories were locked in. This theatre became what it is now—a threshold, a doorway, a test.\"",
+      "\"Every Prompter who stands on this stage feels the weight of those empty seats. The judgment of eyes that aren't there. The question: are you worthy to cross? Are you worthy to guide stories that no one will ever see?\"",
+      "Maren's voice drops to a whisper. \"Some Prompters cannot bear it. They stand on this stage forever, frozen, unable to cross, unable to return. They become part of the theatre itself—echoes, memories, warnings to those who come after.\"",
+      "They look at you with ancient eyes. \"What do you feel when you stand before the empty house?\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "maren",
+      "name": "Maren",
+      "description": "A figure of indeterminate age, wrapped in a cloak that seems to absorb the candlelight. Their voice carries the weight of the theatre's history.",
+      "disposition": 7,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ambient_haunting_theatre",
+    "sfx": ["empty_seat_echo", "wind_across_stage", "distant_applause_ghost"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "empty_house_seen"
+    },
+    {
+      "type": "modify_stat",
+      "stat": "stage_presence",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "I feel the weight of their judgment",
+      "to": "sc_1_0_024",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The empty seats watch. Always watching."
+    },
+    {
+      "id": "choice_2",
+      "label": "I feel the potential of their return",
+      "to": "sc_1_0_024",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "Perhaps some day, the theatre will be full again."
+    },
+    {
+      "id": "choice_3",
+      "label": "I feel nothing but resolve",
+      "to": "sc_1_0_024",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "Empty or full, the stage is yours to command."
+    },
+    {
+      "id": "choice_4",
+      "label": "Return to the booth",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The empty house waits."
+    }
+  ],
+  "flags": {
+    "sets": ["empty_house_seen"],
+    "requires": [],
+    "checks": []
+  }
+}

@@ -55,6 +55,14 @@
       "conditions": null,
       "onChoose": [],
       "disabledHint": "A figure flees through the darkness. Will you pursue?"
+    },
+    {
+      "id": "choice_3",
+      "label": "Explore deeper into the Wings",
+      "to": "sc_1_0_013",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The Wings stretch further than expected, filled with echoes."
     }
   ],
   "flags": {

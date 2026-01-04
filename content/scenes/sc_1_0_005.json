@@ -1,0 +1,68 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_005",
+  "title": "The Handbook's Pages",
+  "act": 1,
+  "hub": 0,
+  "location": "The Prompter's Booth",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["exploration", "worldbuilding", "lore"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Prompter's Booth",
+    "paragraphs": [
+      "You open the leather-bound handbook. The pages crackle with age—some brittle as dried leaves, others impossibly fresh. This isn't a single book. It's a palimpsest, centuries of Prompters writing over each other, marginal notes becoming main text, entire chapters crossed out only to be resurrected in later handwritings.",
+      "The title page is unreadable, scratched through so many times that only indentations remain. But the first chapter is clear:",
+      "\"THE UNDERSTAGE exists in the space between what is written and what is remembered. Stories never truly end. They continue in the darkness backstage, waiting for their cue, rehearsing scenes that audiences will never see. The Prompter's duty: to guide, to protect, and sometimes... to let go.\"",
+      "Your finger traces a handwritten addition in the margin: \"But who prompts the Prompter?\"",
+      "Deeper in the handbook, you find diagrams of the Understage's geography. The Threshold Stage where you stand. The Green Room where stories meet. The Archives where abandoned narratives gather dust. And beyond them all, the Mainstage—where stories begin and end.",
+      "A sketch catches your eye: a figure standing at center stage, arms raised, while shadowy forms watch from the wings. The caption reads simply: \"The Editor.\"",
+      "The handbook holds more pages, more secrets. But the candle is burning low, and the iron door waits."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ambient_mystery_contemplation",
+    "sfx": ["page_turn", "paper_crackle", "candle_flicker"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "handbook_read"
+    },
+    {
+      "type": "modify_stat",
+      "stat": "script",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Continue reading the handbook",
+      "to": "sc_1_0_006",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The handbook has more to reveal."
+    },
+    {
+      "id": "choice_2",
+      "label": "Close the handbook and return to the booth",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The handbook's knowledge waits."
+    }
+  ],
+  "flags": {
+    "sets": ["handbook_read"],
+    "requires": [],
+    "checks": []
+  }
+}

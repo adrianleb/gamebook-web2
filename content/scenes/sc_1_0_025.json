@@ -1,0 +1,138 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_025",
+  "title": "The Edge of Darkness",
+  "act": 1,
+  "hub": 0,
+  "location": "The Threshold Stage",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["climax_preparation", "atmosphere", "choice"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Threshold Stage - The Edge",
+    "paragraphs": [
+      "You walk to the edge of the stage. The amber light ends abruptly, replaced by darkness absolute. The Understage.",
+      "From here, you can sense the vastness of what lies beyond. The Green Room, where stories meet and form alliances. The Archives, where abandoned narratives gather dust. The Mainstage, where all stories begin and end.",
+      "You feel it—the resistance. The boundary between worlds is not easily crossed. It demands something of you.",
+      "\"The First Crossing is the hardest,\" Maren says from behind you. \"Once you cross, there is no return to who you were. The Understage changes everyone who enters it. Some become stronger. Some break. Some become something else entirely.\"",
+      "They step closer, but not too close. They will not follow. Not yet.",
+      "\"Before you cross, know this: the stories you guide will depend on you. They will look to you for direction, for meaning, for resolution. But they are not yours to control. They are yours to guide. There is a difference.\"",
+      "Maren's voice softens. \"I have watched three hundred Prompters stand where you stand now. Some crossed with courage. Some crossed with fear. Some crossed with pride. All of them crossed, because there was no other way.\"",
+      "\"The First Crossing awaits. When you are ready, step into the darkness. The stories will not tell themselves.\"",
+      "The empty seats watch. The stage marks beneath your feet remember those who came before. The darkness waits.",
+      "What path will you take to cross?"
+    ]
+  },
+  "npcs": [
+    {
+      "id": "maren",
+      "name": "Maren",
+      "description": "A figure of indeterminate age, wrapped in a cloak that seems to absorb the candlelight. They will not follow you across—yet.",
+      "disposition": 8,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "tension_crossing_imminent",
+    "sfx": ["wind_void", "heartbeat", "stage_floor_creak"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "crossing_prepared"
+    },
+    {
+      "type": "modify_stat",
+      "stat": "stage_presence",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Cross directly into the darkness (requires stage_presence 3+)",
+      "to": "sc_1_1_099",
+      "conditions": {
+        "type": "stat_check",
+        "stat": "stage_presence",
+        "op": "gte",
+        "value": 3,
+        "attemptable": true
+      },
+      "onSuccess": {
+        "to": "sc_1_1_099",
+        "effects": [
+          {
+            "type": "set_flag",
+            "flag": "crossing_direct"
+          },
+          {
+            "type": "modify_faction",
+            "faction": "preservationist",
+            "value": 1
+          }
+        ]
+      },
+      "onFailure": {
+        "to": "sc_1_0_902",
+        "effects": [
+          {
+            "type": "set_flag",
+            "flag": "crossing_failed"
+          }
+        ]
+      },
+      "disabledHint": "You need stage_presence 3+ to cross directly."
+    },
+    {
+      "id": "choice_2",
+      "label": "Return through the Wings (pursuers path)",
+      "to": "sc_1_0_002",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "path_wings_chosen"
+        }
+      ],
+      "disabledHint": "Find your path through action and pursuit."
+    },
+    {
+      "id": "choice_3",
+      "label": "Study the mirror corridor (researcher path)",
+      "to": "sc_1_0_020",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "path_mirror_chosen"
+        }
+      ],
+      "disabledHint": "Find your path through knowledge and discovery."
+    },
+    {
+      "id": "choice_4",
+      "label": "Consult Maren before crossing (negotiator path)",
+      "to": "sc_1_0_004",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "path_maren_chosen"
+        }
+      ],
+      "disabledHint": "Find your path through wisdom and guidance."
+    }
+  ],
+  "flags": {
+    "sets": ["crossing_prepared"],
+    "requires": [],
+    "checks": []
+  }
+}

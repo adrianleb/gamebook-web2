@@ -75,6 +75,14 @@
     },
     {
       "id": "choice_3",
+      "label": "Explore the stage before crossing",
+      "to": "sc_1_0_023",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The stage holds history and secrets."
+    },
+    {
+      "id": "choice_4",
       "label": "Turn back",
       "to": "sc_1_0_001",
       "conditions": null,

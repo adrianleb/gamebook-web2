@@ -1,0 +1,79 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_006",
+  "title": "Maren's Story",
+  "act": 1,
+  "hub": 0,
+  "location": "The Prompter's Booth",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["dialogue", "character_study", "lore"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Prompter's Booth",
+    "paragraphs": [
+      "You turn the page and find a section written in a different hand—more careful, more deliberate, as if each word was chosen with infinite care.",
+      "\"The Guide is the first face a Prompter sees. They wait in shadow, offer keys and cryptic advice, and vanish when their duty is done. I have been the Guide for three hundred Prompters. I have watched them rise and fall, succeed and fail, live and die.\"",
+      "The handwriting shifts, becomes unsteady.",
+      "\"I was once a Prompter myself. In the time before the Threshold Theatre had a name. Before the Understage was divided into Acts and Hubs. When the stories were wilder, and the cost of guiding them was... higher.\"",
+      "\"I failed my crossing. The Editor spared me, gave me this duty instead. A mercy? Or a punishment? Three centuries of watching others attempt what I could not. Three hundred Prompters, and only a handful have truly understood.\"",
+      "You realize the figure in shadow is watching you. Has been watching you read.",
+      "\"We are more alike than you know,\" they say. Their voice carries something new—an ancient weariness, a weight of countless failures. \"I too sought to understand the stories. I too believed I could save them all. I was wrong.\"",
+      "They lean forward into the candlelight. Their face is still shifting, still indeterminate, but for a moment you see eyes that have witnessed everything and forgotten nothing.",
+      "\"The handbook will tell you many things. It will not tell you what matters most: when to hold on, and when to let go.\"",
+      "The candle flares. When your vision clears, the figure is back in shadow. The handbook lies open before you, waiting for your choice."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "maren",
+      "name": "Maren",
+      "description": "A figure of indeterminate age, wrapped in a cloak that seems to absorb the candlelight. Their voice carries the weight of countless rehearsals.",
+      "disposition": 7,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ambient_emotional_revelation",
+    "sfx": ["page_turn_slow", "cloak_shift", "candle_flare"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "maren_backstory_learned"
+    },
+    {
+      "type": "modify_stat",
+      "stat": "improv",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Ask Maren about their failure",
+      "to": "sc_1_0_007",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "Maren's past holds lessons for a Prompter."
+    },
+    {
+      "id": "choice_2",
+      "label": "Close the handbook and consider your path",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The handbook's revelations linger."
+    }
+  ],
+  "flags": {
+    "sets": ["maren_backstory_learned"],
+    "requires": [],
+    "checks": []
+  }
+}

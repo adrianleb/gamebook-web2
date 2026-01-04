@@ -1,0 +1,95 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_042",
+  "title": "The Stagehand's Secret",
+  "act": 1,
+  "hub": 0,
+  "location": "The Wings",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["dialogue", "lore", "character_moment"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Wings - Behind the Curtains",
+    "paragraphs": [
+      "\"Maren?\" The Stagehand's eyebrows rise. \"The Guide? Why would they mention me? We serve different purposes.\"",
+      "They count on grease-stained fingers: \"Maren greets new Prompters, gives them a key and some cryptic advice, then watches to see what they do. I keep the Understage from falling apart while Prompters are busy being heroes or villains or whatever they're trying to be.\"",
+      "The Stagehand's expression turns thoughtful. \"Maren's been the Guide for three centuries. I've been the Stagehand for... longer. I don't remember exactly. Time works differently in the Wings.\"",
+      "They look around at the labyrinth of corridors, the racks of costumes, the props gathering dust.",
+      "\"See, the Guide is a ceremonial position. Someone has to welcome Prompters, give them their start. But the work—the real work—happens out of sight. Someone has to oil the pulleys. Someone has to repair the torn costumes. Someone has to make sure the stories don't fall apart when no one's watching.\"",
+      "The Stagehand meets your eyes. \"Maren guides Prompters through their choice. I guide stories through their consequences. Both are important. But only one of us gets remembered.\"",
+      "A moment of silence passes between you. Then the Stagehand sighs and picks up their burden of ropes.",
+      "\"Enough talk. The escaped figure is getting farther away. If we're doing this—if you're really going to make a deal with me—then we need to move.\"",
+      "They start down a corridor you hadn't noticed before.",
+      "\"Follow me, Prompter. I know a shortcut.\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "stagehand",
+      "name": "The Stagehand",
+      "description": "A practical figure carrying ropes and pulleys. Someone has been doing this work for a very long time.",
+      "disposition": 7,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ambient_revelationquiet",
+    "sfx": ["ropes_shift", "footsteps_departing", "corridor_echo"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "stagehand_secret_learned"
+    },
+    {
+      "type": "set_flag",
+      "flag": "stagehand_deal_made"
+    },
+    {
+      "type": "add_item",
+      "item": "stagehand_favor"
+    },
+    {
+      "type": "modify_stat",
+      "stat": "script",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Follow the Stagehand",
+      "to": "sc_1_0_011",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "A shortcut through the Wings."
+    },
+    {
+      "id": "choice_2",
+      "label": "Ask the Stagehand about themselves",
+      "to": "sc_1_0_015",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "Perhaps there's more to learn."
+    },
+    {
+      "id": "choice_3",
+      "label": "Return to the booth first",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The Stagehand knows where to find you."
+    }
+  ],
+  "flags": {
+    "sets": ["stagehand_secret_learned"],
+    "requires": [],
+    "checks": []
+  }
+}

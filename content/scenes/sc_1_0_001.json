@@ -75,6 +75,14 @@
       "conditions": null,
       "onChoose": [],
       "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "Read the Prompter's Handbook",
+      "to": "sc_1_0_005",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The handbook waits, filled with secrets of the Understage."
     }
   ],
   "flags": {

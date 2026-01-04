@@ -1,0 +1,86 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_013",
+  "title": "The Corridor of Echoes",
+  "act": 1,
+  "hub": 0,
+  "location": "The Wings",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["exploration", "atmosphere", "environmental_storytelling"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Wings - Corridor of Echoes",
+    "paragraphs": [
+      "The Wings stretch further than you expected. What appeared to be a simple backstage area reveals itself as a labyrinthine maze of corridors, dressing rooms, and forgotten spaces.",
+      "You wander deeper, past racks of costumes that seem to shift when you're not looking directly at them. A velvet cape draped over a mannequin... was it there a moment ago? A porcelain mask on a shelf... did its eyes just move?",
+      "The air grows thick with whispers. Not voices—echoes. Rehearsals from performances centuries ago. Arguments, love scenes, death throes, curtain calls. All of them replaying in the darkness, caught in the fabric of the place like dust motes in sunlight.",
+      "\"Please... I can't...\" A woman's voice, desperate. \"The story won't let me...\"",
+      "\"No! This isn't how it ends!\" A man's voice, defiant. \"I refuse!\"",
+      "The echoes fade as quickly as they came. You are alone in the corridor. But you sense that the Wings are not empty. They are filled with stories that cannot complete themselves, characters trapped in endless rehearsal, moments that refuse to fade.",
+      "Somewhere ahead, you hear the sound of running footsteps.",
+      "Somewhere behind you, the amber light of the Threshold Stage still glows.",
+      "Somewhere to your left, a doorway stands open—revealing a room filled with mirrors."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "ambient_eerie_reverberation",
+    "sfx": ["whisper_echoes", "footsteps_distant", "fabric_shift_unseen"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "wings_deep_visited"
+    },
+    {
+      "type": "modify_stat",
+      "stat": "stage_presence",
+      "value": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Follow the running footsteps",
+      "to": "sc_1_0_010",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "Someone flees through the darkness. Will you pursue?"
+    },
+    {
+      "id": "choice_2",
+      "label": "Enter the room of mirrors",
+      "to": "sc_1_0_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The mirrors reflect impossible truths."
+    },
+    {
+      "id": "choice_3",
+      "label": "Return to the Threshold Stage light",
+      "to": "sc_1_0_002",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The stage waits, patient and eternal."
+    },
+    {
+      "id": "choice_4",
+      "label": "Explore deeper into the Wings",
+      "to": "sc_1_0_014",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The corridors hold more secrets."
+    }
+  ],
+  "flags": {
+    "sets": ["wings_deep_visited"],
+    "requires": [],
+    "checks": []
+  }
+}

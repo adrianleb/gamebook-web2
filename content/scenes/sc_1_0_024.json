@@ -1,0 +1,93 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_1_0_024",
+  "title": "The Prompter's Mark",
+  "act": 1,
+  "hub": 0,
+  "location": "The Threshold Stage",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["character_moment", "lore", "atmosphere"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Threshold Stage - Center Stage",
+    "paragraphs": [
+      "Maren nods, as if your answer confirms something they've been waiting to hear.",
+      "\"Every Prompter leaves their mark on this stage,\" they say. \"Some mark it with fear. Some with pride. Some with refusal.\"",
+      "They gesture to the floorboards at your feet. You look down and see them—scars in the wood. Burn marks. Scratches. Something that looks like bloodstains, aged to black.",
+      "\"Here, a Prompter burned themselves out in a single night of desperate creation,\" Maren says, pointing to a charred patch. \"They wrote twelve new scenes, twelve new stories, and collapsed at dawn. Their name is forgotten, but their work... parts of it survive in the Archives.\"",
+      "They move to a set of scratches. \"Here, a Prompter who tried to claw their way back to reality. They didn't understand that the only way out is through. They spent weeks trying to dig through the stage floor, as if the real world lay just beneath the wood.\"",
+      "They stop before a dark stain. \"And here... the most tragic mark of all. A Prompter who stood in this spot and refused to move. For years. They became a statue, a monument to their own fear. Sometimes, late at night, new Prompters report seeing them—a figure standing at center stage, weeping silently, frozen forever.\"",
+      "Maren turns to face you. \"What mark will you leave?\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "maren",
+      "name": "Maren",
+      "description": "A figure of indeterminate age, wrapped in a cloak that seems to absorb the candlelight. Their eyes hold centuries of witnessed tragedy.",
+      "disposition": 7,
+      "faction": "independent"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "ambient_melancholy_legacy",
+    "sfx": ["wood_creak", "wind_across_stage", "distant_footsteps"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "stage_marks_seen"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "I will leave no mark. I will pass through.",
+      "to": "sc_1_0_025",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "To leave no mark is itself a kind of mark."
+    },
+    {
+      "id": "choice_2",
+      "label": "I will leave a mark of courage.",
+      "to": "sc_1_0_025",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_stat",
+          "stat": "stage_presence",
+          "value": 1
+        }
+      ],
+      "disabledHint": "Courage is its own legacy."
+    },
+    {
+      "id": "choice_3",
+      "label": "I don't know yet what kind of mark I'll leave.",
+      "to": "sc_1_0_025",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "Uncertainty is the beginning of wisdom."
+    },
+    {
+      "id": "choice_4",
+      "label": "Return to the booth to think",
+      "to": "sc_1_0_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": "The stage waits for your decision."
+    }
+  ],
+  "flags": {
+    "sets": ["stage_marks_seen"],
+    "requires": [],
+    "checks": []
+  }
+}
