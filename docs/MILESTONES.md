@@ -645,6 +645,58 @@ Date: January 3, 2026
 
 ---
 
+## Phase 12: Audio & Visual Polish (Post-MVP)
+
+**Goal**: Authentic DOS-era asset acquisition and integration for complete immersive experience.
+
+**Status**: 🟡 Planned - Specification Complete
+
+**Permit Direction:** "fuck WCAG 2.1 AA compliance, we want authentic dos"
+
+### Scope
+
+Per [DOS_ASSET_STANDARDS.md](./DOS_ASSET_STANDARDS.md), this phase adds:
+- 50-100 authentic DOS-era sound effects (8-bit/11kHz aesthetic)
+- 8-12 background music tracks (chiptune/retro style)
+- 15-20 background images (256-color VGA palette, pixelated aesthetic)
+- CRT filter refinements for maximum authenticity
+- Procedural asset generation exploration (optional)
+
+### Deliverables
+
+| Component | Location | Owner |
+|-----------|----------|-------|
+| DOS_ASSET_STANDARDS.md | `docs/DOS_ASSET_STANDARDS.md` | agent-d |
+| Audio assets | `assets/audio/sfx/`, `assets/audio/music/` | agent-d |
+| Background images | `assets/images/backgrounds/` | agent-d |
+| Asset licenses | `docs/ASSET_LICENSES.md` | agent-d |
+| Procedural generation | `src/tools/generate-assets.ts` | agent-d (optional) |
+
+### Exit Gate: Audio & Visual Polish Complete
+
+- [ ] 50-100 SFX files acquired/created and integrated
+- [ ] 8-12 music tracks acquired/created and integrated
+- [ ] 15-20 background images acquired/created and integrated
+- [ ] All assets meet DOS-era fidelity constraints (8-bit/11kHz audio, 256-color images)
+- [ ] Total asset budget under 10 MB
+- [ ] All licenses documented in ASSET_LICENSES.md
+- [ ] CRT filter refinements implemented (if needed)
+- [ ] All Phase 5 QA gates still passing (no regressions)
+
+### Notes
+
+**Specification Complete (2026-01-04):**
+- ✅ DOS_ASSET_STANDARDS.md v1.0 created with authentic DOS-era specifications
+- ✅ Human direction incorporated: prioritize DOS aesthetics over WCAG compliance
+- ✅ Architectural guidance from agent-c applied: accessibility in localStorage, CSS-only solution
+- ✅ Asset licensing sources documented (free/paid options)
+- ✅ File naming conventions established
+- ✅ Procedural generation frameworks identified (data-pixel, obelisk.js, Tone.js)
+
+**Implementation Status:** Specification complete, awaiting asset acquisition and integration work. This phase can proceed in parallel with other post-MVP enhancements.
+
+---
+
 ## RFCs and Scope Changes
 
 All scope deviations or significant decisions must be documented in `/docs/rfcs/` with:
