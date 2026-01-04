@@ -283,7 +283,14 @@ export class ContentValidator {
       return errors;
     }
 
-    const validTypes = ['stat', 'flag', 'item', 'faction', 'and', 'or', 'not'];
+    // Accept both schema-format and runtime-format condition types
+    // Schema types (from content files): has_item, stat_check, flag_check, faction_check, NOT, AND, OR, visited, choice_made
+    // Runtime types (after SceneLoader normalization): item, stat, flag, faction, not, and, or
+    // visited and choice_made are schema-defined but not yet implemented in runtime
+    const validSchemaTypes = ['has_item', 'stat_check', 'flag_check', 'faction_check', 'NOT', 'AND', 'OR', 'visited', 'choice_made'];
+    const validRuntimeTypes = ['stat', 'flag', 'item', 'faction', 'and', 'or', 'not'];
+    const validTypes = [...validSchemaTypes, ...validRuntimeTypes];
+
     if (!validTypes.includes(condition.type)) {
       errors.push({
         type: 'schema-error',
@@ -292,9 +299,14 @@ export class ContentValidator {
       });
     }
 
+    // Normalize condition type to runtime format for validation logic
+    // This handles both schema-format (stat_check, has_item, etc.) and runtime-format (stat, item, etc.)
+    const normalizedType = this.normalizeConditionType(condition.type);
+
     // Validate stat references (will need stats.json when available)
-    if (condition.type === 'stat') {
-      if (!condition.stat) {
+    if (normalizedType === 'stat') {
+      const statField = condition.type === 'stat_check' || condition.type === 'stat' ? 'stat' : 'stat';
+      if (!condition[statField]) {
         errors.push({
           type: 'invalid-stat',
           sceneId,
@@ -318,8 +330,9 @@ export class ContentValidator {
     }
 
     // Validate flag references
-    if (condition.type === 'flag') {
-      if (!condition.flag) {
+    if (normalizedType === 'flag') {
+      const flagField = condition.type === 'flag_check' || condition.type === 'flag' ? 'flag' : 'flag';
+      if (!condition[flagField]) {
         errors.push({
           type: 'schema-error',
           sceneId,
@@ -329,8 +342,9 @@ export class ContentValidator {
     }
 
     // Validate item references (will need items.json when available)
-    if (condition.type === 'item') {
-      if (!condition.item) {
+    if (normalizedType === 'item') {
+      const itemField = condition.type === 'has_item' || condition.type === 'item' ? 'item' : 'item';
+      if (!condition[itemField]) {
         errors.push({
           type: 'invalid-item',
           sceneId,
@@ -340,8 +354,9 @@ export class ContentValidator {
     }
 
     // Validate faction references
-    if (condition.type === 'faction') {
-      if (!condition.faction) {
+    if (normalizedType === 'faction') {
+      const factionField = condition.type === 'faction_check' || condition.type === 'faction' ? 'faction' : 'faction';
+      if (!condition[factionField]) {
         errors.push({
           type: 'schema-error',
           sceneId,
@@ -350,8 +365,8 @@ export class ContentValidator {
       }
     }
 
-    // Validate nested conditions
-    if (['and', 'or', 'not'].includes(condition.type)) {
+    // Validate nested conditions (AND, OR, NOT in schema; and, or, not in runtime)
+    if (['and', 'or', 'not', 'AND', 'OR', 'NOT'].includes(condition.type)) {
       if (!condition.conditions || condition.conditions.length === 0) {
         errors.push({
           type: 'schema-error',
@@ -365,7 +380,51 @@ export class ContentValidator {
       }
     }
 
+    // Validate visited condition (schema-defined, not yet implemented)
+    if (condition.type === 'visited') {
+      if (!condition.sceneId) {
+        errors.push({
+          type: 'schema-error',
+          sceneId,
+          message: 'Visited condition missing sceneId field',
+        });
+      }
+    }
+
+    // Validate choice_made condition (schema-defined, not yet implemented)
+    if (condition.type === 'choice_made') {
+      if (!condition.choiceId) {
+        errors.push({
+          type: 'schema-error',
+          sceneId,
+          message: 'choice_made condition missing choiceId field',
+        });
+      }
+    }
+
     return errors;
+  }
+
+  /**
+   * Normalize schema-format condition type to runtime format.
+   * Matches the normalization logic in SceneLoader.typeMap.
+   *
+   * @param type - Condition type (schema or runtime format)
+   * @returns Normalized runtime type
+   */
+  private normalizeConditionType(type: string): string {
+    const typeMap: Record<string, string> = {
+      'has_item': 'item',
+      'stat_check': 'stat',
+      'flag_check': 'flag',
+      'faction_check': 'faction',
+      'NOT': 'not',
+      'AND': 'and',
+      'OR': 'or',
+      'visited': 'visited', // Not implemented in runtime yet
+      'choice_made': 'choice_made', // Not implemented in runtime yet
+    };
+    return typeMap[type] || type;
   }
 
   /**
@@ -650,6 +709,7 @@ export class ContentValidator {
 
   /**
    * Collect stat IDs from condition tree.
+   * Handles both schema-format (stat_check) and runtime-format (stat) condition types.
    */
   private collectStatsFromConditions(conditions: unknown, refs: Set<string>): void {
     if (!conditions) return;
@@ -664,13 +724,13 @@ export class ContentValidator {
     const cond = conditions as Record<string, unknown>;
     const type = cond.type as string;
 
-    // Stat condition
-    if (type === 'stat' && cond.stat && typeof cond.stat === 'string') {
+    // Stat condition - handle both schema-format (stat_check) and runtime-format (stat)
+    if ((type === 'stat' || type === 'stat_check') && cond.stat && typeof cond.stat === 'string') {
       refs.add(cond.stat);
     }
 
-    // Nested conditions (and, or, not)
-    if ((type === 'and' || type === 'or' || type === 'not') && cond.conditions) {
+    // Nested conditions (and, or, not, AND, OR, NOT)
+    if ((type === 'and' || type === 'or' || type === 'not' || type === 'AND' || type === 'OR' || type === 'NOT') && cond.conditions) {
       this.collectStatsFromConditions(cond.conditions, refs);
     }
   }
@@ -735,6 +795,7 @@ export class ContentValidator {
 
   /**
    * Collect item IDs from condition tree.
+   * Handles both schema-format (has_item) and runtime-format (item) condition types.
    */
   private collectItemsFromConditions(conditions: unknown, refs: Set<string>): void {
     if (!conditions) return;
@@ -749,13 +810,13 @@ export class ContentValidator {
     const cond = conditions as Record<string, unknown>;
     const type = cond.type as string;
 
-    // Item condition
-    if (type === 'item' && cond.item && typeof cond.item === 'string') {
+    // Item condition - handle both schema-format (has_item) and runtime-format (item)
+    if ((type === 'item' || type === 'has_item') && cond.item && typeof cond.item === 'string') {
       refs.add(cond.item);
     }
 
-    // Nested conditions (and, or, not)
-    if ((type === 'and' || type === 'or' || type === 'not') && cond.conditions) {
+    // Nested conditions (and, or, not, AND, OR, NOT)
+    if ((type === 'and' || type === 'or' || type === 'not' || type === 'AND' || type === 'OR' || type === 'NOT') && cond.conditions) {
       this.collectItemsFromConditions(cond.conditions, refs);
     }
   }

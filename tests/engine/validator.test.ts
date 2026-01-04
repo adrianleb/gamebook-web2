@@ -584,7 +584,7 @@ describe('ContentValidator - validateCondition', () => {
       expect(result.errors.some(e => e.message.includes('Invalid condition type'))).toBe(true);
     });
 
-    it('should accept all valid condition types', () => {
+    it('should accept all valid runtime condition types', () => {
       const validTypes = ['stat', 'flag', 'item', 'faction', 'and', 'or', 'not'] as const;
 
       for (const type of validTypes) {
@@ -614,6 +614,201 @@ describe('ContentValidator - validateCondition', () => {
 
         expect(result.valid).toBe(true);
       }
+    });
+  });
+
+  describe('Schema-format condition types', () => {
+    it('should accept schema-format condition types (has_item, stat_check, flag_check, faction_check)', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Test',
+            to: 'sc_1_0_002' as SceneId,
+            conditions: [
+              { type: 'has_item', item: 'test_item' },
+              { type: 'stat_check', stat: 'stage_presence', operator: 'gte', value: 5 },
+              { type: 'flag_check', flag: 'TEST_FLAG' },
+              { type: 'faction_check', faction: 'test_faction' },
+            ],
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should accept uppercase NOT/AND/OR condition types', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Test',
+            to: 'sc_1_0_002' as SceneId,
+            conditions: [
+              {
+                type: 'NOT',
+                conditions: [
+                  { type: 'flag_check', flag: 'TEST_FLAG' },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should accept uppercase AND condition type with nested conditions', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Test',
+            to: 'sc_1_0_002' as SceneId,
+            conditions: [
+              {
+                type: 'AND',
+                conditions: [
+                  { type: 'flag_check', flag: 'FLAG_1' },
+                  { type: 'flag_check', flag: 'FLAG_2' },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should accept uppercase OR condition type with nested conditions', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Test',
+            to: 'sc_1_0_002' as SceneId,
+            conditions: [
+              {
+                type: 'OR',
+                conditions: [
+                  { type: 'stat_check', stat: 'script', operator: 'gte', value: 5 },
+                  { type: 'stat_check', stat: 'stage_presence', operator: 'gte', value: 5 },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should accept visited condition type (schema-defined)', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Test',
+            to: 'sc_1_0_002' as SceneId,
+            conditions: [
+              { type: 'visited', sceneId: 'sc_1_0_001', count: 1 },
+            ],
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should detect visited condition missing sceneId', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Test',
+            to: 'sc_1_0_002' as SceneId,
+            conditions: [
+              { type: 'visited', count: 1 },
+            ],
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.some(e => e.message.includes('sceneId'))).toBe(true);
+    });
+
+    it('should accept choice_made condition type (schema-defined)', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Test',
+            to: 'sc_1_0_002' as SceneId,
+            conditions: [
+              { type: 'choice_made', choiceId: 'choice_123' },
+            ],
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it('should detect choice_made condition missing choiceId', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Test',
+            to: 'sc_1_0_002' as SceneId,
+            conditions: [
+              { type: 'choice_made' },
+            ],
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.some(e => e.message.includes('choiceId'))).toBe(true);
+    });
+
+    it('should validate nested conditions with mixed schema and runtime types', () => {
+      const scene = createMockScene({
+        choices: [
+          {
+            label: 'Test',
+            to: 'sc_1_0_002' as SceneId,
+            conditions: [
+              {
+                type: 'AND',
+                conditions: [
+                  { type: 'flag_check', flag: 'QUEST_STARTED' },
+                  {
+                    type: 'NOT',
+                    conditions: [
+                      { type: 'flag', flag: 'QUEST_COMPLETE' },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
     });
   });
 
