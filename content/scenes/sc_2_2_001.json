@@ -107,6 +107,14 @@
     },
     {
       "id": "choice_7",
+      "label": "Visit the Neutral Ground (Independent)",
+      "to": "sc_2_2_070",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_8",
       "label": "Head to the Archives",
       "to": "sc_2_3_001",
       "conditions": null,

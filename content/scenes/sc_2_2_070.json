@@ -1,0 +1,154 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_070",
+  "title": "The Neutral Ground",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["faction_hq", "independent", "lore", "npc_encounter"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - The Neutral Ground",
+    "paragraphs": [
+      "In a quiet corner of the Green Room, away from the faction-colored doors and heated debates, you find an unassuming space that feels different—calmer.",
+      "The Neutral Ground has no banners, no symbols, no declarations of allegiance. Just comfortable chairs arranged in a circle, a low table with an empty notebook and pen, and walls covered in notes written in every color of ink.",
+      "A figure sits in one of the chairs, gray-robed and gray-faced in a way that suggests they could be anyone—or no one at all. They look up as you enter.",
+      "\"You're looking for balance,\" they say. It's not a question. \"Most aren't. Most want certainty. They want to know they're right. But you... you understand that stories need all their parts. The preservation AND the revision. The escape AND the return.\"",
+      "They rise and extend a hand—their grip is firm but gentle. \"I am called the Independent. I walk between factions, carrying messages, translating demands, and sometimes... preventing the Understage from tearing itself apart.\"",
+      "The Independent gestures to the walls. \"These notes? They're from characters who chose not to choose. From Prompters who refused to pick a side. Some found peace. Most found it's the hardest path of all.\"",
+      "\"Balance isn't doing nothing,\" they continue, their voice dropping. \"Balance is holding opposing truths together until they find a way to coexist. It's listening to the Preservationist who fears losing the past, and the Revisionist who fears losing the future, and the Exiter who fears losing themselves—and finding the third option that honors all three.\"",
+      "They study you carefully. \"The Council of Three will meet soon. Representatives from each faction, gathered to discuss the growing crisis. They need a mediator. Someone who can see value in every perspective without being trapped by any of them.\"",
+      "From a pocket of their gray robes, the Independent produces a simple token—a slate-white circle, unmarked and smooth. \"This represents possibility. The freedom to become what's needed, not what's expected. If you would walk the path of balance, know this: we have no great army. No ancient headquarters. No prophecies. We only have each other, and the stubborn belief that stories are big enough for all truths.\"",
+      "The Neutral Ground waits for your choice."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_independent",
+      "name": "The Independent",
+      "description": "Gray-robed mediator who walks between all factions, seeking balance in the Understage",
+      "role": "faction_leader"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "independent_theme",
+    "sfx": ["quiet_voice", "paper_rustle"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "MET_INDEPENDENT"
+    },
+    {
+      "type": "set_flag",
+      "flag": "DISCOVERED_INDEPENDENT_HQ"
+    },
+    {
+      "type": "modify_faction",
+      "faction": "independent",
+      "amount": 1
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Ask about the Council of Three",
+      "to": "sc_2_2_071",
+      "conditions": [
+        {
+          "type": "flag_check",
+          "flag": "QUEST_BALANCE_STARTED"
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "independent",
+          "amount": 1
+        }
+      ],
+      "disabledHint": "You need to accept the Balance of Power quest first."
+    },
+    {
+      "id": "choice_2",
+      "label": "Ask about the Independent philosophy",
+      "to": "sc_2_2_070",
+      "conditions": [
+        {
+          "type": "NOT",
+          "conditions": [
+            {
+              "type": "flag_check",
+              "flag": "INDEPENDENT_PHILOSOPHY_EXPLAINED"
+            }
+          ]
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "INDEPENDENT_PHILOSOPHY_EXPLAINED"
+        },
+        {
+          "type": "modify_faction",
+          "faction": "preservationist",
+          "amount": 1
+        },
+        {
+          "type": "modify_faction",
+          "faction": "revisionist",
+          "amount": 1
+        },
+        {
+          "type": "modify_faction",
+          "faction": "exiter",
+          "amount": 1
+        },
+        {
+          "type": "modify_faction",
+          "faction": "independent",
+          "amount": 1
+        }
+      ],
+      "disabledHint": "The Independent has already explained their philosophy."
+    },
+    {
+      "id": "choice_3",
+      "label": "Accept the Diplomat's Challenge",
+      "to": "sc_2_2_072",
+      "conditions": [
+        {
+          "type": "NOT",
+          "conditions": [
+            {
+              "type": "flag_check",
+              "flag": "DIPLOMAT_CHALLENGE_COMPLETE"
+            }
+          ]
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "You've already completed the Diplomat's Challenge."
+    },
+    {
+      "id": "choice_4",
+      "label": "Return to the Green Room center",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["MET_INDEPENDENT", "DISCOVERED_INDEPENDENT_HQ"],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}

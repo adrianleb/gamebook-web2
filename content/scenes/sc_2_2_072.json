@@ -1,0 +1,176 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_072",
+  "title": "The Diplomat's Challenge",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["faction_hq", "independent", "stat_check", "item_reward"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Council Chamber",
+    "paragraphs": [
+      "You take your place at the Council table. The three representatives watch you, waiting. The Independent stands behind you, a silent witness to your first act as mediator.",
+      "\"The Archives are being vandalized,\" the Preservationist accuses, gesturing at the Revisionist. \"Stories are being rewritten without consent. Original drafts are being 'improved' until they're unrecognizable. This must stop.\"",
+      "\"We're FIXING them,\" the Revisionist retorts. \"Some stories are broken. Tragic endings that serve no purpose. Plots that depend on cruelty. Why preserve suffering when we can create joy?\"",
+      "\"And what about the characters who WANT to leave?\" the Exiter interrupts. \"Stories that trap people in pain, in cycles of abuse, in narratives they never chose. Why shouldn't they have the freedom to exit?\"",
+      "The room erupts into argument. Each faction has valid points. Each faction has blind spots. And you need to find a way forward that honors all three truths.",
+      "You could side with the Preservationists—protecting the sanctity of original texts. You could side with the Revisionists—embracing the power to improve flawed stories. You could side with the Exiters—fighting for character freedom.",
+      "Or you could find the third option.",
+      "The Independent's voice cuts through the noise: \"What if NO ONE gets unchecked power? What if the Archives remain protected... but Revisionists can propose changes that must be approved by a council that includes Preservationists AND Exiters? What if characters CAN leave stories... but only after understanding what they're losing, and only if the departure doesn't unravel other narratives?\"",
+      "Silence falls. The representatives actually consider it.",
+      "\"Balance,\" the Preservationist says slowly. \"Not victory. But protection for what matters.\"",
+      "\"And the chance to improve,\" the Revisionist adds, cautiously hopeful.",
+      "\"And freedom,\" the Exiter nods, \"but with understanding. Not abandon. Choice.\"",
+      "They're looking at you now. Waiting for you to make it real."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "council_preservationist",
+      "name": "Preservationist Representative",
+      "role": "Council member from Preservationist faction",
+      "demeanor": "Formal, protective, wary of change"
+    },
+    {
+      "id": "council_revisionist",
+      "name": "Revisionist Representative",
+      "role": "Council member from Revisionist faction",
+      "demeanor": "Passionate, articulate, frustrated with stagnation"
+    },
+    {
+      "id": "council_exiter",
+      "name": "Exiter Representative",
+      "role": "Council member from Exiter faction",
+      "demeanor": "Calm, philosophical, focused on freedom"
+    },
+    {
+      "id": "the_independent",
+      "name": "The Independent",
+      "role": "Council moderator and Independent faction representative",
+      "demeanor": "Diplomatic, weary, principled"
+    }
+  ],
+  "art": "A round council table with four figures. The mediator stands at center, flanked by three faction representatives. Tension gives way to possibility.",
+  "audio": {
+    "music": "diplomat_challenge",
+    "sfx": ["tense_silence", "coin_clink"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "DIPLOMAT_CHALLENGE_COMPLETE"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "[STAGE PRESENCE 3] Propose the Council solution",
+      "conditions": {
+        "type": "stat_check",
+        "stat": "stage_presence",
+        "op": "gte",
+        "value": 3,
+        "attemptable": true
+      },
+      "onSuccess": {
+        "to": "sc_2_2_072",
+        "effects": [
+          {
+            "type": "add_item",
+            "item": "diplomats_token"
+          },
+          {
+            "type": "set_flag",
+            "flag": "COUNCIL_ESTABLISHED"
+          },
+          {
+            "type": "modify_faction",
+            "faction": "preservationist",
+            "value": 2
+          },
+          {
+            "type": "modify_faction",
+            "faction": "revisionist",
+            "value": 2
+          },
+          {
+            "type": "modify_faction",
+            "faction": "exiter",
+            "value": 2
+          },
+          {
+            "type": "modify_faction",
+            "faction": "independent",
+            "value": 3
+          }
+        ]
+      },
+      "onFailure": {
+        "to": "sc_2_2_072",
+        "effects": [
+          {
+            "type": "modify_faction",
+            "faction": "independent",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "choice_2",
+      "label": "Listen to the Independent's guidance",
+      "to": "sc_2_2_072",
+      "conditions": [
+        {
+          "type": "NOT",
+          "conditions": [
+            {
+              "type": "flag_check",
+              "flag": "INDEPENDENT_GUIDANCE_HEARD"
+            }
+          ]
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "INDEPENDENT_GUIDANCE_HEARD"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "stage_presence",
+          "value": 1
+        }
+      ],
+      "disabledHint": "The Independent has already given you guidance."
+    },
+    {
+      "id": "choice_3",
+      "label": "Return to the Neutral Ground",
+      "to": "sc_2_2_070",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "Return to the Green Room center",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["DIPLOMAT_CHALLENGE_COMPLETE"],
+    "requires": ["COUNCIL_OF_THREE_VISITED", "QUEST_BALANCE_STARTED", "green_room_reached"],
+    "checks": []
+  }
+}
