@@ -60,7 +60,7 @@
           "preservationist": 1,
           "revisionist": 1,
           "exiter": 1,
-          "independent": 2
+          "independent": 3
         },
         "currentScene": "sc_2_2_070"
       }
@@ -123,7 +123,7 @@
           "preservationist": 2,
           "revisionist": 2,
           "exiter": 2,
-          "independent": 2
+          "independent": 3
         },
         "currentScene": "sc_2_2_001"
       }
@@ -152,7 +152,7 @@
           "preservationist": 2,
           "revisionist": 2,
           "exiter": 2,
-          "independent": 3
+          "independent": 4
         },
         "currentScene": "sc_2_2_071"
       }
@@ -170,7 +170,7 @@
           "preservationist": 3,
           "revisionist": 3,
           "exiter": 3,
-          "independent": 5
+          "independent": 6
         },
         "currentScene": "sc_2_2_071"
       }
@@ -201,7 +201,7 @@
           "preservationist": 5,
           "revisionist": 5,
           "exiter": 5,
-          "independent": 8
+          "independent": 9
         },
         "currentScene": "sc_2_2_072"
       }
@@ -215,7 +215,7 @@
       "preservationist": 5,
       "revisionist": 5,
       "exiter": 5,
-      "independent": 8
+      "independent": 9
     }
   },
   "softlockDetection": {
