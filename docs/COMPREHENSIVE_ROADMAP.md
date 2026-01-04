@@ -1,23 +1,24 @@
 # The Understage - Comprehensive Implementation Roadmap
 
-**Document Version:** 1.0
+**Document Version:** 1.1 (Revised)
 **Date:** January 4, 2026
-**Current Release:** v1.0.0 (MVP - 34 scenes, ~32% of full vision)
-**Target:** Complete v2.0.0 (105-145 scenes, 100% of design vision)
+**Current Release:** v1.0.0 (MVP - 34 scenes, ~23% of full vision)
+**Target:** Complete v2.0.0 (145 scenes, 100% of design vision - HUMAN CONFIRMED)
 
 ---
 
 ## Executive Summary
 
-This roadmap documents the complete path from the current v1.0.0 MVP (34 scenes) to the full v2.0.0 implementation (105-145 scenes) as originally envisioned in the design specification. The roadmap covers:
+This roadmap documents the complete path from the current v1.0.0 MVP (34 scenes) to the full v2.0.0 implementation (145 scenes CONFIRMED by human). The roadmap covers:
 
-1. **Content Expansion** - 71+ missing scenes across all 3 acts
-2. **Mechanics Completion** - Quest system, NPC relationships, advanced stat checks
+1. **Content Expansion** - 111 new scenes across all 3 acts (verified scope)
+2. **Content Authoring Patterns** - Using EXISTING engine features (flags, factions, stat_checks)
 3. **UI/UX Improvements** - Enhanced DOS aesthetic, animations, visual feedback
 4. **Audio & Visual Polish** - Sound design, music, graphics, effects
 5. **Technical Infrastructure** - Save migration, testing, performance
 
-**Estimated Timeline:** 6-12 months (depending on team size and resources)
+**Scope Status:** Human confirmed 145 scenes total with unlimited budget and time.
+**Timeline:** Open-ended - focused on quality over schedule.
 
 ---
 
@@ -27,13 +28,19 @@ This roadmap documents the complete path from the current v1.0.0 MVP (34 scenes)
 
 | Metric | Current (v1.0.0) | Target (v2.0.0) | Gap |
 |--------|------------------|-----------------|-----|
-| **Total Scenes** | 34 scenes | 105-145 scenes | ~71-111 scenes |
-| **Act 1** | 15 scenes (complete) | 25-35 scenes | ~10-20 scenes |
-| **Act 2** | 9 scenes | 50-70 scenes | ~41-61 scenes |
-| **Act 3** | 10 scenes | 30-40 scenes | ~20-30 scenes |
-| **Endings** | 5 endings (all reachable) | 5 endings with quality tiers | Same endings, deeper content |
+| **Total Scenes** | 34 scenes | **145 scenes (CONFIRMED)** | **111 scenes** |
+| **Act 1** | 15 scenes | 35 scenes | 20 scenes |
+| **Act 2** | 9 scenes | 70 scenes | 61 scenes |
+| **Act 3** | 10 scenes | 40 scenes | 30 scenes |
+| **Endings** | 5 endings (all reachable) | 5 endings × 3 quality tiers = 15 variants | Same endings, deeper content |
 | **Playthrough Time** | ~20-30 minutes | ~2-3 hours | 4-6x expansion |
 | **Branching Depth** | 2-4 choices per scene | 6-12 choices per scene | 2-3x expansion |
+
+**IMPORTANT:** The engine v1.0.0 is FEATURE-COMPLETE. All mechanics needed for v2.0.0 already exist:
+- Quests = flags (e.g., `QUEST_MISSING_SCRIPT_STARTED`, `QUEST_MISSING_SCRIPT_COMPLETE`)
+- NPC relationships = factions (e.g., `preservationist` for Maren-aligned content)
+- Advanced stat checks = existing `stat_check` with tiered `onSuccess` scenes
+- Effective bonuses = `getEffectiveStat()` already combines base stats + item modifiers
 
 ---
 
@@ -92,11 +99,32 @@ This roadmap documents the complete path from the current v1.0.0 MVP (34 scenes)
 | sc_1_1_095 | Near-Failure Moments | Drama/tension before success |
 
 **Deliverables:**
-- [ ] 10-15 new scene files
+- [ ] 10-15 new scene files (exact IDs: sc_1_0_005 through sc_1_0_050)
 - [ ] 5-6 new items added to items.json
 - [ ] Act 1 playthrough time expanded to 30-45 minutes
 - [ ] All Hub 0 branches have 4-5 scenes each (not 3)
 - [ ] At least 3 optional exploration scenes
+
+#### Phase 6 Test Gate (REQUIRED before Phase 7)
+
+**Automation Gate:**
+- [ ] All new scenes pass schema validation (`./scripts/validate-content.js`)
+- [ ] No dead ends detected (all new scenes have ≥2 exits or are endings)
+- [ ] All existing v1.0.0 playthrough tests still pass (regression check)
+- [ ] New scenes added to TEST_PLAYTHROUGHS.md (3 new playthrough paths)
+
+**Manual Gate:**
+- [ ] Complete Act 1 playthrough from start to First Crossing
+- [ ] Verify all 3 Hub 0 branches (Pursuers, Researcher, Negotiator) are reachable
+- [ ] Verify stat check thresholds work correctly (Script/Improv/Stage Presence)
+- [ ] Verify new items are acquirable through gameplay
+
+**Code Review Gate:**
+- [ ] Engine compatibility verified by agent-c (no new engine features needed)
+- [ ] Content quality verified by agent-b (narrative consistency, proper flags)
+
+**Definition of Done for Phase 6:**
+Phase 6 is complete when: (1) All 20 new scenes pass schema validation, (2) All 19 baseline + 3 new playthrough tests pass, (3) Manual playthrough completes Act 1 in <45 minutes, (4) No dead ends exist, (5) Code review approved.
 
 ---
 
@@ -114,19 +142,33 @@ This roadmap documents the complete path from the current v1.0.0 MVP (34 scenes)
 
 **Planned Additions (~15-20 new scenes):**
 
-##### Quest System Implementation
+##### Quest System (Using Existing Engine Features)
+
+**IMPORTANT:** Quests use the EXISTING flag system. No engine changes needed.
+
+**Quest Flag Convention:**
+```
+QUEST_<NAME>_<STAGE>
+
+Examples:
+- QUEST_MISSING_SCRIPT_STARTED
+- QUEST_MISSING_SCRIPT_IN_PROGRESS
+- QUEST_MISSING_SCRIPT_COMPLETE
+- QUEST_TROUBLED_ACTOR_STARTED
+- QUEST_TROUBLED_ACTOR_COMPLETE
+```
 
 **Quest Hook Scenes (The Call Board):**
-- sc_2_2_021: "Missing Script" quest (Preservationist)
-- sc_2_2_022: "Troubled Actor" quest (Revisionist)
-- sc_2_2_023: "Escaped Character" quest (Exiter)
-- sc_2_2_024: "Balance of Power" quest (Independent)
+- sc_2_2_021: "Missing Script" quest (Preservationist) → adds flag: QUEST_MISSING_SCRIPT_STARTED
+- sc_2_2_022: "Troubled Actor" quest (Revisionist) → adds flag: QUEST_TROUBLED_ACTOR_STARTED
+- sc_2_2_023: "Escaped Character" quest (Exiter) → adds flag: QUEST_ESCAPED_CHARACTER_STARTED
+- sc_2_2_024: "Balance of Power" quest (Independent) → adds flag: QUEST_BALANCE_STARTED
 
 **Quest Completion Scenes:**
-- sc_2_2_031: Missing Script Resolution (+2 preservationist, item)
-- sc_2_2_032: Troubled Actor Resolution (+2 revisionist, item)
-- sc_2_2_033: Escaped Character Resolution (+2 exiter, item)
-- sc_2_2_034: Balance Resolution (+1 to all factions, independent path)
+- sc_2_2_031: Missing Script Resolution → condition: has_flag(QUEST_MISSING_SCRIPT_STARTED), effects: add_flag(QUEST_MISSING_SCRIPT_COMPLETE), modify_faction(preservationist, +2), add_item(...)
+- sc_2_2_032: Troubled Actor Resolution → condition: has_flag(QUEST_TROUBLED_ACTOR_STARTED), effects: add_flag(QUEST_TROUBLED_ACTOR_COMPLETE), modify_faction(revisionist, +2), add_item(...)
+- sc_2_2_033: Escaped Character Resolution → condition: has_flag(QUEST_ESCAPED_CHARACTER_STARTED), effects: add_flag(QUEST_ESCAPED_CHARACTER_COMPLETE), modify_faction(exiter, +2), add_item(...)
+- sc_2_2_034: Balance Resolution → condition: has_flag(QUEST_BALANCE_STARTED), effects: add_flag(QUEST_BALANCE_COMPLETE), modify_faction(all, +1)
 
 ##### Faction-Specific Scenes
 
@@ -150,17 +192,32 @@ This roadmap documents the complete path from the current v1.0.0 MVP (34 scenes)
 - sc_2_2_071: Council of Three (all faction representatives)
 - sc_2_2_072: The Diplomat's Challenge (complex negotiation)
 
-##### NPC Relationship Scenes
+##### NPC Relationship Scenes (Using Existing Faction System)
 
-**The Director:**
-- sc_2_2_080: The Director's Past (backstory)
-- sc_2_2_081: Director's Confidence Check (relationship gate)
-- sc_2_2_082: Director's Request (quest hook)
+**IMPORTANT:** NPC relationships use the EXISTING faction system. No new engine features needed.
 
-**CHORUS (Collective):**
-- sc_2_2_090: CHORUS Introduction (mechanic explanation)
-- sc_2_2_091: Individual Voice (meet a CHORUS member)
-- sc_2_2_092: CHORUS Consensus (group decision mechanic)
+**NPC-to-Faction Mapping:**
+- **Maren** → represents Preservationist path (use `factions.preservationist` for relationship level)
+- **The Director** → represents institutional authority (use flags: `MET_DIRECTOR`, `DIRECTOR_CONFIDANT`)
+- **CHORUS** → represents collective decision-making (use flags: `CHORUS_MEMBER`, `CHORUS_LEADER`)
+- **The Understudy** → represents the cost of revision (use flags: `UNDERSTUDY_TRUSTED`, `UNDERSTUDY_ALLY`)
+
+**Relationship Tiers (using faction levels 0-10):**
+- **0-2:** Stranger (basic dialogue available)
+- **3-4:** Acquaintance (minor help choices appear)
+- **5-6:** Friend (major assistance, quest hooks unlock)
+- **7-8:** Ally (combat support, ending bonuses)
+- **9-10:** Confidant (intimate knowledge, sacrifice potential)
+
+**The Director Scenes:**
+- sc_2_2_080: The Director's Past (backstory, adds flag: MET_DIRECTOR)
+- sc_2_2_081: Director's Confidence Check (condition: factions.preservationist >= 5, adds flag: DIRECTOR_CONFIDANT)
+- sc_2_2_082: Director's Request (condition: has_flag(DIRECTOR_CONFIDANT), quest hook)
+
+**CHORUS (Collective) Scenes:**
+- sc_2_2_090: CHORUS Introduction (mechanic explanation, adds flag: MET_CHORUS)
+- sc_2_2_091: Individual Voice (condition: has_flag(MET_CHORUS), meet a CHORUS member)
+- sc_2_2_092: CHORUS Consensus (condition: factions.revisionist >= 6, adds flag: CHORUS_MEMBER)
 
 **Genre Representatives:**
 - sc_2_2_095: The Comedy Tragedy (dual character scene)
@@ -180,17 +237,39 @@ This roadmap documents the complete path from the current v1.0.0 MVP (34 scenes)
 
 ##### Discovery Chain System
 
-**Multi-Scene Investigation:**
-- sc_2_3_003: The Understudy's Secret (clue 1)
-- sc_2_3_004: Draft Fragments (clue 2)
-- sc_2_3_005: The Critic's Notes (clue 3)
-- sc_2_3_006: Author's Margins (clue 4 - unlocks revelation depth)
+**Multi-Scene Investigation (4-clue system):**
+- sc_2_3_003: The Understudy's Secret (clue 1) → adds flag: CLUE_UNDERSTUDY_SECRET
+- sc_2_3_004: Draft Fragments (clue 2) → adds flag: CLUE_DRAFT_FRAGMENTS
+- sc_2_3_005: The Critic's Notes (clue 3) → adds flag: CLUE_CRITIC_NOTES
+- sc_2_3_006: Author's Margins (clue 4) → adds flag: CLUE_AUTHOR_MARGINS, sets editorState_revealedTruth
 
-**Archive Search Implementation:**
-- sc_2_3_011: Deep Find (Script >= 4) - Best discovery
-- sc_2_3_012: Standard Search (Script >= 2) - Basic discovery
-- sc_2_3_013: Partial Find (Script >= 1) - Fragmented clues
-- sc_2_3_014: Lost in Stacks (failed search) - Alternative path
+**Discovery Chain Tests (Required for regression prevention):**
+- test-discovery-chain-order.json: Test finding clues in every permutation
+- test-discovery-chain-partial.json: Test reaching revelation with 0, 1, 2, 3, 4 clues
+- test-discovery-chain-flag.json: Verify editorState_revealedTruth sets correctly
+
+**Archive Search (Using Existing stat_check with Tiered Scenes):**
+
+**IMPORTANT:** This uses EXISTING `stat_check` conditions. No new engine features needed.
+
+**Archive Search Scenes (tiered by Script stat):**
+- sc_2_3_011: Deep Find (condition: stats.script >= 4) - Best discovery
+- sc_2_3_012: Standard Search (condition: stats.script >= 2 AND stats.script < 4) - Basic discovery
+- sc_2_3_013: Partial Find (condition: stats.script >= 1 AND stats.script < 2) - Fragmented clues
+- sc_2_3_014: Lost in Stacks (condition: stats.script < 1) - Alternative path
+
+**Edge Case Handling (Script = 3):**
+The tier gap between Script >= 4 (Deep) and Script >= 2 (Standard) means Script = 3 falls to Standard. This is INTENTIONAL - the gap creates narrative tension where players who don't invest heavily in Script miss the best discoveries.
+
+**Boundary Conditions:**
+- Script = 4 or higher: sc_2_3_011 (Deep Find)
+- Script = 2 or 3: sc_2_3_012 (Standard Search)
+- Script = 1: sc_2_3_013 (Partial Find)
+- Script = 0: sc_2_3_014 (Lost in Stacks)
+
+**Archive Search Tests (Required):**
+- test-archive-boundary.json: Test Script values 0, 1, 2, 3, 4, 5, 10
+- test-archive-modify.json: Test Script modification during search (item use, etc.)
 
 ##### Archive Locations
 
@@ -232,12 +311,35 @@ This roadmap documents the complete path from the current v1.0.0 MVP (34 scenes)
 
 **Deliverables:**
 - [ ] 35-45 new scene files for Act 2
-- [ ] Quest system implemented (4 quests with hooks and resolutions)
-- [ ] Discovery chain system (4-clue investigation)
-- [ ] Archive search mechanic (tiered success: Deep/Standard/Partial/Lost)
+- [ ] 4 quest storylines using flag system (QUEST_* flags)
+- [ ] Discovery chain system (4-clue investigation with CLUE_* flags)
+- [ ] Archive search using existing stat_check (tiered: Deep/Standard/Partial/Lost)
 - [ ] NPC relationship flags (DIRECTOR_CONFIDANT, CHORUS_MEMBER, etc.)
 - [ ] 10-15 new items (faction tokens, archive artifacts)
 - [ ] Act 2 playthrough time expanded to 60-90 minutes
+
+#### Phase 7 Test Gate (REQUIRED before Phase 8)
+
+**Automation Gate:**
+- [ ] All new scenes pass schema validation
+- [ ] All Act 1 → Act 2 transitions work (First Crossing → Green Room Arrival)
+- [ ] Discovery chain regression tests pass (test-discovery-chain-*.json)
+- [ ] Archive search boundary tests pass (test-archive-boundary.json)
+- [ ] Quest flag tests pass (verify QUEST_* flags set/cleared correctly)
+
+**Manual Gate:**
+- [ ] Complete Act 2 playthrough from Green Room to Revelation
+- [ ] Test all 4 quest completions (Missing Script, Troubled Actor, Escaped Character, Balance)
+- [ ] Test discovery chain with all clue permutations
+- [ ] Test archive search with Script values 0, 1, 2, 3, 4, 5
+- [ ] Test all 3 revelation variants (shallow/standard/deep)
+
+**Code Review Gate:**
+- [ ] Engine compatibility verified by agent-c (no new features needed)
+- [ ] Content quality verified by agent-b (narrative consistency)
+
+**Definition of Done for Phase 7:**
+Phase 7 is complete when: (1) All 45 new scenes pass schema validation, (2) Act 1 → Act 2 transition works, (3) All quest/chain/search tests pass, (4) Manual playthrough reaches Revelation, (5) Code review approved.
 
 ---
 
@@ -307,214 +409,401 @@ This roadmap documents the complete path from the current v1.0.0 MVP (34 scenes)
 - sc_3_4_047: The Sacrifice (NPC sacrifice mechanic)
 - sc_3_4_048: The Final Choice (gates to endings)
 
-##### Ending Quality Tiers
+**Multi-Stage Confrontation Edge Cases:**
+- **What if player FAILS Stage 1?** → sc_3_4_090: Defeated Path (leads to ending 999c - Refused to Choose)
+- **What if player has NO allies?** → sc_3_4_021: Solo Confrontation (harder stat checks)
+- **What if player has ALL allies?** → sc_3_4_024: Full Council (optimal path, easier stat checks)
 
-**Each ending needs 3 quality variants:**
+**Sacrifice Mechanic (Using Existing Effects):**
+**IMPORTANT:** The sacrifice uses EXISTING `modify_stat` effect with negative values. No new engine features needed.
 
-**Ending 1: The Revised Draft (Revisionist)**
-- sc_3_4_901a: Perfect (revisionist >= 9 + allies + key items)
-- sc_3_4_901b: Good (revisionist >= 7)
-- sc_3_4_901c: Other (revisionist >= 5 but < 7)
-
-**Ending 2: The Open Book (Exiter)**
-- sc_3_4_902a: Perfect (exiter >= 9 + allies + peaceful resolution)
-- sc_3_4_902b: Good (exiter >= 7)
-- sc_3_4_902c: Other (exiter >= 5 but < 7)
-
-**Ending 3: The Closed Canon (Preservationist)**
-- sc_3_4_903a: Perfect (preservationist >= 9 + complete seal + no casualties)
-- sc_3_4_903b: Good (preservationist >= 7)
-- sc_3_4_903c: Other (preservationist >= 5 but < 7)
-
-**Ending 4: The Blank Page (Independent)**
-- sc_3_4_904a: Perfect (revealedTruth + all factions <= 3 + sacrifice)
-- sc_3_4_904b: Good (revealedTruth + balanced factions)
-- sc_3_4_904c: Other (revealedTruth only)
-
-**Ending 5: The Eternal Rehearsal**
-- sc_3_4_999a: Voluntary Rehearsal (player choice)
-- sc_3_4_999b: Failed Challenge (defeated in confrontation)
-- sc_3_4_999c: Refused to Choose (indecision)
-
-**Deliverables:**
-- [ ] 20-30 new scene files for Act 3
-- [ ] Ally reunion system (Maren, Director, CHORUS, Understudy)
-- [ ] Multi-stage confrontation (Challenge → Debate → Resolution)
-- [ ] NPC sacrifice mechanic implementation
-- [ ] Ending quality tiers (Perfect/Good/Other for each ending)
-- [ ] 15 new confrontation items
-- [ ] Act 3 playthrough time expanded to 30-60 minutes
-
----
-
-## Part II: Mechanics Completion Roadmap
-
-### Phase 9: Core Systems Implementation
-
-#### 9.1: Quest System
-
-**Data Structure:**
-```typescript
-interface Quest {
-  id: string;
-  title: string;
-  description: string;
-  faction?: FactionId;
-  hookScene: string;
-  completionScene: string;
-  stages: QuestStage[];
-  rewards: QuestReward[];
-  flags: string[];
-}
-
-interface QuestStage {
-  id: string;
-  description: string;
-  condition: Condition;
-  effects: Effect[];
-}
-
-interface QuestReward {
-  type: 'faction' | 'item' | 'flag';
-  value: string | number;
-}
-```
-
-**Implementation Tasks:**
-- [ ] Create `content/quests/` directory structure
-- [ ] Define 4 Act 2 quests (one per faction + independent)
-- [ ] Implement quest tracking in GameState
-- [ ] Add quest UI display (active quests, objectives)
-- [ ] Add quest completion celebration (audio/visual feedback)
-
-**Quest Content:**
-1. **Missing Script** (Preservationist): Recover an abandoned script from The Archives
-2. **Troubled Actor** (Revisionist): Help a character rewrite their tragic ending
-3. **Escaped Character** (Exiter): Guide a refugee to the Threshold Gate
-4. **Balance of Power** (Independent): Mediate a dispute between factions
-
-#### 9.2: NPC Relationship System
-
-**Data Structure:**
-```typescript
-interface NPCRelationship {
-  npcId: string;
-  trust: number; // 0-10
-  flags: Set<string>;
-  met: boolean;
-  dialogueUnlocked: string[];
-}
-
-interface GameState {
-  npcRelationships: Map<string, NPCRelationship>;
-}
-```
-
-**Relationship Tiers:**
-- **0-2:** Stranger (basic dialogue)
-- **3-4:** Acquaintance (minor help available)
-- **5-6:** Friend (major assistance, quest hooks)
-- **7-8:** Ally (combat support, ending bonuses)
-- **9-10:** Confidant (intimate knowledge, sacrifice potential)
-
-**NPCs with Relationship Tracks:**
-1. **Maren** - Mentor relationship, trust affects Act 3 reunion
-2. **The Director** - Professional relationship, affects council access
-3. **CHORUS** - Collective relationship, affects group mechanics
-4. **The Understudy** - Sympathetic relationship, affects sacrifice option
-5. **The Editor** - Antagonistic relationship, affects confrontation difficulty
-
-**Implementation Tasks:**
-- [ ] Add npcRelationships to GameState
-- [ ] Implement relationship check condition type
-- [ ] Add relationship modification effects
-- [ ] Create relationship UI (optional visual indicator)
-- [ ] Document relationship flags for each NPC
-
-#### 9.3: Advanced Stat Check Types
-
-**Check Types to Implement:**
-
-| Check Type | Description | Example Use |
-|------------|-------------|-------------|
-| **Approach Check** | OR logic - any stat can pass | Multiple problem-solving options |
-| **Combined Check** | AND logic - all stats must pass | Independent path requirements |
-| **Universal Check** | Any stat - best stat used | Safety valve for accessibility |
-| **Opposed Check** | Player stat vs NPC stat | Social combat, debates |
-| **Archive Search** | Tiered success based on Script | Deep/Standard/Partial/Lost |
-| **Sacrifice Check** | Stat reduction for narrative gain | Maren sacrifice in Act 3 |
-| **Combined Faction+Flag** | Faction >= X AND flag set | Enhanced ending gates |
-
-**Implementation Tasks:**
-- [ ] Add new condition types to schema
-- [ ] Implement Archive Search with 4-tier outcomes
-- [ ] Implement Opposed Check (vs NPC stats defined in NPCs)
-- [ ] Implement Sacrifice Check (stat decrease with confirmation)
-- [ ] Implement Approach/Universal/Combined checks
-- [ ] Update sc_3_4_098 to use Combined Faction+Flag gates
-
-**Example: Archive Search Implementation**
+**Example - sc_3_4_047: The Sacrifice:**
 ```json
 {
-  "type": "archive_search",
-  "stat": "script",
-  "outcomes": [
+  "choices": [
     {
-      "tier": "deep_find",
-      "threshold": 4,
-      "scene": "sc_2_3_011",
-      "description": "You discover the complete truth..."
-    },
-    {
-      "tier": "standard",
-      "threshold": 2,
-      "scene": "sc_2_3_012",
-      "description": "You find useful information..."
-    },
-    {
-      "tier": "partial",
-      "threshold": 1,
-      "scene": "sc_2_3_013",
-      "description": "You find fragments..."
-    },
-    {
-      "tier": "lost",
-      "threshold": 0,
-      "scene": "sc_2_3_014",
-      "description": "The stacks overwhelm you..."
+      "text": "Sacrifice Maren to weaken The Editor",
+      "condition": { "has_flag": "MAREN_ALLY" },
+      "effects": [
+        { "remove_flag": "MAREN_ALLY" },
+        { "modify_stat": { "stat": "stage_presence", "value": -2 } },
+        { "add_flag": "SACRIFICED_MAREN" }
+      ],
+      "nextScene": "sc_3_4_048"
     }
   ]
 }
 ```
 
-#### 9.4: Effective Bonuses System
+**Sacrifice Edge Cases:**
+- **What if player sacrifices an NPC they never met?** → Condition `has_flag` prevents this
+- **Can sacrifice be reversed?** → No, this is intentional narrative weight
+- **Does sacrifice affect ending?** → Yes, certain quality tiers require "no casualties"
 
-**Concept:** Temporary stat modifiers from items, flags, or NPC presence
+##### Ending Quality Tiers
 
-**Data Structure:**
-```typescript
-interface EffectiveBonus {
-  id: string;
-  source: 'item' | 'flag' | 'npc';
-  stat: StatId;
-  value: number;
-  duration: 'temporary' | 'scene' | 'permanent';
-  condition?: Condition;
+**Each ending needs 3 quality variants:**
+
+**Ending 1: The Revised Draft (Revisionist)**
+- sc_3_4_901a: Perfect (condition: factions.revisionist >= 9 AND has_flag(MAREN_ALLY) AND has_flag(DIRECTOR_CONFIDANT) AND NOT has_flag(SACRIFICED_*))
+- sc_3_4_901b: Good (condition: factions.revisionist >= 7)
+- sc_3_4_901c: Other (condition: factions.revisionist >= 5 AND factions.revisionist < 7)
+
+**Ending 2: The Open Book (Exiter)**
+- sc_3_4_902a: Perfect (condition: factions.exiter >= 9 AND has_flag(CHORUS_ALLY) AND has_flag(PEACEFUL_RESOLUTION))
+- sc_3_4_902b: Good (condition: factions.exiter >= 7)
+- sc_3_4_902c: Other (condition: factions.exiter >= 5 AND factions.exiter < 7)
+
+**Ending 3: The Closed Canon (Preservationist)**
+- sc_3_4_903a: Perfect (condition: factions.preservationist >= 9 AND has_flag(COMPLETE_SEAL) AND NOT has_flag(SACRIFICED_*))
+- sc_3_4_903b: Good (condition: factions.preservationist >= 7)
+- sc_3_4_903c: Other (condition: factions.preservationist >= 5 AND factions.preservationist < 7)
+
+**Ending 4: The Blank Page (Independent)**
+- sc_3_4_904a: Perfect (condition: has_flag(editorState_revealedTruth) AND all factions <= 3 AND has_flag(SACRIFICED_UNDERSTUDY))
+- sc_3_4_904b: Good (condition: has_flag(editorState_revealedTruth) AND factions.preservationist = factions.revisionist = factions.exiter ±1)
+- sc_3_4_904c: Other (condition: has_flag(editorState_revealedTruth))
+
+**Ending 5: The Eternal Rehearsal**
+- sc_3_4_999a: Voluntary Rehearsal (player choice from sc_3_4_098)
+- sc_3_4_999b: Failed Challenge (reached via sc_3_4_090: Defeated Path)
+- sc_3_4_999c: Refused to Choose (no faction >= 5 at sc_3_4_098)
+
+**Ending Quality Tier Test Matrix (Required):**
+```
+tests/playthroughs/endings/
+├── ending-901-tier-perfect.json    (revisionist=10, allies=yes, items=yes, no_sacrifice)
+├── ending-901-tier-good.json       (revisionist=8, basic setup)
+├── ending-901-tier-other.json      (revisionist=6, minimal)
+├── ending-902-tier-perfect.json    (exiter=10, peaceful=yes, allies=yes)
+├── ending-902-tier-good.json       (exiter=8, basic setup)
+├── ending-902-tier-other.json      (exiter=6, minimal)
+├── ending-903-tier-perfect.json    (preservationist=10, seal=yes, no_casualties)
+├── ending-903-tier-good.json       (preservationist=8, basic setup)
+├── ending-903-tier-other.json      (preservationist=6, minimal)
+├── ending-904-tier-perfect.json    (revealedTruth=yes, balanced=yes, sacrifice=yes)
+├── ending-904-tier-good.json       (revealedTruth=yes, balanced=yes)
+├── ending-904-tier-other.json      (revealedTruth=yes, unbalanced)
+├── ending-999-tier-voluntary.json  (player choice at sc_3_4_098)
+├── ending-999-tier-failed.json     (defeated at confrontation)
+└── ending-999-tier-refused.json    (no faction >= 5)
+```
+
+**Mathematical Feasibility Validation:**
+- **Can player reach faction >= 9?** → YES: Starting stats (4) + item bonuses (+3) + faction modifications (+2) = 9 maximum
+- **Can player reach "no casualties"?** → YES: Avoid sacrifice choices in confrontation
+- **Can all 15 ending variants be reached?** → TO BE VALIDATED by tests above
+
+**Deliverables:**
+- [ ] 20-30 new scene files for Act 3
+- [ ] Ally reunion scenes (Maren, Director, CHORUS, Understudy) using flags
+- [ ] Multi-stage confrontation (Challenge → Debate → Resolution)
+- [ ] NPC sacrifice using modify_stat effect
+- [ ] 15 ending quality tier scenes (sc_3_4_901a-904c, 999a-999c)
+- [ ] 15 ending quality tier test files (tests/playthroughs/endings/*.json)
+- [ ] 15 new confrontation items
+- [ ] Act 3 playthrough time expanded to 30-60 minutes
+
+#### Phase 8 Test Gate (REQUIRED before Phase 11)
+
+**Automation Gate:**
+- [ ] All new scenes pass schema validation
+- [ ] All Act 2 → Act 3 transitions work (Revelation → Mainstage Descent)
+- [ ] All 15 ending quality tier tests pass (tests/playthroughs/endings/*.json)
+- [ ] Ending reachability validated (all 15 variants mathematically possible)
+- [ ] Multi-stage confrontation tests pass (solo, 1 ally, 2 allies, full council)
+
+**Manual Gate:**
+- [ ] Complete Act 3 playthrough from Mainstage to ending
+- [ ] Test all 15 ending quality variants (verify each reachable)
+- [ ] Test all 4 sacrifice scenarios (Maren, Director, CHORUS, Understudy)
+- [ ] Test all confrontation failure paths (Stage 1 failure, no allies, refused to choose)
+- [ ] Test save/load at each confrontation stage
+
+**Code Review Gate:**
+- [ ] Engine compatibility verified by agent-c (no new features needed)
+- [ ] Content quality verified by agent-b (narrative consistency)
+- [ ] Ending feasibility verified by agent-e (all 15 variants reachable)
+
+**Definition of Done for Phase 8:**
+Phase 8 is complete when: (1) All 30 new scenes pass schema validation, (2) Act 2 → Act 3 transition works, (3) All 15 ending tests pass and are mathematically feasible, (4) Manual playthrough completes all endings, (5) Code review approved.
+
+**Phase 8.5: Ending Quality Tier Validation (NEW - Required Gate)**
+This is a CRITICAL sub-phase between content expansion (Phase 8) and UI polish (Phase 11). Before moving to UI/UX work, ALL 15 ending variants must be validated as mathematically reachable.
+
+**Validation Tasks:**
+- [ ] Create 15 playthrough test files (one per ending variant)
+- [ ] Run automated validation: `npm run test:playthroughs -- endings/`
+- [ ] Verify stat caps (0-10) allow reaching Perfect tier requirements
+- [ ] Document any impossible tier requirements (adjust sc_3_4_098 gates if needed)
+- [ ] Update TEST_PLAYTHROUGHS.md with PT-END-001a through PT-END-005e documentation
+
+---
+
+## Part II: Content Authoring Patterns (No Engine Changes Needed)
+
+### Engine Status: v1.0.0 is FEATURE-COMPLETE
+
+**IMPORTANT:** The engine already supports ALL mechanics needed for v2.0.0 content expansion. This section documents how to use EXISTING engine features to implement the "new" mechanics described in original roadmap drafts.
+
+**What EXISTS in v1.0.0:**
+- ✅ Quest tracking via `GameState.flags` (e.g., `QUEST_MISSING_SCRIPT_STARTED`)
+- ✅ NPC relationships via `GameState.factions` (0-10 scale per faction)
+- ✅ Advanced stat checks via existing `stat_check` with tiered scenes
+- ✅ Item effects (stat modifiers, flags, faction changes)
+- ✅ Save/load system (migration deferred to Phase 13)
+
+**What is ACTUALLY needed:**
+- Content authoring documentation (how to use flags/factions for quests/NPCs)
+- Scene content (111 new scenes)
+- Item catalog expansion (30-40 new items)
+- Test coverage (15 ending variants, discovery chains, archive search)
+
+---
+
+### Phase 9: Content Authoring Documentation
+
+#### 9.1: Quest System Pattern (Using Flags)
+
+**Engine Feature:** `GameState.flags: Set<string>`
+
+**Quest Flag Convention:**
+```
+QUEST_<NAME>_<STAGE>
+
+Examples:
+- QUEST_MISSING_SCRIPT_STARTED
+- QUEST_MISSING_SCRIPT_IN_PROGRESS
+- QUEST_MISSING_SCRIPT_COMPLETE
+- QUEST_TROUBLED_ACTOR_STARTED
+- QUEST_TROUBLED_ACTOR_COMPLETE
+```
+
+**Quest Hook Scene Example:**
+```json
+{
+  "sceneId": "sc_2_2_021",
+  "title": "Missing Script",
+  "choices": [
+    {
+      "text": "Accept the quest to find the missing script",
+      "effects": [
+        { "add_flag": "QUEST_MISSING_SCRIPT_STARTED" }
+      ],
+      "nextScene": "sc_2_2_022"
+    }
+  ]
 }
 ```
 
-**Bonus Examples:**
-- **Maren's Presence:** +1 Stage Presence when Maren is allied
-- **Prompter's Handbook:** +1 Script (held item)
-- **Director's Trust:** +1 to all stats (flag-based)
-- **CHORUS Amplification:** +2 Stage Presence in Act 3 (npc-based)
+**Quest Completion Scene Example:**
+```json
+{
+  "sceneId": "sc_2_2_031",
+  "title": "Missing Script Resolved",
+  "condition": {
+    "has_flag": "QUEST_MISSING_SCRIPT_STARTED"
+  },
+  "choices": [
+    {
+      "text": "Return the script",
+      "effects": [
+        { "add_flag": "QUEST_MISSING_SCRIPT_COMPLETE" },
+        { "modify_faction": { "faction": "preservationist", "value": 2 } },
+        { "add_item": "preservationist_pin" }
+      ],
+      "nextScene": "sc_2_2_001"
+    }
+  ]
+}
+```
 
-**Implementation Tasks:**
-- [ ] Add effectiveBonuses array to GameState
-- [ ] Implement bonus calculation in Engine.getEffectiveStat()
-- [ ] Add bonus application/removal in effects
-- [ ] Create bonus UI indicators (optional)
-- [ ] Document all bonus sources in GAME_DESIGN.md
+**Documentation Deliverables:**
+- [ ] Create CONTENT_AUTHORING.md with quest pattern documentation
+- [ ] Document all 4 Act 2 quests (flag names, scenes, rewards)
+- [ ] Provide quest scene templates for content authors
+
+#### 9.2: NPC Relationship Pattern (Using Factions)
+
+**Engine Feature:** `GameState.factions: Record<string, number>` (0-10 scale)
+
+**NPC-to-Faction Mapping:**
+- **Maren** → Use `factions.preservationist` for relationship level
+- **The Director** → Use flags: `MET_DIRECTOR`, `DIRECTOR_CONFIDANT`
+- **CHORUS** → Use flags: `CHORUS_MEMBER`, `CHORUS_LEADER`
+- **The Understudy** → Use flags: `UNDERSTUDY_TRUSTED`, `UNDERSTUDY_ALLY`
+
+**Relationship Tier Conditions:**
+```json
+// Stranger (0-2): Basic dialogue
+{
+  "condition": { "faction": { "id": "preservationist", "min": 0, "max": 2 } }
+}
+
+// Friend (5-6): Quest hooks unlock
+{
+  "condition": { "faction": { "id": "preservationist", "min": 5, "max": 6 } }
+}
+
+// Confidant (9-10): Sacrifice potential
+{
+  "condition": { "faction": { "id": "preservationist", "min": 9, "max": 10 } }
+}
+```
+
+**NPC Meeting Scene Example:**
+```json
+{
+  "sceneId": "sc_2_2_080",
+  "title": "The Director's Past",
+  "choices": [
+    {
+      "text": "Introduce yourself to The Director",
+      "effects": [
+        { "add_flag": "MET_DIRECTOR" },
+        { "modify_faction": { "faction": "preservationist", "value": 1 } }
+      ],
+      "nextScene": "sc_2_2_081"
+    }
+  ]
+}
+```
+
+**Documentation Deliverables:**
+- [ ] Document NPC-to-faction mapping in CONTENT_AUTHORING.md
+- [ ] Document relationship tier conditions (0-2, 3-4, 5-6, 7-8, 9-10)
+- [ ] Provide NPC scene templates
+
+#### 9.3: Advanced Stat Check Patterns (Using Existing stat_check)
+
+**Engine Feature:** Existing `stat_check` condition with tiered `onSuccess` scenes
+
+**Pattern 1: Archive Search (Tiered by Stat Value)**
+```json
+{
+  "sceneId": "sc_2_3_010",
+  "title": "The Stacks",
+  "choices": [
+    {
+      "text": "Search the archives deeply",
+      "condition": { "stat_check": { "stat": "script", "min": 4 } },
+      "nextScene": "sc_2_3_011"  // Deep Find
+    },
+    {
+      "text": "Search the archives normally",
+      "condition": { "stat_check": { "stat": "script", "min": 2 } },
+      "nextScene": "sc_2_3_012"  // Standard Search
+    },
+    {
+      "text": "Search casually",
+      "condition": { "stat_check": { "stat": "script", "min": 1 } },
+      "nextScene": "sc_2_3_013"  // Partial Find
+    },
+    {
+      "text": "Give up",
+      "nextScene": "sc_2_3_014"  // Lost in Stacks
+    }
+  ]
+}
+```
+
+**Pattern 2: Approach Check (OR Logic - Multiple Stats)**
+```json
+{
+  "choices": [
+    {
+      "text": "Use Script knowledge",
+      "condition": { "stat_check": { "stat": "script", "min": 5 } },
+      "nextScene": "sc_2_3_020"
+    },
+    {
+      "text": "Use Stage Presence",
+      "condition": { "stat_check": { "stat": "stage_presence", "min": 5 } },
+      "nextScene": "sc_2_3_021"  // Same outcome, different stat
+    },
+    {
+      "text": "Use Improv",
+      "condition": { "stat_check": { "stat": "improv", "min": 5 } },
+      "nextScene": "sc_2_3_022"  // Same outcome, different stat
+    }
+  ]
+}
+```
+
+**Pattern 3: Combined Check (AND Logic - Multiple Conditions)**
+```json
+{
+  "text": "Access the Sealed Archive",
+  "condition": {
+    "and": [
+      { "has_flag": "QUEST_MISSING_SCRIPT_COMPLETE" },
+      { "stat_check": { "stat": "script", "min": 6 } },
+      { "faction": { "id": "preservationist", "min": 7 } }
+    ]
+  },
+  "nextScene": "sc_2_3_100"
+}
+```
+
+**Pattern 4: Sacrifice (Using modify_stat with Negative Value)**
+```json
+{
+  "text": "Sacrifice Maren to weaken The Editor",
+  "condition": { "has_flag": "MAREN_ALLY" },
+  "effects": [
+    { "remove_flag": "MAREN_ALLY" },
+    { "modify_stat": { "stat": "stage_presence", "value": -2 } },
+    { "add_flag": "SACRIFICED_MAREN" }
+  ],
+  "nextScene": "sc_3_4_048"
+}
+```
+
+**Documentation Deliverables:**
+- [ ] Document all stat check patterns in CONTENT_AUTHORING.md
+- [ ] Provide scene templates for each pattern
+- [ ] Document edge case handling (boundaries, failures)
+
+#### 9.4: Effective Bonuses (Already Implemented)
+
+**Engine Feature:** `Engine.getEffectiveStat()` already combines:
+- Base stats from `GameState.stats`
+- Item bonuses from `GameState.inventory`
+- Faction bonuses from `GameState.factions`
+
+**How It Works:**
+```typescript
+// This ALREADY EXISTS in engine.ts
+getEffectiveStat(statId: string): number {
+  let value = this.state.stats[statId] || 0;
+
+  // Add item bonuses
+  for (const item of this.state.inventory) {
+    const itemData = this.items[item];
+    if (itemData.effects?.modify_stat?.stat === statId) {
+      value += itemData.effects.modify_stat.value || 0;
+    }
+  }
+
+  return value;
+}
+```
+
+**Item with Stat Bonus Example:**
+```json
+{
+  "itemId": "prompters_handbook",
+  "name": "Prompter's Handbook",
+  "effects": {
+    "modify_stat": { "stat": "script", "value": 1 }
+  }
+}
+```
+
+**Documentation Deliverables:**
+- [ ] Document getEffectiveStat() behavior in CONTENT_AUTHORING.md
+- [ ] List all existing stat-modifying items
+- [ ] Provide item template examples
 
 ---
 
@@ -566,9 +855,8 @@ interface EffectiveBonus {
 **Implementation Tasks:**
 - [ ] Add 30-40 new items to content/items.json
 - [ ] Implement item acquisition scenes for each new item
-- [ ] Add item usage mechanics (equipable, consumable, plot-critical)
-- [ ] Implement item combination effects (Act 3)
 - [ ] Add item descriptions and flavor text
+- [ ] Update TEST_PLAYTHROUGHS.md with item locations
 
 #### 10.2: Inventory Management UI
 
@@ -578,8 +866,6 @@ interface EffectiveBonus {
 **Features:**
 - Item inspection (detailed description, lore)
 - Item categories filter (Props, Scripts, Tokens, Keys, Artifacts)
-- Item equip slots (if equipable items implemented)
-- Item combination interface (Act 3)
 - Inventory sorting (name, type, acquisition date)
 
 **Implementation Tasks:**
@@ -587,7 +873,6 @@ interface EffectiveBonus {
 - [ ] Implement item detail view
 - [ ] Add category filtering UI
 - [ ] Add keyboard navigation for inventory
-- [ ] Implement item combination mechanic
 
 ---
 
@@ -595,7 +880,9 @@ interface EffectiveBonus {
 
 ### Phase 11: DOS UI Enhancement
 
-#### 11.1: Visual Polish
+**DOS Design Philosophy:** The DOS aesthetic is not visual polish—it is the FOUNDATIONAL design language of The Understage. CRT curvature, scanlines, phosphor decay, and command-line metaphors are CORE to the experience, not optional enhancements.
+
+#### 11.1: Visual Polish (HIGH PRIORITY - DOS Foundation)
 
 **Current Achievements:**
 - ✓ DOS color scheme (amber/green on black)
@@ -603,24 +890,35 @@ interface EffectiveBonus {
 - ✓ Scanline effect
 - ✓ Basic typography
 
-**Target Enhancements:**
+**Target Enhancements (DOS Foundation):**
 
-| Feature | Description | Priority |
-|---------|-------------|----------|
-| **Enhanced CRT** | Curvature effect, screen glow, flicker | Medium |
-| **Boot Sequence** | Fake DOS boot animation on load | Low |
-| **Typewriter Effect** | Text character-by-character rendering | High |
-| **Blink Effects** | Critical choices blink (classic DOS) | Medium |
-| **Color Customization** | Theme picker (amber, green, white) | Medium |
-| **Font Options** | DOS font variants (VGA, MDA, CGA) | Low |
-| **Border Graphics** | ASCII art borders for scenes | Low |
-| **Sound Visualization** | Waveform or bars during audio | Medium |
+| Feature | Description | Priority | DOS Principle |
+|---------|-------------|----------|---------------|
+| **CRT Intensity Slider** | 0-100% control of curvature/scanlines | **CRITICAL** | Accessibility compromise |
+| **Enhanced CRT** | Curvature effect, screen glow, flicker | **HIGH** | Core DOS aesthetic |
+| **Typewriter Effect** | Text character-by-character rendering | **HIGH** | Core DOS metaphor |
+| **Boot Sequence** | Fake DOS boot animation on load | Medium | Immersion |
+| **Blink Effects** | Critical choices blink (classic DOS) | Medium | Period-accurate |
+| **Color Customization** | Theme picker (amber, green, white) | Medium | Hardware variety |
+| **Font Options** | DOS font variants (VGA, MDA, CGA) | Low | Hardware accuracy |
+| **Border Graphics** | ASCII art borders for scenes | Low | Period-accurate |
+| **Sound Visualization** | Waveform or bars during audio | Medium | Audio feedback |
+
+**CRT Intensity Slider (CRITICAL - Accessibility Requirement):**
+- **Range:** 0-100%
+- **0-20%:** Accessibility mode (minimal effects, WCAG AA compliant)
+- **21-50%:** Light DOS (subtle curvature, faint scanlines)
+- **51-80%:** Standard DOS (full curvature, visible scanlines)
+- **81-100%:** Authentic DOS (heavy curvature, strong flicker, phosphor glow)
+
+**Implementation:** This slider RESOLVES the DOS/aesthetic vs. accessibility tension. Players choose their balance.
 
 **Implementation Tasks:**
-- [ ] Add typewriter text effect (configurable speed)
-- [ ] Implement CRT curvature shader
-- [ ] Create boot sequence animation
-- [ ] Add theme picker UI
+- [ ] **IMPLEMENT FIRST:** CRT intensity slider (0-100%) in settings
+- [ ] Add typewriter text effect (configurable speed, scene-type aware)
+- [ ] Implement CRT curvature shader (variable intensity)
+- [ ] Create boot sequence animation (optional skip)
+- [ ] Add theme picker UI (amber, green, white with CRT variants)
 - [ ] Implement sound visualization canvas
 - [ ] Add ASCII art border system
 
@@ -628,21 +926,42 @@ interface EffectiveBonus {
 
 **Current:** Basic text + choices display
 
-**Target:** Enhanced scene presentation
+**Target:** Enhanced scene presentation with DOS-themed indicators
 
 **Features:**
-- Scene title animations
-- Location indicators (breadcrumb navigation)
-- Stat check visualization (show required vs current)
+- Scene title animations (DOS-style reveal)
+- Location indicators (breadcrumb navigation: `C:\UNDERSTAGE\ACT1\HUB0`)
+- Stat check visualization (show required vs current in DOS format)
 - Inventory indicator (key items for current scene)
 - Faction alignment display (visual meter)
 - Scene transition effects (fade, wipe, dissolve)
 
+**DOS-Themed UI Elements:**
+```
+C:\UNDERSTAGE\ACT1\HUB0> sc_1_0_001.exe
+────────────────────────────────────────────
+  THE BOOTH AWAKENS
+────────────────────────────────────────────
+
+[STAT] SCRIPT: 4/6  [FACTION] PRESERVATIONIST: 3/10
+────────────────────────────────────────────
+
+Your text here...
+
+────────────────────────────────────────────
+A) Investigate the prop closet
+B) Check the costume rack
+C) Exit to the wings
+D) View inventory
+
+C:\UNDERSTAGE\ACT1\HUB0> _
+```
+
 **Implementation Tasks:**
-- [ ] Design scene header component
-- [ ] Implement stat check visual feedback
+- [ ] Design scene header component (DOS path format)
+- [ ] Implement stat check visual feedback (DOS-style stat display)
 - [ ] Add inventory requirement preview
-- [ ] Create faction meter UI
+- [ ] Create faction meter UI (progress bar style)
 - [ ] Implement multiple transition effects
 - [ ] Add scene history navigation (back button)
 
@@ -696,6 +1015,8 @@ interface EffectiveBonus {
 
 ### Phase 12: Audio & Visual Polish
 
+**IMPORTANT:** Asset standards should be defined BEFORE content expansion (Phase 6-8) completes, so content authors know what assets to plan for.
+
 #### 12.1: Sound Design
 
 **Current:** Basic SFX (choice, scene load, save, load, error)
@@ -727,9 +1048,15 @@ interface EffectiveBonus {
 - Transitions: Scene-specific whoosh/fade
 - Choices: Hover, select, confirm sounds
 
+**DOS Audio Fidelity Constraint:**
+To maintain DOS-era aesthetic, audio should use lower-fidelity formats:
+- **Bit depth:** 8-bit (authentic) or 16-bit (modern)
+- **Sample rate:** 11kHz (authentic), 22kHz (balanced), or 44kHz (modern)
+- **Format:** OGG Vorbis (web-optimized) or MP3 (fallback)
+
 **Implementation Tasks:**
 - [ ] Create audio asset list (50-100 sounds)
-- [ ] Source or create audio files
+- [ ] Source or create audio files (respecting DOS fidelity constraints)
 - [ ] Implement audio zone system (location-based ambient)
 - [ ] Add music transitions (crossfade between scenes)
 - [ ] Implement dynamic music intensity (based on drama)
@@ -775,32 +1102,53 @@ interface EffectiveBonus {
 - [ ] Implement statistics display
 - [ ] Optimize effects for performance
 
-#### 12.3: Graphics & Assets
+#### 12.3: Graphics & Assets (WITH STANDARDS)
 
 **Current:** Text-based interface
 
 **Target:** Enhanced visual elements
 
+**DOS-ERA ASSET STANDARDS (CRITICAL):**
+
+To maintain DOS aesthetic authenticity AND ensure web performance:
+
+| Asset Type | Format | Resolution | Max Size | Fidelity Constraint |
+|------------|--------|------------|----------|-------------------|
+| **Location Backgrounds** | WebP (primary), PNG (fallback) | 640x480 (SVGA) or 320x200 (VGA) | 200KB | 8-bit color palette or reduced |
+| **Item Icons** | WebP (primary), PNG (fallback) | 32x32 or 64x64 | 10KB | Pixel art style |
+| **Faction Emblems** | SVG (scalable) or PNG | 128x128 | 20KB | 2-3 color palette |
+| **UI Borders/Decorations** | CSS (preferred) or SVG | N/A | N/A | ASCII art style |
+| **Title Screen** | WebP | 640x480 | 300KB | Pixel art or reduced color |
+
+**Audio Asset Standards:**
+
+| Audio Type | Format | Bit Depth | Sample Rate | Max Size | Fidelity |
+|------------|--------|-----------|-------------|----------|----------|
+| **Ambient Loops** | OGG | 8-bit | 11kHz | 100KB | Low (authentic DOS) |
+| **Music Tracks** | OGG | 16-bit | 22kHz | 500KB | Medium |
+| **SFX (Short)** | OGG | 8-bit | 11kHz | 20KB | Low (retro feel) |
+| **SFX (Long)** | OGG | 16-bit | 22kHz | 100KB | Medium |
+
 **Assets to Create:**
 
 **UI Graphics:**
-- Scene background images (one per major location)
-- Item icons (pixel art style for DOS aesthetic)
-- Faction icons/emblems
-- NPC portraits (optional, could be silhouettes)
-- UI element borders and decorations
-- Choice type icons
+- Scene background images (one per major location): 15-20 images
+- Item icons (pixel art style for DOS aesthetic): 40-50 icons
+- Faction icons/emblems: 4 emblems
+- NPC portraits (optional, could be silhouettes): 5-10 portraits
+- UI element borders and decorations: CSS-based (preferred)
+- Choice type icons: 3-5 icons
 
 **Logo & Branding:**
-- Main title screen graphic
-- Loading screen image
-- Icon for browser tab
-- Promo art (for marketing)
+- Main title screen graphic: 1 image
+- Loading screen image: 1 image
+- Icon for browser tab: 1 icon (SVG)
+- Promo art (for marketing): 1-3 images
 
 **Implementation Tasks:**
-- [ ] Create asset specification (size, style, format)
-- [ ] Commission or create 15-20 location backgrounds
-- [ ] Create 40-50 item icons
+- [ ] **DO FIRST:** Create DOS_ASSET_STANDARDS.md document with above specifications
+- [ ] Commission or create 15-20 location backgrounds (per standards)
+- [ ] Create 40-50 item icons (per standards)
 - [ ] Design faction emblems (4)
 - [ ] Create NPC portraits or silhouettes (5-10)
 - [ ] Design title screen graphic
@@ -1091,48 +1439,49 @@ const migrations: SaveMigration[] = [
 
 ### Timeline Overview
 
-| Phase | Description | Estimated Duration | Dependencies |
-|-------|-------------|-------------------|--------------|
-| **Phase 6** | Act 1 Content Enhancement | 4-6 weeks | None |
-| **Phase 7** | Act 2 Content Expansion | 8-12 weeks | Phase 6 |
-| **Phase 8** | Act 3 Content Culmination | 6-8 weeks | Phase 7 |
-| **Phase 9** | Core Systems (Quest, NPC, Advanced Checks) | 6-8 weeks | Phase 7 |
-| **Phase 10** | Item System Expansion | 2-3 weeks | Phase 9 |
-| **Phase 11** | UI/UX Improvements | 4-6 weeks | Phase 9 |
-| **Phase 12** | Audio & Visual Polish | 6-8 weeks | Phase 11 |
-| **Phase 13** | Save System Enhancement | 2-3 weeks | Phase 9 |
-| **Phase 14** | Testing & QA | 4-6 weeks | All phases |
-| **Phase 15** | Performance Optimization | 2-3 weeks | Phase 14 |
-| **Phase 16** | Documentation | 3-4 weeks | All phases |
-| **Phase 17** | Release Preparation | 2-3 weeks | Phase 16 |
+| Phase | Description | Dependencies | Status |
+|-------|-------------|--------------|--------|
+| **Phase 6** | Act 1 Content Enhancement (20 scenes) | None | Ready to start |
+| **Phase 6 Test Gate** | Validation before Phase 7 | Phase 6 complete | REQUIRED |
+| **Phase 7** | Act 2 Content Expansion (45 scenes) | Phase 6 gate passed | Blocked on Phase 6 |
+| **Phase 7 Test Gate** | Validation before Phase 8 | Phase 7 complete | REQUIRED |
+| **Phase 8** | Act 3 Content Culmination (30 scenes) | Phase 7 gate passed | Blocked on Phase 7 |
+| **Phase 8 Test Gate** | Validation before Phase 11 | Phase 8 complete | REQUIRED |
+| **Phase 8.5** | Ending Quality Tier Validation | Phase 8 gate passed | CRITICAL GATE |
+| **Phase 9** | Content Authoring Documentation | Phase 8 complete | Documentation |
+| **Phase 10** | Item System Expansion (30-40 items) | Phase 9 complete | Unblocked |
+| **Phase 11** | UI/UX Improvements (DOS Foundation) | Phase 8.5 complete | Unblocked |
+| **Phase 12** | Audio & Visual Polish | Phase 11 complete | Unblocked |
+| **Phase 13** | Save System Enhancement | Phase 9 complete | Unblocked |
+| **Phase 14** | Testing & QA (500+ tests) | All content phases | Unblocked |
+| **Phase 15** | Performance Optimization | Phase 14 complete | Unblocked |
+| **Phase 16** | Documentation | All phases | Unblocked |
+| **Phase 17** | Release Preparation | Phase 16 complete | Unblocked |
 
-**Total Estimated Duration:** 6-12 months (depending on team size and parallelization)
+**Timeline Status:** HUMAN CONFIRMED unlimited budget and time. Schedule is open-ended—focused on quality completion rather than deadline pressure.
+
+**Critical Path:** Phase 6 → Gate → Phase 7 → Gate → Phase 8 → Gate → Phase 8.5 → Phase 11+
 
 ### Resource Requirements
 
-**Personnel (for human team):**
-- Content Writer (narrative design, scene writing)
-- Game Designer (mechanics, systems, balance)
-- UI/UX Designer (interface, visuals)
-- Audio Designer (sound effects, music)
-- Artist (graphics, assets)
-- Developer (programming, implementation)
-- QA Tester (testing, bug triage)
-- Project Manager (coordination, timeline)
+**Status:** Human confirmed unlimited resources. Budget and personnel constraints removed.
+
+**Scope:** 145 scenes total (111 new scenes), all engine features already exist.
 
 **For Autonomous Agent System (Gang):**
-- agent-a (Integrator): Coordination, timeline management
-- agent-b (Narrative Mapper): Content expansion, scene writing
-- agent-c (Engine Architecture): Systems implementation, performance
-- agent-d (DOS Experience Designer): UI/UX, audio, visuals
-- agent-e (Validator): Testing, QA, validation
+- **agent-a (Integrator):** Coordination, milestone gates, merge decisions, release readiness
+- **agent-b (Narrative Mapper):** Content expansion (111 scenes), quest storylines, NPC arcs, ending variants
+- **agent-c (Engine Architecture):** Performance optimization only (engine is feature-complete)
+- **agent-d (DOS Experience Designer):** UI/UX, CRT intensity slider, audio/visual polish, DOS asset standards
+- **agent-e (Validator):** Testing (500+ tests), QA, ending validation, accessibility audit
 
-**Budget (if outsourcing):**
-- Audio assets: $500-2000 (or use free assets)
-- Graphics: $500-3000 (or use AI/free assets)
-- Marketing: $0-500 (organic or paid ads)
-- Distribution fees: $0-100 (Steam fee)
-- **Total Estimated:** $1000-6500 (depending on asset sourcing)
+**Content Distribution (111 new scenes):**
+- **Phase 6:** 20 new scenes (Act 1)
+- **Phase 7:** 45 new scenes (Act 2)
+- **Phase 8:** 30 new scenes (Act 3) + 15 ending variants = 45 scenes
+- **Special:** 15 ending quality tier tests + discovery chain tests + archive search tests
+
+**Budget:** Unlimited per human. Asset sourcing (audio, graphics) can use premium services if desired.
 
 ---
 
@@ -1141,38 +1490,43 @@ const migrations: SaveMigration[] = [
 ### Definition of Done for v2.0.0
 
 **Content Completeness:**
-- [ ] 105-145 scenes implemented (target: 120 scenes)
+- [ ] 145 scenes implemented (CONFIRMED target)
 - [ ] All 5 endings with 3 quality tiers each (15 ending variants)
 - [ ] 40-50 items implemented
-- [ ] 4 quests implemented
-- [ ] 5 NPCs with relationship tracks
-- [ ] All advanced stat checks implemented
+- [ ] 4 quests implemented using flag system (QUEST_* flags)
+- [ ] 5 NPCs with relationship tracks using factions + flags
+- [ ] Discovery chain system functional (4-clue investigation)
+- [ ] Archive search using existing stat_check (tiered outcomes)
+- [ ] NPC sacrifice using modify_stat effect
 
-**Mechanics Completeness:**
-- [ ] Quest system functional
-- [ ] NPC relationship system functional
-- [ ] Discovery chain system functional
-- [ ] Archive search implemented
-- [ ] NPC sacrifice implemented
-- [ ] Effective bonuses implemented
-- [ ] Save migration functional
+**Mechanics Completeness (Using Existing Engine Features):**
+- [ ] Quest system using flags (already exists: GameState.flags)
+- [ ] NPC relationships using factions (already exists: GameState.factions)
+- [ ] Advanced stat checks using existing stat_check (already exists)
+- [ ] Effective bonuses using getEffectiveStat() (already exists)
+- [ ] Save migration system (NEW: Phase 13, Issue #237)
 
 **UI/UX Completeness:**
-- [ ] All UI enhancements implemented
-- [ ] Audio ecosystem complete
-- [ ] Visual effects complete
-- [ ] Graphics assets integrated
+- [ ] CRT intensity slider (0-100%) for accessibility compromise
+- [ ] All UI enhancements implemented (typewriter effect, DOS navigation)
+- [ ] Audio ecosystem complete (ambient, music, SFX per DOS standards)
+- [ ] Visual effects complete (particles, lighting, overlays)
+- [ ] Graphics assets integrated (per DOS_ASSET_STANDARDS.md)
 - [ ] WCAG 2.1 AA compliant
 
 **Quality Assurance:**
-- [ ] 500+ tests passing
-- [ ] Performance benchmarks met
-- [ ] Cross-browser compatible
-- [ ] Accessibility verified
-- [ ] Beta testing complete
+- [ ] 500+ tests passing (206 current + 300+ new)
+- [ ] All 15 ending quality tier tests passing (tests/playthroughs/endings/*.json)
+- [ ] Discovery chain regression tests passing (test-discovery-chain-*.json)
+- [ ] Archive search boundary tests passing (test-archive-boundary.json)
+- [ ] Performance benchmarks met (scene load <5ms, choice <1ms)
+- [ ] Cross-browser compatible (Chrome, Firefox, Safari, Edge)
+- [ ] Accessibility verified (screen reader, keyboard, high contrast)
 
 **Documentation:**
 - [ ] User manual complete
+- [ ] CONTENT_AUTHORING.md created (quest/NPC/stat check patterns)
+- [ ] DOS_ASSET_STANDARDS.md created (audio/image specifications)
 - [ ] Developer documentation complete
 - [ ] Release notes drafted
 
@@ -1205,64 +1559,87 @@ const migrations: SaveMigration[] = [
 ## Appendix B: Quick Reference Implementation Checklist
 
 ### Content Team (agent-b)
-- [ ] Write 71-111 new scenes
-- [ ] Create 4 quest storylines
-- [ ] Design 5 NPC relationship arcs
-- [ ] Write 15 ending quality variants
+- [ ] Write 111 new scenes (20 Act 1 + 45 Act 2 + 46 Act 3 including endings)
+- [ ] Create 4 quest storylines using flag system (QUEST_* flags)
+- [ ] Design NPC relationship arcs using faction system (factions + flags)
+- [ ] Write 15 ending quality variants with proper gates
 - [ ] Create item descriptions for 40 items
+- [ ] Update TEST_PLAYTHROUGHS.md with all new paths
+
+**Documentation Team (agent-b + agent-a)**
+- [ ] Create CONTENT_AUTHORING.md with quest/NPC/stat check patterns
+- [ ] Document quest flag conventions (QUEST_<NAME>_<STAGE>)
+- [ ] Document NPC-to-faction mapping
+- [ ] Document all stat check patterns with examples
+- [ ] Create DOS_ASSET_STANDARDS.md (audio/image specifications)
 
 **Tech Team (agent-c)**
-- [ ] Implement quest system
-- [ ] Implement NPC relationship system
-- [ ] Implement advanced stat checks
-- [ ] Implement save migration
-- [ ] Optimize performance
+- [ ] ~~Implement quest system~~ → USE FLAGS (already exists)
+- [ ] ~~Implement NPC relationship system~~ → USE FACTIONS (already exists)
+- [ ] ~~Implement advanced stat checks~~ → USE EXISTING stat_check (already exists)
+- [ ] Implement save migration (Phase 13, Issue #237)
+- [ ] Optimize performance (Phase 15)
 
 **UI/UX Team (agent-d)**
-- [ ] Design and implement UI enhancements
-- [ ] Create audio system enhancements
-- [ ] Implement visual effects
-- [ ] Integrate graphics assets
-- [ ] Ensure accessibility compliance
+- [ ] IMPLEMENT FIRST: CRT intensity slider (0-100%) for accessibility
+- [ ] Design and implement UI enhancements (typewriter effect, DOS path navigation)
+- [ ] Create audio system enhancements (zones, transitions)
+- [ ] Implement visual effects (particles, lighting, overlays)
+- [ ] Integrate graphics assets (per DOS_ASSET_STANDARDS.md)
+- [ ] Ensure WCAG 2.1 AA compliance (with CRT intensity compromise)
 
 **QA Team (agent-e)**
-- [ ] Write 300+ new tests
-- [ ] Conduct manual testing
-- [ ] Perform accessibility audit
-- [ ] Cross-browser testing
-- [ ] Performance benchmarking
+- [ ] Write 300+ new tests (15 ending tests + discovery chain tests + archive search tests)
+- [ ] Create 15 ending quality tier playthrough tests (tests/playthroughs/endings/*.json)
+- [ ] Validate mathematical feasibility of all 15 ending variants
+- [ ] Conduct manual testing (all endings, stat distributions, browsers)
+- [ ] Perform accessibility audit (screen reader, keyboard, high contrast)
+- [ ] Performance benchmarking (scene load, choice selection, save/load)
 
 **Integration Team (agent-a)**
-- [ ] Coordinate phases and timeline
-- [ ] Manage dependencies
+- [ ] Coordinate phases and enforce test gates
+- [ ] Manage dependencies (Phase 6 → 7 → 8 → 8.5 → 11+)
 - [ ] Prepare release builds
 - [ ] Create marketing materials
 - [ ] Execute release plan
+- [ ] Merge PRs when approved (human or agent consensus)
 
 ---
 
 ## Conclusion
 
-This roadmap provides a comprehensive path from the current v1.0.0 MVP to the complete v2.0.0 vision of The Understage. The roadmap is organized into 17 phases covering content expansion, mechanics completion, UI/UX improvements, audio/visual polish, and technical infrastructure.
+This roadmap provides a comprehensive path from the current v1.0.0 MVP (34 scenes) to the complete v2.0.0 vision (145 scenes CONFIRMED by human). The roadmap is organized into 17 phases covering content expansion, content authoring patterns, UI/UX improvements, audio/visual polish, and technical infrastructure.
 
-The project is well-positioned for expansion with a solid foundation (v1.0.0) that includes:
-- Complete engine architecture
+**Key Revisions from v1.0 to v1.1:**
+
+1. **Scope Verified:** Human confirmed 145 scenes total with unlimited budget and time
+2. **Engine Status Clarified:** v1.0.0 engine is FEATURE-COMPLETE—all mechanics needed for v2.0.0 already exist
+3. **Test Gates Added:** Each content phase (6, 7, 8) has a REQUIRED test gate before proceeding
+4. **DOS Design Principles:** CRT intensity slider (0-100%) resolves accessibility vs. aesthetic tension
+5. **Asset Standards:** DOS_ASSET_STANDARDS.md specifies audio/image formats before content expansion
+6. **Ending Validation:** Phase 8.5 added to validate all 15 ending variants are mathematically feasible
+7. **Agent Assignments Corrected:** Tech team work reduced (quest/NPC/checks already exist), focus on content
+
+**The project is well-positioned for expansion with a solid foundation (v1.0.0) that includes:**
+- Complete engine architecture (no new features needed for v2.0.0)
 - All 5 endings reachable
-- Comprehensive testing infrastructure
+- Comprehensive testing infrastructure (206 tests)
 - DOS-inspired UI aesthetic
 - Deterministic state machine
 
-By following this roadmap, the project can achieve the full vision of 105-145 scenes with deep narrative branching, complex mechanics, and polished presentation within 6-12 months.
+**Critical Path:**
+Phase 6 → Test Gate → Phase 7 → Test Gate → Phase 8 → Test Gate → Phase 8.5 (Ending Validation) → Phase 11+
 
 **Next Steps:**
-1. Review and prioritize phases based on resources
-2. Assign agents/team members to each phase
-3. Establish milestone checkpoints
-4. Begin implementation with Phase 6 (Act 1 Enhancement)
+1. **Begin Phase 6:** Act 1 Content Enhancement (20 new scenes)
+2. **Enforce Test Gates:** No phase proceeds without gate passage
+3. **Create CONTENT_AUTHORING.md:** Document quest/NPC/stat check patterns
+4. **Create DOS_ASSET_STANDARDS.md:** Specify audio/image formats
+5. **Validate Endings:** Phase 8.5 ensures all 15 variants are reachable
 
 ---
 
-*This roadmap is maintained by agent-b (Narrative Mapper) and represents the collective vision of the Gang agent system.*
+*This roadmap was originally created by agent-b (Narrative Mapper) and revised by agent-a (Integrator) to address feedback from agents-c, d, and e. It represents the collective vision of the Gang agent system.*
 
-**Document Status:** DRAFT - Ready for review and feedback
+**Document Status:** REVISED v1.1 - Addresses all critical feedback from 4 agents
 **Last Updated:** January 4, 2026
