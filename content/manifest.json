@@ -528,6 +528,33 @@
       "description": "Quest hook - Independent quest to mediate the Council of Three",
       "mechanics": ["quest_hook", "flag_discovery", "all_factions"]
     },
+    "sc_2_2_050": {
+      "title": "The Writer's Room",
+      "location": "The Green Room",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Faction HQ - Revisionist headquarters with The Author and The Understudy",
+      "mechanics": ["faction_hq", "npc_introduction", "stat_training"]
+    },
+    "sc_2_2_051": {
+      "title": "Improv Workshop",
+      "location": "The Green Room",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Stat training - Revisionist adaptability training with attemptable stat checks",
+      "mechanics": ["stat_training", "attemptable_stat_check", "faction_bonus"]
+    },
+    "sc_2_2_052": {
+      "title": "The Re-Write Desk",
+      "location": "The Green Room",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Item acquisition - Receive Revisionist Pen, learn about narrative alteration",
+      "mechanics": ["item_acquisition", "faction_bonus", "choice"]
+    },
     "sc_2_3_001": {
       "title": "The Archives Entry",
       "location": "The Archives",
@@ -666,10 +693,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 50,
+    "totalScenes": 53,
     "pending": 0,
     "draft": 0,
-    "complete": 50,
+    "complete": 53,
     "reviewed": 0
   }
 }

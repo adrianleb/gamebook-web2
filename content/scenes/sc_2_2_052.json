@@ -1,0 +1,126 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_052",
+  "title": "The Re-Write Desk",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["revisionist", "item", "mechanic"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Re-Write Desk",
+    "paragraphs": [
+      "A simple wooden desk sits in the center of the room, covered in drafts marked with red ink. Crossed-out paragraphs. Rewritten dialogue. Entire pages crumpled and discarded.",
+      "The Author runs a finger along a line of text, scratching it out. \"This is where we do the work,\" they say quietly. \"The Preservationists call it vandalism. We call it improvement.\"",
+      "They pick up a pen—a simple thing, but the ink seems to shimmer with possibility. \"This pen can change anything. A word. A line. An entire scene. But every change has consequences. Change a tragedy to comedy, and someone's grief becomes a joke. Change a villain to hero, and their victims' suffering means nothing.\"",
+      "The Author meets your eyes, their face momentarily still. \"The question isn't CAN you change stories. The question is SHOULD you. We Revisionists believe the answer is yes—that stories must evolve to stay relevant. But not everyone agrees.\"",
+      "From the shadows, The Understudy speaks. \"Ask them what happens to the ORIGINAL versions. The ones that get crossed out.\"",
+      "The Author's head snaps toward The Understudy, expression darkening. For a moment, you see something beneath the shifting faces—a hunger, an emptiness that no amount of rewriting can fill.",
+      "\"The originals are PRESERVED,\" The Author says, voice tight. \"In the Archives. The Conservator sees to that. Nothing is truly lost. Only... improved.\"",
+      "The Author turns back to you, face calm again. \"Would you like to try? A small revision. Just to see how it feels.\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_author",
+      "name": "The Author",
+      "description": "Offers the power of narrative revision",
+      "role": "faction_leader"
+    },
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "Warns about the cost of revision",
+      "role": "suspicious_ally"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "rewrite_desk_tense",
+    "sfx": ["pen_scratch", "paper_crumple"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "rewrite_desk_entered"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Accept the pen and make a revision",
+      "to": "sc_2_2_050",
+      "conditions": [
+        {
+          "type": "flag_check",
+          "flag": "rewrite_desk_visited",
+          "operator": "NOT_SET"
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "add_item",
+          "item": "revisionist_pen"
+        },
+        {
+          "type": "modify_faction",
+          "faction": "revisionist",
+          "value": 2
+        },
+        {
+          "type": "set_flag",
+          "flag": "rewrite_desk_visited"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "script",
+          "value": 1
+        }
+      ],
+      "disabledHint": "You've already experienced the Re-Write Desk."
+    },
+    {
+      "id": "choice_2",
+      "label": "Ask The Understudy what they meant",
+      "to": "sc_2_2_050",
+      "conditions": [
+        {
+          "type": "flag_check",
+          "flag": "understory_warned",
+          "operator": "NOT_SET"
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "understudy_warned"
+        },
+        {
+          "type": "modify_stat",
+          "stat": "script",
+          "value": 1
+        }
+      ],
+      "disabledHint": "The Understudy has already shared their warning."
+    },
+    {
+      "id": "choice_3",
+      "label": "Decline the offer (return to Writer's Room)",
+      "to": "sc_2_2_050",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["rewrite_desk_entered"],
+    "requires": ["writers_room_entered"],
+    "checks": []
+  }
+}
