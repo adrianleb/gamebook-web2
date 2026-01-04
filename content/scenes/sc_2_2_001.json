@@ -99,6 +99,14 @@
     },
     {
       "id": "choice_6",
+      "label": "Visit the Threshold Gate (Exiters)",
+      "to": "sc_2_2_060",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_7",
       "label": "Head to the Archives",
       "to": "sc_2_3_001",
       "conditions": null,

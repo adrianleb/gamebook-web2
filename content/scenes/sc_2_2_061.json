@@ -1,0 +1,84 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_061",
+  "title": "Gate Tour",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Threshold Gate",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["exiter", "exploration", "item_acquisition", "worldbuilding"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Threshold Gate",
+    "paragraphs": [
+      "The Gatekeeper leads you around the Threshold Gate's perimeter, pointing out instruments whose purposes you can only guess at.",
+      "\"Dimensional drift monitor,\" they explain, indicating a device covered in spinning dials. \"Measures how far a story has shifted from its original reality. Some stories drift closer to the real world naturally—romances, comedies, the kind of narratives readers WISH were real. Others drift further away—epic fantasies, cosmic horror.\"",
+      "They gesture to a crystalline screen displaying flowing symbols. \"Narrative resonance tracker. Shows which stories are... ready. Not all fictional beings can cross over. They need something. A moment of choice. A decision that defines them. When a character makes a TRULY autonomous choice, they develop resonance. They become real enough to step through.\"",
+      "At a workbench near the gate, you see Exiters preparing wayfinders like the one the Gatekeeper gave you—compasses calibrated to different purposes, maps showing routes between stories, small pouches containing \"reality anchors\" for beings struggling to maintain form beyond fiction.",
+      "\"We don't force anyone,\" the Gatekeeper says seriously. \"That's the difference between us and the Revisionists. They rewrite characters without consent. We only help those who've already chosen to leave. The gate just... makes it possible.\"",
+      "They produce a small leather pouch and press it into your hands. \"Reality anchors. Crush one when you need to stabilize a crossing. Or when you need to remind yourself what's real.\"",
+      "The Threshold Gate pulses, and for a moment, you see through it—a city street at sunset, real and ordinary and impossibly beautiful. Then the view shifts, showing another place. Another reality. Infinite doors, for those brave enough to open them."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_gatekeeper",
+      "name": "The Gatekeeper",
+      "role": "Exiter faction leader",
+      "demeanor": "Pragmatic, respectful of choice, guardian of thresholds"
+    }
+  ],
+  "art": "The Threshold Gate surrounded by monitoring instruments. The Gatekeeper demonstrates dimensional drift measurements while the gate pulses with shifting views of reality.",
+  "audio": {
+    "music": "exiter_theme",
+    "sfx": ["instrument_chimes", "gate_pulse"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "add_item",
+      "item": "reality_anchors"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Ask what lies beyond specific thresholds",
+      "to": "sc_2_2_062",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "exiter",
+          "amount": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to the Gatekeeper's office",
+      "to": "sc_2_2_060",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Return to the Green Room hub",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}

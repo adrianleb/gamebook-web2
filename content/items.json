@@ -152,6 +152,33 @@
         "effect": "One use per hub: gain temporary access to any faction-gated content or bonus"
       },
       {
+        "id": "wayfinder",
+        "name": "Wayfinder",
+        "category": "prop",
+        "faction": "exiter",
+        "properties": [],
+        "description": "Granted by the Gatekeeper. A compass that points toward what matters most.",
+        "effect": "Reveals the most important available choice in each scene"
+      },
+      {
+        "id": "reality_anchors",
+        "name": "Reality Anchors",
+        "category": "prop",
+        "faction": "exiter",
+        "properties": ["consumable"],
+        "description": "Granted during Gate Tour. Small pouch of crystallized reality dust.",
+        "effect": "Stabilize dimensional crossing or resist reality-warping effects"
+      },
+      {
+        "id": "threshold_fragment",
+        "name": "Threshold Fragment",
+        "category": "artifact",
+        "faction": "exiter",
+        "properties": ["plot_critical"],
+        "description": "Granted for completing Escaped Character quest. A crystalline fragment from the Threshold Gate itself.",
+        "effect": "One-time passage through any Threshold Gate; opens Exiter-exclusive ending options"
+      },
+      {
         "id": "elara_token",
         "name": "Elara's Token",
         "category": "token",
