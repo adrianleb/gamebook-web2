@@ -1,0 +1,97 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT2-H2-SEALED-ARCHIVE-ACCESS",
+    "description": "Sealed Archive Access with Prerequisite Chain - Tests flags.requires prerequisite chain (sc_2_2_042 requires ARCHIVES_TOUR_COMPLETE which requires MET_CONSERVATOR), set_flag (SEALED_ARCHIVE_ACCESS_GRANTED), and modify_faction +2 on exit",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 0
+    },
+    "currentScene": "sc_2_2_040"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Starting at Conservator's Office - onEnter effects set MET_CONSERVATOR and DISCOVERED_PRESERVATIONIST_HQ",
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ"],
+        "currentScene": "sc_2_2_040",
+        "factions": {
+          "preservationist": 0
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Ask for a tour of the Archives' - modifies faction +1, transitions to sc_2_2_041",
+      "expectedScene": "sc_2_2_041",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ", "ARCHIVES_TOUR_COMPLETE"],
+        "inventoryContains": ["archival_ticket"],
+        "factions": {
+          "preservationist": 1
+        },
+        "currentScene": "sc_2_2_041"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose 'Ask about the Sealed Archive' - tests prerequisite chain (requires ARCHIVES_TOUR_COMPLETE from step 2)",
+      "expectedScene": "sc_2_2_042",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ", "ARCHIVES_TOUR_COMPLETE", "SEALED_ARCHIVE_ACCESS_GRANTED"],
+        "inventoryContains": ["archival_ticket"],
+        "factions": {
+          "preservationist": 1
+        },
+        "currentScene": "sc_2_2_042"
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Thank the Conservator and return to the Green Room' - tests modify_faction +2 effect",
+      "expectedScene": "sc_2_2_001",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ", "ARCHIVES_TOUR_COMPLETE", "SEALED_ARCHIVE_ACCESS_GRANTED"],
+        "inventoryContains": ["archival_ticket"],
+        "factions": {
+          "preservationist": 3
+        },
+        "currentScene": "sc_2_2_001"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_001",
+    "flagsRequired": ["green_room_reached", "MET_CONSERVATOR", "ARCHIVES_TOUR_COMPLETE", "SEALED_ARCHIVE_ACCESS_GRANTED"],
+    "inventoryRequired": ["archival_ticket"],
+    "factionsRequired": {
+      "preservationist": 3
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

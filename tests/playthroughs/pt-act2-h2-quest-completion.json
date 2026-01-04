@@ -1,0 +1,66 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT2-H2-QUEST-COMPLETION",
+    "description": "Quest Completion Test - Tests multi-effect onEnter (set_flag QUEST_MISSING_SCRIPT_COMPLETE, modify_faction preservationist +2, add_item sealed_archive_key) and choice gating conditions",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached", "QUEST_MISSING_SCRIPT_STARTED"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 0
+    },
+    "currentScene": "sc_2_2_031"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify onEnter multi-effects - QUEST_MISSING_SCRIPT_COMPLETE flag, preservationist +2, sealed_archive_key item",
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_MISSING_SCRIPT_STARTED", "QUEST_MISSING_SCRIPT_COMPLETE"],
+        "inventoryContains": ["sealed_archive_key"],
+        "factions": {
+          "preservationist": 2
+        },
+        "currentScene": "sc_2_2_031"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose 'Return to the Green Room hub' - basic exit choice",
+      "expectedScene": "sc_2_2_001",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_MISSING_SCRIPT_STARTED", "QUEST_MISSING_SCRIPT_COMPLETE"],
+        "inventoryContains": ["sealed_archive_key"],
+        "factions": {
+          "preservationist": 2
+        },
+        "currentScene": "sc_2_2_001"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_001",
+    "flagsRequired": ["green_room_reached", "QUEST_MISSING_SCRIPT_COMPLETE"],
+    "inventoryRequired": ["sealed_archive_key"],
+    "factionsRequired": {
+      "preservationist": 2
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

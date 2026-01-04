@@ -70,10 +70,10 @@
       "to": "sc_2_2_021",
       "conditions": [
         {
-          "type": "NOT",
+          "type": "not",
           "conditions": [
             {
-              "type": "flag_check",
+              "type": "flag",
               "flag": "QUEST_MISSING_SCRIPT_DISCOVERED"
             }
           ]
@@ -88,10 +88,10 @@
       "to": "sc_2_2_040",
       "conditions": [
         {
-          "type": "NOT",
+          "type": "not",
           "conditions": [
             {
-              "type": "flag_check",
+              "type": "flag",
               "flag": "CONSERVATOR_FACTION_EXPLAIN"
             }
           ]

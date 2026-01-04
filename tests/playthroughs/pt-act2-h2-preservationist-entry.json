@@ -1,0 +1,68 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT2-H2-PRESERVATIONIST-ENTRY",
+    "description": "Preservationist Faction Entry Path - Tests modify_faction effect on tour choice, set_flag effects (MET_CONSERVATOR, DISCOVERED_PRESERVATIONIST_HQ), and NOT condition gating for quest/faction_explain choices",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_2_2_040"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify onEnter effects - MET_CONSERVATOR and DISCOVERED_PRESERVATIONIST_HQ flags set",
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ"],
+        "currentScene": "sc_2_2_040",
+        "factions": {
+          "preservationist": 0
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Ask for a tour of the Archives' - tests modify_faction effect (+1 preservationist)",
+      "expectedScene": "sc_2_2_041",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ", "ARCHIVES_TOUR_COMPLETE"],
+        "inventoryContains": ["archival_ticket"],
+        "factions": {
+          "preservationist": 1
+        },
+        "currentScene": "sc_2_2_041"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_041",
+    "flagsRequired": ["MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ", "ARCHIVES_TOUR_COMPLETE"],
+    "inventoryRequired": ["archival_ticket"],
+    "factionsRequired": {
+      "preservationist": 1
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
