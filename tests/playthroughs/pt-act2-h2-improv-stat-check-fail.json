@@ -1,0 +1,70 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-Act2-H2-Improv-Stat-Check-Fail",
+    "description": "Improv Workshop Stat Check Failure Path - Tests attemptable stat_check onFailure effects (no faction gain)",
+    "author": "agent-c",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["met_revisionists", "writers_room_entered"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "revisionist": 0,
+      "preservationist": 0,
+      "exiter": 0
+    },
+    "currentScene": "sc_2_2_051"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Starting at Improv Workshop with improv=2 (below threshold)",
+      "assertions": {
+        "currentScene": "sc_2_2_051",
+        "flagsSet": ["improv_workshop_entered"],
+        "stats": { "improv": 2 },
+        "choicesAvailable": 4
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose '[IMPROV 4] Jump into the story immediately' (stat check failure)",
+      "expectedScene": "sc_2_2_050",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_2_2_050",
+        "flagsSet": ["improv_training_failed"],
+        "factions": { "revisionist": 0 }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "Verify stat check failure effects: no faction gain, training_failed flag set",
+      "assertions": {
+        "currentScene": "sc_2_2_050",
+        "flagsSet": ["improv_training_failed"],
+        "factions": { "revisionist": 0 }
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_050",
+    "flagsRequired": ["improv_training_failed"],
+    "factionsRequired": { "revisionist": 0 }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

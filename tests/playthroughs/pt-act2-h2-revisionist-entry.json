@@ -1,0 +1,69 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-Act2-H2-Revisionist-Entry",
+    "description": "Revisionist Faction Entry Path - Tests modify_faction effect when joining faction and flag setting (met_revisionists, writers_room_entered)",
+    "author": "agent-c",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "revisionist": 0,
+      "preservationist": 0,
+      "exiter": 0
+    },
+    "currentScene": "sc_2_2_050"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Starting at Writer's Room with revisionist=0",
+      "assertions": {
+        "currentScene": "sc_2_2_050",
+        "flagsSet": ["met_revisionists", "writers_room_entered"],
+        "factions": { "revisionist": 0 }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Accept the Author's offer (join Revisionists)'",
+      "expectedScene": "sc_2_2_051",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_2_2_051",
+        "flagsSet": ["revisionist_path_started"],
+        "factions": { "revisionist": 1 }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "Verify at Improv Workshop - faction increased to 1, path started flag set",
+      "assertions": {
+        "currentScene": "sc_2_2_051",
+        "flagsSet": ["met_revisionists", "writers_room_entered", "improv_workshop_entered", "revisionist_path_started"],
+        "factions": { "revisionist": 1 }
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_051",
+    "flagsRequired": ["revisionist_path_started"],
+    "factionsRequired": { "revisionist": 1 }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

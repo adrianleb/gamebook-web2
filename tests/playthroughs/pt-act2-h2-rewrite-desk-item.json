@@ -1,0 +1,75 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-Act2-H2-Rewrite-Desk-Item",
+    "description": "Re-Write Desk Item Acquisition - Tests add_item effect grants revisionist_pen to inventory and one-time flag gating (rewrite_desk_visited)",
+    "author": "agent-c",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["met_revisionists", "writers_room_entered"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "revisionist": 0,
+      "preservationist": 0,
+      "exiter": 0
+    },
+    "currentScene": "sc_2_2_052"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Starting at Re-Write Desk, no items in inventory",
+      "assertions": {
+        "currentScene": "sc_2_2_052",
+        "flagsSet": ["rewrite_desk_entered"],
+        "inventoryContains": []
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Accept the pen and make a revision' (first time)",
+      "expectedScene": "sc_2_2_050",
+      "checkpoint": true,
+      "assertions": {
+        "currentScene": "sc_2_2_050",
+        "inventoryContains": ["revisionist_pen"],
+        "flagsSet": ["rewrite_desk_visited"],
+        "factions": { "revisionist": 2 },
+        "stats": { "script": 3 }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "Verify item acquisition effects: revisionist_pen added, revisionist +2, script +1, visited flag set",
+      "assertions": {
+        "currentScene": "sc_2_2_050",
+        "inventoryContains": ["revisionist_pen"],
+        "flagsSet": ["rewrite_desk_visited"],
+        "factions": { "revisionist": 2 },
+        "stats": { "script": 3 }
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_050",
+    "inventoryRequired": ["revisionist_pen"],
+    "flagsRequired": ["rewrite_desk_visited"],
+    "factionsRequired": { "revisionist": 2 },
+    "statsRequired": { "script": 3 }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
