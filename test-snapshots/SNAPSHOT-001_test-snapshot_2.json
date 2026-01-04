@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-01-04T02:26:33.741Z",
+  "playthrough": "test-snapshot",
+  "step": 2,
+  "name": "test-snapshot",
+  "engineVersion": 1,
+  "contentVersion": "0.0.1",
+  "state": {
+    "version": 1,
+    "contentVersion": "0.0.1",
+    "timestamp": 1767493593735,
+    "currentSceneId": "sc_1_0_001",
+    "history": [
+      {
+        "sceneId": "sc_1_0_001",
+        "timestamp": 1767493593741,
+        "visitedCount": 2
+      }
+    ],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "flags": [
+      "game_started",
+      "location_booth_visited",
+      "test_flag"
+    ],
+    "inventory": [
+      [
+        "test_item",
+        1
+      ]
+    ],
+    "factions": {}
+  }
+}
