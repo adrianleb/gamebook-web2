@@ -19,7 +19,9 @@
     "build:engine": "tsc -p tsconfig.cli.json",
     "build:browser": "vite build",
     "build:all": "npm run build:engine && npm run build:browser",
-    "dev": "vite"
+    "dev": "vite",
+    "test:generate-ending-tests": "bun run tests/generate-ending-tests.ts",
+    "test:validate-ending-feasibility": "bun run tests/generate-ending-tests.ts"
   },
   "bin": {
     "gamebook-runner": "./dist/cli/headless-runner.js"

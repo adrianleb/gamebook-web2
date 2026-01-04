@@ -1,0 +1,102 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-END-002-other",
+    "description": "The Open Book (other tier) - Tests Other: Low-tier exiter ending (5-6)",
+    "author": "agent-e (generated)",
+    "version": "1.0",
+    "generated": true,
+    "sourceEnding": 2,
+    "tier": "other"
+  },
+  "startingState": {
+    "flags": [
+      "game_started",
+      "act1_complete",
+      "act2_complete",
+      "mainstage_reached"
+    ],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 1,
+      "revisionist": 1,
+      "exiter": 5,
+      "independent": 1
+    },
+    "currentScene": "sc_3_4_098"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Arrived at Last Curtain Call with other ending requirements",
+      "assertions": {
+        "currentScene": "sc_3_4_098"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "verify",
+      "description": "Verify 'The Open Book' choice is enabled",
+      "assertions": {
+        "choiceEnabled": "The Open Book",
+        "reason": "exiter >= 5"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceLabel": "The Open Book",
+      "description": "Choose other ending path",
+      "expectedScene": "sc_3_4_902",
+      "checkpoint": true
+    },
+    {
+      "sequence": 4,
+      "action": "checkpoint",
+      "description": "Arrived at ending scene",
+      "assertions": {
+        "currentScene": "sc_3_4_902",
+        "flagsSet": [
+          "ending_achieved"
+        ]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_902",
+    "flagsRequired": [
+      "game_started",
+      "act1_complete",
+      "act2_complete",
+      "ending_achieved"
+    ],
+    "inventoryRequired": [],
+    "statsRequired": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factionsRequired": {
+      "preservationist": 1,
+      "revisionist": 1,
+      "exiter": 5,
+      "independent": 1
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "Faction gate: exiter >= 5 required for this ending",
+    "Ending 5 (The Eternal Rehearsal) must always be available as fallback",
+    "Quality tier: OTHER - Other: Low-tier exiter ending (5-6)"
+  ]
+}
