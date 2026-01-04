@@ -24,7 +24,9 @@ This directory contains automated playthrough test scripts for the headless runn
 - **pt-edge-003.json**: Tests complex edge case interactions.
 
 ### 4. Faction Tests (Act 2)
-- **pt-revisionist-quest.json**: Tests Revisionist quest mechanics - validates flag setting, faction changes, and faction assertions.
+**TODO**: Create faction tests when Act 2 Hub 2 faction content merges:
+- **pt-revisionist-quest.json**: Test Revisionist quest mechanics (sc_2_2_050-052) - validates flag setting, faction changes, and faction assertions.
+- **pt-preservationist-quest.json**: Test Preservationist quest mechanics (sc_2_2_040-042) - validates flag setting, faction changes, and item acquisition.
 
 ### 5. Save/Load Regression Tests
 - **pt-sl-001.json**: Tests save/load round-trip and state serialization.
