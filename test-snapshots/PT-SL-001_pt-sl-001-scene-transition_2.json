@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-02T01:40:01.564Z",
+  "timestamp": "2026-01-04T02:18:46.677Z",
   "playthrough": "pt-sl-001-scene-transition",
   "step": 2,
   "name": "pt-sl-001-scene-transition",
@@ -8,25 +8,25 @@
   "state": {
     "version": 1,
     "contentVersion": "0.0.1",
-    "timestamp": 1767318001563,
+    "timestamp": 1767493126676,
     "currentSceneId": "sc_1_0_002",
     "history": [
       {
         "sceneId": "sc_1_0_001",
-        "timestamp": 1767318001564,
+        "timestamp": 1767493126677,
         "visitedCount": 2
       },
       {
         "sceneId": "sc_1_0_002",
-        "timestamp": 1767318001564,
+        "timestamp": 1767493126677,
         "choiceLabel": "Step through the opening to the right",
         "visitedCount": 1
       }
     ],
     "stats": {
-      "health": 10,
-      "courage": 5,
-      "insight": 3
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
     },
     "flags": {},
     "inventory": {},

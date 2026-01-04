@@ -32,7 +32,7 @@
     {
       "sequence": 2,
       "action": "checkpoint",
-      "description": "At threshold - verify stage_presence check setup (stage_presence=2, threshold=2)",
+      "description": "At threshold - verify stage_presence check setup (stage_presence=2, threshold=3 = FAIL)",
       "assertions": {
         "stats": { "stage_presence": 2 }
       }
@@ -41,11 +41,12 @@
       "sequence": 3,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Choose 'Step into the darkness' (stage_presence check: 2 >= 2 = SUCCESS)",
-      "expectedScene": "sc_1_1_099",
+      "description": "Choose 'Step into the darkness' (stage_presence check: 2 >= 3 = FAILURE, goes to sc_1_0_902)",
+      "expectedScene": "sc_1_0_902",
       "checkpoint": true,
       "assertions": {
-        "currentScene": "sc_1_1_099"
+        "currentScene": "sc_1_0_902",
+        "flagsSet": ["crossing_failed"]
       }
     },
     {
@@ -61,12 +62,14 @@
       "description": "Load saved state - verify all complex state preserved",
       "assertions": {
         "inventoryContains": ["booth_key"],
-        "currentScene": "sc_1_1_099"
+        "currentScene": "sc_1_0_902",
+        "flagsSet": ["crossing_failed"]
       }
     }
   ],
   "endingCriteria": {
-    "sceneId": "sc_1_1_099",
+    "sceneId": "sc_1_0_902",
+    "flagsRequired": ["crossing_failed"],
     "inventoryRequired": ["booth_key"]
   },
   "softlockDetection": {

@@ -11,7 +11,7 @@
     "inventory": ["booth_key"],
     "stats": {
       "script": 2,
-      "stage_presence": 2,
+      "stage_presence": 3,
       "improv": 2
     },
     "currentScene": "sc_1_0_001"
@@ -20,10 +20,10 @@
     {
       "sequence": 1,
       "action": "checkpoint",
-      "description": "Starting with booth_key and stage_presence=2",
+      "description": "Starting with booth_key and stage_presence=3 (meets threshold)",
       "assertions": {
         "inventoryContains": ["booth_key"],
-        "stats": { "stage_presence": 2 }
+        "stats": { "stage_presence": 3 }
       }
     },
     {
@@ -41,10 +41,10 @@
     {
       "sequence": 3,
       "action": "checkpoint",
-      "description": "At threshold - stage_presence check should pass (2 >= 2)",
+      "description": "At threshold - stage_presence check should pass (3 >= 3)",
       "assertions": {
-        "stats": { "stage_presence": 2 },
-        "choicesAvailable": 2
+        "stats": { "stage_presence": 3 },
+        "choicesAvailable": 4
       }
     },
     {
@@ -65,7 +65,7 @@
     "flagsRequired": ["crossing_succeeded"],
     "inventoryRequired": ["booth_key"],
     "statsRequired": {
-      "stage_presence": 2
+      "stage_presence": 3
     }
   },
   "softlockDetection": {

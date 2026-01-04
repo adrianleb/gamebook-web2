@@ -52,7 +52,7 @@
     {
       "sequence": 4,
       "action": "choose",
-      "choiceIndex": 1,
+      "choiceIndex": 3,
       "description": "Only choice: 'Turn back' (failure path - cannot cross)",
       "expectedScene": "sc_1_0_001",
       "checkpoint": true,
