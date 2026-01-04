@@ -42,7 +42,7 @@
     {
       "sequence": 3,
       "action": "choose",
-      "choiceIndex": 0,
+      "choiceIndex": 1,
       "description": "Choose 'Thank Maren and return to the booth'",
       "expectedScene": "sc_1_0_001",
       "checkpoint": true,
