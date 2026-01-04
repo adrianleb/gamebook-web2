@@ -1,0 +1,130 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_034",
+  "title": "Balance of Power Resolution",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Council of Three",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["quest_completion", "independent", "exploration"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Council Chamber",
+    "paragraphs": [
+      "The Council Chamber is a neutral space—no faction colors, no symbols, just a round table where three representatives wait. The air is thick with tension.",
+      "\"You're the mediator,\" the Preservationist says, stiffly polite. \"We've been told you can help us.\"",
+      "\"Help you do what?\" the Revisionist counters. \"We're not here to compromise. Stories must evolve.\"",
+      "\"And stories must be PRESERVED,\" the Exiter adds quietly. \"But they must also have the freedom to end.\"",
+      "You've spent hours listening to each faction. Understanding what they actually need—not what they SAY they need. The Preservationists fear chaos. The Revisionists fear stagnation. The Exiters fear being trapped in stories they didn't choose.",
+      "You propose a solution: The Council of Three will meet regularly. No single faction dominates Act 2. Each gets influence in the areas that matter to them—Preservationists control the Archives, Revisionists guide new productions, Exiters monitor the Threshold Gates.",
+      "\"Balance,\" the Independent representative says, nodding approval. \"Not victory. A system where no single story dominates the Understage.\"",
+      "The three representatives exchange glances. Slowly, reluctantly, they agree. It's not perfect. But it's better than open conflict.",
+      "The Independent rep hands you a blank token—a slate-white chip that seems to shift slightly when you look at it. \"For when you need to be anyone. Go anywhere. Balance is the hardest path—we don't have the luxury of certainty. But we have the freedom to choose our own way.\"",
+      "As you leave the Council Chamber, you feel the weight of what you've done. You haven't chosen a side. You've created a space where all sides can exist. It's exhausting work. But someone has to do it."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "council_preservationist",
+      "name": "Preservationist Representative",
+      "role": "Council member from Preservationist faction",
+      "demeanor": "Formal, protective, wary of change"
+    },
+    {
+      "id": "council_revisionist",
+      "name": "Revisionist Representative",
+      "role": "Council member from Revisionist faction",
+      "demeanor": "Passionate, articulate, frustrated with stagnation"
+    },
+    {
+      "id": "council_exiter",
+      "name": "Exiter Representative",
+      "role": "Council member from Exiter faction",
+      "demeanor": "Calm, philosophical, focused on freedom"
+    },
+    {
+      "id": "council_independent",
+      "name": "The Independent",
+      "role": "Independent faction representative",
+      "demeanor": "Diplomatic, weary, principled"
+    }
+  ],
+  "art": {
+    "description": "A circular council chamber with a round table at its center. Three faction representatives seated around it, each displaying subtle faction colors. A fourth figure stands nearby—the Independent mediator."
+  },
+  "audio": {
+    "music": "council_ambient",
+    "sfx": ["chair_scrape", "tense_silence"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "QUEST_BALANCE_COMPLETE"
+    },
+    {
+      "type": "modify_faction",
+      "faction": "preservationist",
+      "amount": 1
+    },
+    {
+      "type": "modify_faction",
+      "faction": "revisionist",
+      "amount": 1
+    },
+    {
+      "type": "modify_faction",
+      "faction": "exiter",
+      "amount": 1
+    },
+    {
+      "type": "modify_faction",
+      "faction": "independent",
+      "amount": 1
+    },
+    {
+      "type": "add_item",
+      "item": "diplomats_token"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Explore the Council Chamber further",
+      "to": "sc_2_2_071",
+      "conditions": [
+        {
+          "type": "flag",
+          "flag": "green_room_reached"
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "Requires access to the Green Room"
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to the Green Room hub",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Check the Call Board for more work",
+      "to": "sc_2_2_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["QUEST_BALANCE_COMPLETE"],
+    "requires": ["QUEST_BALANCE_STARTED", "green_room_reached"],
+    "checks": []
+  }
+}
