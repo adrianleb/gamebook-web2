@@ -134,7 +134,7 @@
     },
     {
       "id": "choice_4",
-      "label": "Someone steps from the shadows - a grease-stained figure blocks your path",
+      "label": "Hear the Stagehand's offer",
       "to": "sc_1_0_040",
       "conditions": null,
       "onChoose": [
@@ -143,7 +143,7 @@
           "flag": "stagehand_intervention"
         }
       ],
-      "disabledHint": "The Stagehand has other plans for this confrontation."
+      "disabledHint": null
     }
   ],
   "flags": {
