@@ -40,9 +40,7 @@
       "demeanor": "Pragmatic, respectful of choice, aware of multiverse"
     }
   ],
-  "art": {
-    "description": "A circular gateframe of swirling light. Beyond it, a crystalline void with cascading story fragments. Two figures silhouetted against the dimensional cascade."
-  },
+  "art": "A circular gateframe of swirling light. Beyond it, a crystalline void with cascading story fragments. Two figures silhouetted against the dimensional cascade.",
   "audio": {
     "music": "threshold_ambient",
     "sfx": ["gate_hum", "dimensional_rush"]
@@ -69,7 +67,7 @@
       "to": "sc_2_2_060",
       "conditions": [
         {
-          "type": "flag",
+          "type": "flag_check",
           "flag": "green_room_reached"
         }
       ],

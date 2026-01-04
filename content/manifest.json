@@ -654,6 +654,33 @@
       "description": "Item acquisition - Receive Revisionist Pen, learn about narrative alteration",
       "mechanics": ["item_acquisition", "faction_bonus", "choice"]
     },
+    "sc_2_2_060": {
+      "title": "The Threshold Gate",
+      "location": "The Green Room",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Exiter faction headquarters - meet the Gatekeeper, learn about crossing over",
+      "mechanics": ["faction_hq", "npc_encounter", "lore", "flag_setting"]
+    },
+    "sc_2_2_061": {
+      "title": "Gate Tour",
+      "location": "The Green Room - Threshold Gate",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Exiter - Tour the Threshold Gate, receive reality anchors, learn about dimensional crossings",
+      "mechanics": ["exploration", "item_acquisition", "lore", "worldbuilding"]
+    },
+    "sc_2_2_062": {
+      "title": "The Crossed Over",
+      "location": "The Green Room - The Crossed Over",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Exiter - Locked content accessible after completing Escaped Character quest",
+      "mechanics": ["locked_content", "quest_reward", "lore", "faction_bonus"]
+    },
     "sc_2_3_001": {
       "title": "The Archives Entry",
       "location": "The Archives",
@@ -792,10 +819,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 57,
+    "totalScenes": 60,
     "pending": 0,
     "draft": 0,
-    "complete": 57,
+    "complete": 60,
     "reviewed": 0
   }
 }

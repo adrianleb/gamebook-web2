@@ -54,9 +54,7 @@
       "demeanor": "Diplomatic, weary, principled"
     }
   ],
-  "art": {
-    "description": "A circular council chamber with a round table at its center. Three faction representatives seated around it, each displaying subtle faction colors. A fourth figure stands nearby—the Independent mediator."
-  },
+  "art": "A circular council chamber with a round table at its center. Three faction representatives seated around it, each displaying subtle faction colors. A fourth figure stands nearby—the Independent mediator.",
   "audio": {
     "music": "council_ambient",
     "sfx": ["chair_scrape", "tense_silence"]
@@ -95,10 +93,10 @@
     {
       "id": "choice_1",
       "label": "Explore the Council Chamber further",
-      "to": "sc_2_2_071",
+      "to": "sc_2_2_001",
       "conditions": [
         {
-          "type": "flag",
+          "type": "flag_check",
           "flag": "green_room_reached"
         }
       ],

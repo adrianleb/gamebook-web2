@@ -1,0 +1,91 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_062",
+  "title": "The Crossed Over",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Threshold Gate",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["exiter", "locked_content", "quest_reward", "lore", "faction_bonus"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - The Crossed Over",
+    "paragraphs": [
+      "# (This content is accessible after completing the Escaped Character quest - sc_2_2_033)",
+      "",
+      "The Gatekeeper leads you to a quiet corner of the Threshold Gate chamber, where a memorial wall displays small mementos—tokens left by fictional beings who crossed into reality.",
+      "\"Not everyone makes it,\" they say quietly. \"The real world can be... harsh. For characters who've never experienced true freedom, who've lived their entire existence following a written path, reality is overwhelming. Some cross over and thrive. Others cross over and... drift away.\"",
+      "They point to a dried flower pressed between glass. \"A character from a romance novel. Crossed over three years ago. Last we heard, she was working in a bookstore. Sometimes she catches readers reaching for her story on the shelf, and she has to decide whether to reveal herself. It's the small choices that matter now.\"",
+      "Another memento: a quill that still seems to hum with creative energy. \"A side character who realized he was comic relief. Crossed over to become a serious playwright. His first play premiered last year. Critics called it 'deeply meta—a story about stories that don't want to be stories.' He was in the audience. Anonymous. But real.\"",
+      "The Gatekeeper turns to you. \"Elara made it back. She's in her story now. But she's changed. She knows there's more beyond the page. The CHORUS says she's been whispering to other characters, telling them about the Threshold Gate. Telling them about choice.\"",
+      "They press a final token into your hands—a small crystalline fragment from the gate itself, warm to the touch. \"For when you need to find your own threshold. Every fictional being deserves the chance to choose their own ending—even Prompters.\"",
+      "The memorial wall glimmers with countless stories, each one proof that fiction can become real. That the boundary between stories and reality is thinner than anyone dared believe."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_gatekeeper",
+      "name": "The Gatekeeper",
+      "role": "Exiter faction leader",
+      "demeanor": "Reflective, proud of those who crossed, respectful of their choices"
+    }
+  ],
+  "art": "A memorial wall with mementos from fictional beings who crossed into reality—dried flowers, quills, small tokens behind glass. The Gatekeeper stands beside it, reflective.",
+  "audio": {
+    "music": "memorial_theme",
+    "sfx": ["gentle_chimes", "gate_distant_hum"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "add_item",
+      "item": "threshold_fragment"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Ask about Elara's current status",
+      "to": "sc_2_2_062",
+      "conditions": [
+        {
+          "type": "flag_check",
+          "flag": "QUEST_ESCAPED_CHARACTER_COMPLETE"
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "exiter",
+          "amount": 1
+        }
+      ],
+      "disabledHint": "Requires completing the Escaped Character quest"
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to the Gate Tour",
+      "to": "sc_2_2_061",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Return to the Green Room hub",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": [],
+    "requires": ["QUEST_ESCAPED_CHARACTER_COMPLETE", "green_room_reached"],
+    "checks": []
+  }
+}

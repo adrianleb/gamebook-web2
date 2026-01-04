@@ -39,9 +39,7 @@
       "demeanor": "Encouraging, respectful of story structure"
     }
   ],
-  "art": {
-    "description": "A creative workspace filled with story fragments. A worn wooden table covered in ink stains and coffee rings. Corkboards with index cards showing story variations."
-  },
+  "art": "A creative workspace filled with story fragments. A worn wooden table covered in ink stains and coffee rings. Corkboards with index cards showing story variations.",
   "audio": {
     "music": "green_room_ambient",
     "sfx": ["pen_scratching", "coffee_pour"]
@@ -68,7 +66,7 @@
       "to": "sc_2_2_050",
       "conditions": [
         {
-          "type": "flag",
+          "type": "flag_check",
           "flag": "green_room_reached"
         }
       ],

@@ -32,9 +32,7 @@
       " demeanor": "Reverent, serious, protective of stories"
     }
   ],
-  "art": {
-    "description": "A cluttered office with floor-to-ceiling bookshelves. A wooden desk covered in manuscripts and sealing wax. Warm amber light from a reading lamp."
-  },
+  "art": "A cluttered office with floor-to-ceiling bookshelves. A wooden desk covered in manuscripts and sealing wax. Warm amber light from a reading lamp.",
   "audio": {
     "music": "green_room_ambient",
     "sfx": ["paper_rustle", "wax_seal_stamp"]
@@ -61,7 +59,7 @@
       "to": "sc_2_2_042",
       "conditions": [
         {
-          "type": "flag",
+          "type": "flag_check",
           "flag": "green_room_reached"
         }
       ],

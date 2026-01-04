@@ -1,0 +1,131 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_060",
+  "title": "The Threshold Gate",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["faction_hq", "exiter", "lore", "npc_encounter"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Threshold Gate",
+    "paragraphs": [
+      "At the far end of the Green Room, where the mirrors cluster most densely, you find it: the Threshold Gate.",
+      "It's not a door. Not exactly. A circular frame of crystallized story-light, pulsing with the rhythm of a thousand narrative heartbeats. Through its center, you glimpse something impossible—a different sky. Different stars. The real world, filtered through the lens of fiction.",
+      "Figures in practical clothing move around the gate's base, monitoring instruments that measure dimensional drift, narrative resonance, and story-friction. They wear the amber and gold of the Exiters, colors that seem to shift like sunrise over pages.",
+      "A tall figure with silver-streaked hair approaches, extending a hand in welcome. \"You must be the new Prompter. I'm called the Gatekeeper. I monitor those who choose to cross through.\"",
+      "The Gatekeeper gestures to the gate itself. \"Every story has thresholds—moments when a character could step off the path, choose differently, become something else. Most stories don't let them. We do. We help fictional beings who've earned their freedom find their way to reality.\"",
+      "They notice your expression and smile sadly. \"I know what the Preservationists say. That we're destroying stories. But you know what destroys stories? FORCING characters to live the same lives, make the same choices, suffer the same endings—forever. That's not preservation. That's imprisonment.\"",
+      "From a pocket, they produce a compass—its needle spins wildly before settling in a single direction. \"This is a Wayfinder. It points toward what matters most to you. Useful in the Understage, where stories can become... labyrinthine.\"",
+      "The gate hums behind them, and for a moment, you hear voices—not from the mirror, but from beyond it. Real voices. Calling to fictional characters who dare to answer."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_gatekeeper",
+      "name": "The Gatekeeper",
+      "description": "Tall guardian of the Threshold Gate, silver-streaked hair, monitors dimensional crossings",
+      "role": "faction_leader"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "exiter_theme",
+    "sfx": ["gate_hum", "compass_spinning"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "MET_GATEKEEPER"
+    },
+    {
+      "type": "set_flag",
+      "flag": "DISCOVERED_EXITER_HQ"
+    },
+    {
+      "type": "add_item",
+      "item": "wayfinder"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Ask about the Threshold Gate",
+      "to": "sc_2_2_061",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "exiter",
+          "amount": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Ask about the escaped character quest",
+      "to": "sc_2_2_023",
+      "conditions": [
+        {
+          "type": "NOT",
+          "conditions": [
+            {
+              "type": "flag_check",
+              "flag": "QUEST_ESCAPED_CHARACTER_DISCOVERED"
+            }
+          ]
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "You've already learned about this quest."
+    },
+    {
+      "id": "choice_3",
+      "label": "Ask about the other factions",
+      "to": "sc_2_2_060",
+      "conditions": [
+        {
+          "type": "NOT",
+          "conditions": [
+            {
+              "type": "flag_check",
+              "flag": "GATEKEEPER_FACTION_EXPLAIN"
+            }
+          ]
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "GATEKEEPER_FACTION_EXPLAIN"
+        },
+        {
+          "type": "modify_faction",
+          "faction": "exiter",
+          "amount": 1
+        }
+      ],
+      "disabledHint": "The Gatekeeper has already explained the factions."
+    },
+    {
+      "id": "choice_4",
+      "label": "Return to the Green Room center",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["MET_GATEKEEPER", "DISCOVERED_EXITER_HQ"],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}
