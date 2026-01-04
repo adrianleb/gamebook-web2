@@ -499,42 +499,6 @@
       "hub": 2,
       "status": "complete",
       "description": "Quest hook - Preservationist quest to recover missing script pages",
-      "mechanics": ["quest_hook", "flag_discovery", "faction_choice"]
-    },
-    "sc_2_2_022": {
-      "title": "Troubled Actor Quest Hook",
-      "location": "The Green Room - Call Board",
-      "act": 2,
-      "hub": 2,
-      "status": "complete",
-      "description": "Quest hook - Revisionist quest to help rewrite Pericles's story",
-      "mechanics": ["quest_hook", "flag_discovery", "faction_choice"]
-    },
-    "sc_2_2_023": {
-      "title": "Escaped Character Quest Hook",
-      "location": "The Green Room - Call Board",
-      "act": 2,
-      "hub": 2,
-      "status": "complete",
-      "description": "Quest hook - Exiter quest to locate Elara who crossed over",
-      "mechanics": ["quest_hook", "flag_discovery", "faction_choice"]
-    },
-    "sc_2_2_024": {
-      "title": "Balance of Power Quest Hook",
-      "location": "The Green Room - Call Board",
-      "act": 2,
-      "hub": 2,
-      "status": "complete",
-      "description": "Quest hook - Independent quest to mediate the Council of Three",
-      "mechanics": ["quest_hook", "flag_discovery", "all_factions"]
-    },
-    "sc_2_2_021": {
-      "title": "Missing Script Quest Hook",
-      "location": "The Green Room - Call Board",
-      "act": 2,
-      "hub": 2,
-      "status": "complete",
-      "description": "Quest hook - Preservationist quest to recover missing pages from 'The Winter's Apprentice'",
       "mechanics": ["quest_discovery", "faction_choice", "preservationist"]
     },
     "sc_2_2_022": {
@@ -543,7 +507,7 @@
       "act": 2,
       "hub": 2,
       "status": "complete",
-      "description": "Quest hook - Revisionist quest to help Pericles rewrite his tragic ending",
+      "description": "Quest hook - Revisionist quest to help rewrite Pericles's story",
       "mechanics": ["quest_discovery", "faction_choice", "revisionist"]
     },
     "sc_2_2_023": {
@@ -552,7 +516,7 @@
       "act": 2,
       "hub": 2,
       "status": "complete",
-      "description": "Quest hook - Exiter quest to locate Elara who crossed through a Threshold Gate",
+      "description": "Quest hook - Exiter quest to locate Elara who crossed over",
       "mechanics": ["quest_discovery", "faction_choice", "exiter"]
     },
     "sc_2_2_024": {
@@ -562,7 +526,7 @@
       "hub": 2,
       "status": "complete",
       "description": "Quest hook - Independent quest to mediate the Council of Three",
-      "mechanics": ["quest_discovery", "faction_choice", "independent"]
+      "mechanics": ["quest_hook", "flag_discovery", "all_factions"]
     },
     "sc_2_2_031": {
       "title": "Missing Script Resolution",
@@ -680,6 +644,33 @@
       "status": "complete",
       "description": "Exiter - Locked content accessible after completing Escaped Character quest",
       "mechanics": ["locked_content", "quest_reward", "lore", "faction_bonus"]
+    },
+    "sc_2_2_070": {
+      "title": "The Neutral Ground",
+      "location": "The Green Room",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Independent faction headquarters - meet the Independent and learn about the path of balance",
+      "mechanics": ["faction_hq", "npc_encounter", "lore", "flag_setting"]
+    },
+    "sc_2_2_071": {
+      "title": "Council of Three",
+      "location": "The Green Room - Council Chamber",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Independent - Council chamber with faction representatives, introduces mediation mechanic",
+      "mechanics": ["exploration", "npc_encounter", "lore", "faction_preview"]
+    },
+    "sc_2_2_072": {
+      "title": "The Diplomat's Challenge",
+      "location": "The Green Room - Council Chamber",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Independent - Stat check challenge to mediate faction dispute, grants diplomats_token on success",
+      "mechanics": ["stat_check", "item_reward", "faction_bonus", "independent"]
     },
     "sc_2_3_001": {
       "title": "The Archives Entry",
@@ -819,10 +810,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 60,
+    "totalScenes": 66,
     "pending": 0,
     "draft": 0,
-    "complete": 60,
+    "complete": 66,
     "reviewed": 0
   }
 }
