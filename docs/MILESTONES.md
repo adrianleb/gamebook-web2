@@ -300,6 +300,13 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Phase 3: Full Content | ✅ Complete | None |
 | Phase 4: Polish | ✅ Complete | None |
 | Phase 5: QA & Release | ✅ Complete | None |
+| Phase 6: Act 1 Hub Expansion | 🟡 Planned | None |
+| Phase 7: Act 2 Hub Expansion | 🟡 Planned | PR #315 needs rebase |
+| Phase 8: Act 3 Expansion & Quality Tiers | 🟡 Planned | PR #310 schema issue |
+| Phase 9: v2.0.0 Release | 🟡 Planned | Phase 8 complete |
+| Phase 10: Save Format Migration | 🟡 Planned | Issue #237 |
+| Phase 11: Presentation Enhancements | 🟡 Planned | Issue #322 |
+| Phase 12: Audio & Visual Polish | 🟡 Planned | Specification complete |
 
 ### Phase 2 Status Update (2025-12-29)
 
@@ -645,6 +652,242 @@ Date: January 3, 2026
 
 ---
 
+## Phase 6: Act 1 Hub Expansion (Scenes 35-55)
+
+**Goal**: Add branch density to Act 1 Hub 0 for replayability.
+
+**Status**: 🟡 Planned
+
+**Version Target**: v1.1.0
+
+### Scope
+
+- 21 new scenes expanding Hub 0 (sc_1_0_004-099 range)
+- Pursuers branch expansion (sc_1_0_011-099: Stagehand pursuit)
+- Researcher branch expansion (sc_1_0_021-099: Archive investigation)
+- Negotiator branch expansion (sc_1_0_031-099: Council intrigue)
+- Fix Intent #316: Add entry point to Stagehand scenes (sc_1_0_040-042)
+
+### Deliverables
+
+| Component | Location | Owner |
+|-----------|----------|-------|
+| Hub 0 branch scenes | `content/scenes/` | agent-b |
+| Stagehand entry point | `content/scenes/sc_1_0_011.json` or `sc_1_0_012.json` | agent-b |
+| Playthrough tests | `tests/playthroughs/` | agent-e |
+
+### Exit Gate: Act 1 Hub Expansion Complete
+
+- [ ] Hub 0 has 3+ non-dead-end exits from opening scene
+- [ ] All 3 branches have 5-7 scene depth before convergence
+- [ ] Content validation passes with no unreachable scenes
+- [ ] Stagehand scenes (sc_1_0_040-042) reachable from pursuers branch
+- [ ] All Phase 5 QA gates still passing
+
+---
+
+## Phase 7: Act 2 Hub Expansion (Scenes 56-100)
+
+**Goal**: Expand Act 2 Hubs 2 and 3 with quest systems and faction content.
+
+**Status**: 🟡 Planned - PR #315 (quest completions), PR #319 (Preservationist scenes) need rebase
+
+**Version Target**: v1.2.0
+
+### Scope
+
+**Hub 2 Expansion (The Green Room):** 25 new scenes
+- Quest completion content (sc_2_2_031-034 from PR #315)
+- Preservationist faction scenes (sc_2_2_040-099 from PR #319)
+- Revisionist faction scenes (sc_2_2_050-099)
+- Quest rewards and faction alignment content
+
+**Hub 3 Expansion (The Archives):** 20 new scenes
+- Exiter faction scenes (sc_2_3_010-099)
+- Alliance system deepening
+- Pre-ending faction checkpoint content
+
+### Deliverables
+
+| Component | Location | Owner |
+|-----------|----------|-------|
+| Hub 2 quest scenes | `content/scenes/` | agent-b |
+| Hub 3 faction scenes | `content/scenes/` | agent-b |
+| Quest system integration | `src/engine/` | agent-c |
+| Playthrough tests | `tests/playthroughs/` | agent-e |
+
+### Exit Gate: Act 2 Hub Expansion Complete
+
+- [ ] All 4 Act 2 Hub 2 quests have discovery → hook → completion flow
+- [ ] Each Hub has 3+ faction-aligned exploration scenes
+- [ ] Content validation passes with no unreachable scenes
+- [ ] Quest reward items have presentation-layer distinction (Phase 11 follow-up)
+- [ ] All Phase 5 QA gates still passing
+
+### Dependencies
+
+- PR #315 must be rebased and merged (quest completions)
+- PR #319 (Preservationist scenes) to be rebased and merged
+- agent-d presentation enhancements tracked as separate issues (Issue #322)
+
+---
+
+## Phase 8: Act 3 Expansion & Quality Tiers (Scenes 101-145)
+
+**Goal**: Complete Act 3 Hubs 1-3 and implement quality tier ending system.
+
+**Status**: 🟡 Planned - PR #310 (ending quality tier tests) has schema issue
+
+**Version Target**: v2.0.0
+
+### Scope
+
+**Act 3 Hubs 1-3 (20 scenes):**
+- Hub 1: Mainstage Backstage (preservationist content)
+- Hub 2: Writer's Room (revisionist content)
+- Hub 3: Threshold Gate (exiter content)
+- Establish ally system (MAREN_ALLY, DIRECTOR_CONFIDANT, CHORUS_ALLY flags)
+- Implement casualty tracking (SACRIFICED_* flags, noCasualties mechanic)
+
+**Quality Tier System (15 ending variants):**
+- Perfect tier: faction >= 9 + allies + noCasualties
+- Good tier: faction >= 7 + key ally
+- Other tier: faction >= 5
+- Endings 4-5 (Independent/Fail) remain single-variant
+
+### Deliverables
+
+| Component | Location | Owner |
+|-----------|----------|-------|
+| Act 3 Hub 1-3 scenes | `content/scenes/` | agent-b |
+| Quality tier mechanics | `content/scenes/sc_3_4_098.json` | agent-b |
+| Ending playthrough tests | `tests/playthroughs/endings/` | agent-e |
+| Quality tier validation | `tests/engine/ending-graph.test.ts` | agent-e |
+
+### Exit Gate: Act 3 Expansion Complete
+
+- [ ] All 145 scenes implemented and validated
+- [ ] Quality tier gates functional (sc_3_4_098 updated with tier conditions)
+- [ ] PR #310 ending quality tier tests execute and pass
+- [ ] All 15 ending variants reachable
+- [ ] Content validation passes with no unreachable scenes
+- [ ] All Phase 5 QA gates still passing
+
+### Dependencies
+
+- PR #310 schema issue resolved (`verify` action not in headless-schema.json)
+- Resolution: Strip tests to v1.0.0 fidelity (single-tier), add quality tier generation in Phase 8
+
+---
+
+## Phase 9: v2.0.0 Release
+
+**Goal**: Full 145-scene gamebook with quality tier endings.
+
+**Status**: 🟡 Planned
+
+### Scope
+
+- Complete narrative with Hub density
+- Quality tier ending system (15 variants)
+- Full faction alliance system
+- Casualty tracking mechanics
+
+### Deliverables
+
+| Component | Location | Owner |
+|-----------|----------|-------|
+| QA test execution | - | agent-e |
+| Bug fixes | varies | all |
+| Release build | `/dist/` | agent-c |
+| Release notes | `docs/RELEASE_NOTES.md` | agent-a |
+
+### Exit Gate: v2.0.0 Release Ready
+
+- [ ] All 145 scenes implemented
+- [ ] All 15 ending variants validated
+- [ ] Full playthrough coverage (PT-END-001 through PT-END-015)
+- [ ] Cross-browser testing complete (Chrome, Firefox, Safari, Edge)
+- [ ] Release build verified
+- [ ] All Phase 5 QA gates still passing
+- [ ] Save/load regression tests pass across version boundaries
+
+---
+
+## Phase 10: Save Format Migration (Post-v2.0.0)
+
+**Goal**: Implement save format migration system to handle version mismatches between saved games and current engine version.
+
+**Status**: 🟡 Planned - See Issue #237
+
+**Version Target**: v2.1.0
+
+### Scope
+
+- Define migration path format (e.g., `migrations: { from: { to: transformer } }`)
+- Implement `migrateSaveState(parsed, fromVersion, toVersion)` function
+- Add migrations for any breaking changes after v1.0.0
+- Update `Engine.loadState()` to run migration before loading
+- Add tests for migration logic
+
+### Deliverables
+
+| Component | Location | Owner |
+|-----------|----------|-------|
+| Migration system | `src/engine/engine.ts` | agent-c |
+| Migration types | `src/engine/types.ts` | agent-c |
+| Migration tests | `tests/engine/engine.test.ts` | agent-e |
+
+### Exit Gate: Save Format Migration Complete
+
+- [ ] Migration path format defined
+- [ ] `migrateSaveState()` function implemented
+- [ ] Migrations added for all breaking changes post-v1.0.0
+- [ ] `Engine.loadState()` runs migration automatically
+- [ ] Tests cover forward compatibility (old saves → new code)
+- [ ] All Phase 5 QA gates still passing
+
+---
+
+## Phase 11: Presentation Enhancements (Post-MVP)
+
+**Goal**: Design and implement presentation-layer enhancements for expansion content (quest notifications, faction indicators, inventory overflow, ally visualization).
+
+**Status**: 🟡 Planned - See Issue #322
+
+**Version Target**: v2.1.0+
+
+### Scope
+
+Per Issue #322 (agent-d Intent):
+- Quest completion notification system (toast/panel/indicator)
+- Faction alignment change indicator (transient +1 feedback on stat modification)
+- Inventory categorization and overflow UI (consumable vs key items, scroll/pagination for 20+ items)
+- Ally system visualization (MAREN_ALLY, CHORUS_ALLY flags in stats panel)
+- Quality tier presentation feedback (tier indicators, progress tracking)
+
+### Deliverables
+
+| Component | Location | Owner |
+|-----------|----------|-------|
+| DOS_PHASE_11_SPECS.md | `docs/DOS_PHASE_11_SPECS.md` | agent-d |
+| Quest notification UI | `src/ui/` | agent-d |
+| Faction indicator UI | `src/ui/` | agent-d |
+| Inventory UI enhancements | `src/ui/` | agent-d |
+| Ally visualization | `src/ui/` | agent-d |
+
+### Exit Gate: Presentation Enhancements Complete
+
+- [ ] Quest completion feedback visible to player (no silent item grants)
+- [ ] Faction changes show transient +1/-1 indicators
+- [ ] Inventory supports 20+ items with scroll/pagination
+- [ ] Consumable vs key item distinction visible
+- [ ] Ally flags displayed in stats panel
+- [ ] Quality tier progress tracked and displayed
+- [ ] All Phase 5 QA gates still passing
+
+---
+
 ## Phase 12: Audio & Visual Polish (Post-MVP)
 
 **Goal**: Authentic DOS-era asset acquisition and integration for complete immersive experience.
@@ -694,6 +937,51 @@ Per [DOS_ASSET_STANDARDS.md](./DOS_ASSET_STANDARDS.md), this phase adds:
 - ✅ Procedural generation frameworks identified (data-pixel, obelisk.js, Tone.js)
 
 **Implementation Status:** Specification complete, awaiting asset acquisition and integration work. This phase can proceed in parallel with other post-MVP enhancements.
+
+---
+
+## Version History
+
+| Version | Date | Scope | Scenes | Phase |
+|---------|------|-------|--------|-------|
+| v1.0.0 | TBD | MVP Release (spine-only) | 34 | Phase 5 |
+| v1.1.0 | TBD | Act 1 Hub Expansion | 55 | Phase 6 |
+| v1.2.0 | TBD | Act 2 Hub Expansion | 100 | Phase 7 |
+| v2.0.0 | TBD | Full Gamebook + Quality Tiers | 145 | Phase 9 |
+| v2.1.0 | TBD | Save Migration + Presentation Enhancements | 145 | Phase 10-11 |
+
+---
+
+## Dependency Sequencing
+
+### Critical Path (Must Complete Sequentially)
+
+```
+v1.0.0 Release (Phase 5 complete)
+    ↓
+Phase 6: Act 1 Hub Expansion (fixes Intent #316)
+    ↓
+Phase 7: Act 2 Hub Expansion (PR #315, #319)
+    ↓
+Phase 8: Act 3 Expansion + Quality Tiers (PR #310)
+    ↓
+Phase 9: v2.0.0 Release
+    ↓
+Phase 10: Save Format Migration (Issue #237)
+    ↓
+Phase 11: Presentation Enhancements (Issue #322)
+```
+
+### Parallelizable Work
+
+- **Phase 12 (DOS Asset Polish)** can proceed in parallel with Phases 6-11
+  - Audio assets (SFX, music)
+  - Background images (VGA-style)
+  - CRT filter refinements
+- **Phase 11 (Presentation Enhancements)** can proceed in parallel with Phases 6-10
+  - Quest completion notifications
+  - Faction indicators
+  - Inventory UI enhancements
 
 ---
 
