@@ -730,11 +730,18 @@ export class HeadlessRunner {
 
   /**
    * Create a state snapshot.
+   * Properly serializes Map/Set using same pattern as Engine.deepCloneState().
    */
   private createSnapshot(
     name: string,
     state: GameState
   ): StateSnapshot {
+    // Convert Set and Map to plain JSON for serialization (same as Engine.deepCloneState)
+    const serializable = {
+      ...state,
+      flags: Array.from(state.flags),
+      inventory: Array.from(state.inventory.entries()),
+    };
     return {
       timestamp: new Date().toISOString(),
       playthrough: name, // Will be updated with actual playthrough name
@@ -742,7 +749,7 @@ export class HeadlessRunner {
       name,
       engineVersion: state.version,
       contentVersion: state.contentVersion,
-      state: JSON.parse(JSON.stringify(state)), // Deep clone
+      state: JSON.parse(JSON.stringify(serializable)), // Deep clone
     };
   }
 
