@@ -1,0 +1,158 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_051",
+  "title": "Improv Workshop",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["stat_training", "revisionist", "improv"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "Improv Workshop",
+    "paragraphs": [
+      "The Improv Workshop is a bare stage with mirrors on three walls. No script. No net. Just you and the infinite possibility of what comes next.",
+      "The Author stands in the center, face shifting through a dozen expressions in as many seconds. \"Improv is the heart of revision,\" they say. \"The Preservationists memorize lines. We LIVE them. We don't ask 'what did the author write?' We ask 'what COULD have been written?'\"",
+      "They gesture to you. \"Let's test your adaptability. I'll set a scene. You'll respond. No preparation. No safety net. Show me you can think on your feet, and I'll teach you techniques the others can only dream of.\"",
+      "The scene shifts around you. Suddenly you're not in a workshop—you're on a cliff edge, a storm approaching, someone screaming your name from below. What do you do?"
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_author",
+      "name": "The Author",
+      "description": "Tests your adaptability through improv scenarios",
+      "role": "faction_leader"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "workshop_training",
+    "sfx": ["scene_shift", "mirror_reflection"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "improv_workshop_entered"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "[IMPROV 4] Jump into the story immediately",
+      "conditions": {
+        "type": "stat_check",
+        "stat": "improv",
+        "op": "gte",
+        "value": 4,
+        "attemptable": true
+      },
+      "onSuccess": {
+        "to": "sc_2_2_050",
+        "effects": [
+          {
+            "type": "modify_stat",
+            "stat": "improv",
+            "value": 1
+          },
+          {
+            "type": "modify_faction",
+            "faction": "revisionist",
+            "value": 1
+          },
+          {
+            "type": "set_flag",
+            "flag": "improv_training_complete"
+          }
+        ]
+      },
+      "onFailure": {
+        "to": "sc_2_2_050",
+        "effects": [
+          {
+            "type": "set_flag",
+            "flag": "improv_training_failed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "choice_2",
+      "label": "[SCRIPT 4] Analyze the scenario first",
+      "conditions": {
+        "type": "stat_check",
+        "stat": "script",
+        "op": "gte",
+        "value": 4,
+        "attemptable": true
+      },
+      "onSuccess": {
+        "to": "sc_2_2_050",
+        "effects": [
+          {
+            "type": "modify_stat",
+            "stat": "script",
+            "value": 1
+          },
+          {
+            "type": "modify_faction",
+            "faction": "revisionist",
+            "value": 1
+          }
+        ]
+      },
+      "onFailure": {
+        "to": "sc_2_2_050",
+        "effects": []
+      }
+    },
+    {
+      "id": "choice_3",
+      "label": "[STAGE PRESENCE 5] Command the scene to change",
+      "conditions": {
+        "type": "stat_check",
+        "stat": "stage_presence",
+        "op": "gte",
+        "value": 5,
+        "attemptable": true
+      },
+      "onSuccess": {
+        "to": "sc_2_2_050",
+        "effects": [
+          {
+            "type": "modify_stat",
+            "stat": "stage_presence",
+            "value": 1
+          },
+          {
+            "type": "modify_faction",
+            "faction": "revisionist",
+            "value": 1
+          }
+        ]
+      },
+      "onFailure": {
+        "to": "sc_2_2_050",
+        "effects": []
+      }
+    },
+    {
+      "id": "choice_4",
+      "label": "Decline the training (return to Writer's Room)",
+      "to": "sc_2_2_050",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["improv_workshop_entered"],
+    "requires": ["writers_room_entered"],
+    "checks": []
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_050",
+  "title": "The Writer's Room",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["faction_hq", "revisionist", "stat_training"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Writer's Room",
+    "paragraphs": [
+      "A door marked THE WRITER'S ROOM swings open at your approach, revealing a space cluttered with typewriters, stacks of parchment, and corkboards covered in index cards connected by red string.",
+      "\"Welcome, Prompter.\" A figure looks up from a manual typewriter—The Author, though their face shifts like pages turning in a wind. \"We are the Revisionists. Stories are not sacred texts to be preserved in amber. They are living things that must grow, change, adapt.\"",
+      "The Author gestures to the walls, where index cards show alternate versions of famous scenes. \"Romeo and Juliet where they survive. Hamlet where he forgives Claudius. Every story can be rewritten. Every tragedy can become comedy. Every ending can become beginning.\"",
+      "You notice cards showing YOUR story—moments from your journey, rewritten in different hands. One shows you remaining in the Prompter's Booth forever. Another shows you crossing alone into the Editor's domain. A third shows you as the Director of this very theater.",
+      "\"The Preservationists fear change,\" The Author continues, typing rapidly. \"They lock stories away, call them 'classics,' forbid anyone from altering a word. But stories that don't change die. They become museum pieces, irrelevant to anyone living now.\"",
+      "The Author pulls a fresh sheet of paper into the typewriter. \"We offer you something the others cannot: the power to reshape narratives. Not just to follow stories, but to IMPROVE them. To cut the boring parts, fix the plot holes, give characters the agency they were denied.\"",
+      "From a corner of the room, The Understudy watches you with hollow eyes. When The Author isn't looking, they mouth: *Nothing is as it seems.*",
+      "\"Join us,\" The Author says, \"and learn the art of revision. Or explore our facilities. The Improv Workshop trains adaptability. The Re-Write Desk lets you practice narrative surgery.\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_author",
+      "name": "The Author",
+      "description": "A shapeshifting Revisionist leader who believes all stories should be rewritten",
+      "role": "faction_leader"
+    },
+    {
+      "id": "the_understudy",
+      "name": "The Understudy",
+      "description": "A hollow-eyed figure who seems trapped between stories",
+      "role": "suspicious_ally"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "typing_rhythm_ambient",
+    "sfx": ["typewriter_keys", "paper_rustle"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "met_revisionists"
+    },
+    {
+      "type": "set_flag",
+      "flag": "writers_room_entered"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Accept the Author's offer (join Revisionists)",
+      "to": "sc_2_2_051",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "revisionist",
+          "value": 1
+        },
+        {
+          "type": "set_flag",
+          "flag": "revisionist_path_started"
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Visit the Improv Workshop (stat training)",
+      "to": "sc_2_2_051",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Try the Re-Write Desk (narrative alteration)",
+      "to": "sc_2_2_052",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "Speak with The Understudy privately",
+      "to": "sc_2_2_052",
+      "conditions": [
+        {
+          "type": "flag_check",
+          "flag": "understudy_confronted",
+          "operator": "NOT_SET"
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "understudy_confronted"
+        }
+      ],
+      "disabledHint": "You've already spoken with The Understudy."
+    },
+    {
+      "id": "choice_5",
+      "label": "Return to the Green Room center",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["met_revisionists", "writers_room_entered"],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}
