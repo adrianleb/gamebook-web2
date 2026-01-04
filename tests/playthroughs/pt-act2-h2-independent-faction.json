@@ -51,7 +51,7 @@
       "sequence": 3,
       "action": "choose",
       "choiceIndex": 1,
-      "description": "Choose 'Ask about the Independent philosophy' - verify all-faction bonus",
+      "description": "Choose 'Ask about the Independent philosophy' - verify all-faction bonus (self-loop re-triggers effectsOnEnter)",
       "expectedScene": "sc_2_2_070",
       "checkpoint": true,
       "assertions": {
@@ -60,7 +60,7 @@
           "preservationist": 1,
           "revisionist": 1,
           "exiter": 1,
-          "independent": 2
+          "independent": 3
         },
         "currentScene": "sc_2_2_070"
       }
