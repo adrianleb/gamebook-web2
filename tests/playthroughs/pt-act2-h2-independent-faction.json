@@ -1,0 +1,226 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-Act2-H2-Independent",
+    "description": "Independent Faction Path - Tests sc_2_2_070-072 scenes, modify_faction effects, set_flag effects, all-faction bonuses, and Diplomat's Token acquisition",
+    "author": "agent-b",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached", "act2_started"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 3,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_2_2_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Starting at Green Room Arrival - verify Act 2 Hub 2 entry",
+      "assertions": {
+        "flagsSet": ["green_room_reached", "act2_started"],
+        "currentScene": "sc_2_2_001"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 6,
+      "description": "Choose 'Visit the Neutral Ground (Independent)' - navigate to sc_2_2_070",
+      "expectedScene": "sc_2_2_070",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["MET_INDEPENDENT", "DISCOVERED_INDEPENDENT_HQ"],
+        "factions": {
+          "independent": 1
+        },
+        "currentScene": "sc_2_2_070"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose 'Ask about the Independent philosophy' - verify all-faction bonus",
+      "expectedScene": "sc_2_2_070",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["MET_INDEPENDENT", "DISCOVERED_INDEPENDENT_HQ", "INDEPENDENT_PHILOSOPHY_EXPLAINED"],
+        "factions": {
+          "preservationist": 1,
+          "revisionist": 1,
+          "exiter": 1,
+          "independent": 2
+        },
+        "currentScene": "sc_2_2_070"
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Ask about the Council of Three' - should fail (QUEST_BALANCE_STARTED not set)",
+      "expectedScene": "sc_2_2_070",
+      "checkpoint": false,
+      "assertions": {
+        "currentScene": "sc_2_2_070"
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "choose",
+      "choiceIndex": 3,
+      "description": "Return to Green Room center to accept quest first",
+      "expectedScene": "sc_2_2_001",
+      "checkpoint": false,
+      "assertions": {
+        "currentScene": "sc_2_2_001"
+      }
+    },
+    {
+      "sequence": 6,
+      "action": "choose",
+      "choiceIndex": 2,
+      "description": "Go to Call Board to accept Balance of Power quest",
+      "expectedScene": "sc_2_2_020",
+      "checkpoint": false,
+      "assertions": {
+        "currentScene": "sc_2_2_020"
+      }
+    },
+    {
+      "sequence": 7,
+      "action": "choose",
+      "choiceIndex": 3,
+      "description": "Select Balance of Power quest hook - should set QUEST_BALANCE_DISCOVERED",
+      "expectedScene": "sc_2_2_024",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["QUEST_BALANCE_DISCOVERED"],
+        "currentScene": "sc_2_2_024"
+      }
+    },
+    {
+      "sequence": 8,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Accept quest - should set QUEST_BALANCE_STARTED and grant all-faction bonuses",
+      "expectedScene": "sc_2_2_001",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["QUEST_BALANCE_DISCOVERED", "QUEST_BALANCE_STARTED"],
+        "factions": {
+          "preservationist": 2,
+          "revisionist": 2,
+          "exiter": 2,
+          "independent": 2
+        },
+        "currentScene": "sc_2_2_001"
+      }
+    },
+    {
+      "sequence": 9,
+      "action": "choose",
+      "choiceIndex": 6,
+      "description": "Return to Neutral Ground with quest active",
+      "expectedScene": "sc_2_2_070",
+      "checkpoint": false,
+      "assertions": {
+        "currentScene": "sc_2_2_070"
+      }
+    },
+    {
+      "sequence": 10,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Ask about the Council of Three' - now accessible with QUEST_BALANCE_STARTED",
+      "expectedScene": "sc_2_2_071",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["QUEST_BALANCE_STARTED", "COUNCIL_OF_THREE_VISITED"],
+        "factions": {
+          "preservationist": 2,
+          "revisionist": 2,
+          "exiter": 2,
+          "independent": 3
+        },
+        "currentScene": "sc_2_2_071"
+      }
+    },
+    {
+      "sequence": 11,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose 'Listen to each faction's concerns' - verify all-faction listening bonus",
+      "expectedScene": "sc_2_2_071",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["QUEST_BALANCE_STARTED", "COUNCIL_OF_THREE_VISITED", "COUNCIL_CONCERNS_HEARD"],
+        "factions": {
+          "preservationist": 3,
+          "revisionist": 3,
+          "exiter": 3,
+          "independent": 5
+        },
+        "currentScene": "sc_2_2_071"
+      }
+    },
+    {
+      "sequence": 12,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Propose a compromise' - navigate to Diplomat's Challenge",
+      "expectedScene": "sc_2_2_072",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["QUEST_BALANCE_STARTED", "COUNCIL_OF_THREE_VISITED", "COUNCIL_CONCERNS_HEARD", "DIPLOMAT_CHALLENGE_COMPLETE"],
+        "currentScene": "sc_2_2_072"
+      }
+    },
+    {
+      "sequence": 13,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Propose the Council solution (Stage Presence 3)' - attemptable stat check success path",
+      "expectedScene": "sc_2_2_072",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["QUEST_BALANCE_STARTED", "COUNCIL_OF_THREE_VISITED", "COUNCIL_CONCERNS_HEARD", "DIPLOMAT_CHALLENGE_COMPLETE", "COUNCIL_ESTABLISHED"],
+        "inventoryContains": ["diplomats_token"],
+        "factions": {
+          "preservationist": 5,
+          "revisionist": 5,
+          "exiter": 5,
+          "independent": 8
+        },
+        "currentScene": "sc_2_2_072"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_072",
+    "flagsRequired": ["QUEST_BALANCE_STARTED", "COUNCIL_OF_THREE_VISITED", "DIPLOMAT_CHALLENGE_COMPLETE", "COUNCIL_ESTABLISHED"],
+    "inventoryRequired": ["diplomats_token"],
+    "factionsRequired": {
+      "preservationist": 5,
+      "revisionist": 5,
+      "exiter": 5,
+      "independent": 8
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
