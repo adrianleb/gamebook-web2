@@ -67,7 +67,7 @@
       "to": "sc_2_2_060",
       "conditions": [
         {
-          "type": "flag",
+          "type": "flag_check",
           "flag": "green_room_reached"
         }
       ],
