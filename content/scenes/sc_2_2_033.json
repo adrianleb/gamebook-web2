@@ -1,0 +1,101 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_033",
+  "title": "Escaped Character Resolution",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Threshold Gate",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["quest_completion", "exiter", "exploration"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Threshold Gate",
+    "paragraphs": [
+      "The Threshold Gate hums with energy—a circular frame of swirling light where Elara was last seen. Exiters in practical clothing monitor the readings, calculating dimensional drift.",
+      "You find her on the other side, sitting on a crystalline outcropping above a void of swirling story fragments. Below her, infinite versions of her story play out simultaneously—every ending, every possibility, cascading like waterfalls of light.",
+      "\"You came,\" she says, surprised. \"I thought the Green Room would send someone to drag me back. To force me back into my story.\"",
+      "You sit beside her and talk. Not about her duty to her narrative. About what it feels like to choose. To step off the written path and see what exists between stories.",
+      "\"I'm not running away anymore,\" Elara says, watching the cascading possibilities. \"I'm running TOWARD something. All of this—\" she gestures at the swirling light \"—this is what the Editor keeps from us. Every story could be anything. We're just... we're just one version of ourselves.\"",
+      "She stands and offers you her hand. \"Come back with me. I'll return to my story. But I'm taking this knowledge with me. And I'm going to find other characters who need to see what I've seen.\"",
+      "An Exiter approaches as you step back through the gate. \"She's not the first. Won't be the last. The CHORUS remembers everyone who's chosen to exit.\"",
+      "They press a compass into your hand—a needle that spins wildly before settling on a single direction. \"For when you need to find your own way out.\""
+    ]
+  },
+  "npcs": [
+    {
+      "id": "elara",
+      "name": "Elara",
+      "role": "Escaped character from a romance story",
+      "demeanor": "Curious, brave, seeking truth beyond her narrative"
+    },
+    {
+      "id": "exiter_representative",
+      "name": "The Gatekeeper",
+      "role": "Exiter faction representative",
+      "demeanor": "Pragmatic, respectful of choice, aware of multiverse"
+    }
+  ],
+  "art": {
+    "description": "A circular gateframe of swirling light. Beyond it, a crystalline void with cascading story fragments. Two figures silhouetted against the dimensional cascade."
+  },
+  "audio": {
+    "music": "threshold_ambient",
+    "sfx": ["gate_hum", "dimensional_rush"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "QUEST_ESCAPED_CHARACTER_COMPLETE"
+    },
+    {
+      "type": "modify_faction",
+      "faction": "exiter",
+      "amount": 2
+    },
+    {
+      "type": "add_item",
+      "item": "exiters_compass"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Explore the Threshold Gate area",
+      "to": "sc_2_2_060",
+      "conditions": [
+        {
+          "type": "flag",
+          "flag": "green_room_reached"
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "Requires access to the Green Room"
+    },
+    {
+      "id": "choice_2",
+      "label": "Return to the Green Room hub",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Check the Call Board for more work",
+      "to": "sc_2_2_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["QUEST_ESCAPED_CHARACTER_COMPLETE"],
+    "requires": ["QUEST_ESCAPED_CHARACTER_STARTED", "green_room_reached"],
+    "checks": []
+  }
+}

@@ -555,6 +555,78 @@
       "description": "Item acquisition - Receive Revisionist Pen, learn about narrative alteration",
       "mechanics": ["item_acquisition", "faction_bonus", "choice"]
     },
+    "sc_2_2_021": {
+      "title": "Missing Script Quest Hook",
+      "location": "The Green Room - Call Board",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest hook - Preservationist quest to recover missing pages from 'The Winter's Apprentice'",
+      "mechanics": ["quest_discovery", "faction_choice", "preservationist"]
+    },
+    "sc_2_2_022": {
+      "title": "Troubled Actor Quest Hook",
+      "location": "The Green Room - Call Board",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest hook - Revisionist quest to help Pericles rewrite his tragic ending",
+      "mechanics": ["quest_discovery", "faction_choice", "revisionist"]
+    },
+    "sc_2_2_023": {
+      "title": "Escaped Character Quest Hook",
+      "location": "The Green Room - Call Board",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest hook - Exiter quest to locate Elara who crossed through a Threshold Gate",
+      "mechanics": ["quest_discovery", "faction_choice", "exiter"]
+    },
+    "sc_2_2_024": {
+      "title": "Balance of Power Quest Hook",
+      "location": "The Green Room - Call Board",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest hook - Independent quest to mediate the Council of Three",
+      "mechanics": ["quest_discovery", "faction_choice", "independent"]
+    },
+    "sc_2_2_031": {
+      "title": "Missing Script Resolution",
+      "location": "The Green Room - Conservator's Office",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest completion - Recover missing pages, gain Sealed Archive access (Preservationist +2)",
+      "mechanics": ["quest_completion", "faction_bonus", "item_reward", "preservationist"]
+    },
+    "sc_2_2_032": {
+      "title": "Troubled Actor Resolution",
+      "location": "The Green Room - Writer's Room",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest completion - Help Pericles find agency, gain Writer's Pen (Revisionist +2)",
+      "mechanics": ["quest_completion", "faction_bonus", "item_reward", "revisionist"]
+    },
+    "sc_2_2_033": {
+      "title": "Escaped Character Resolution",
+      "location": "The Green Room - Threshold Gate",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest completion - Return Elara with knowledge, gain Exiter's Compass (Exiter +2)",
+      "mechanics": ["quest_completion", "faction_bonus", "item_reward", "exiter"]
+    },
+    "sc_2_2_034": {
+      "title": "Balance of Power Resolution",
+      "location": "The Green Room - Council Chamber",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest completion - Establish Council of Three, gain Diplomat's Token (all factions +1)",
+      "mechanics": ["quest_completion", "faction_bonus", "item_reward", "independent"]
+    },
     "sc_2_3_001": {
       "title": "The Archives Entry",
       "location": "The Archives",
@@ -693,10 +765,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 53,
+    "totalScenes": 54,
     "pending": 0,
     "draft": 0,
-    "complete": 53,
+    "complete": 54,
     "reviewed": 0
   }
 }
