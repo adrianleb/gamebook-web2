@@ -97,7 +97,7 @@
   ],
   "flags": {
     "sets": ["SEALED_ARCHIVE_ACCESS_GRANTED"],
-    "requires": ["QUEST_MISSING_SCRIPT_COMPLETE"],
+    "requires": ["ARCHIVES_TOUR_COMPLETE"],
     "checks": []
   }
 }
