@@ -1,0 +1,85 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_024",
+  "title": "Balance of Power Quest Hook",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Call Board",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["quest_hook", "independent", "exploration"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Call Board",
+    "paragraphs": [
+      "A notice written in four different hands—Preservationist blue, Revisionist red, Exiter green, and a fourth color you've never seen before, a neutral gray.",
+      "\"The Understage is fracturing. Each faction pulls in its own direction, and the tension is tearing stories apart. We need someone who can see all sides. Someone who can walk between factions without losing themselves.\"",
+      "The gray handwriting continues: \"The Council of Three will convene soon—a meeting of faction representatives to discuss the growing crisis. They need a mediator. Someone who understands that every story needs balance: preservation AND revision, escape AND return. Not one truth, but all truths held together.\"",
+      "Below, the other factions have added their own notes:",
+      "Preservationist: \"We will listen, but we will not compromise on protecting the archives.\"",
+      "Revisionist: \"Stories must evolve. Stagnation is death.\"",
+      "Exiter: \"None of this matters if we're trapped forever.\"",
+      "The gray handwriting returns: \"If you seek balance, seek the Neutral Ground in the Green Room. The Council will decide the fate of the Understage. Be there.\"",
+      "This is different from the other notices. It's not asking you to choose a faction. It's asking you to hold them together—to carry the weight of all perspectives."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "green_room_ambient",
+    "sfx": ["paper_rustle"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "QUEST_BALANCE_DISCOVERED"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Accept the quest - mediate the Council of Three",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "QUEST_BALANCE_STARTED"
+        },
+        {
+          "type": "modify_faction",
+          "faction": "preservationist",
+          "amount": 1
+        },
+        {
+          "type": "modify_faction",
+          "faction": "revisionist",
+          "amount": 1
+        },
+        {
+          "type": "modify_faction",
+          "faction": "exiter",
+          "amount": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Decline for now - return to the Call Board",
+      "to": "sc_2_2_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["QUEST_BALANCE_DISCOVERED"],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}
