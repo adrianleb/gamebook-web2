@@ -66,16 +66,11 @@
     },
     {
       "id": "choice_2",
-      "label": "Ask about the missing pages from the Archives",
+      "label": "Ask about the Sealed Archive",
       "to": "sc_2_2_042",
-      "conditions": [
-        {
-          "type": "flag_check",
-          "flag": "QUEST_MISSING_SCRIPT_COMPLETE"
-        }
-      ],
+      "conditions": null,
       "onChoose": [],
-      "disabledHint": "You need to complete the Missing Script quest first to access the Sealed Archive."
+      "disabledHint": null
     },
     {
       "id": "choice_3",
