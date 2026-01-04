@@ -611,7 +611,7 @@ export class SceneLoader {
         delete (result as Record<string, unknown>).value;
       }
 
-      return result as Effect;
+      return result as unknown as Effect;
     });
   }
 
