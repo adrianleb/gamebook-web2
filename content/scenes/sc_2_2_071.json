@@ -133,6 +133,19 @@
       "disabledHint": "You've already heard everyone's concerns."
     },
     {
+      "id": "choice_2a",
+      "label": "Mediate the Council of Three",
+      "to": "sc_2_2_034",
+      "conditions": [
+        {
+          "type": "flag_check",
+          "flag": "QUEST_BALANCE_STARTED"
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "You need to accept the Balance of Power quest first."
+    },
+    {
       "id": "choice_3",
       "label": "Return to the Neutral Ground",
       "to": "sc_2_2_070",
