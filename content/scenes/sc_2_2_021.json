@@ -1,0 +1,72 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_021",
+  "title": "Missing Script Quest Hook",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Call Board",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["quest_hook", "preservationist", "exploration"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Call Board",
+    "paragraphs": [
+      "A notice in Preservationist blue catches your eye, pinned prominently among the faction requests.",
+      "\"MISSING: The Third Act of 'The Winter's Apprentice'—critical pages from the final scene. This script has been performed unchanged for three hundred years. Someone has altered the ending. The original pages MUST be recovered before the next performance.\"",
+      "Below the notice, a smaller note reads: \"Reward offered: Access to the Sealed Archive, where the first drafts of every story are preserved. Contact the Conservator's Office in the Green Room.\"",
+      "The request speaks to preservation—to keeping stories as they were written, protecting them from revision.",
+      "You feel the weight of the choice. The Preservationists would restore what was lost. But the Revisionists might ask what harm there is in a new ending.",
+      "This quest matters. Scripts are the foundation of performance. Without them, actors improvise—and improvisation leads to chaos."
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "green_room_ambient",
+    "sfx": ["paper_rustle"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "QUEST_MISSING_SCRIPT_DISCOVERED"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Accept the quest - help find the missing pages",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "QUEST_MISSING_SCRIPT_STARTED"
+        },
+        {
+          "type": "modify_faction",
+          "faction": "preservationist",
+          "amount": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Decline for now - return to the Call Board",
+      "to": "sc_2_2_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["QUEST_MISSING_SCRIPT_DISCOVERED"],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}

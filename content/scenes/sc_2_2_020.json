@@ -8,10 +8,10 @@
   "implementationStatus": "complete",
   "metadata": {
     "sourceNode": null,
-    "tags": ["exploration", "lore", "rumors"],
+    "tags": ["exploration", "lore", "rumors", "quest_hub"],
     "author": "agent-b",
     "createdAt": "2025-12-31",
-    "updatedAt": "2025-12-31"
+    "updatedAt": "2026-01-04"
   },
   "text": {
     "location": "The Green Room - Call Board",
@@ -23,12 +23,17 @@
       "A flyer in Preservationist blue asks for volunteers to help \"restore damaged manuscripts\" in the Archives. It warns that \"stories are being rewritten without consent.\"",
       "A Revisionist manifesto pinned nearby declares that \"fiction is too important to leave to chance.\" It argues for conscious improvement of every narrative.",
       "An Exiter pamphlet, written in handwriting that seems to move, invites characters to \"imagine a world beyond the page.\" It asks: \"What if your story could continue after 'The End'?\"",
+      "QUEST NOTICES:",
+      "A prominent notice in blue reads: \"MISSING: The Third Act of 'The Winter's Apprentice'—critical pages from the final scene. The Conservator's Office seeks assistance.\"",
+      "A hasty addition in red: \"EMERGENCY: Pericles, the tragic hero, has forgotten his purpose. The Writer's Room needs help rewriting his arc.\"",
+      "A shifting script in green: \"SOMEONE HAS CROSSED OVER. Elara, a minor character, has stepped through a Threshold Gate. The Gatekeepers need help locating her.\"",
+      "A gray notice in four different hands: \"The Council of Three will convene soon. The Understage needs a mediator. Seek the Neutral Ground.\"",
       "RUMORS AND WARNINGS:",
       "A scrap of paper reads: \"Has anyone else noticed that forgotten scenes are disappearing? First the cut chapters, now the minor characters...\"",
       "Another note, hastily written: \"The Editor was seen in the Archives. They were weeping.\"",
       "A final message, written in something that looks like ink but smells of iron: \"DO NOT TRUST THE DIRECTOR. DO NOT TRUST THE UNDERSTUDY. DO NOT TRUST YOUR OWN MEMORIES.\"",
       "The Call Board suggests a world in conflict—stories choosing sides, unsure what happens when the final curtain falls.",
-      "You step back, the weight of what you've learned settling in."
+      "Several quest notices stand out, each offering a path into the deeper conflicts of the Understage."
     ]
   },
   "npcs": [],
@@ -41,6 +46,38 @@
   "choices": [
     {
       "id": "choice_1",
+      "label": "Read about the Missing Script (Preservationist)",
+      "to": "sc_2_2_021",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Read about the Troubled Actor (Revisionist)",
+      "to": "sc_2_2_022",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_3",
+      "label": "Read about the Escaped Character (Exiter)",
+      "to": "sc_2_2_023",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "Read about the Council of Three (Independent)",
+      "to": "sc_2_2_024",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_5",
       "label": "Return to the Green Room center",
       "to": "sc_2_2_001",
       "conditions": null,

@@ -1,0 +1,72 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_022",
+  "title": "Troubled Actor Quest Hook",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Call Board",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["quest_hook", "revisionist", "exploration"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Call Board",
+    "paragraphs": [
+      "A Revisionist manifesto has been modified by hand—scrawled additions in urgent ink.",
+      "\"EMERGENCY: Pericles, the tragic hero of the same name, has forgotten his purpose. He wanders the Dressing Rooms reciting lines from comedies, weeping between jokes. He says he's 'tired of being noble' and wants to try something new. The role is destroying him. He needs a rewrite—a chance to be someone else for a while.\"",
+      "Below, a response from the Writer's Room: \"We can help him. But the Preservationists will call it blasphemy. Pericles needs a new arc. A redemption story. Or a comedy. Something that isn't just tragedy upon tragedy.\"",
+      "The notice challenges everything you know about stories. Characters are suffering in their roles. The Revisionists offer relief—at the cost of changing who they are.",
+      "This is not just about one actor. It's about the right of fictional beings to choose their own narratives.",
+      "You see both sides. Pericles deserves peace. But should a tragic hero become a comedian? Where does the character end and the change begin?"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "green_room_ambient",
+    "sfx": ["paper_rustle"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "QUEST_TROUBLED_ACTOR_DISCOVERED"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Accept the quest - help rewrite Pericles's story",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "QUEST_TROUBLED_ACTOR_STARTED"
+        },
+        {
+          "type": "modify_faction",
+          "faction": "revisionist",
+          "amount": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Decline for now - return to the Call Board",
+      "to": "sc_2_2_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["QUEST_TROUBLED_ACTOR_DISCOVERED"],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}

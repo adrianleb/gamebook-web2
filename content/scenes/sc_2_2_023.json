@@ -1,0 +1,72 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_023",
+  "title": "Escaped Character Quest Hook",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room - Call Board",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["quest_hook", "exiter", "exploration"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Call Board",
+    "paragraphs": [
+      "An Exiter pamphlet, written in handwriting that seems to shift on the page, describes an urgent situation.",
+      "\"SOMEONE HAS CROSSED OVER. A minor character from a forgotten novel—name: Elara, role: 'the innkeeper's daughter'—has found a Threshold Gate and stepped through. She was last seen near the reality border, confused and frightened. She doesn't know she's fictional. She doesn't know that readers stopped caring about her story decades ago.\"",
+      "The pamphlet continues: \"We need to bring her back. NOT to trap her, but to prepare her. The real world will destroy her if she's not ready. If you've seen the Threshold Gate, if you know where she might have gone, please contact the Gatekeepers.\"",
+      "The notice is signed with a symbol you don't recognize—a doorframe, open and empty.",
+      "Your heart races. A fictional character, in the real world. It's impossible. It's terrifying. It's exactly what the Exiters dream of.",
+      "But you wonder: what happens to Elara's story if she never returns? Does the novel continue without her? Do the other characters notice she's gone? Or does the entire narrative unravel?"
+    ]
+  },
+  "npcs": [],
+  "art": null,
+  "audio": {
+    "music": "green_room_ambient",
+    "sfx": ["paper_rustle"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "QUEST_ESCAPED_CHARACTER_DISCOVERED"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Accept the quest - help find Elara",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "QUEST_ESCAPED_CHARACTER_STARTED"
+        },
+        {
+          "type": "modify_faction",
+          "faction": "exiter",
+          "amount": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Decline for now - return to the Call Board",
+      "to": "sc_2_2_020",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["QUEST_ESCAPED_CHARACTER_DISCOVERED"],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}

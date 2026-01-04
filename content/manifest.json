@@ -489,8 +489,44 @@
       "act": 2,
       "hub": 2,
       "status": "complete",
-      "description": "Exploration - Lore exposition through faction notices, rumors, and warnings",
-      "mechanics": ["exploration", "lore", "environmental_storytelling"]
+      "description": "Quest hub - Lore exposition through faction notices, rumors, warnings, and quest discovery",
+      "mechanics": ["exploration", "lore", "quest_discovery", "environmental_storytelling"]
+    },
+    "sc_2_2_021": {
+      "title": "Missing Script Quest Hook",
+      "location": "The Green Room - Call Board",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest hook - Preservationist quest to recover missing script pages",
+      "mechanics": ["quest_hook", "flag_discovery", "faction_choice"]
+    },
+    "sc_2_2_022": {
+      "title": "Troubled Actor Quest Hook",
+      "location": "The Green Room - Call Board",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest hook - Revisionist quest to help rewrite Pericles's story",
+      "mechanics": ["quest_hook", "flag_discovery", "faction_choice"]
+    },
+    "sc_2_2_023": {
+      "title": "Escaped Character Quest Hook",
+      "location": "The Green Room - Call Board",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest hook - Exiter quest to locate Elara who crossed over",
+      "mechanics": ["quest_hook", "flag_discovery", "faction_choice"]
+    },
+    "sc_2_2_024": {
+      "title": "Balance of Power Quest Hook",
+      "location": "The Green Room - Call Board",
+      "act": 2,
+      "hub": 2,
+      "status": "complete",
+      "description": "Quest hook - Independent quest to mediate the Council of Three",
+      "mechanics": ["quest_hook", "flag_discovery", "all_factions"]
     },
     "sc_2_3_001": {
       "title": "The Archives Entry",
@@ -630,10 +666,10 @@
     }
   },
   "implementationStatus": {
-    "totalScenes": 46,
+    "totalScenes": 50,
     "pending": 0,
     "draft": 0,
-    "complete": 46,
+    "complete": 50,
     "reviewed": 0
   }
 }
