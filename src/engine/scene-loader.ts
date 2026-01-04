@@ -566,7 +566,9 @@ export class SceneLoader {
 
   /**
    * Normalize effect type format from content files to engine runtime format.
-   * Maps underscore versions to hyphen versions (e.g., set_flag → set-flag).
+   * Maps:
+   * - Underscore versions to hyphen versions (e.g., set_flag → set-flag)
+   * - Non-canonical field names (e.g., modify_faction 'value' → 'amount')
    *
    * @param effects - Raw effects array (may be undefined)
    * @returns Normalized effects array
@@ -595,10 +597,21 @@ export class SceneLoader {
         'modify_faction': 'modify-faction',
       };
 
-      return {
+      const normalizedType = typeMap[type] || type as EffectType;
+
+      // For modify_faction effects, transform 'value' field to 'amount' for backward compatibility
+      // Content files may use 'value' but engine canonical format uses 'amount'
+      const result: Record<string, unknown> = {
         ...effectObj,
-        type: typeMap[type] || type as EffectType,
-      } as Effect;
+        type: normalizedType,
+      };
+
+      if (normalizedType === 'modify-faction' && 'value' in effectObj && !('amount' in effectObj)) {
+        result.amount = effectObj.value;
+        delete (result as Record<string, unknown>).value;
+      }
+
+      return result as Effect;
     });
   }
 
