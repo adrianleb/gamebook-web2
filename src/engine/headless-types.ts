@@ -11,7 +11,7 @@
  * - CI-friendly output with JUnit format
  */
 
-import type { GameState, SceneId, StatId, FlagName, ItemId } from './types.js';
+import type { GameState, SceneId, StatId, FlagName, ItemId, FactionId } from './types.js';
 
 /**
  * Playthrough script configuration.
@@ -97,6 +97,9 @@ export interface StartingState {
 
   /** Starting stat values */
   stats?: Record<StatId, number>;
+
+  /** Starting faction values (0-10 range) */
+  factions?: Record<FactionId, number>;
 
   /** Starting scene ID (overrides manifest default) */
   currentScene?: SceneId;
@@ -218,6 +221,12 @@ export interface StateAssertions {
   /** Expected stat values (partial match) */
   stats?: Partial<Record<StatId, number>>;
 
+  /** Expected faction values (absolute, 0-10 range, partial match) */
+  factions?: Partial<Record<FactionId, number>>;
+
+  /** Minimum faction thresholds (for ending gate validation) */
+  factionsMin?: Partial<Record<FactionId, number>>;
+
   /** Expected current scene (checkpoint only) */
   currentScene?: SceneId;
 
@@ -247,6 +256,9 @@ export interface EndingCriteria {
 
   /** Required stat thresholds at ending */
   statsRequired?: Partial<Record<StatId, number>>;
+
+  /** Required faction thresholds at ending */
+  factionsRequired?: Partial<Record<FactionId, number>>;
 }
 
 /**

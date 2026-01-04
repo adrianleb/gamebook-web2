@@ -47,6 +47,11 @@
           "description": "Starting stat values",
           "additionalProperties": { "type": "number" }
         },
+        "factions": {
+          "type": "object",
+          "description": "Starting faction values (0-10 range)",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 10 }
+        },
         "currentScene": {
           "type": "string",
           "description": "Starting scene ID (overrides manifest default)"
@@ -138,6 +143,11 @@
           "type": "object",
           "description": "Required stat thresholds at ending",
           "additionalProperties": { "type": "number" }
+        },
+        "factionsRequired": {
+          "type": "object",
+          "description": "Required faction thresholds at ending (0-10 range)",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 10 }
         }
       }
     },
@@ -191,6 +201,16 @@
           "type": "object",
           "description": "Expected stat values (partial match)",
           "additionalProperties": { "type": "number" }
+        },
+        "factions": {
+          "type": "object",
+          "description": "Expected faction values (absolute, 0-10 range, partial match)",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 10 }
+        },
+        "factionsMin": {
+          "type": "object",
+          "description": "Minimum faction thresholds (for ending gate validation)",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 10 }
         },
         "currentScene": {
           "type": "string",

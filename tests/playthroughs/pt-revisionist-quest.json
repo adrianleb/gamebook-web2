@@ -1,0 +1,80 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-REVISIONIST-QUEST",
+    "description": "Revisionist Quest Test - Validates flag setting and faction changes during Act 2 Hub 2 quest",
+    "author": "agent-c",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "revisionist": 0,
+      "preservationist": 0,
+      "exiter": 0
+    },
+    "currentScene": "sc_2_2_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify starting state at Green Room",
+      "assertions": {
+        "flagsSet": ["green_room_reached"],
+        "factions": {
+          "revisionist": 0
+        },
+        "currentScene": "sc_2_2_001"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 3,
+      "description": "Choose 'Visit The Writer's Room (Revisionists)'",
+      "expectedScene": "sc_2_2_050",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "met_revisionists", "writers_room_entered"],
+        "factions": {
+          "revisionist": 0
+        },
+        "currentScene": "sc_2_2_050"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Accept the Author's offer (join Revisionists)' - sets flag and +1 revisionist faction",
+      "expectedScene": "sc_2_2_051",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "met_revisionists", "writers_room_entered", "revisionist_path_started"],
+        "factions": {
+          "revisionist": 1
+        },
+        "currentScene": "sc_2_2_051"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_051",
+    "flagsRequired": ["revisionist_path_started"],
+    "factionsRequired": {
+      "revisionist": 1
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

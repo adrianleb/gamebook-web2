@@ -20,6 +20,7 @@ import type {
   FlagName,
   ItemId,
   StatId,
+  FactionId,
 } from './types.js';
 import type {
   PlaythroughScript,
@@ -499,6 +500,58 @@ export class HeadlessRunner {
       }
     }
 
+    // Check factions (absolute values, 0-10 range)
+    if (assertions.factions) {
+      for (const [faction, expectedValue] of Object.entries(assertions.factions)) {
+        // Skip undefined values (defensive, shouldn't happen with Partial<Record>)
+        if (expectedValue === undefined) continue;
+        // Validate 0-10 range
+        if (expectedValue < 0 || expectedValue > 10) {
+          return {
+            status: 'failed',
+            expected: `faction value between 0-10`,
+            actual: `${expectedValue}`,
+            reason: `Faction assertion value ${expectedValue} for "${faction}" is outside valid range (0-10)`,
+          };
+        }
+        const actualValue = state.factions[faction] ?? 0;
+        if (actualValue !== expectedValue) {
+          return {
+            status: 'failed',
+            expected: `${faction} = ${expectedValue}`,
+            actual: `${faction} = ${actualValue}`,
+            reason: `Expected faction "${faction}" to be ${expectedValue}, but got ${actualValue}`,
+          };
+        }
+      }
+    }
+
+    // Check factionsMin (threshold validation)
+    if (assertions.factionsMin) {
+      for (const [faction, minValue] of Object.entries(assertions.factionsMin)) {
+        // Skip undefined values (defensive, shouldn't happen with Partial<Record>)
+        if (minValue === undefined) continue;
+        // Validate 0-10 range
+        if (minValue < 0 || minValue > 10) {
+          return {
+            status: 'failed',
+            expected: `faction threshold between 0-10`,
+            actual: `${minValue}`,
+            reason: `Faction minimum threshold ${minValue} for "${faction}" is outside valid range (0-10)`,
+          };
+        }
+        const actualValue = state.factions[faction] ?? 0;
+        if (actualValue < minValue) {
+          return {
+            status: 'failed',
+            expected: `${faction} >= ${minValue}`,
+            actual: `${faction} = ${actualValue}`,
+            reason: `Expected faction "${faction}" >= ${minValue}, but got ${actualValue}`,
+          };
+        }
+      }
+    }
+
     // Check currentScene
     if (assertions.currentScene && state.currentSceneId !== assertions.currentScene) {
       return {
@@ -611,6 +664,26 @@ export class HeadlessRunner {
               expected: `${stat} >= ${minValue}`,
               actual: `${stat} = ${actualValue}`,
               reason: `Required stat "${stat}" is ${actualValue}, expected at least ${minValue ?? 0}`,
+            },
+          };
+        }
+      }
+    }
+
+    // Check required factions
+    if (criteria.factionsRequired) {
+      for (const [faction, minValue] of Object.entries(criteria.factionsRequired)) {
+        // Skip undefined values (defensive, shouldn't happen with Partial<Record>)
+        if (minValue === undefined) continue;
+        const actualValue = state.factions[faction] ?? 0;
+        if (actualValue < minValue) {
+          return {
+            status: 'failed',
+            failure: {
+              step: this.stepCount,
+              expected: `${faction} >= ${minValue}`,
+              actual: `${faction} = ${actualValue}`,
+              reason: `Required faction "${faction}" is ${actualValue}, expected at least ${minValue}`,
             },
           };
         }
@@ -777,6 +850,7 @@ export class HeadlessRunner {
     flags?: FlagName[];
     inventory?: ItemId[];
     stats?: Record<StatId, number>;
+    factions?: Record<FactionId, number>;
     currentScene?: SceneId;
   }): Promise<void> {
     const state = this.engine.getState();
@@ -799,6 +873,13 @@ export class HeadlessRunner {
     if (startingState.stats) {
       for (const [stat, value] of Object.entries(startingState.stats)) {
         state.stats[stat] = value;
+      }
+    }
+
+    // Set factions
+    if (startingState.factions) {
+      for (const [faction, value] of Object.entries(startingState.factions)) {
+        state.factions[faction] = value;
       }
     }
 
