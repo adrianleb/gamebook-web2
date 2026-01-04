@@ -179,6 +179,44 @@
         "effect": "One use per hub"
       }
     ],
+    "act2_quest": [
+      {
+        "id": "sealed_archive_key",
+        "name": "Sealed Archive Key",
+        "category": "key",
+        "faction": "preservationist",
+        "properties": ["plot_critical"],
+        "description": "Quest reward: Missing Script completion",
+        "effect": "Access to restricted Sealed Archive"
+      },
+      {
+        "id": "writers_pen",
+        "name": "Writer's Pen",
+        "category": "prop",
+        "faction": "revisionist",
+        "properties": ["consumable"],
+        "description": "Quest reward: Troubled Actor completion",
+        "effect": "Single-use narrative rewrite"
+      },
+      {
+        "id": "elara_token",
+        "name": "Elara's Token",
+        "category": "token",
+        "faction": "exiter",
+        "properties": [],
+        "description": "Quest reward: Escaped Character completion - reveals paths between stories",
+        "effect": "Multiverse navigation hint"
+      },
+      {
+        "id": "diplomats_token",
+        "name": "Diplomat's Token",
+        "category": "token",
+        "faction": "independent",
+        "properties": ["consumable"],
+        "description": "Quest reward: Balance of Power completion",
+        "effect": "Appears as any token needed"
+      }
+    ],
     "act2_archives": [
       {
         "id": "first_draft_fragment",
