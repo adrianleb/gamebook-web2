@@ -305,8 +305,7 @@ export class ContentValidator {
 
     // Validate stat references (will need stats.json when available)
     if (normalizedType === 'stat') {
-      const statField = condition.type === 'stat_check' || condition.type === 'stat' ? 'stat' : 'stat';
-      if (!condition[statField]) {
+      if (!condition.stat) {
         errors.push({
           type: 'invalid-stat',
           sceneId,
@@ -331,8 +330,7 @@ export class ContentValidator {
 
     // Validate flag references
     if (normalizedType === 'flag') {
-      const flagField = condition.type === 'flag_check' || condition.type === 'flag' ? 'flag' : 'flag';
-      if (!condition[flagField]) {
+      if (!condition.flag) {
         errors.push({
           type: 'schema-error',
           sceneId,
@@ -343,8 +341,7 @@ export class ContentValidator {
 
     // Validate item references (will need items.json when available)
     if (normalizedType === 'item') {
-      const itemField = condition.type === 'has_item' || condition.type === 'item' ? 'item' : 'item';
-      if (!condition[itemField]) {
+      if (!condition.item) {
         errors.push({
           type: 'invalid-item',
           sceneId,
@@ -355,8 +352,7 @@ export class ContentValidator {
 
     // Validate faction references
     if (normalizedType === 'faction') {
-      const factionField = condition.type === 'faction_check' || condition.type === 'faction' ? 'faction' : 'faction';
-      if (!condition[factionField]) {
+      if (!condition.faction) {
         errors.push({
           type: 'schema-error',
           sceneId,
