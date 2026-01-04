@@ -217,6 +217,14 @@
     ],
     "act2_archives": [
       {
+        "id": "archival_ticket",
+        "name": "Archival Ticket",
+        "category": "token",
+        "properties": [],
+        "description": "Grants access to the public Archives; given by the Conservator",
+        "effect": "Access to Archives study areas; lore and stat boosts"
+      },
+      {
         "id": "first_draft_fragment",
         "name": "First Draft Fragment",
         "category": "artifact",

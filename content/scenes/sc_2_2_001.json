@@ -83,6 +83,14 @@
     },
     {
       "id": "choice_4",
+      "label": "Visit the Conservator's Office (Preservationist)",
+      "to": "sc_2_2_040",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_5",
       "label": "Visit The Writer's Room (Revisionists)",
       "to": "sc_2_2_050",
       "conditions": null,
@@ -90,7 +98,7 @@
       "disabledHint": null
     },
     {
-      "id": "choice_5",
+      "id": "choice_6",
       "label": "Head to the Archives",
       "to": "sc_2_3_001",
       "conditions": null,

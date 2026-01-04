@@ -1,0 +1,127 @@
+{
+  "$schema": "./scene-schema.json",
+  "id": "sc_2_2_040",
+  "title": "The Conservator's Office",
+  "act": 2,
+  "hub": 2,
+  "location": "The Green Room",
+  "implementationStatus": "complete",
+  "metadata": {
+    "sourceNode": null,
+    "tags": ["faction_hq", "preservationist", "lore", "npc_encounter"],
+    "author": "agent-b",
+    "createdAt": "2026-01-04",
+    "updatedAt": "2026-01-04"
+  },
+  "text": {
+    "location": "The Green Room - Conservator's Office",
+    "paragraphs": [
+      "Behind an unmarked door in the Green Room, you find the Conservator's Office—a sanctuary of order amidst the Understage's chaos.",
+      "Walls lined with glass-fronted cabinets display artifacts: quills from the first draft of Don Quixote, a dried rose from Romeo and Juliet's balcony scene, the mask worn by the original phantom of the opera. Each item is labeled, cataloged, preserved.",
+      "A figure moves between the shelves—The Conservator, elderly but ageless in a way only fictional characters can be. Their robes are the deep blue of the Preservationists, embroidered with silver scripts that shift and flow like living text.",
+      "\"You've come.\" The Conservator's voice cracks like old paper. \"The Call Board said someone was asking about the missing pages. I am called the Conservator. I keep what was written, safe from those who would change it.\"",
+      "They gesture to a battered oak desk covered in restoration tools: rare inks, binding glue, parchment patches. \"Every story has a true form. The first draft. The author's intent. We protect that truth against Revisionists who would 'improve' what needs no improvement. Against Exiters who would abandon stories for realities they were never meant to know.\"",
+      "The Conservator meets your eyes. \"The missing pages from 'The Winter's Apprentice'—they are more than lost. They were taken. Someone rewrote the ending. We need the original back. The third act cannot be performed with false words.\"",
+      "From a drawer, they produce a heavy iron key on a blue ribbon. \"The Sealed Archive holds the first drafts of every story. Only those who have proven their dedication to preservation may enter. Perhaps you will be worthy.\"",
+      "The office smells of old paper and commitment—a fortress against the erosion of stories."
+    ]
+  },
+  "npcs": [
+    {
+      "id": "the_conservator",
+      "name": "The Conservator",
+      "description": "Elderly guardian of the Archives, dedicated to preserving stories in their original form",
+      "role": "faction_leader"
+    }
+  ],
+  "art": null,
+  "audio": {
+    "music": "preservationist_theme",
+    "sfx": ["paper_rustle", "quill_scratch"]
+  },
+  "effectsOnEnter": [
+    {
+      "type": "set_flag",
+      "flag": "MET_CONSERVATOR"
+    },
+    {
+      "type": "set_flag",
+      "flag": "DISCOVERED_PRESERVATIONIST_HQ"
+    }
+  ],
+  "choices": [
+    {
+      "id": "choice_1",
+      "label": "Ask for a tour of the Archives",
+      "to": "sc_2_2_041",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "modify_faction",
+          "faction": "preservationist",
+          "amount": 1
+        }
+      ],
+      "disabledHint": null
+    },
+    {
+      "id": "choice_2",
+      "label": "Ask about the missing pages quest",
+      "to": "sc_2_2_021",
+      "conditions": [
+        {
+          "type": "NOT",
+          "conditions": [
+            {
+              "type": "flag_check",
+              "flag": "QUEST_MISSING_SCRIPT_DISCOVERED"
+            }
+          ]
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "You've already learned about this quest."
+    },
+    {
+      "id": "choice_3",
+      "label": "Ask about the other factions",
+      "to": "sc_2_2_040",
+      "conditions": [
+        {
+          "type": "NOT",
+          "conditions": [
+            {
+              "type": "flag_check",
+              "flag": "CONSERVATOR_FACTION_EXPLAIN"
+            }
+          ]
+        }
+      ],
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "CONSERVATOR_FACTION_EXPLAIN"
+        },
+        {
+          "type": "modify_faction",
+          "faction": "preservationist",
+          "value": 1
+        }
+      ],
+      "disabledHint": "The Conservator has already explained the factions."
+    },
+    {
+      "id": "choice_4",
+      "label": "Return to the Green Room center",
+      "to": "sc_2_2_001",
+      "conditions": null,
+      "onChoose": [],
+      "disabledHint": null
+    }
+  ],
+  "flags": {
+    "sets": ["MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ"],
+    "requires": ["green_room_reached"],
+    "checks": []
+  }
+}
