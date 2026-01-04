@@ -23,7 +23,12 @@ This directory contains automated playthrough test scripts for the headless runn
 - **pt-edge-002.json**: Tests additional edge scenarios.
 - **pt-edge-003.json**: Tests complex edge case interactions.
 
-### 4. Save/Load Regression Tests
+### 4. Faction Tests (Act 2)
+**TODO**: Create faction tests when Act 2 Hub 2 faction content merges:
+- **pt-revisionist-quest.json**: Test Revisionist quest mechanics (sc_2_2_050-052) - validates flag setting, faction changes, and faction assertions.
+- **pt-preservationist-quest.json**: Test Preservationist quest mechanics (sc_2_2_040-042) - validates flag setting, faction changes, and item acquisition.
+
+### 5. Save/Load Regression Tests
 - **pt-sl-001.json**: Tests save/load round-trip and state serialization.
 - **pt-sl-002.json**: Tests save/load with complex state changes.
 
@@ -48,6 +53,11 @@ Each playthrough script follows the schema defined in `src/engine/headless-schem
       "stage_presence": 2,
       "improv": 2
     },
+    "factions": {
+      "revisionist": 0,
+      "preservationist": 0,
+      "exiter": 0
+    },
     "currentScene": "sc_1_0_001"
   },
   "steps": [
@@ -62,6 +72,8 @@ Each playthrough script follows the schema defined in `src/engine/headless-schem
         "inventoryContains": [],
         "inventoryExcludes": [],
         "stats": {},
+        "factions": {},
+        "factionsMin": {},
         "visitedCount": {},
         "choicesAvailable": 2
       }
@@ -71,7 +83,8 @@ Each playthrough script follows the schema defined in `src/engine/headless-schem
     "sceneId": "sc_1_1_000",
     "flagsRequired": [],
     "inventoryRequired": [],
-    "statsRequired": {}
+    "statsRequired": {},
+    "factionsRequired": {}
   },
   "softlockDetection": {
     "enabled": true,
@@ -143,6 +156,8 @@ When adding new test scenarios:
 - **inventoryContains**: Verifies items are in inventory
 - **inventoryExcludes**: Verifies items are NOT in inventory
 - **stats**: Verifies exact stat values (uses canonical stats: script, stage_presence, improv)
+- **factions**: Verifies exact faction values (0-10 range, absolute values)
+- **factionsMin**: Verifies minimum faction thresholds (for ending gate validation)
 - **visitedCount**: Verifies scene visit counts (for softlock detection)
 - **currentScene**: Verifies current scene ID
 - **choicesAvailable**: Verifies minimum number of available choices
