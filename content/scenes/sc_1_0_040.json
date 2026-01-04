@@ -58,7 +58,7 @@
     {
       "id": "choice_2",
       "label": "Refuse and continue the pursuit",
-      "to": "sc_1_0_011",
+      "to": "sc_1_0_012",
       "conditions": null,
       "onChoose": [
         {

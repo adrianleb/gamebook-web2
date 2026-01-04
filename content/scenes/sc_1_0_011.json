@@ -131,6 +131,19 @@
         }
       ],
       "disabledHint": null
+    },
+    {
+      "id": "choice_4",
+      "label": "Hear the Stagehand's offer",
+      "to": "sc_1_0_040",
+      "conditions": null,
+      "onChoose": [
+        {
+          "type": "set_flag",
+          "flag": "stagehand_intervention"
+        }
+      ],
+      "disabledHint": null
     }
   ],
   "flags": {
