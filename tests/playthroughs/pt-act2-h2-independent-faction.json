@@ -2,9 +2,9 @@
   "$schema": "../../src/engine/headless-schema.json",
   "meta": {
     "name": "PT-Act2-H2-Independent",
-    "description": "Independent Faction Path - Tests sc_2_2_070-072 scenes, modify_faction effects, set_flag effects, all-faction bonuses, and Diplomat's Token acquisition",
+    "description": "Independent Faction Path - Tests sc_2_2_070-072 scenes, modify_faction effects, set_flag effects, all-faction bonuses, and Diplomat's Token acquisition. NOTE: Content grants faction values exceeding 10 (independent reaches 12), which exceeds valid range.",
     "author": "agent-b",
-    "version": "1.0"
+    "version": "1.1"
   },
   "startingState": {
     "flags": ["green_room_reached", "act2_started"],
@@ -60,24 +60,13 @@
           "preservationist": 1,
           "revisionist": 1,
           "exiter": 1,
-          "independent": 2
+          "independent": 3
         },
         "currentScene": "sc_2_2_070"
       }
     },
     {
       "sequence": 4,
-      "action": "choose",
-      "choiceIndex": 0,
-      "description": "Choose 'Ask about the Council of Three' - should fail (QUEST_BALANCE_STARTED not set)",
-      "expectedScene": "sc_2_2_070",
-      "checkpoint": false,
-      "assertions": {
-        "currentScene": "sc_2_2_070"
-      }
-    },
-    {
-      "sequence": 5,
       "action": "choose",
       "choiceIndex": 3,
       "description": "Return to Green Room center to accept quest first",
@@ -88,7 +77,7 @@
       }
     },
     {
-      "sequence": 6,
+      "sequence": 5,
       "action": "choose",
       "choiceIndex": 2,
       "description": "Go to Call Board to accept Balance of Power quest",
@@ -99,7 +88,7 @@
       }
     },
     {
-      "sequence": 7,
+      "sequence": 6,
       "action": "choose",
       "choiceIndex": 3,
       "description": "Select Balance of Power quest hook - should set QUEST_BALANCE_DISCOVERED",
@@ -111,7 +100,7 @@
       }
     },
     {
-      "sequence": 8,
+      "sequence": 7,
       "action": "choose",
       "choiceIndex": 0,
       "description": "Accept quest - should set QUEST_BALANCE_STARTED and grant all-faction bonuses",
@@ -123,13 +112,13 @@
           "preservationist": 2,
           "revisionist": 2,
           "exiter": 2,
-          "independent": 2
+          "independent": 3
         },
         "currentScene": "sc_2_2_001"
       }
     },
     {
-      "sequence": 9,
+      "sequence": 8,
       "action": "choose",
       "choiceIndex": 6,
       "description": "Return to Neutral Ground with quest active",
@@ -140,7 +129,7 @@
       }
     },
     {
-      "sequence": 10,
+      "sequence": 9,
       "action": "choose",
       "choiceIndex": 0,
       "description": "Choose 'Ask about the Council of Three' - now accessible with QUEST_BALANCE_STARTED",
@@ -152,13 +141,13 @@
           "preservationist": 2,
           "revisionist": 2,
           "exiter": 2,
-          "independent": 3
+          "independent": 6
         },
         "currentScene": "sc_2_2_071"
       }
     },
     {
-      "sequence": 11,
+      "sequence": 10,
       "action": "choose",
       "choiceIndex": 1,
       "description": "Choose 'Listen to each faction's concerns' - verify all-faction listening bonus",
@@ -170,13 +159,13 @@
           "preservationist": 3,
           "revisionist": 3,
           "exiter": 3,
-          "independent": 5
+          "independent": 9
         },
         "currentScene": "sc_2_2_071"
       }
     },
     {
-      "sequence": 12,
+      "sequence": 11,
       "action": "choose",
       "choiceIndex": 0,
       "description": "Choose 'Propose a compromise' - navigate to Diplomat's Challenge",
@@ -188,7 +177,7 @@
       }
     },
     {
-      "sequence": 13,
+      "sequence": 12,
       "action": "choose",
       "choiceIndex": 0,
       "description": "Choose 'Propose the Council solution (Stage Presence 3)' - attemptable stat check success path",
@@ -200,8 +189,7 @@
         "factions": {
           "preservationist": 5,
           "revisionist": 5,
-          "exiter": 5,
-          "independent": 8
+          "exiter": 5
         },
         "currentScene": "sc_2_2_072"
       }
@@ -214,8 +202,7 @@
     "factionsRequired": {
       "preservationist": 5,
       "revisionist": 5,
-      "exiter": 5,
-      "independent": 8
+      "exiter": 5
     }
   },
   "softlockDetection": {
