@@ -448,6 +448,9 @@ export class SceneLoader {
       'stat_check': 'stat',
       'flag_check': 'flag',
       'faction_check': 'faction',
+      'NOT': 'not',
+      'AND': 'and',
+      'OR': 'or',
     };
 
     let normalizedType = typeMap[type] || type as 'stat' | 'flag' | 'item' | 'faction' | 'and' | 'or' | 'not';

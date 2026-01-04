@@ -896,6 +896,193 @@ describe('SceneLoader', () => {
       }
     });
 
+    describe('NOT Condition Normalization', () => {
+      it('should normalize uppercase NOT to lowercase not', async () => {
+        const manifest: GameManifest = {
+          gamebook: {
+            title: 'Test Gamebook',
+            source: 'test',
+            version: '1.0.0',
+            adaptationVersion: '1.0.0',
+          },
+          structure: {
+            acts: 1,
+            totalNodesEstimated: 2,
+            endings: 0,
+          },
+          startingScene: 'sc_test_not_001',
+          acts: [],
+          endings: [],
+          sceneIndex: {
+            sc_test_not_001: {
+              title: 'NOT Test Scene',
+              location: 'Test',
+              act: 1,
+              hub: 0,
+              status: 'complete',
+            },
+            sc_test_001: {
+              title: 'Target Scene',
+              location: 'Test',
+              act: 1,
+              hub: 0,
+              status: 'complete',
+            },
+          },
+          implementationStatus: {
+            totalScenes: 1,
+            pending: 0,
+            draft: 0,
+            complete: 1,
+            reviewed: 0,
+          },
+        };
+
+        // Content files use uppercase NOT per scene-schema.json
+        const rawScene: RawSceneData = {
+          id: 'sc_test_not_001',
+          title: 'NOT Test Scene',
+          text: 'Test text',
+          effects: [],
+          choices: [
+            {
+              id: 'choice_1',
+              label: 'Choice without flag',
+              to: 'sc_test_001',
+              conditions: {
+                type: 'NOT',
+                conditions: [
+                  { type: 'flag_check', flag: 'some_flag' }
+                ]
+              },
+              onChoose: [],
+            },
+            {
+              id: 'choice_2',
+              label: 'Choice without item',
+              to: 'sc_test_001',
+              conditions: {
+                type: 'NOT',
+                conditions: [
+                  { type: 'has_item', item: 'key_item' }
+                ]
+              },
+              onChoose: [],
+            },
+          ],
+        };
+
+        setupTestContent({ 'sc_test_not_001.json': rawScene });
+
+        try {
+          const loader = new SceneLoader({ contentPath: testContentPath, cache: false, manifest });
+          await loader.initialize();
+          const sceneData = await loader.loadScene('sc_test_not_001');
+
+          // Uppercase NOT should normalize to lowercase 'not'
+          expect(sceneData.choices.length).toBe(2);
+
+          expect(sceneData.choices[0].conditions).toBeDefined();
+          expect(sceneData.choices[0].conditions?.[0].type).toBe('not');
+          expect(sceneData.choices[0].conditions?.[0].conditions).toBeDefined();
+          expect(sceneData.choices[0].conditions?.[0].conditions?.[0].type).toBe('flag');
+
+          expect(sceneData.choices[1].conditions).toBeDefined();
+          expect(sceneData.choices[1].conditions?.[0].type).toBe('not');
+          expect(sceneData.choices[1].conditions?.[0].conditions?.[0].type).toBe('item');
+        } finally {
+          cleanupTestContent(['sc_test_not_001.json']);
+        }
+      });
+
+      it('should handle nested NOT conditions', async () => {
+        const manifest: GameManifest = {
+          gamebook: {
+            title: 'Test Gamebook',
+            source: 'test',
+            version: '1.0.0',
+            adaptationVersion: '1.0.0',
+          },
+          structure: {
+            acts: 1,
+            totalNodesEstimated: 2,
+            endings: 0,
+          },
+          startingScene: 'sc_test_nested_not_001',
+          acts: [],
+          endings: [],
+          sceneIndex: {
+            sc_test_nested_not_001: {
+              title: 'Nested NOT Test',
+              location: 'Test',
+              act: 1,
+              hub: 0,
+              status: 'complete',
+            },
+            sc_test_001: {
+              title: 'Target Scene',
+              location: 'Test',
+              act: 1,
+              hub: 0,
+              status: 'complete',
+            },
+          },
+          implementationStatus: {
+            totalScenes: 1,
+            pending: 0,
+            draft: 0,
+            complete: 1,
+            reviewed: 0,
+          },
+        };
+
+        // Nested NOT with AND/OR - common in faction scene gating
+        const rawScene: RawSceneData = {
+          id: 'sc_test_nested_not_001',
+          title: 'Nested NOT Test',
+          text: 'Test text',
+          effects: [],
+          choices: [
+            {
+              id: 'choice_1',
+              label: 'Complex condition',
+              to: 'sc_test_001',
+              conditions: {
+                type: 'NOT',
+                conditions: [
+                  {
+                    type: 'AND',
+                    conditions: [
+                      { type: 'flag_check', flag: 'flag_a' },
+                      { type: 'flag_check', flag: 'flag_b' }
+                    ]
+                  }
+                ]
+              },
+              onChoose: [],
+            },
+          ],
+        };
+
+        setupTestContent({ 'sc_test_nested_not_001.json': rawScene });
+
+        try {
+          const loader = new SceneLoader({ contentPath: testContentPath, cache: false, manifest });
+          await loader.initialize();
+          const sceneData = await loader.loadScene('sc_test_nested_not_001');
+
+          // Nested conditions should all normalize correctly
+          expect(sceneData.choices[0].conditions?.[0].type).toBe('not');
+          const nestedAnd = sceneData.choices[0].conditions?.[0].conditions?.[0];
+          expect(nestedAnd?.type).toBe('and');
+          expect(nestedAnd?.conditions?.[0].type).toBe('flag');
+          expect(nestedAnd?.conditions?.[1].type).toBe('flag');
+        } finally {
+          cleanupTestContent(['sc_test_nested_not_001.json']);
+        }
+      });
+    });
+
     it('should preserve attemptable flag during condition normalization', async () => {
       const manifest: GameManifest = {
         gamebook: {
