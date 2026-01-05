@@ -184,7 +184,7 @@
   flex-shrink: 0;
   width: 28px;
   height: 28px;
-  padding: 0;
+  padding: 8px; /* WCAG 2.5.5: 44x44px min touch target (28px + 16px padding) */
   background: transparent;
   border: 1px solid var(--border-dim, #2a2a2a);
   color: var(--text-secondary, #a0a0a0);
