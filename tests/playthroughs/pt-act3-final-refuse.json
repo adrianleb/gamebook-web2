@@ -1,0 +1,64 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT3-FINAL-REFUSE",
+    "description": "Fail-state Ending (Eternal Rehearsal) - Tests that choice 4 (Refuse the choice) has no requirements and always leads to sc_3_4_999",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["mainstage_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "revisionist": 0,
+      "exiter": 0,
+      "preservationist": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_3_4_098"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Arrived at Last Curtain Call with no faction alignment",
+      "assertions": {
+        "flagsSet": ["mainstage_reached"],
+        "currentScene": "sc_3_4_098",
+        "choicesAvailable": 5,
+        "factions": {
+          "revisionist": 0,
+          "exiter": 0,
+          "preservationist": 0,
+          "independent": 0
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 4,
+      "description": "Choose 'Refuse the choice—Let the Understage remain as it is'",
+      "expectedScene": "sc_3_4_999",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["mainstage_reached", "ending_achieved", "ending_5_eternal_rehearsal"],
+        "currentScene": "sc_3_4_999"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_999",
+    "flagsRequired": ["mainstage_reached", "ending_achieved"]
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
