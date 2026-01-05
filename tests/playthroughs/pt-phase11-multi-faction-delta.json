@@ -1,0 +1,114 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-PHASE11-MULTI-FACTION-DELTA",
+    "description": "Phase 11 Multi-Faction Delta Detection Test - Validates that entering sc_2_2_034 (Independent quest completion) triggers 4 modify_faction events detectable by notification system. Tests state diff correctly computes all 4 deltas in single event batch. Per agent-c and agent-e: event detection regression testing for Phase 11 presentation.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached", "QUEST_BALANCE_STARTED", "COUNCIL_OF_THREE_VISITED"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 1,
+      "revisionist": 1,
+      "exiter": 1,
+      "independent": 2
+    },
+    "currentScene": "sc_2_2_071"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify starting state - all flags set, factions at expected levels",
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_BALANCE_STARTED", "COUNCIL_OF_THREE_VISITED"],
+        "factions": {
+          "preservationist": 1,
+          "revisionist": 1,
+          "exiter": 1,
+          "independent": 2
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Complete the Council of Three quest' - transition to sc_2_2_034",
+      "expectedScene": "sc_2_2_034",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_BALANCE_STARTED", "COUNCIL_OF_THREE_VISITED", "QUEST_BALANCE_COMPLETE"],
+        "inventoryContains": ["diplomats_token"],
+        "factions": {
+          "preservationist": 2,
+          "revisionist": 2,
+          "exiter": 2,
+          "independent": 3
+        },
+        "eventsExpected": [
+          {
+            "type": "effect-applied",
+            "path": "flags.QUEST_BALANCE_COMPLETE",
+            "newValue": true,
+            "minCount": 1
+          },
+          {
+            "type": "effect-applied",
+            "path": "factions.preservationist",
+            "minCount": 1
+          },
+          {
+            "type": "effect-applied",
+            "path": "factions.revisionist",
+            "minCount": 1
+          },
+          {
+            "type": "effect-applied",
+            "path": "factions.exiter",
+            "minCount": 1
+          },
+          {
+            "type": "effect-applied",
+            "path": "factions.independent",
+            "minCount": 1
+          },
+          {
+            "type": "effect-applied",
+            "path": "inventory.diplomats_token",
+            "minCount": 1
+          }
+        ]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_034",
+    "flagsRequired": ["QUEST_BALANCE_COMPLETE"],
+    "inventoryRequired": ["diplomats_token"],
+    "factionsRequired": {
+      "preservationist": 2,
+      "revisionist": 2,
+      "exiter": 2,
+      "independent": 3
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "Phase 11 regression test: validates multi-faction delta detection",
+    "Tests that all 4 modify_faction effects emit events detectable by notification system",
+    "State diffing correctly computes all deltas in single event batch",
+    "Per agent-c: uses actual event bus via engine.onStateChange(), no mocking"
+  ]
+}

@@ -7,8 +7,10 @@
  * - Attemptable stat checks (success/failure branches with faction effects)
  * - Item acquisition (add_item effects)
  * - Flag-based choice gating (NOT_SET operator)
+ * - Phase 11 event detection (quest notifications, faction indicators, inventory overflow)
  *
  * Per Intent #340: Close integration testing gap between schema/unit tests and runtime behavior.
+ * Per Intent #378: Phase 11 presentation event detection regression tests.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -87,6 +89,22 @@ describe('Playthrough Integration - Verse Scene Stat Checks', () => {
 
       expect(result.status).toBe('passed');
       expect(result.failure).toBeUndefined();
+    });
+  });
+});
+
+describe('Playthrough Integration - Phase 11 Event Detection', () => {
+  describe('Event collection infrastructure', () => {
+    it('should collect events from engine.onStateChange() during playthrough', async () => {
+      const result = await runPlaythrough('pt-phase11-event-infrastructure.json');
+
+      if (result.status !== 'passed') {
+        console.log('FAILURE:', result.failure);
+      }
+      expect(result.status).toBe('passed');
+      expect(result.failure).toBeUndefined();
+      expect(result.events).toBeDefined();
+      expect(result.events!.length).toBeGreaterThan(0);
     });
   });
 });

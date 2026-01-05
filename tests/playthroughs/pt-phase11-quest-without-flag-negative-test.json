@@ -1,0 +1,92 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-PHASE11-QUEST-WITHOUT-FLAG-NEGATIVE",
+    "description": "Phase 11 Negative Test - Validates that entering quest completion scene (sc_2_2_032) without proper quest started flag does NOT trigger completion notification events. Tests guards against false positives in event detection. Per agent-c and agent-e: negative regression test for Phase 11 presentation.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_2_2_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify starting state - no quest started flag",
+      "assertions": {
+        "flagsSet": ["green_room_reached"],
+        "factions": {
+          "revisionist": 0
+        },
+        "eventsExpected": [
+          {
+            "type": "effect-applied",
+            "path": "flags.QUEST_TROUBLED_ACTOR_COMPLETE",
+            "maxCount": 0
+          }
+        ]
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 7,
+      "description": "Choose 'Go to the Writer's Room' - direct access without quest start",
+      "expectedScene": "sc_2_2_032",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached"],
+        "flagsCleared": [],
+        "factions": {
+          "revisionist": 0
+        },
+        "eventsExpected": [
+          {
+            "type": "effect-applied",
+            "path": "flags.QUEST_TROUBLED_ACTOR_COMPLETE",
+            "maxCount": 0
+          },
+          {
+            "type": "effect-applied",
+            "path": "inventory.writers_pen",
+            "maxCount": 0
+          },
+          {
+            "type": "effect-applied",
+            "path": "factions.revisionist",
+            "maxCount": 0
+          }
+        ]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_032"
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "Phase 11 negative regression test: validates no false positive events",
+    "Tests that entering completion scene without quest start flag does NOT trigger events",
+    "Uses maxCount: 0 to assert no matching events occur",
+    "Guards against false positives in notification system",
+    "Per agent-c: validates event detection correctness"
+  ]
+}

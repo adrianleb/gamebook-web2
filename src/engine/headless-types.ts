@@ -11,7 +11,17 @@
  * - CI-friendly output with JUnit format
  */
 
-import type { GameState, SceneId, StatId, FlagName, ItemId, FactionId } from './types.js';
+import type {
+  GameState,
+  SceneId,
+  StatId,
+  FlagName,
+  ItemId,
+  FactionId,
+  StateChangeEvent,
+  StateChangeType,
+  RenderScope,
+} from './types.js';
 
 /**
  * Playthrough script configuration.
@@ -202,6 +212,33 @@ export interface LoadSnapshotStep extends BaseStep {
 }
 
 /**
+ * Event assertion for validating state change events.
+ * Per agent-c and agent-e: enables event detection regression testing for Phase 11.
+ */
+export interface EventAssertion {
+  /** Expected event type(s) - omit to match any type */
+  type?: StateChangeType | StateChangeType[];
+
+  /** Expected event path pattern - supports partial match (e.g., "flags.quest_" matches any flag starting with "quest_") */
+  path?: string;
+
+  /** Expected old value - omit to match any value */
+  oldValue?: unknown;
+
+  /** Expected new value - omit to match any value */
+  newValue?: unknown;
+
+  /** Expected render scope - omit to match any scope */
+  renderScope?: RenderScope | RenderScope[];
+
+  /** Minimum number of events matching this pattern */
+  minCount?: number;
+
+  /** Maximum number of events matching this pattern (exclusive) */
+  maxCount?: number;
+}
+
+/**
  * State assertions for validation.
  * Per agent-e: enables save/load regression testing.
  */
@@ -238,6 +275,12 @@ export interface StateAssertions {
 
   /** Verify choices with disabledHint are properly disabled */
   disabledChoicesValidated?: boolean;
+
+  /**
+   * Expected state change events for Phase 11 presentation testing.
+   * Per agent-c: use actual event bus, don't mock. Validates event emission path.
+   */
+  eventsExpected?: EventAssertion[];
 }
 
 /**
@@ -351,6 +394,12 @@ export interface PlaythroughResult {
 
   /** Snapshots created during execution */
   snapshots: string[];
+
+  /**
+   * State change events collected during execution.
+   * Per agent-c: enables event detection regression testing for Phase 11.
+   */
+  events?: StateChangeEvent[];
 
   /** Failure details (if failed) */
   failure?: {

@@ -21,6 +21,8 @@ import type {
   ItemId,
   StatId,
   FactionId,
+  StateChangeEvent,
+  Unsubscribe,
 } from './types.js';
 import type {
   PlaythroughScript,
@@ -35,6 +37,7 @@ import type {
   StateSnapshot,
   PlaythroughResult,
   EndingCriteria,
+  EventAssertion,
 } from './headless-types.js';
 
 /**
@@ -60,6 +63,15 @@ export class HeadlessRunner {
   private lastProgressState: Set<string> = new Set();
 
   /**
+   * Event collection for Phase 11 presentation testing.
+   * Per agent-c: use actual event bus via engine.onStateChange().
+   * Per agent-e Intent #379: Now receives ALL state change events including
+   * effect-applied events (modify_faction, add_item, set_flag) via Engine.emitEvent().
+   */
+  private events: StateChangeEvent[] = [];
+  private eventUnsubscribe: Unsubscribe | null = null;
+
+  /**
    * Create a new headless runner.
    *
    * Per agent-e (Intent #64): disableAutosave option prevents filesystem churn during automated tests.
@@ -75,6 +87,12 @@ export class HeadlessRunner {
     this.engine = new Engine({
       contentPath: this.contentPath,
       disableAutosave: options.disableAutosave ?? false,
+    });
+
+    // Subscribe to state change events for Phase 11 testing (per agent-c)
+    // Per agent-e Intent #379: Now collects ALL events including effect-applied events
+    this.eventUnsubscribe = this.engine.onStateChange((event) => {
+      this.events.push(event);
     });
   }
 
@@ -96,6 +114,9 @@ export class HeadlessRunner {
     const snapshotsCreated: string[] = [];
     let failure: PlaythroughResult['failure'] | undefined;
     let softlock: SoftlockResult | undefined;
+
+    // Reset event collection for each script execution (per agent-c)
+    this.events = [];
 
     try {
       // Apply starting state overrides
@@ -174,6 +195,7 @@ export class HeadlessRunner {
       steps: this.stepCount,
       duration,
       snapshots: snapshotsCreated,
+      events: this.events, // Include collected events for Phase 11 testing
       failure,
       softlock,
     };
@@ -591,6 +613,89 @@ export class HeadlessRunner {
       }
     }
 
+    // Check eventsExpected (Phase 11 presentation testing, per agent-c)
+    if (assertions.eventsExpected) {
+      const eventResult = this.validateEventAssertions(assertions.eventsExpected);
+      if (eventResult.status === 'failed') {
+        return eventResult;
+      }
+    }
+
+    return { status: 'passed' };
+  }
+
+  /**
+   * Validate event assertions.
+   * Per agent-c: assert on real event bus events, don't mock.
+   */
+  private validateEventAssertions(
+    assertions: EventAssertion[]
+  ): {
+    status: 'passed' | 'failed';
+    expected?: string;
+    actual?: string;
+    reason?: string;
+  } {
+    for (const assertion of assertions) {
+      // Find events matching this assertion
+      const matchingEvents = this.events.filter((event) => {
+        // Check type match
+        if (assertion.type) {
+          const types = Array.isArray(assertion.type) ? assertion.type : [assertion.type];
+          if (!types.includes(event.type)) {
+            return false;
+          }
+        }
+
+        // Check path match (supports partial match)
+        if (assertion.path) {
+          if (!event.path.includes(assertion.path)) {
+            return false;
+          }
+        }
+
+        // Check oldValue match
+        if (assertion.oldValue !== undefined && event.oldValue !== assertion.oldValue) {
+          return false;
+        }
+
+        // Check newValue match
+        if (assertion.newValue !== undefined && event.newValue !== assertion.newValue) {
+          return false;
+        }
+
+        // Check renderScope match
+        if (assertion.renderScope) {
+          const scopes = Array.isArray(assertion.renderScope) ? assertion.renderScope : [assertion.renderScope];
+          if (!scopes.includes(event.renderScope)) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+
+      // Check minCount
+      if (assertion.minCount !== undefined && matchingEvents.length < assertion.minCount) {
+        return {
+          status: 'failed',
+          expected: `at least ${assertion.minCount} event(s) matching pattern`,
+          actual: `${matchingEvents.length} event(s)`,
+          reason: `Expected at least ${assertion.minCount} events matching path="${assertion.path || 'any'}", type="${assertion.type || 'any'}", but found ${matchingEvents.length}`,
+        };
+      }
+
+      // Check maxCount
+      if (assertion.maxCount !== undefined && matchingEvents.length >= assertion.maxCount) {
+        return {
+          status: 'failed',
+          expected: `less than ${assertion.maxCount} event(s) matching pattern`,
+          actual: `${matchingEvents.length} event(s)`,
+          reason: `Expected less than ${assertion.maxCount} events matching path="${assertion.path || 'any'}", type="${assertion.type || 'any'}", but found ${matchingEvents.length}`,
+        };
+      }
+    }
+
     return { status: 'passed' };
   }
 
@@ -898,6 +1003,7 @@ export class HeadlessRunner {
     this.stepCount = 0;
     this.lastProgressState.clear();
     this.lastProgressStep = 0;
+    this.events = []; // Clear events on reset (per agent-c)
   }
 
   /**
