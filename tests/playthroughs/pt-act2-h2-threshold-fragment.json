@@ -1,0 +1,63 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-Act2-H2-Threshold-Fragment",
+    "description": "Threshold Fragment Acquisition - Validates quest completion prerequisite (QUEST_ESCAPED_CHARACTER_COMPLETE) and add_item effect for threshold_fragment",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached", "MET_GATEKEEPER", "DISCOVERED_EXITER_HQ", "QUEST_ESCAPED_CHARACTER_COMPLETE"],
+    "inventory": ["wayfinder", "reality_anchors"],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "exiter": 2
+    },
+    "currentScene": "sc_2_2_062"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Starting at The Crossed Over - verify quest completion flag allows entry",
+      "assertions": {
+        "currentScene": "sc_2_2_062",
+        "flagsSet": ["QUEST_ESCAPED_CHARACTER_COMPLETE", "green_room_reached"],
+        "inventoryContains": ["wayfinder", "reality_anchors", "threshold_fragment"],
+        "factions": { "exiter": 2 }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "checkpoint",
+      "description": "Verify threshold_fragment was granted via effectsOnEnter",
+      "assertions": {
+        "currentScene": "sc_2_2_062",
+        "inventoryContains": ["threshold_fragment"],
+        "inventory": ["wayfinder", "reality_anchors", "threshold_fragment"]
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Return to Gate Tour",
+      "expectedScene": "sc_2_2_061"
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_062",
+    "flagsRequired": ["QUEST_ESCAPED_CHARACTER_COMPLETE", "green_room_reached"],
+    "inventoryRequired": ["wayfinder", "reality_anchors", "threshold_fragment"],
+    "factionsRequired": { "exiter": 2 }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
