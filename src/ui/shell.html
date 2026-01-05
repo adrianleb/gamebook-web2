@@ -14,10 +14,15 @@
 
   <!-- DOS UI styles -->
   <link rel="stylesheet" href="shell.css">
+  <!-- Phase 11 notification styles -->
+  <link rel="stylesheet" href="phase11-styles.css">
 </head>
 <body>
   <!-- Skip-link for keyboard accessibility (per STYLE_GUIDE.md) -->
   <a href="#main-text" class="skip-link" data-test-id="skip-link">Skip to content</a>
+
+  <!-- Phase 11 notification container (for quest completions, faction changes, item acquisitions) -->
+  <div class="notification-container" id="notification-container" data-test-id="notification-container" aria-live="polite" aria-atomic="false"></div>
 
   <!-- Main game container -->
   <div class="game-container">
