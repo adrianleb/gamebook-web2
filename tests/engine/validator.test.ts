@@ -560,6 +560,21 @@ describe('ContentValidator - validateCondition', () => {
   });
 
   describe('Condition type validation', () => {
+    it('should handle single condition object format (not array)', () => {
+      // Per Intent #400: Scene files allow single condition objects for author convenience
+      // The validator must normalize this to array format before iteration
+      const scene = createMockScene({
+        choices: [
+          { label: 'Test', to: 'sc_1_0_002' as SceneId, conditions: { type: 'flag', flag: 'TEST_FLAG' } as any },
+        ],
+      });
+      const result = validator.validateScene(scene, manifest);
+
+      // Should pass validation - single object normalized to array
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
     it('should detect missing condition type', () => {
       const scene = createMockScene({
         choices: [

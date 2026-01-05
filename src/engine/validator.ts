@@ -229,9 +229,14 @@ export class ContentValidator {
           }
         }
 
-        // Validate conditions
-        if (choice.conditions) {
-          for (const condition of choice.conditions) {
+        // Validate conditions (handle both single object and array formats)
+        // Scene files allow single condition objects for author convenience
+        const conditionsToValidate = Array.isArray(choice.conditions)
+          ? choice.conditions
+          : (choice.conditions ? [choice.conditions] : undefined);
+
+        if (conditionsToValidate) {
+          for (const condition of conditionsToValidate) {
             const conditionErrors = this.validateCondition(condition, scene.id, manifest);
             errors.push(...conditionErrors);
           }
