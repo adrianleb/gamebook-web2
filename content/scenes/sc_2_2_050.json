@@ -65,7 +65,7 @@
         {
           "type": "modify_faction",
           "faction": "revisionist",
-          "value": 1
+          "amount": 1
         },
         {
           "type": "set_flag",
@@ -108,6 +108,37 @@
         }
       ],
       "disabledHint": "You've already spoken with The Understudy."
+    },
+    {
+      "id": "choice_4a",
+      "label": "Ask about the troubled actor quest",
+      "to": "sc_2_2_022",
+      "conditions": [
+        {
+          "type": "NOT",
+          "conditions": [
+            {
+              "type": "flag_check",
+              "flag": "QUEST_TROUBLED_ACTOR_DISCOVERED"
+            }
+          ]
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "You've already learned about this quest."
+    },
+    {
+      "id": "choice_4b",
+      "label": "Help Pericles rewrite his story",
+      "to": "sc_2_2_032",
+      "conditions": [
+        {
+          "type": "flag_check",
+          "flag": "QUEST_TROUBLED_ACTOR_STARTED"
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "You need to accept the Troubled Actor quest first."
     },
     {
       "id": "choice_5",

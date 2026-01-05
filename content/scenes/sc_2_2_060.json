@@ -87,6 +87,19 @@
       "disabledHint": "You've already learned about this quest."
     },
     {
+      "id": "choice_2a",
+      "label": "Find Elara beyond the Threshold Gate",
+      "to": "sc_2_2_033",
+      "conditions": [
+        {
+          "type": "flag_check",
+          "flag": "QUEST_ESCAPED_CHARACTER_STARTED"
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "You need to accept the Escaped Character quest first."
+    },
+    {
       "id": "choice_3",
       "label": "Return to the Green Room center",
       "to": "sc_2_2_001",

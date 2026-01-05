@@ -111,6 +111,19 @@
       "disabledHint": "The Conservator has already explained the factions."
     },
     {
+      "id": "choice_3a",
+      "label": "Turn in the missing script pages",
+      "to": "sc_2_2_031",
+      "conditions": [
+        {
+          "type": "flag_check",
+          "flag": "QUEST_MISSING_SCRIPT_STARTED"
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "You need to accept the Missing Script quest first."
+    },
+    {
       "id": "choice_4",
       "label": "Return to the Green Room center",
       "to": "sc_2_2_001",
