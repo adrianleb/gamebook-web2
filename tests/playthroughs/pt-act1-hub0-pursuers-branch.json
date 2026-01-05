@@ -1,0 +1,91 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT1-HUB0-PURSUERS-BRANCH",
+    "description": "Pursuers Branch Path - Tests complete narrative flow from branch choice through convergence at sc_1_1_099 First Crossing. Validates stat check (stage_presence >= 3), faction preview (exiter), and state flag propagation (branch_pursuers, pursuers_path_complete, act1_complete, first_crossing_reached).",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["game_started"],
+    "inventory": [],
+    "stats": {
+      "script": 0,
+      "stage_presence": 2,
+      "improv": 0
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Step through the opening to the right - navigate to sc_1_0_002 The Wings",
+      "expectedScene": "sc_1_0_002",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "path_direct"],
+        "inventoryHas": ["wings_pass"],
+        "currentScene": "sc_1_0_002"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Investigate the sound of running footsteps - navigate to sc_1_0_010 The Pursuit Begins (Pursuers branch entry)",
+      "expectedScene": "sc_1_0_010",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "path_direct", "branch_pursuers"],
+        "currentScene": "sc_1_0_010",
+        "stats": {
+          "stage_presence": 3
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Chase after the figure - navigate to sc_1_0_011 The Trap, stat check (stage_presence >= 3) passes, gain +2 exiter faction, set pursuers_escaped_trusted flag",
+      "expectedScene": "sc_1_0_011",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "path_direct", "branch_pursuers", "pursuers_escaped_trusted"],
+        "currentScene": "sc_1_0_011",
+        "factions": {
+          "exiter": 3
+        }
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Continue to the First Crossing - navigate to sc_1_1_099 The First Crossing (convergence scene)",
+      "expectedScene": "sc_1_1_099",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "path_direct", "branch_pursuers", "pursuers_path_complete", "act1_complete", "first_crossing_reached"],
+        "currentScene": "sc_1_1_099"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_1_099",
+    "flagsRequired": ["branch_pursuers", "pursuers_path_complete", "act1_complete", "first_crossing_reached"]
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

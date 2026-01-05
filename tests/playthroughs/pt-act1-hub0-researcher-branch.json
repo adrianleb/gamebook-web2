@@ -1,0 +1,91 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT1-HUB0-RESEARCHER-BRANCH",
+    "description": "Researcher Branch Path - Tests complete narrative flow from branch choice through convergence at sc_1_1_099 First Crossing. Validates stat check (script >= 3), faction preview (revisionist), and state flag propagation (branch_researcher, researcher_path_complete, act1_complete, first_crossing_reached).",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["game_started", "met_maren"],
+    "inventory": ["booth_key"],
+    "stats": {
+      "script": 1,
+      "stage_presence": 0,
+      "improv": 0
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Attempt the iron door (requires booth_key) - navigate to sc_1_0_003 The Threshold Stage",
+      "expectedScene": "sc_1_0_003",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "met_maren"],
+        "inventoryHas": ["booth_key"],
+        "currentScene": "sc_1_0_003"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Study the mirror corridor before crossing - navigate to sc_1_0_020 The Mirror Corridor (Researcher branch entry)",
+      "expectedScene": "sc_1_0_020",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "met_maren", "branch_researcher"],
+        "currentScene": "sc_1_0_020",
+        "stats": {
+          "script": 2
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Study the mirror inscriptions - navigate to sc_1_0_021 The Abandoned Drafts, stat check (script >= 3) passes, gain +2 revisionist faction, set researcher_drafts_promised flag",
+      "expectedScene": "sc_1_0_021",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "met_maren", "branch_researcher", "researcher_drafts_promised"],
+        "currentScene": "sc_1_0_021",
+        "factions": {
+          "revisionist": 3
+        }
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Continue to the First Crossing - navigate to sc_1_1_099 The First Crossing (convergence scene)",
+      "expectedScene": "sc_1_1_099",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "met_maren", "branch_researcher", "researcher_path_complete", "act1_complete", "first_crossing_reached"],
+        "currentScene": "sc_1_1_099"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_1_099",
+    "flagsRequired": ["branch_researcher", "researcher_path_complete", "act1_complete", "first_crossing_reached"]
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

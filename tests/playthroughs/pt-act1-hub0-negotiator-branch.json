@@ -1,0 +1,106 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT1-HUB0-NEGOTIATOR-BRANCH",
+    "description": "Negotiator Branch Path - Tests complete narrative flow from branch choice through convergence at sc_1_1_099 First Crossing. Validates faction preview choices (preservationist, revisionist, exiter, independent), and state flag propagation (branch_negotiator, negotiator_path_complete, act1_complete, first_crossing_reached).",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["game_started"],
+    "inventory": [],
+    "stats": {
+      "script": 0,
+      "stage_presence": 0,
+      "improv": 0
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "choose",
+      "choiceIndex": 2,
+      "description": "Speak with the figure in shadow - navigate to sc_1_0_004 Maren's Guidance, gain booth_key item",
+      "expectedScene": "sc_1_0_004",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "met_maren"],
+        "inventoryHas": ["booth_key"],
+        "currentScene": "sc_1_0_004"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Ask Maren about what kind of Prompter you should be - navigate to sc_1_0_030 Maren's Test (Negotiator branch entry)",
+      "expectedScene": "sc_1_0_030",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "met_maren", "branch_negotiator"],
+        "currentScene": "sc_1_0_030",
+        "stats": {
+          "script": 1
+        }
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 1,
+      "description": "Choose 'I will improve the stories that need changing' (Revisionist path) - navigate to sc_1_0_031 Maren's Warning, gain +2 revisionist faction, set negotiator_revisionist flag",
+      "expectedScene": "sc_1_0_031",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "met_maren", "branch_negotiator", "negotiator_revisionist"],
+        "currentScene": "sc_1_0_031",
+        "factions": {
+          "revisionist": 2
+        }
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'I want to understand' - navigate to sc_1_0_032 The Negotiator's Crossing, set negotiator_goal_understanding flag",
+      "expectedScene": "sc_1_0_032",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "met_maren", "branch_negotiator", "negotiator_revisionist", "negotiator_path_complete", "negotiator_goal_understanding"],
+        "currentScene": "sc_1_0_032",
+        "stats": {
+          "script": 3
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Continue to the First Crossing - navigate to sc_1_1_099 The First Crossing (convergence scene)",
+      "expectedScene": "sc_1_1_099",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "met_maren", "branch_negotiator", "negotiator_path_complete", "act1_complete", "first_crossing_reached"],
+        "currentScene": "sc_1_1_099"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_1_099",
+    "flagsRequired": ["branch_negotiator", "negotiator_path_complete", "act1_complete", "first_crossing_reached"]
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
