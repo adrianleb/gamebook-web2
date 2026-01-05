@@ -65,7 +65,6 @@
     {
       "id": "choice_1",
       "label": "Offer to help them cross to the Understage",
-      "to": "sc_1_0_012",
       "conditions": {
         "type": "stat_check",
         "stat": "stage_presence",
