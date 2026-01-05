@@ -32,6 +32,12 @@ import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 import { NotificationQueue, resetNotificationQueue, type NotificationType } from '../../src/ui/notification-queue.js';
 
 /**
+ * Check if DOM is available for testing.
+ * DOM-dependent tests are skipped when running in headless Node.js environment.
+ */
+const HAS_DOM = typeof document !== 'undefined' && typeof document.body !== 'undefined';
+
+/**
  * Mock StateChangeEvent for testing.
  */
 interface MockStateChangeEvent {
@@ -59,18 +65,14 @@ function createMockEvent(path: string, oldValue: unknown, newValue: unknown): Mo
   };
 }
 
-describe('NotificationQueue - Core Functionality', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('NotificationQueue - Core Functionality', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
     // Reset singleton and create fresh instance
     resetNotificationQueue();
     queue = new NotificationQueue({ maxQueueSize: 10, autoDismiss: 5000 });
-
-    // Initialize in test environment
-    if (typeof document !== 'undefined') {
-      queue.initialize();
-    }
+    queue.initialize();
   });
 
   afterEach(() => {
@@ -338,7 +340,7 @@ describe('NotificationQueue - Core Functionality', () => {
   });
 });
 
-describe('NotificationQueue - Rapid Event Stress (Item 8)', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('NotificationQueue - Rapid Event Stress (Item 8)', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
@@ -350,6 +352,9 @@ describe('NotificationQueue - Rapid Event Stress (Item 8)', () => {
   });
 
   afterEach(() => {
+    if (!HAS_DOM) {
+      return;
+    }
     queue.destroy();
     resetNotificationQueue();
   });
@@ -407,7 +412,7 @@ describe('NotificationQueue - Rapid Event Stress (Item 8)', () => {
   });
 });
 
-describe('NotificationQueue - Memory Leak Regression (Item 9)', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('NotificationQueue - Memory Leak Regression (Item 9)', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
@@ -419,6 +424,9 @@ describe('NotificationQueue - Memory Leak Regression (Item 9)', () => {
   });
 
   afterEach(() => {
+    if (!HAS_DOM) {
+      return;
+    }
     queue.destroy();
     resetNotificationQueue();
   });
@@ -476,7 +484,7 @@ describe('NotificationQueue - Memory Leak Regression (Item 9)', () => {
   });
 });
 
-describe('NotificationQueue - Queue Overflow (Item 10)', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('NotificationQueue - Queue Overflow (Item 10)', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
@@ -488,6 +496,9 @@ describe('NotificationQueue - Queue Overflow (Item 10)', () => {
   });
 
   afterEach(() => {
+    if (!HAS_DOM) {
+      return;
+    }
     queue.destroy();
     resetNotificationQueue();
   });
@@ -570,7 +581,7 @@ describe('NotificationQueue - Queue Overflow (Item 10)', () => {
   });
 });
 
-describe('NotificationQueue - Inventory Pagination Boundaries (Item 11)', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('NotificationQueue - Inventory Pagination Boundaries (Item 11)', () => {
   /**
    * Intent #392 Item 11: Create inventory pagination boundary tests
    * (19, 20, 21 items with mixed quest/regular categories).
@@ -661,7 +672,7 @@ describe('NotificationQueue - Inventory Pagination Boundaries (Item 11)', () => 
   });
 });
 
-describe('NotificationQueue - Custom Configuration', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('NotificationQueue - Custom Configuration', () => {
   it('should respect custom maxQueueSize', () => {
     resetNotificationQueue();
     const queue = new NotificationQueue({ maxQueueSize: 5 });
@@ -701,7 +712,7 @@ describe('NotificationQueue - Custom Configuration', () => {
   }, 5000);
 });
 
-describe('NotificationQueue - Accessibility', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('NotificationQueue - Accessibility', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
@@ -713,6 +724,9 @@ describe('NotificationQueue - Accessibility', () => {
   });
 
   afterEach(() => {
+    if (!HAS_DOM) {
+      return;
+    }
     queue.destroy();
     resetNotificationQueue();
   });

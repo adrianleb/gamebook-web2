@@ -34,6 +34,12 @@ import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 import { NotificationQueue, resetNotificationQueue, type NotificationType } from '../../src/ui/notification-queue.js';
 
 /**
+ * Check if DOM is available for testing.
+ * DOM-dependent tests are skipped when running in headless Node.js environment.
+ */
+const HAS_DOM = typeof document !== 'undefined' && typeof document.body !== 'undefined';
+
+/**
  * Mobile viewport breakpoints per phase11-styles.css.
  */
 const MOBILE_BREAKPOINTS = {
@@ -73,7 +79,7 @@ function createMockEvent(path: string, oldValue: unknown, newValue: unknown): Mo
   };
 }
 
-describe('Mobile Viewport Constraints - 320px (Small)', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('Mobile Viewport Constraints - 320px (Small)', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
@@ -188,7 +194,7 @@ describe('Mobile Viewport Constraints - 320px (Small)', () => {
   });
 });
 
-describe('Mobile Viewport Constraints - 375px (Medium)', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('Mobile Viewport Constraints - 375px (Medium)', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
@@ -279,7 +285,7 @@ describe('Mobile Viewport Constraints - 375px (Medium)', () => {
   });
 });
 
-describe('Mobile Viewport Constraints - 414px (Large)', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('Mobile Viewport Constraints - 414px (Large)', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
@@ -355,7 +361,7 @@ describe('Mobile Viewport Constraints - 414px (Large)', () => {
   });
 });
 
-describe('Mobile Viewport - Orientation Changes', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('Mobile Viewport - Orientation Changes', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
@@ -425,7 +431,7 @@ describe('Mobile Viewport - Orientation Changes', () => {
   });
 });
 
-describe('Mobile Viewport - Safe Area Insets', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('Mobile Viewport - Safe Area Insets', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
@@ -479,7 +485,7 @@ describe('Mobile Viewport - Safe Area Insets', () => {
   });
 });
 
-describe('Mobile Viewport - Text Scaling', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('Mobile Viewport - Text Scaling', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
@@ -550,7 +556,7 @@ describe('Mobile Viewport - Text Scaling', () => {
   });
 });
 
-describe('Mobile Viewport - Touch Interactions', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('Mobile Viewport - Touch Interactions', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
@@ -616,7 +622,7 @@ describe('Mobile Viewport - Touch Interactions', () => {
   });
 });
 
-describe('Mobile Viewport - Performance', () => {
+describe.skipIf(!HAS_DOM, 'DOM required - skipping in headless environment')('Mobile Viewport - Performance', () => {
   let queue: NotificationQueue;
 
   beforeEach(() => {
