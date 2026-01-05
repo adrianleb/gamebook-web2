@@ -23,10 +23,12 @@ This directory contains automated playthrough test scripts for the headless runn
 - **pt-edge-002.json**: Tests additional edge scenarios.
 - **pt-edge-003.json**: Tests complex edge case interactions.
 
-### 4. Faction Tests (Act 2)
-**TODO**: Create faction tests when Act 2 Hub 2 faction content merges:
-- **pt-revisionist-quest.json**: Test Revisionist quest mechanics (sc_2_2_050-052) - validates flag setting, faction changes, and faction assertions.
-- **pt-preservationist-quest.json**: Test Preservationist quest mechanics (sc_2_2_040-042) - validates flag setting, faction changes, and item acquisition.
+### 4. Faction Tests (Act 2 Hub 2)
+- **pt-act2-h2-revisionist-quest-loop.json**: Tests Revisionist quest mechanics - validates flag propagation (QUEST_TROUBLED_ACTOR_*), faction reward (+2 revisionist), and item acquisition (writers_pen).
+- **pt-act2-h2-preservationist-quest-loop.json**: Tests Preservationist quest mechanics - validates flag propagation (QUEST_ARCHIVAL_DUTY_*), faction reward (+2 preservationist), and item acquisition (seal_of_approval).
+- **pt-act2-h2-exiter-quest-loop.json**: Tests Exiter quest mechanics - validates flag propagation (QUEST_BACKSTAGE_PASSAGE_*), faction reward (+2 exiter), and item acquisition (stage_door_key).
+- **pt-act2-h2-independent-quest-loop.json**: Tests Independent path quest mechanics - validates faction independence (no faction alignment) and alternative completion path.
+- **pt-act2-h2-quest-completion.json**: Generic quest completion validation - tests reward granting mechanics across all quest types.
 
 ### 5. Save/Load Regression Tests
 - **pt-sl-001.json**: Tests save/load round-trip and state serialization.
