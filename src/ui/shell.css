@@ -647,6 +647,7 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-1);
+  min-height: 44px; /* WCAG 2.5.5: 44x44px min touch target */
   padding: var(--space-1);
   background: var(--bg-tertiary);
   border: 1px solid var(--border-dim);
@@ -1070,7 +1071,7 @@ body.test-mode .stat-bar::before {
 }
 
 .slot-action-btn {
-  min-height: 36px;
+  min-height: 44px; /* WCAG 2.5.5: 44x44px min touch target */
   padding: var(--space-1) var(--space-2);
   font-family: 'VT323', monospace;
   font-size: var(--font-base);
