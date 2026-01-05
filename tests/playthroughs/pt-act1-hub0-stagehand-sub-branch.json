@@ -51,7 +51,7 @@
       "sequence": 3,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Accept the deal - navigate to sc_1_0_042 The Stagehand's Secret, set stagehand_secret_learned and stagehand_deal_made flags, add stagehand_favor item, +1 script stat",
+      "description": "Accept the deal immediately (choice_0) - navigate to sc_1_0_042 The Stagehand's Secret, set stagehand_secret_learned and stagehand_deal_made flags, add stagehand_favor item, +1 script stat. Note: choice_3 'Ask why Maren never mentioned you' also leads to sc_1_0_042 but with different narrative experience (questioning first vs immediate acceptance)",
       "expectedScene": "sc_1_0_042",
       "checkpoint": true,
       "assertions": {
