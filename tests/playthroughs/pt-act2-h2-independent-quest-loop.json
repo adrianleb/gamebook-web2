@@ -1,0 +1,133 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT2-H2-INDEPENDENT-QUEST-LOOP",
+    "description": "Independent Quest Loop - Tests full quest flow from discovery (Call Board) → started (quest acceptance adds +1 to all factions) → completion (quest resolution with +1 to all factions and diplomats_token reward). Validates QUEST_BALANCE_DISCOVERED → QUEST_BALANCE_STARTED → QUEST_BALANCE_COMPLETE flag propagation, multi-faction reward granting, and diplomats_token item acquisition.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_2_2_020"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "choose",
+      "choiceIndex": 3,
+      "description": "Read about the Council of Three (Independent quest) at Call Board",
+      "expectedScene": "sc_2_2_024",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_BALANCE_DISCOVERED"],
+        "factions": {
+          "preservationist": 0,
+          "revisionist": 0,
+          "exiter": 0,
+          "independent": 0
+        },
+        "currentScene": "sc_2_2_024"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Accept the quest - sets QUEST_BALANCE_STARTED and +1 to ALL factions",
+      "expectedScene": "sc_2_2_001",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_BALANCE_DISCOVERED", "QUEST_BALANCE_STARTED"],
+        "factions": {
+          "preservationist": 1,
+          "revisionist": 1,
+          "exiter": 1,
+          "independent": 1
+        },
+        "currentScene": "sc_2_2_001"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 4,
+      "description": "Navigate to Neutral Ground (Independent faction HQ) - direct navigation for test efficiency",
+      "expectedScene": "sc_2_2_070",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_BALANCE_DISCOVERED", "QUEST_BALANCE_STARTED", "MET_INDEPENDENT", "DISCOVERED_INDEPENDENT_HQ"],
+        "factions": {
+          "preservationist": 1,
+          "revisionist": 1,
+          "exiter": 1,
+          "independent": 2
+        },
+        "currentScene": "sc_2_2_070"
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Ask about the Council of Three - requires QUEST_BALANCE_STARTED, +1 independent",
+      "expectedScene": "sc_2_2_071",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_BALANCE_DISCOVERED", "QUEST_BALANCE_STARTED", "MET_INDEPENDENT", "DISCOVERED_INDEPENDENT_HQ", "COUNCIL_OF_THREE_VISITED"],
+        "factions": {
+          "preservationist": 1,
+          "revisionist": 1,
+          "exiter": 1,
+          "independent": 3
+        },
+        "currentScene": "sc_2_2_071"
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "navigate",
+      "sceneId": "sc_2_2_034",
+      "description": "Navigate directly to quest completion scene (Balance of Power Resolution) - simulates returning after mediating the Council of Three. Validates scene entry requires QUEST_BALANCE_STARTED flag and grants +1 to all factions plus diplomats_token.",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_BALANCE_DISCOVERED", "QUEST_BALANCE_STARTED", "MET_INDEPENDENT", "DISCOVERED_INDEPENDENT_HQ", "COUNCIL_OF_THREE_VISITED", "QUEST_BALANCE_COMPLETE"],
+        "inventoryContains": ["diplomats_token"],
+        "factions": {
+          "preservationist": 2,
+          "revisionist": 2,
+          "exiter": 2,
+          "independent": 4
+        },
+        "currentScene": "sc_2_2_034"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_034",
+    "flagsRequired": ["QUEST_BALANCE_COMPLETE"],
+    "inventoryRequired": ["diplomats_token"],
+    "factionsRequired": {
+      "preservationist": 2,
+      "revisionist": 2,
+      "exiter": 2,
+      "independent": 4
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}

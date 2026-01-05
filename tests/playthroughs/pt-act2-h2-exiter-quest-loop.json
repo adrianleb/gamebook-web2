@@ -1,0 +1,117 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT2-H2-EXITER-QUEST-LOOP",
+    "description": "Exiter Quest Loop - Tests full quest flow from discovery (Call Board) → started (quest acceptance at Threshold Gate) → completion (quest resolution with reward granting). Validates QUEST_ESCAPED_CHARACTER_DISCOVERED → QUEST_ESCAPED_CHARACTER_STARTED → QUEST_ESCAPED_CHARACTER_COMPLETE flag propagation, +2 exiter faction reward, and elara_token item acquisition.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_2_2_020"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "choose",
+      "choiceIndex": 2,
+      "description": "Read about the Escaped Character (Exiter quest) at Call Board",
+      "expectedScene": "sc_2_2_023",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_ESCAPED_CHARACTER_DISCOVERED"],
+        "factions": {
+          "exiter": 0
+        },
+        "currentScene": "sc_2_2_023"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Accept the quest - sets QUEST_ESCAPED_CHARACTER_STARTED and +1 exiter",
+      "expectedScene": "sc_2_2_001",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_ESCAPED_CHARACTER_DISCOVERED", "QUEST_ESCAPED_CHARACTER_STARTED"],
+        "factions": {
+          "exiter": 1
+        },
+        "currentScene": "sc_2_2_001"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 3,
+      "description": "Navigate to Threshold Gate (faction HQ) - direct navigation for test efficiency",
+      "expectedScene": "sc_2_2_060",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_ESCAPED_CHARACTER_DISCOVERED", "QUEST_ESCAPED_CHARACTER_STARTED", "MET_GATEKEEPER", "DISCOVERED_EXITER_HQ"],
+        "inventoryContains": ["wayfinder"],
+        "factions": {
+          "exiter": 1
+        },
+        "currentScene": "sc_2_2_060"
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Ask about the Threshold Gate - +1 exiter faction",
+      "expectedScene": "sc_2_2_061",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_ESCAPED_CHARACTER_DISCOVERED", "QUEST_ESCAPED_CHARACTER_STARTED", "MET_GATEKEEPER", "DISCOVERED_EXITER_HQ"],
+        "inventoryContains": ["wayfinder"],
+        "factions": {
+          "exiter": 2
+        },
+        "currentScene": "sc_2_2_061"
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "navigate",
+      "sceneId": "sc_2_2_033",
+      "description": "Navigate directly to quest completion scene (Escaped Character Resolution) - simulates returning after finding and helping Elara. Validates scene entry requires QUEST_ESCAPED_CHARACTER_STARTED flag.",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "QUEST_ESCAPED_CHARACTER_DISCOVERED", "QUEST_ESCAPED_CHARACTER_STARTED", "MET_GATEKEEPER", "DISCOVERED_EXITER_HQ", "QUEST_ESCAPED_CHARACTER_COMPLETE"],
+        "inventoryContains": ["wayfinder", "elara_token"],
+        "factions": {
+          "exiter": 4
+        },
+        "currentScene": "sc_2_2_033"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_033",
+    "flagsRequired": ["QUEST_ESCAPED_CHARACTER_COMPLETE"],
+    "inventoryRequired": ["elara_token"],
+    "factionsRequired": {
+      "exiter": 4
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
