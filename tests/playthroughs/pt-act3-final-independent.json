@@ -1,0 +1,64 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT3-FINAL-INDEPENDENT",
+    "description": "Independent Ending (Blank Page) - Tests flag gate (editorState_revealedTruth) enables choice 3 and leads to sc_3_4_904",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["mainstage_reached", "editorState_revealedTruth"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "revisionist": 0,
+      "exiter": 0,
+      "preservationist": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_3_4_098"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Arrived at Last Curtain Call with editorState_revealedTruth flag set",
+      "assertions": {
+        "flagsSet": ["mainstage_reached", "editorState_revealedTruth"],
+        "currentScene": "sc_3_4_098",
+        "choicesAvailable": 5,
+        "factions": {
+          "revisionist": 0,
+          "exiter": 0,
+          "preservationist": 0,
+          "independent": 0
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 3,
+      "description": "Choose 'Seek the deeper truth—Transcend faction entirely (Independent)'",
+      "expectedScene": "sc_3_4_904",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["mainstage_reached", "editorState_revealedTruth", "ending_achieved", "ending_4_blank_page"],
+        "currentScene": "sc_3_4_904"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_3_4_904",
+    "flagsRequired": ["mainstage_reached", "editorState_revealedTruth", "ending_achieved"]
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
