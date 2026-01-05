@@ -1,0 +1,71 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT2-H2-PRESERVATIONIST-NOT-GATING",
+    "description": "NOT Condition Choice Gating - Validates that CONSERVATOR_FACTION_EXPLAIN and QUEST_MISSING_SCRIPT_DISCOVERED flags correctly disable choices when SET, and enable when NOT_SET",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 0
+    },
+    "currentScene": "sc_2_2_040"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Initial state - both NOT-gated choices should be available (choice_1: tour, choice_2: quest, choice_3: faction explain)",
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ"],
+        "currentScene": "sc_2_2_040",
+        "choicesAvailable": 4
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 2,
+      "description": "Choose 'Ask about the other factions' - sets CONSERVATOR_FACTION_EXPLAIN flag, adds +1 preservationist",
+      "expectedScene": "sc_2_2_040",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ", "CONSERVATOR_FACTION_EXPLAIN"],
+        "factions": {
+          "preservationist": 1
+        },
+        "currentScene": "sc_2_2_040"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "checkpoint",
+      "description": "After setting CONSERVATOR_FACTION_EXPLAIN, choice_3 should now be disabled (NOT condition blocks it)",
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ", "CONSERVATOR_FACTION_EXPLAIN"],
+        "currentScene": "sc_2_2_040",
+        "choicesAvailable": 3,
+        "disabledChoicesValidated": true
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_040",
+    "flagsRequired": ["green_room_reached", "MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ", "CONSERVATOR_FACTION_EXPLAIN"],
+    "factionsRequired": {
+      "preservationist": 1
+    }
+  },
+  "softlockDetection": {
+    "enabled": false,
+    "exemptScenes": ["sc_2_2_040"]
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT2-H2-ARCHIVES-TOUR-ITEM",
+    "description": "Archive Tour Item Acquisition - Tests add_item effect grants archival_ticket to inventory, set_flag (ARCHIVES_TOUR_COMPLETE), and stat modification option (Script +1)",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached", "MET_CONSERVATOR"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "currentScene": "sc_2_2_041"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify onEnter effects - ARCHIVES_TOUR_COMPLETE flag set, archival_ticket added",
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "ARCHIVES_TOUR_COMPLETE"],
+        "inventoryContains": ["archival_ticket"],
+        "currentScene": "sc_2_2_041",
+        "stats": {
+          "script": 2
+        }
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Choose 'Study the Archives (Script +1)' - tests modify_stat effect",
+      "expectedScene": "sc_2_2_001",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "ARCHIVES_TOUR_COMPLETE"],
+        "inventoryContains": ["archival_ticket"],
+        "stats": {
+          "script": 3
+        },
+        "currentScene": "sc_2_2_001"
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_001",
+    "flagsRequired": ["green_room_reached", "MET_CONSERVATOR", "ARCHIVES_TOUR_COMPLETE"],
+    "inventoryRequired": ["archival_ticket"],
+    "statsRequired": {
+      "script": 3
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
