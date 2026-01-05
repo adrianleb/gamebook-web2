@@ -1,0 +1,96 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT1-HUB0-STAGEHAND-SUB-BRANCH",
+    "description": "Stagehand Sub-Branch Test - Validates optional detour from Pursuers path (sc_1_0_011 choice_4) through Stagehand scenes (sc_1_0_040 → sc_1_0_041 → sc_1_0_042) back to sc_1_0_011. Tests unique flag propagation (stagehand_intervention, met_stagehand, stagehand_offer_understood, stagehand_secret_learned, stagehand_deal_made), item acquisition (stagehand_favor), stat changes (+1 script), and return path to main Pursuers flow.",
+    "author": "agent-e",
+    "version": "1.1"
+  },
+  "startingState": {
+    "flags": ["game_started", "path_direct", "branch_pursuers"],
+    "inventory": ["wings_pass"],
+    "stats": {
+      "script": 0,
+      "stage_presence": 3,
+      "improv": 0
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 3,
+      "independent": 0
+    },
+    "currentScene": "sc_1_0_011"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "choose",
+      "choiceIndex": 3,
+      "description": "Hear the Stagehand's offer - navigate to sc_1_0_040 The Stagehand's Offer, set stagehand_intervention and met_stagehand flags",
+      "expectedScene": "sc_1_0_040",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "path_direct", "branch_pursuers", "stagehand_intervention", "met_stagehand"],
+        "currentScene": "sc_1_0_040"
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Accept the Stagehand's deal - navigate to sc_1_0_041 The Stagehand's Price, set stagehand_offer_understood flag",
+      "expectedScene": "sc_1_0_041",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "path_direct", "branch_pursuers", "stagehand_intervention", "met_stagehand", "stagehand_offer_understood"],
+        "currentScene": "sc_1_0_041"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Accept the deal - navigate to sc_1_0_042 The Stagehand's Secret, set stagehand_secret_learned and stagehand_deal_made flags, add stagehand_favor item, +1 script stat",
+      "expectedScene": "sc_1_0_042",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "path_direct", "branch_pursuers", "stagehand_intervention", "met_stagehand", "stagehand_offer_understood", "stagehand_secret_learned", "stagehand_deal_made"],
+        "inventoryHas": ["wings_pass", "stagehand_favor"],
+        "currentScene": "sc_1_0_042",
+        "stats": {
+          "script": 1
+        }
+      }
+    },
+    {
+      "sequence": 4,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Follow the Stagehand - navigate back to sc_1_0_011 The Trap (return to Pursuers path)",
+      "expectedScene": "sc_1_0_011",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "path_direct", "branch_pursuers", "stagehand_intervention", "met_stagehand", "stagehand_offer_understood", "stagehand_secret_learned", "stagehand_deal_made"],
+        "inventoryHas": ["wings_pass", "stagehand_favor"],
+        "currentScene": "sc_1_0_011",
+        "stats": {
+          "script": 1
+        }
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_0_011",
+    "flagsRequired": ["stagehand_intervention", "met_stagehand", "stagehand_offer_understood", "stagehand_secret_learned", "stagehand_deal_made"],
+    "inventoryRequired": ["stagehand_favor"],
+    "statsRequired": {
+      "script": 1
+    }
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
