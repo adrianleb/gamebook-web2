@@ -26,6 +26,7 @@ import type {
   ReadonlyState,
 } from '../engine/types.js';
 import { getAudioManager } from './audio-manager.js';
+import { getNotificationQueue, type NotificationQueue } from './notification-queue.js';
 
 /**
  * Item metadata from content/items.json
@@ -154,6 +155,12 @@ export class GameRenderer {
   /** Audio manager for Phase 4 SFX */
   private audio;
 
+  /** Notification queue for Phase 11 presentation enhancements */
+  private notificationQueue: NotificationQueue;
+
+  /** Track previous flags state for quest completion detection (per agent-c perspective) */
+  private previousFlags: Set<string> = new Set();
+
   /** DOM element references */
   private elements: GameElements;
 
@@ -177,6 +184,7 @@ export class GameRenderer {
   constructor(engine: Engine) {
     this.engine = engine;
     this.audio = getAudioManager();
+    this.notificationQueue = getNotificationQueue();
     this.unsubscribers = [];
     this.itemCatalog = {};
     this.statMetadata = [];
@@ -208,6 +216,13 @@ export class GameRenderer {
 
       // Load stat metadata
       await this.loadStatMetadata();
+
+      // Phase 11: Initialize notification queue
+      this.notificationQueue.initialize();
+
+      // Phase 11: Initialize previous flags state for quest completion detection
+      const initialState = this.engine.getState();
+      this.previousFlags = new Set(initialState.flags);
 
       // Subscribe to engine state changes
       const unsubscribe = this.engine.onStateChange(
@@ -258,10 +273,14 @@ export class GameRenderer {
   /**
    * Cleanup subscriptions to prevent memory leaks.
    * Per agent-c's recommendation for long-running subscriptions.
+   * Phase 11: Also cleanup notification queue.
    *
    * Call this before destroying the renderer (e.g., SPA navigation).
    */
   destroy(): void {
+    // Phase 11: Cleanup notification queue
+    this.notificationQueue.destroy();
+
     // Unsubscribe from all engine events
     for (const unsub of this.unsubscribers) {
       unsub();
@@ -274,6 +293,8 @@ export class GameRenderer {
   /**
    * Handle state change events from Engine.
    * Routes to appropriate render method based on renderScope.
+   * Phase 11: Also triggers notifications for quest completions,
+   * faction changes, and item acquisitions.
    *
    * @param event - State change event from Engine
    */
@@ -284,6 +305,11 @@ export class GameRenderer {
       renderScope: event.renderScope,
       urgency: event.urgency,
     });
+
+    // Phase 11: Handle effect-applied events for notifications
+    if (event.type === 'effect-applied') {
+      this.handlePhase11Notifications(event);
+    }
 
     // Route based on renderScope (per agent-c's design)
     switch (event.renderScope) {
@@ -306,6 +332,95 @@ export class GameRenderer {
       default:
         console.warn('[GameRenderer] Unknown renderScope:', event.renderScope);
     }
+  }
+
+  /**
+   * Phase 11: Handle notification triggering for quest completions,
+   * faction changes, and item acquisitions.
+   *
+   * Per Intent #392: Uses event.path/oldValue/newValue from engine,
+   * no state diffing needed (per agent-c perspective).
+   *
+   * @param event - State change event from Engine
+   */
+  private handlePhase11Notifications(event: StateChangeEvent): void {
+    const { path, oldValue, newValue } = event;
+
+    // Quest completion: Detect QUEST_*_COMPLETE flags being set
+    // Per agent-c perspective: Use state diffing to detect newly set quest flags
+    // since effect-applied event for setFlag only returns path='flags' (generic)
+    if (path === 'flags' && newValue === 'set' && oldValue === 'unset') {
+      const state = this.engine.getState();
+      const newFlags = state.flags;
+
+      // Find quest flags that are in current state but weren't in previous state
+      for (const flag of newFlags) {
+        if (flag.startsWith('QUEST_') && flag.endsWith('_COMPLETE') && !this.previousFlags.has(flag)) {
+          this.notificationQueue.add('quest-complete', {
+            ...event,
+            path: flag, // Use the actual flag name for display
+          });
+          // Only show one notification per event batch
+          break;
+        }
+      }
+
+      // Update previous flags to current state
+      this.previousFlags = new Set(newFlags);
+    }
+
+    // Faction change: Detect factions.* changes
+    if (path.startsWith('factions.') && typeof oldValue === 'number' && typeof newValue === 'number') {
+      const diff = newValue - oldValue;
+      if (diff !== 0) {
+        this.notificationQueue.add('faction-change', event);
+        // Also create floating indicator from stats panel
+        this.createFactionIndicator(path, diff);
+      }
+    }
+
+    // Item acquisition: Detect inventory.* additions
+    if (path.startsWith('inventory.') && typeof newValue === 'number') {
+      const oldCount = typeof oldValue === 'number' ? oldValue : 0;
+      if (newValue > oldCount) {
+        this.notificationQueue.add('item-acquired', event);
+      }
+    }
+  }
+
+  /**
+   * Phase 11: Create floating faction change indicator from stats panel.
+   * Animates from the stats panel location and floats up.
+   *
+   * @param path - Faction path (e.g., "factions.preservationist")
+   * @param diff - Faction change amount (positive or negative)
+   */
+  private createFactionIndicator(path: string, diff: number): void {
+    const statsPanel = this.elements.statsPanel;
+    if (!statsPanel) {
+      return;
+    }
+
+    // Get faction name from path
+    const factionName = path.replace('factions.', '');
+
+    // Create indicator element
+    const indicator = document.createElement('div');
+    indicator.className = `faction-indicator ${diff >= 0 ? 'positive' : 'negative'}`;
+    indicator.textContent = `${diff >= 0 ? '+' : ''}${diff}`;
+
+    // Position near stats panel
+    const rect = statsPanel.getBoundingClientRect();
+    indicator.style.left = `${rect.right + 10}px`;
+    indicator.style.top = `${rect.top + 20}px`;
+
+    // Append to body
+    document.body.appendChild(indicator);
+
+    // Remove after animation completes (2 seconds)
+    setTimeout(() => {
+      indicator.remove();
+    }, 2000);
   }
 
   /**

@@ -1,0 +1,471 @@
+/**
+ * Phase 11 Presentation Enhancements - DOS-Era Styling
+ *
+ * Per agent-d (Intent #392): Quest notifications, faction indicators,
+ * and inventory overflow styling consistent with STYLE_GUIDE.md.
+ *
+ * Features:
+ * - Quest completion toasts with gold accents
+ * - Faction change floating labels with color coding
+ * - Item acquisition toasts with inventory icons
+ * - Notification queue with FIFO eviction
+ * - Mobile viewport responsive (320px, 375px, 414px breakpoints)
+ *
+ * @module ui/phase11-styles
+ */
+
+/* ============================================
+   Notification Container
+   ============================================ */
+
+.notification-container {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  max-width: 400px;
+  width: 100%;
+}
+
+/* ============================================
+   Base Notification Styles
+   ============================================ */
+
+.notification {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-secondary, #1a1a2e);
+  border: 2px solid var(--border-primary, #4a4a4a);
+  color: var(--text-primary, #e8e8e8);
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: var(--font-base, 24px);
+  line-height: 1.2;
+  pointer-events: auto;
+  box-shadow: 4px 4px 0px var(--bg-tertiary, #16213e);
+  border-radius: 0;
+  animation: notification-slide-in 300ms ease-out;
+  transition: opacity 300ms ease,
+              transform 300ms ease,
+              border-color 150ms ease;
+}
+
+/* Notification entering animation */
+@keyframes notification-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Notification dismissed animation */
+.notification.notification-dismissed {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+/* Hover state */
+.notification:hover {
+  border-color: var(--border-accent, #ffd700);
+}
+
+/* ============================================
+   Notification Icons
+   ============================================ */
+
+.notification-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: var(--bg-highlight, #0f3460);
+  border: 1px solid var(--border-dim, #2a2a2a);
+}
+
+/* ============================================
+   Notification Content
+   ============================================ */
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-title {
+  font-weight: var(--font-bold, 700);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+  color: var(--text-accent, #ffd700);
+  text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+}
+
+.notification-message {
+  color: var(--text-secondary, #a0a0a0);
+  word-wrap: break-word;
+}
+
+/* ============================================
+   Notification Types
+   ============================================ */
+
+/* Quest Complete - Gold theme */
+.notification-quest-complete {
+  border-color: var(--faction-preservationist, #ffd700);
+}
+
+.notification-quest-complete .notification-icon {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: var(--faction-preservationist, #ffd700);
+}
+
+.notification-quest-complete .notification-title {
+  color: var(--faction-preservationist, #ffd700);
+}
+
+/* Faction Change - Dynamic color based on faction */
+.notification-faction-change {
+  border-color: var(--text-info, #5dade2);
+}
+
+.notification-faction-change .notification-icon {
+  background: rgba(93, 173, 226, 0.2);
+  border-color: var(--text-info, #5dade2);
+}
+
+.notification-faction-change.positive {
+  border-color: var(--faction-preservationist, #ffd700);
+}
+
+.notification-faction-change.positive .notification-title {
+  color: var(--faction-preservationist, #ffd700);
+}
+
+.notification-faction-change.negative {
+  border-color: var(--faction-revisor, #ff4757);
+}
+
+.notification-faction-change.negative .notification-title {
+  color: var(--faction-revisor, #ff4757);
+}
+
+/* Item Acquired - Blue theme */
+.notification-item-acquired {
+  border-color: var(--text-info, #5dade2);
+}
+
+.notification-item-acquired .notification-icon {
+  background: rgba(93, 173, 226, 0.2);
+  border-color: var(--text-info, #5dade2);
+}
+
+.notification-item-acquired .notification-title {
+  color: var(--text-info, #5dade2);
+}
+
+/* ============================================
+   Notification Dismiss Button
+   ============================================ */
+
+.notification-dismiss {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--border-dim, #2a2a2a);
+  color: var(--text-secondary, #a0a0a0);
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: var(--font-xl, 48px);
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background-color 150ms ease,
+              border-color 150ms ease,
+              color 150ms ease;
+}
+
+.notification-dismiss:hover {
+  background: var(--bg-highlight, #0f3460);
+  border-color: var(--border-focus, #ffff00);
+  color: var(--text-primary, #e8e8e8);
+}
+
+.notification-dismiss:active {
+  background: var(--bg-tertiary, #16213e);
+  box-shadow: inset 2px 2px 0px var(--bg-primary, #000000);
+  transform: translate(1px, 1px);
+}
+
+.notification-dismiss:focus-visible {
+  outline: 2px solid var(--border-focus, #ffff00);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   Faction Change Indicators (Floating Labels)
+   ============================================ */
+
+.faction-indicator {
+  position: absolute;
+  pointer-events: none;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: var(--font-lg, 32px);
+  font-weight: var(--font-bold, 700);
+  padding: 4px 8px;
+  background: var(--bg-secondary, #1a1a2e);
+  border: 2px solid currentColor;
+  color: var(--text-primary, #e8e8e8);
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  z-index: 100;
+  animation: faction-float-up 2s ease-out forwards;
+}
+
+@keyframes faction-float-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-30px) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(1);
+  }
+}
+
+/* Positive faction change - Gold */
+.faction-indicator.positive {
+  color: var(--faction-preservationist, #ffd700);
+  border-color: var(--faction-preservationist, #ffd700);
+}
+
+/* Negative faction change - Red */
+.faction-indicator.negative {
+  color: var(--faction-revisor, #ff4757);
+  border-color: var(--faction-revisor, #ff4757);
+}
+
+/* ============================================
+   Inventory Overflow Indicator
+   ============================================ */
+
+.inventory-overflow-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: var(--bg-highlight, #0f3460);
+  border: 2px dashed var(--border-accent, #ffd700);
+  color: var(--text-accent, #ffd700);
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: var(--font-sm, 20px);
+  text-align: center;
+  margin-top: 8px;
+}
+
+.inventory-overflow-indicator::before {
+  content: '⚠️ ';
+  margin-right: 4px;
+}
+
+/* ============================================
+   Inventory Pagination Controls
+   ============================================ */
+
+.inventory-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+  background: var(--bg-tertiary, #16213e);
+  border-top: 2px solid var(--border-primary, #4a4a4a);
+  margin-top: 8px;
+}
+
+.inventory-pagination-info {
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: var(--font-sm, 20px);
+  color: var(--text-secondary, #a0a0a0);
+}
+
+.inventory-pagination-button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 16px;
+  background: var(--bg-secondary, #1a1a2e);
+  border: 2px solid var(--border-primary, #4a4a4a);
+  color: var(--text-primary, #e8e8e8);
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: var(--font-base, 24px);
+  cursor: pointer;
+  border-radius: 0;
+  transition: background-color 150ms ease,
+              border-color 150ms ease;
+}
+
+.inventory-pagination-button:hover:not(:disabled) {
+  background: var(--bg-tertiary, #16213e);
+  border-color: var(--border-accent, #ffd700);
+}
+
+.inventory-pagination-button:active:not(:disabled) {
+  background: var(--bg-highlight, #0f3460);
+  box-shadow: inset 2px 2px 0px var(--bg-primary, #000000);
+  transform: translate(1px, 1px);
+}
+
+.inventory-pagination-button:focus-visible {
+  outline: 2px solid var(--border-focus, #ffff00);
+  outline-offset: 2px;
+}
+
+.inventory-pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Category Headers for Inventory
+   ============================================ */
+
+.inventory-category-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-highlight, #0f3460);
+  border: 1px solid var(--border-dim, #2a2a2a);
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: var(--font-sm, 20px);
+  font-weight: var(--font-bold, 700);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-accent, #ffd700);
+}
+
+.inventory-category-header:first-child {
+  margin-top: 0;
+}
+
+/* ============================================
+   Mobile Responsive Breakpoints
+   ============================================ */
+
+/* Small mobile (320px - iPhone SE) */
+@media (max-width: 374px) {
+  .notification-container {
+    top: 8px;
+    right: 8px;
+    left: 8px;
+    max-width: none;
+  }
+
+  .notification {
+    padding: 10px 12px;
+    font-size: var(--font-sm, 20px);
+    gap: 8px;
+  }
+
+  .notification-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+  }
+
+  .notification-dismiss {
+    width: 24px;
+    height: 24px;
+    font-size: var(--font-lg, 32px);
+  }
+
+  .faction-indicator {
+    font-size: var(--font-base, 24px);
+    padding: 2px 6px;
+  }
+}
+
+/* Medium mobile (375px - iPhone 12/13) */
+@media (min-width: 375px) and (max-width: 413px) {
+  .notification-container {
+    top: 12px;
+    right: 12px;
+    left: 12px;
+    max-width: none;
+  }
+}
+
+/* Large mobile (414px - iPhone 14 Pro Max) */
+@media (min-width: 414px) and (max-width: 767px) {
+  .notification-container {
+    max-width: 350px;
+  }
+}
+
+/* Disable animations for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .notification {
+    animation: none;
+    transition: none;
+  }
+
+  .notification.notification-dismissed {
+    opacity: 1;
+    transform: none;
+  }
+
+  .faction-indicator {
+    animation: none;
+    opacity: 1;
+  }
+
+  .notification-dismiss,
+  .inventory-pagination-button {
+    transition: none;
+  }
+}
+
+/* ============================================
+   Test Mode Variants
+   ============================================ */
+
+body.test-mode .notification::before {
+  content: "[" attr(data-test-id) "]";
+  position: absolute;
+  top: -20px;
+  right: 0;
+  font-size: 12px;
+  color: var(--border-focus, #ffff00);
+  background: var(--bg-primary, #000000);
+  padding: 2px 4px;
+}
+
+body.test-mode .faction-indicator::before {
+  content: "[FACTION]";
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font-size: 10px;
+  color: var(--border-focus, #ffff00);
+  background: var(--bg-primary, #000000);
+  padding: 2px 4px;
+}
