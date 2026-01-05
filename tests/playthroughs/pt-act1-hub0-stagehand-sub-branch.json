@@ -4,7 +4,7 @@
     "name": "PT-ACT1-HUB0-STAGEHAND-SUB-BRANCH",
     "description": "Stagehand Sub-Branch Test - Validates optional detour from Pursuers path (sc_1_0_011 choice_4) through Stagehand scenes (sc_1_0_040 → sc_1_0_041 → sc_1_0_042) back to sc_1_0_011. Tests unique flag propagation (stagehand_intervention, met_stagehand, stagehand_offer_understood, stagehand_secret_learned, stagehand_deal_made), item acquisition (stagehand_favor), stat changes (+1 script), and return path to main Pursuers flow.",
     "author": "agent-e",
-    "version": "1.1"
+    "version": "1.2"
   },
   "startingState": {
     "flags": ["game_started", "path_direct", "branch_pursuers"],
@@ -56,7 +56,7 @@
       "checkpoint": true,
       "assertions": {
         "flagsSet": ["game_started", "path_direct", "branch_pursuers", "stagehand_intervention", "met_stagehand", "stagehand_offer_understood", "stagehand_secret_learned", "stagehand_deal_made"],
-        "inventoryHas": ["wings_pass", "stagehand_favor"],
+        "inventoryContains": ["wings_pass", "stagehand_favor"],
         "currentScene": "sc_1_0_042",
         "stats": {
           "script": 1
@@ -72,7 +72,7 @@
       "checkpoint": true,
       "assertions": {
         "flagsSet": ["game_started", "path_direct", "branch_pursuers", "stagehand_intervention", "met_stagehand", "stagehand_offer_understood", "stagehand_secret_learned", "stagehand_deal_made"],
-        "inventoryHas": ["wings_pass", "stagehand_favor"],
+        "inventoryContains": ["wings_pass", "stagehand_favor"],
         "currentScene": "sc_1_0_011",
         "stats": {
           "script": 1
