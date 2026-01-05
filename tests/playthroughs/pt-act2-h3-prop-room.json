@@ -1,0 +1,71 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-ACT2-H3-PROP-ROOM",
+    "description": "The Prop Room - Tests exploration scene reachability, requires archives_reached flag, validates prop room content loads, and return navigation to hub with choicesAvailable assertion",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached", "archives_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_2_3_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify Archives Entry loaded with all exploration choices available",
+      "assertions": {
+        "flagsSet": ["green_room_reached", "archives_reached", "act2_hub3_started"],
+        "currentScene": "sc_2_3_001",
+        "choicesAvailable": 5
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 2,
+      "description": "Choose 'Visit The Prop Room (items from lost stories)' - navigate to sc_2_3_020",
+      "expectedScene": "sc_2_3_020",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "archives_reached", "act2_hub3_started"],
+        "currentScene": "sc_2_3_020"
+      }
+    },
+    {
+      "sequence": 3,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Return to Archives Entry - validates dead-end exploration scene return navigation",
+      "expectedScene": "sc_2_3_001",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "archives_reached", "act2_hub3_started"],
+        "currentScene": "sc_2_3_001",
+        "choicesAvailable": 5
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_3_001",
+    "flagsRequired": ["green_room_reached", "archives_reached", "act2_hub3_started"]
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  }
+}
