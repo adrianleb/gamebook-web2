@@ -94,10 +94,19 @@
         {
           "type": "flag_check",
           "flag": "QUEST_ESCAPED_CHARACTER_STARTED"
+        },
+        {
+          "type": "NOT",
+          "conditions": [
+            {
+              "type": "flag_check",
+              "flag": "QUEST_ESCAPED_CHARACTER_COMPLETE"
+            }
+          ]
         }
       ],
       "onChoose": [],
-      "disabledHint": "You need to accept the Escaped Character quest first."
+      "disabledHint": "You need to accept the Escaped Character quest first, or you've already completed it."
     },
     {
       "id": "choice_3",
