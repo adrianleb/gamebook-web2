@@ -131,15 +131,43 @@ export class NotificationQueue {
       return null;
     }
 
+    const newPriority = PRIORITY_LEVELS[type];
+
     // Check if queue is full
     if (this.queue.length >= this.options.maxQueueSize) {
       // Find the lowest priority notification that is currently displayed
       const lowestPriorityIndex = this.findLowestPriorityDisplayed();
       if (lowestPriorityIndex !== -1) {
-        const toEvict = this.queue[lowestPriorityIndex];
-        // Evict lower priority notification
-        this.dismiss(toEvict.id);
-        this.queue.splice(lowestPriorityIndex, 1);
+        const lowestPriority = this.queue[lowestPriorityIndex].priority;
+        // Evict if the new notification has higher priority, OR same priority (FIFO behavior)
+        if (newPriority > lowestPriority) {
+          const toEvict = this.queue[lowestPriorityIndex];
+          // Evict lower priority notification
+          // Note: dismiss() removes from queue, so don't splice again
+          this.dismiss(toEvict.id);
+        } else if (newPriority === lowestPriority) {
+          // Same priority: evict the oldest (FIFO behavior)
+          // Find the oldest item with this priority
+          let oldestIndex = -1;
+          let oldestTimestamp = Infinity;
+          for (let i = 0; i < this.queue.length; i++) {
+            const n = this.queue[i];
+            if (n.priority === lowestPriority && n.displayed && !n.dismissed && n.timestamp < oldestTimestamp) {
+              oldestTimestamp = n.timestamp;
+              oldestIndex = i;
+            }
+          }
+          if (oldestIndex !== -1) {
+            this.dismiss(this.queue[oldestIndex].id);
+          } else {
+            console.warn('[NotificationQueue] Queue full, skipping notification:', type);
+            return null;
+          }
+        } else {
+          // New notification has lower priority than everything in queue
+          console.warn('[NotificationQueue] Queue full with higher priority items, skipping notification:', type);
+          return null;
+        }
       } else {
         // Queue is full with all high-priority items, skip this notification
         console.warn('[NotificationQueue] Queue full, skipping notification:', type);

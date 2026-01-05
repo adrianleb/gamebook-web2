@@ -10,6 +10,26 @@
  * @module tests/phase11/mobile-viewports
  */
 
+// Set up DOM environment first (before other imports)
+import { Window } from 'happy-dom';
+const win = new Window();
+// @ts-ignore
+globalThis.document = win.document;
+// @ts-ignore
+globalThis.window = win as unknown as Window & typeof globalThis;
+// @ts-ignore
+globalThis.HTMLElement = win.HTMLElement;
+// @ts-ignore
+globalThis.HTMLCollection = win.HTMLCollection;
+// @ts-ignore
+globalThis.Node = win.Node;
+// @ts-ignore
+globalThis.Element = win.Element;
+// @ts-ignore
+globalThis.requestAnimationFrame = (cb: FrameRequestCallback) => setTimeout(() => cb(performance.now()), 16) as unknown as number;
+// @ts-ignore
+globalThis.cancelAnimationFrame = (id: number) => clearTimeout(id);
+
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 import { NotificationQueue, resetNotificationQueue, type NotificationType } from '../../src/ui/notification-queue.js';
 

@@ -8,6 +8,26 @@
  * @module tests/ui/notification-queue
  */
 
+// Set up DOM environment first (before other imports)
+import { Window } from 'happy-dom';
+const win = new Window();
+// @ts-ignore
+globalThis.document = win.document;
+// @ts-ignore
+globalThis.window = win as unknown as Window & typeof globalThis;
+// @ts-ignore
+globalThis.HTMLElement = win.HTMLElement;
+// @ts-ignore
+globalThis.HTMLCollection = win.HTMLCollection;
+// @ts-ignore
+globalThis.Node = win.Node;
+// @ts-ignore
+globalThis.Element = win.Element;
+// @ts-ignore
+globalThis.requestAnimationFrame = (cb: FrameRequestCallback) => setTimeout(() => cb(performance.now()), 16) as unknown as number;
+// @ts-ignore
+globalThis.cancelAnimationFrame = (id: number) => clearTimeout(id);
+
 import { describe, it, expect, beforeEach, afterEach } from 'bun:test';
 import { NotificationQueue, resetNotificationQueue, type NotificationType } from '../../src/ui/notification-queue.js';
 
@@ -603,7 +623,7 @@ describe('NotificationQueue - Inventory Pagination Boundaries (Item 11)', () => 
       queue.initialize();
     }
 
-    // Add 21 items - one should be rejected
+    // Add 21 items - FIFO eviction means oldest is evicted when queue is full
     let successCount = 0;
     for (let i = 0; i < 21; i++) {
       const event = createMockEvent(`inventory.item${i}`, 0, 1);
@@ -611,8 +631,8 @@ describe('NotificationQueue - Inventory Pagination Boundaries (Item 11)', () => 
       if (id !== null) successCount++;
     }
 
-    // Max 20 should be accepted
-    expect(successCount).toBe(20);
+    // All 21 should succeed (FIFO evicts oldest), but queue size stays at max
+    expect(successCount).toBe(21);
     expect(queue.getQueueSize()).toBe(20);
 
     queue.destroy();

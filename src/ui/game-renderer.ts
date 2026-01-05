@@ -158,6 +158,9 @@ export class GameRenderer {
   /** Notification queue for Phase 11 presentation enhancements */
   private notificationQueue: NotificationQueue;
 
+  /** Track previous flags state for quest completion detection (per agent-c perspective) */
+  private previousFlags: Set<string> = new Set();
+
   /** DOM element references */
   private elements: GameElements;
 
@@ -216,6 +219,10 @@ export class GameRenderer {
 
       // Phase 11: Initialize notification queue
       this.notificationQueue.initialize();
+
+      // Phase 11: Initialize previous flags state for quest completion detection
+      const initialState = this.engine.getState();
+      this.previousFlags = new Set(initialState.flags);
 
       // Subscribe to engine state changes
       const unsubscribe = this.engine.onStateChange(
@@ -340,22 +347,26 @@ export class GameRenderer {
     const { path, oldValue, newValue } = event;
 
     // Quest completion: Detect QUEST_*_COMPLETE flags being set
+    // Per agent-c perspective: Use state diffing to detect newly set quest flags
+    // since effect-applied event for setFlag only returns path='flags' (generic)
     if (path === 'flags' && newValue === 'set' && oldValue === 'unset') {
-      // Extract flag name from event context - we need to check if it's a quest flag
-      // Since the event doesn't include the specific flag name, we'll need
-      // to check the current state for newly set quest flags
       const state = this.engine.getState();
-      for (const flag of state.flags) {
-        if (flag.startsWith('QUEST_') && flag.endsWith('_COMPLETE')) {
-          // Check if this flag was just set (not present before)
-          // We track this by checking if the flag is new since last render
+      const newFlags = state.flags;
+
+      // Find quest flags that are in current state but weren't in previous state
+      for (const flag of newFlags) {
+        if (flag.startsWith('QUEST_') && flag.endsWith('_COMPLETE') && !this.previousFlags.has(flag)) {
           this.notificationQueue.add('quest-complete', {
             ...event,
-            path: flag, // Use the flag name for display
+            path: flag, // Use the actual flag name for display
           });
-          break; // Only show one notification per event batch
+          // Only show one notification per event batch
+          break;
         }
       }
+
+      // Update previous flags to current state
+      this.previousFlags = new Set(newFlags);
     }
 
     // Faction change: Detect factions.* changes
