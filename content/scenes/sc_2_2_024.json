@@ -64,6 +64,11 @@
           "type": "modify_faction",
           "faction": "exiter",
           "amount": 1
+        },
+        {
+          "type": "modify_faction",
+          "faction": "independent",
+          "amount": 1
         }
       ],
       "disabledHint": null
