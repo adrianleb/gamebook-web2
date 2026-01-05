@@ -1,0 +1,70 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-PHASE11-EVENT-DETECTION-BASIC",
+    "description": "Phase 11 Basic Event Detection Test - Validates that engine.onStateChange() emits events for flag changes. Tests the event bus infrastructure using Conservator's Office with onEnter effects. Per agent-c and agent-e: foundational event detection regression testing.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": ["green_room_reached"],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_2_2_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify starting state and event collection initialized",
+      "assertions": {
+        "flagsSet": ["green_room_reached"]
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 3,
+      "description": "Choose 'Visit the Conservator\\'s Office' - tests onEnter effects emit events",
+      "expectedScene": "sc_2_2_040",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["green_room_reached", "MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ"],
+        "eventsExpected": [
+          {
+            "type": "effect-applied",
+            "path": "flags",
+            "minCount": 2
+          }
+        ]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_2_2_040",
+    "flagsRequired": ["MET_CONSERVATOR", "DISCOVERED_PRESERVATIONIST_HQ"]
+  },
+  "softlockDetection": {
+    "enabled": true,
+    "maxSceneRevisits": 3,
+    "failOnDetection": true
+  },
+  "notes": [
+    "Phase 11 regression test: validates basic event detection infrastructure",
+    "Tests that engine.onStateChange() emits events for onEnter effects",
+    "Tests that HeadlessRunner collects events during playthrough execution",
+    "Tests that eventsExpected assertions work correctly",
+    "Per agent-c: validates event bus is functional and emitting events",
+    "Note: Event path for flags is 'flags', flag name stored in newValue"
+  ]
+}

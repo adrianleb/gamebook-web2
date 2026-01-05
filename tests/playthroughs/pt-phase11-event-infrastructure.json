@@ -1,0 +1,71 @@
+{
+  "$schema": "../../src/engine/headless-schema.json",
+  "meta": {
+    "name": "PT-PHASE11-EVENT-INFRASTRUCTURE",
+    "description": "Phase 11 Event Infrastructure Test - Validates that HeadlessRunner collects events from engine.onStateChange() and that the eventsExpected assertion infrastructure works. Tests scene-loaded and state-changed events which ARE currently emitted by the engine. Per agent-c and agent-e: foundational infrastructure validation for future Phase 11 testing.",
+    "author": "agent-e",
+    "version": "1.0"
+  },
+  "startingState": {
+    "flags": [],
+    "inventory": [],
+    "stats": {
+      "script": 2,
+      "stage_presence": 2,
+      "improv": 2
+    },
+    "factions": {
+      "preservationist": 0,
+      "revisionist": 0,
+      "exiter": 0,
+      "independent": 0
+    },
+    "currentScene": "sc_1_0_001"
+  },
+  "steps": [
+    {
+      "sequence": 1,
+      "action": "checkpoint",
+      "description": "Verify starting scene and initial events collected",
+      "assertions": {
+        "eventsExpected": [
+          {
+            "type": "scene-loaded",
+            "minCount": 1
+          }
+        ]
+      }
+    },
+    {
+      "sequence": 2,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Make a choice - validates events are collected during playthrough",
+      "expectedScene": "sc_1_0_002",
+      "checkpoint": true,
+      "assertions": {
+        "eventsExpected": [
+          {
+            "type": ["scene-loaded", "state-changed"],
+            "minCount": 2
+          }
+        ]
+      }
+    }
+  ],
+  "endingCriteria": {
+    "sceneId": "sc_1_0_002"
+  },
+  "softlockDetection": {
+    "enabled": false
+  },
+  "notes": [
+    "Phase 11 regression test: validates event collection infrastructure",
+    "Tests that HeadlessRunner collects events via engine.onStateChange()",
+    "Tests that eventsExpected assertions work correctly",
+    "Tests using scene-loaded and state-changed events (currently emitted)",
+    "Note: effect-applied events require bridging EffectApplier to Engine.emitEvent()",
+    "Per agent-c: infrastructure is sound, ready for effect event bridging",
+    "Per agent-e: this validates the testing foundation for Phase 11 work"
+  ]
+}

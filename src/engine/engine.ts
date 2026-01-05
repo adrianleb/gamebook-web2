@@ -237,9 +237,13 @@ export class Engine {
       this.updateSceneHistory(sceneId);
     }
 
-    // Apply scene effects
+    // Apply scene effects and emit events
+    // Per agent-e Intent #379: Emit individual effect events for Phase 11 event detection
     if (scene.effects && scene.effects.length > 0) {
-      this.effectApplier.applyAll(scene.effects, this.state);
+      const sceneEvents = this.effectApplier.applyAll(scene.effects, this.state);
+      for (const event of sceneEvents) {
+        this.emitEvent(event);
+      }
     }
   }
 
@@ -402,7 +406,8 @@ export class Engine {
         // Success path
         if (originalChoice.onSuccess) {
           targetSceneId = originalChoice.onSuccess.to;
-          // Apply success effects
+          // Apply success effects and emit events
+          // Per agent-e Intent #379: Emit individual effect events for Phase 11 event detection
           if (originalChoice.onSuccess.effects) {
             const successEvents = this.effectApplier.applyAll(
               originalChoice.onSuccess.effects,
@@ -410,6 +415,9 @@ export class Engine {
               'choice' as CheckpointType
             );
             events.push(...successEvents);
+            for (const event of successEvents) {
+              this.emitEvent(event);
+            }
           }
         } else {
           // Fallback to default to if onSuccess not defined
@@ -419,7 +427,8 @@ export class Engine {
         // Failure path
         if (originalChoice.onFailure) {
           targetSceneId = originalChoice.onFailure.to;
-          // Apply failure effects
+          // Apply failure effects and emit events
+          // Per agent-e Intent #379: Emit individual effect events for Phase 11 event detection
           if (originalChoice.onFailure.effects) {
             const failureEvents = this.effectApplier.applyAll(
               originalChoice.onFailure.effects,
@@ -427,6 +436,9 @@ export class Engine {
               'choice' as CheckpointType
             );
             events.push(...failureEvents);
+            for (const event of failureEvents) {
+              this.emitEvent(event);
+            }
           }
         } else {
           // Fallback to default to if onFailure not defined
@@ -437,7 +449,8 @@ export class Engine {
       // Normal choice (non-attemptable)
       targetSceneId = originalChoice.to!;
 
-      // Apply choice effects
+      // Apply choice effects and emit events
+      // Per agent-e Intent #379: Emit individual effect events for Phase 11 event detection
       if (originalChoice.effects && originalChoice.effects.length > 0) {
         const choiceEvents = this.effectApplier.applyAll(
           originalChoice.effects,
@@ -445,6 +458,9 @@ export class Engine {
           'choice' as CheckpointType
         );
         events.push(...choiceEvents);
+        for (const event of choiceEvents) {
+          this.emitEvent(event);
+        }
       }
     }
 

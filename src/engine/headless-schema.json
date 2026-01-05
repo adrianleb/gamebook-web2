@@ -228,6 +228,49 @@
         "disabledChoicesValidated": {
           "type": "boolean",
           "description": "Verify choices with disabledHint are properly disabled"
+        },
+        "eventsExpected": {
+          "type": "array",
+          "description": "Expected state change events for Phase 11 presentation testing (per agent-c and agent-e)",
+          "items": { "$ref": "#/definitions/eventAssertion" }
+        }
+      }
+    },
+    "eventAssertion": {
+      "type": "object",
+      "description": "Event assertion for validating state change events",
+      "properties": {
+        "type": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ],
+          "description": "Expected event type(s) - omit to match any type"
+        },
+        "path": {
+          "type": "string",
+          "description": "Expected event path pattern - supports partial match"
+        },
+        "oldValue": {
+          "description": "Expected old value - omit to match any value"
+        },
+        "newValue": {
+          "description": "Expected new value - omit to match any value"
+        },
+        "renderScope": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "array", "items": { "type": "string" } }
+          ],
+          "description": "Expected render scope - omit to match any scope"
+        },
+        "minCount": {
+          "type": "number",
+          "description": "Minimum number of events matching this pattern"
+        },
+        "maxCount": {
+          "type": "number",
+          "description": "Maximum number of events matching this pattern (exclusive)"
         }
       }
     }
