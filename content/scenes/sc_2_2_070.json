@@ -120,6 +120,28 @@
       "disabledHint": "The Independent has already explained their philosophy."
     },
     {
+      "id": "choice_2a",
+      "label": "Convene the Council of Three",
+      "to": "sc_2_2_034",
+      "conditions": [
+        {
+          "type": "flag_check",
+          "flag": "QUEST_BALANCE_STARTED"
+        },
+        {
+          "type": "NOT",
+          "conditions": [
+            {
+              "type": "flag_check",
+              "flag": "QUEST_BALANCE_COMPLETE"
+            }
+          ]
+        }
+      ],
+      "onChoose": [],
+      "disabledHint": "You need to accept the Balance of Power quest first, or you've already completed it."
+    },
+    {
       "id": "choice_3",
       "label": "Accept the Diplomat's Challenge",
       "to": "sc_2_2_072",

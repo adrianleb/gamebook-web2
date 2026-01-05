@@ -135,10 +135,19 @@
         {
           "type": "flag_check",
           "flag": "QUEST_TROUBLED_ACTOR_STARTED"
+        },
+        {
+          "type": "NOT",
+          "conditions": [
+            {
+              "type": "flag_check",
+              "flag": "QUEST_TROUBLED_ACTOR_COMPLETE"
+            }
+          ]
         }
       ],
       "onChoose": [],
-      "disabledHint": "You need to accept the Troubled Actor quest first."
+      "disabledHint": "You need to accept the Troubled Actor quest first, or you've already completed it."
     },
     {
       "id": "choice_5",
