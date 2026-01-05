@@ -803,6 +803,8 @@ export class GameRenderer {
         itemLi.className = 'inventory-item inventory-item-animated';
         itemLi.setAttribute('data-test-id', `item-${item.id}`);
         itemLi.setAttribute('data-item-id', item.id);
+        // Phase 10 infrastructure: Keyboard-focusable for future item inspection feature
+        // TODO: Add click handler, ARIA semantics (role="button"), and aria-label when Phase 10 is implemented
         itemLi.setAttribute('tabindex', '0');
 
         // Icon - use category icon or fallback
