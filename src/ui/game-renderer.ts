@@ -803,6 +803,10 @@ export class GameRenderer {
         itemLi.className = 'inventory-item inventory-item-animated';
         itemLi.setAttribute('data-test-id', `item-${item.id}`);
         itemLi.setAttribute('data-item-id', item.id);
+
+        // Phase 10 infrastructure: Make items keyboard-focusable for future item inspection feature.
+        // See COMPREHENSIVE_ROADMAP.md:949 and issue #409 for full context.
+        // TODO (Phase 10): Add click handler, keyboard activation (Enter/Space), and ARIA semantics.
         itemLi.setAttribute('tabindex', '0');
 
         // Icon - use category icon or fallback
