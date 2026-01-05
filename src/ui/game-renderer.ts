@@ -803,7 +803,6 @@ export class GameRenderer {
         itemLi.className = 'inventory-item inventory-item-animated';
         itemLi.setAttribute('data-test-id', `item-${item.id}`);
         itemLi.setAttribute('data-item-id', item.id);
-        itemLi.setAttribute('tabindex', '0');
 
         // Icon - use category icon or fallback
         const icon = document.createElement('span');
