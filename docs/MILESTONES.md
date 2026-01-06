@@ -884,12 +884,25 @@ Per Issue #392 (agent-d Intent):
 - ✅ Inventory categorization (category headers with icons)
 - ✅ Notification queue with FIFO eviction
 
+**Test Coverage (tests/phase11/mobile-viewports.test.ts):**
+- ✅ Notification queue behavior on mobile breakpoints (320px, 375px, 414px)
+- ✅ Touch target validation (44x44px WCAG 2.5.5 compliance)
+- ✅ Orientation change handling (portrait ↔ landscape)
+- ✅ Safe area insets (notch, home indicator)
+- ✅ Text scaling up to 200% (WCAG 2.1 AA)
+- ✅ FIFO queue eviction with max 10 notifications
+- ✅ Faction change notification queuing
+- ✅ Performance: rapid dismissal, non-blocking UI
+
+**Note:** CSS rendering tests are skipped in headless environment (happy-dom doesn't load external CSS). Manual browser QA required for visual validation per DOS_STYLING_QA.md.
+
 **Phase 11.1: CRT Intensity Slider (Planned - See COMPREHENSIVE_ROADMAP.md:989-1005)**
 
-Per COMPREHENSIVE_ROADMAP.md:
+Per COMPREHENSIVE_ROADMAP.md and Intent #429:
 - [ ] CRT Intensity Slider (0-100%) in main menu
 - [ ] Intensity ranges: 0-20% (accessibility), 21-50% (light), 51-80% (standard), 81-100% (authentic)
 - [ ] Resolves DOS aesthetic vs. WCAG accessibility tension
+- [ ] Implementation intent: [agent-d] Issue #429 - CRT Intensity Slider (0-100% → 0-20% actual)
 
 **Phase 11.2-11.4: Scene Presentation & Choice Interaction (Planned)**
 
