@@ -1617,16 +1617,67 @@ When adding new interactive elements, developers MUST:
 >>>>>>> 7c1abee (docs: add WCAG 2.5.5 and 2.1.1 accessibility test documentation)
 ---
 
+### PT-A11Y-003: WCAG 2.5.5 Comprehensive Touch Target Audit
+
+**Tests:** ALL interactive elements meet WCAG 2.5.5 44x44px minimum touch target requirement
+
+**Scope:** Complete audit of all interactive UI components in the codebase
+
+**Audit Date:** 2026-01-06 (post-PR #403)
+
+**Reference:**
+- WCAG 2.5.5 Success Criterion: Touch targets must be at least 44x44px CSS pixels
+- Exception: Inline, essential, or spacing-equivalent (24px gap between targets)
+
+**Audit Results:**
+
+| Component | CSS Selector | Height | Width | Location | Status |
+|-----------|--------------|--------|-------|----------|--------|
+| Choice buttons | `.choice-button` | `min-height: 44px` | 100% | shell.css:405 | ✅ Compliant |
+| Save/load slot buttons | `.slot-action-btn` | `min-height: 44px` | implicit | shell.css:1067 | ✅ Compliant (fixed PR #403) |
+| Error buttons | `.error-button` | `min-height: 44px` | implicit | shell.css:779 | ✅ Compliant |
+| Menu option buttons | `.menu-option-btn` | `min-height: 48px` | implicit | shell.css:1144 | ✅ Compliant |
+| Modal close button | `.modal-close-btn` | `min-height: 44px` | `min-width: 100px` | shell.css:970 | ✅ Compliant |
+| Modal confirm button | `.modal-confirm-btn` | `min-height: 44px` | `min-width: 100px` | shell.css:970 | ✅ Compliant |
+| Notification dismiss | `.notification-dismiss` | `28px + 16px padding = 44px` | `28px + 16px padding = 44px` | phase11-styles.css:183 | ✅ Compliant |
+
+**Summary:** All interactive elements in the codebase meet WCAG 2.5.5 requirements. The only violation was `.slot-action-btn` (36px), which was fixed to 44px in PR #403.
+
+**Verification Procedure:**
+1. Open browser DevTools Inspector
+2. For each component above, inspect the computed `height` and `width`
+3. Verify: `height >= 44px` AND `width >= 44px` OR effective target size (element + padding) >= 44px
+4. For `.notification-dismiss`: Verify `28px` element + `8px` padding on all sides = `44px` effective
+
+**Spacing Exception Check:**
+WCAG 2.5.5 allows smaller targets if 24px spacing-equivalent separation exists. Audit findings:
+- `.slot-action-btn` gap: `var(--space-1) = 8px` ❌ Exception does NOT apply (needs 24px)
+- `.choice-button` gap: None (stacked vertically) ❌ Exception does NOT apply
+- `.menu-option-btn` gap: `var(--space-2) = 16px` ❌ Exception does NOT apply
+
+**Conclusion:** No components qualify for spacing exception. All must meet 44x44px minimum, which they do.
+
+**Regression Prevention:**
+- Manual QA: Re-run this audit after any CSS changes to button/interactive element sizing
+- Automated testing: See Intent #418 (blocked - requires browser-based testing for true regression prevention)
+- Developer checklist: Before merging UI changes, verify touch target sizes meet WCAG 2.5.5
+
+**Future Components:**
+When adding new interactive elements, developers MUST:
+- [ ] Set `min-height: 44px` OR ensure effective target size (element + padding) >= 44px
+- [ ] Set `min-width: 44px` OR ensure effective target size >= 44px
+- [ ] Add to this audit table with CSS selector and location
+- [ ] Run manual verification against PT-A11Y-001/003 validation points
+
+---
+
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
-<<<<<<< HEAD
 | 1.12 | 2026-01-06 | **ADDED** PT-P11-ACC-001 (CRT Intensity Slider) - comprehensive accessibility test for Phase 11.1 CRT intensity slider feature. Tests visual adjustment (0-100% → 0-20% opacity), persistence (localStorage with sessionStorage fallback), keyboard accessibility (arrow keys, Home/End), screen reader announcements (Option A ARIA pattern), touch target size (44x44px WCAG 2.5.5), reduced motion preference, mobile responsive, error handling, and integration with CRT toggle. |
 | 1.11 | 2026-01-06 | **FIXED** PT-A11Y-002 code reference to match post-PR #424 state - updated code validation section to reference actual game-renderer.ts:806-807 comments ("display-only" not "Phase 10 infrastructure"), clarified Phase 10 Requirements as future work with no timeline, and added note about PR #424 removing accessibility attributes from display-only inventory items. |
 | 1.10 | 2026-01-06 | **ADDED** PT-A11Y-003 (WCAG 2.5.5 Comprehensive Touch Target Audit) - complete audit of all interactive UI components (choice buttons, slot buttons, error buttons, menu options, modal buttons, notification dismiss). Documents that all components meet 44x44px minimum requirement. Only violation was `.slot-action-btn` (36px) fixed in PR #403. Addresses reviewer concern about incomplete scope in PT-A11Y-001. |
-=======
->>>>>>> 7c1abee (docs: add WCAG 2.5.5 and 2.1.1 accessibility test documentation)
 | 1.9 | 2026-01-06 | **ADDED** PT-A11Y-001 (WCAG 2.5.5 Touch Target Size) and PT-A11Y-002 (WCAG 2.1.1 Keyboard Interface) accessibility test documentation. Documents PR #403 fixes: `.slot-action-btn` 44x44px minimum touch target for save/load slot buttons, and removal of `tabindex="0"` from non-interactive `.inventory-item` elements. Includes Phase 10 interactivity requirements checklist for when inventory items become interactive. |
 | 1.8 | 2026-01-04 | **ADDED** Ending Quality Tier Tests section documenting v2.0.0 roadmap test infrastructure for 15 ending variants (5 endings × 3 quality tiers for faction endings, single variants for Independent/Fail). Includes generated test file reference table, quality tier requirements matrix, tier fallthrough logic, automated validation commands, Phase 8.5 Required Gate checklist, metadata-driven test generation design, and edge case documentation. **ADDED** `tests/generate-ending-tests.ts` script for automated test generation from manifest.json with mathematical feasibility validation. |
 | 1.7 | 2026-01-03 | **FIXED** YAML template example (line 32) to use canonical stats (script, stage_presence, improv with 1-4 range) instead of legacy stats (health, courage) for documentation consistency. |
