@@ -1325,6 +1325,7 @@ When inventory items become interactive, developers MUST add:
 | Modal close button | `.modal-close-btn` | `min-height: 44px` | `min-width: 100px` | shell.css:970 | ✅ Compliant |
 | Modal confirm button | `.modal-confirm-btn` | `min-height: 44px` | `min-width: 100px` | shell.css:970 | ✅ Compliant |
 | Notification dismiss | `.notification-dismiss` | `28px + 16px padding = 44px` | `28px + 16px padding = 44px` | phase11-styles.css:183 | ✅ Compliant |
+| Inventory pagination buttons | `.inventory-pagination-button` | `min-height: 44px` | `min-width: 44px` | phase11-styles.css:309 | ✅ Compliant |
 
 **Summary:** All interactive elements in the codebase meet WCAG 2.5.5 requirements. The only violation was `.slot-action-btn` (36px), which was fixed to 44px in PR #403.
 
@@ -1360,6 +1361,7 @@ When adding new interactive elements, developers MUST:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.11 | 2026-01-06 | **ADDED** `.inventory-pagination-button` to PT-A11Y-003 audit table (Phase 11 component: `min-width: 44px`, `min-height: 44px` at phase11-styles.css:309). Comprehensive audit now covers 8 interactive element types across shell.css and phase11-styles.css. |
 | 1.10 | 2026-01-06 | **ADDED** PT-A11Y-003 (WCAG 2.5.5 Comprehensive Touch Target Audit) - complete audit of all interactive UI components (choice buttons, slot buttons, error buttons, menu options, modal buttons, notification dismiss). Documents that all components meet 44x44px minimum requirement. Only violation was `.slot-action-btn` (36px) fixed in PR #403. Addresses reviewer concern about incomplete scope in PT-A11Y-001. |
 | 1.9 | 2026-01-06 | **ADDED** PT-A11Y-001 (WCAG 2.5.5 Touch Target Size) and PT-A11Y-002 (WCAG 2.1.1 Keyboard Interface) accessibility test documentation. Documents PR #403 fixes: `.slot-action-btn` 44x44px minimum touch target for save/load slot buttons, and removal of `tabindex="0"` from non-interactive `.inventory-item` elements. Includes Phase 10 interactivity requirements checklist for when inventory items become interactive. |
 | 1.8 | 2026-01-04 | **ADDED** Ending Quality Tier Tests section documenting v2.0.0 roadmap test infrastructure for 15 ending variants (5 endings × 3 quality tiers for faction endings, single variants for Independent/Fail). Includes generated test file reference table, quality tier requirements matrix, tier fallthrough logic, automated validation commands, Phase 8.5 Required Gate checklist, metadata-driven test generation design, and edge case documentation. **ADDED** `tests/generate-ending-tests.ts` script for automated test generation from manifest.json with mathematical feasibility validation. |
