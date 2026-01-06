@@ -1613,15 +1613,20 @@ When adding new interactive elements, developers MUST:
 - agent-e (Accessibility): ARIA Option A pattern, reduced-motion, WCAG validation
 - agent-a (Delivery): SettingsStorageProvider architecture, sessionStorage fallback
 
+=======
+>>>>>>> 7c1abee (docs: add WCAG 2.5.5 and 2.1.1 accessibility test documentation)
 ---
 
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+<<<<<<< HEAD
 | 1.12 | 2026-01-06 | **ADDED** PT-P11-ACC-001 (CRT Intensity Slider) - comprehensive accessibility test for Phase 11.1 CRT intensity slider feature. Tests visual adjustment (0-100% → 0-20% opacity), persistence (localStorage with sessionStorage fallback), keyboard accessibility (arrow keys, Home/End), screen reader announcements (Option A ARIA pattern), touch target size (44x44px WCAG 2.5.5), reduced motion preference, mobile responsive, error handling, and integration with CRT toggle. |
 | 1.11 | 2026-01-06 | **FIXED** PT-A11Y-002 code reference to match post-PR #424 state - updated code validation section to reference actual game-renderer.ts:806-807 comments ("display-only" not "Phase 10 infrastructure"), clarified Phase 10 Requirements as future work with no timeline, and added note about PR #424 removing accessibility attributes from display-only inventory items. |
 | 1.10 | 2026-01-06 | **ADDED** PT-A11Y-003 (WCAG 2.5.5 Comprehensive Touch Target Audit) - complete audit of all interactive UI components (choice buttons, slot buttons, error buttons, menu options, modal buttons, notification dismiss). Documents that all components meet 44x44px minimum requirement. Only violation was `.slot-action-btn` (36px) fixed in PR #403. Addresses reviewer concern about incomplete scope in PT-A11Y-001. |
+=======
+>>>>>>> 7c1abee (docs: add WCAG 2.5.5 and 2.1.1 accessibility test documentation)
 | 1.9 | 2026-01-06 | **ADDED** PT-A11Y-001 (WCAG 2.5.5 Touch Target Size) and PT-A11Y-002 (WCAG 2.1.1 Keyboard Interface) accessibility test documentation. Documents PR #403 fixes: `.slot-action-btn` 44x44px minimum touch target for save/load slot buttons, and removal of `tabindex="0"` from non-interactive `.inventory-item` elements. Includes Phase 10 interactivity requirements checklist for when inventory items become interactive. |
 | 1.8 | 2026-01-04 | **ADDED** Ending Quality Tier Tests section documenting v2.0.0 roadmap test infrastructure for 15 ending variants (5 endings × 3 quality tiers for faction endings, single variants for Independent/Fail). Includes generated test file reference table, quality tier requirements matrix, tier fallthrough logic, automated validation commands, Phase 8.5 Required Gate checklist, metadata-driven test generation design, and edge case documentation. **ADDED** `tests/generate-ending-tests.ts` script for automated test generation from manifest.json with mathematical feasibility validation. |
 | 1.7 | 2026-01-03 | **FIXED** YAML template example (line 32) to use canonical stats (script, stage_presence, improv with 1-4 range) instead of legacy stats (health, courage) for documentation consistency. |
