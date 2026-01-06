@@ -1268,7 +1268,7 @@ npm run test tests/engine/accessibility.test.ts
 - **Corollary:** Non-interactive elements MUST NOT have `tabindex="0"` (creates keyboard trap)
 
 **Test Procedure:**
-1. Add items to inventory via console: `engine.state.inventory.addItem('wayfinder', 1)`
+1. Add items to inventory via console: `engine.state.inventory.set('wayfinder', 1)`
 2. Press Tab key to navigate interface
 3. Expected: Inventory items do NOT receive keyboard focus
 4. Verify: No `cursor: pointer` on inventory items
