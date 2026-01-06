@@ -207,6 +207,40 @@
         <button class="menu-option-btn" data-action="save" data-test-id="menu-save">Save Game</button>
         <button class="menu-option-btn" data-action="load" data-test-id="menu-load">Load Game</button>
         <button class="menu-option-btn menu-option-btn-secondary" data-action="toggle-crt" data-test-id="menu-toggle-crt" id="menu-toggle-crt">CRT Filter: <span data-test-id="crt-status">Off</span></button>
+
+        <!-- CRT Intensity Slider -->
+        <div class="crt-intensity-control" data-test-id="crt-intensity-control">
+          <label for="crt-intensity-slider" class="slider-label" id="crt-intensity-label">
+            CRT Intensity
+          </label>
+          <div class="slider-row">
+            <span class="slider-value-min" aria-hidden="true">0%</span>
+            <input
+              type="range"
+              id="crt-intensity-slider"
+              class="crt-intensity-slider"
+              data-test-id="crt-intensity-slider"
+              min="0"
+              max="100"
+              step="1"
+              value="50"
+              aria-labelledby="crt-intensity-label"
+              aria-describedby="crt-intensity-status"
+              aria-valuenow="50"
+              aria-valuetext="50 percent">
+            <span class="slider-value-max" aria-hidden="true">100%</span>
+          </div>
+          <!-- ARIA live status region - updates on change event only (per agent-e Option A) -->
+          <div
+            id="crt-intensity-status"
+            class="slider-status"
+            data-test-id="crt-intensity-status"
+            aria-live="polite"
+            aria-atomic="true">
+            CRT intensity: 50%
+          </div>
+        </div>
+
         <button class="menu-option-btn menu-danger-btn" data-action="quit" data-test-id="menu-quit">Quit to Title</button>
       </div>
       <div class="modal-footer">
@@ -221,22 +255,43 @@
     import { GameRenderer } from '/src/ui/game-renderer.ts';
     import { SaveMenu } from '/src/ui/save-menu.ts';
     import { getCRTFilter } from '/src/ui/crt-filter.ts';
+    import { getSettingsStorage } from '/src/ui/settings/SettingsStorageProvider.ts';
 
     /**
-     * Setup CRT filter toggle button in main menu.
+     * Setup CRT filter toggle and intensity slider in main menu.
      * Per Phase 4 polish: Desktop-only with reduced-motion respect.
+     * Per Phase 11.1: Intensity slider (0-100% → 0-20% opacity) with ARIA live status.
      */
-    function setupCRTToggle() {
+    function setupCRTControl() {
       const crt = getCRTFilter();
+      const settings = getSettingsStorage();
       crt.initialize();
+
+      // Load saved intensity or use default (50%)
+      const savedIntensity = settings.getNumber('crtIntensity', 50);
+      crt.setIntensity(savedIntensity);
 
       const toggleBtn = document.getElementById('menu-toggle-crt');
       const statusSpan = document.querySelector('[data-test-id="crt-status"]');
+      const slider = document.querySelector<HTMLInputElement>('[data-test-id="crt-intensity-slider"]');
+      const statusDiv = document.querySelector('[data-test-id="crt-intensity-status"]');
 
       // Update button text to reflect initial state
       const updateCRTStatus = () => {
         if (statusSpan) {
           statusSpan.textContent = crt.isEnabled() ? 'On' : 'Off';
+        }
+      };
+
+      // Update slider ARIA attributes and status text
+      const updateSliderUI = (intensity: number) => {
+        if (slider) {
+          slider.value = intensity.toString();
+          slider.setAttribute('aria-valuenow', intensity.toString());
+          slider.setAttribute('aria-valuetext', `${intensity} percent`);
+        }
+        if (statusDiv) {
+          statusDiv.textContent = `CRT intensity: ${intensity}%`;
         }
       };
 
@@ -246,14 +301,69 @@
         updateCRTStatus();
       });
 
+      // Setup slider with Option A ARIA pattern (per agent-e)
+      // - aria-live updates ONLY on 'change' event (thumb release)
+      // - mousedown/mouseup drag detection for keyboard vs mouse distinction
+      let isDragging = false;
+
+      if (slider) {
+        // Initialize slider UI with saved value
+        updateSliderUI(savedIntensity);
+
+        // Detect drag state (mouse/touch) for ARIA control
+        slider.addEventListener('mousedown', () => {
+          isDragging = true;
+        });
+
+        slider.addEventListener('mouseup', () => {
+          isDragging = false;
+        });
+
+        // Keyboard navigation always announces (not dragging)
+        slider.addEventListener('keydown', () => {
+          isDragging = false;
+        });
+
+        // 'input' event: Update CRT visual immediately (no ARIA announcement)
+        slider.addEventListener('input', (e) => {
+          const target = e.target as HTMLInputElement;
+          const intensity = parseInt(target.value, 10);
+          crt.setIntensity(intensity);
+
+          // Instant visual preview - no ARIA update during drag
+          // (Screen readers will announce on 'change' event only)
+        });
+
+        // 'change' event: Update ARIA live status (per Option A pattern)
+        slider.addEventListener('change', (e) => {
+          const target = e.target as HTMLInputElement;
+          const intensity = parseInt(target.value, 10);
+
+          // Update ARIA status (announced by screen readers)
+          updateSliderUI(intensity);
+
+          // Persist to storage (debounced)
+          settings.setNumber('crtIntensity', intensity);
+
+          console.log(`[CRT Control] Intensity changed: ${intensity}%`);
+        });
+
+        // Focus: Announce current value to screen readers
+        slider.addEventListener('focus', () => {
+          const intensity = crt.getIntensity();
+          updateSliderUI(intensity);
+        });
+      }
+
       // Update status on viewport changes
       window.matchMedia('(min-width: 768px)').addEventListener('change', updateCRTStatus);
       window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', updateCRTStatus);
 
       // Initial status update
       updateCRTStatus();
+      updateSliderUI(savedIntensity);
 
-      console.log('[DOS UI Shell] CRT toggle initialized');
+      console.log('[DOS UI Shell] CRT control initialized (toggle + intensity slider)');
     }
 
     /**
@@ -287,8 +397,8 @@
 
         console.log('[DOS UI Shell] SaveMenu initialized');
 
-        // Setup CRT filter toggle (Phase 4 polish)
-        setupCRTToggle();
+        // Setup CRT filter control (Phase 4 toggle + Phase 11.1 intensity slider)
+        setupCRTControl();
 
         // Expose for debugging (development only)
         if (typeof window !== 'undefined') {

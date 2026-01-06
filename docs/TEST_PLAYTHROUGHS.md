@@ -1358,10 +1358,268 @@ When adding new interactive elements, developers MUST:
 
 ---
 
+## Phase 11 Accessibility Tests
+
+### PT-P11-ACC-001: CRT Intensity Slider
+
+**Tests:** CRT intensity slider UI, ARIA live status, persistence, WCAG compliance (Phase 11.1)
+
+**Purpose:** Validate the CRT intensity slider (0-100% user-facing → 0-20% actual opacity) provides adjustable DOS aesthetic while maintaining WCAG AA accessibility per Intent #429.
+
+**Related:** Intent #429 (agent-d), PT-A11Y-002 (keyboard navigation), PT-P4-ACC-001 (CRT filter behavior)
+
+---
+
+#### Test Setup
+
+1. Open the game in a browser (Chrome/Firefox/Safari)
+2. Start a new game or load existing save
+3. Open the main menu (MENU button)
+4. Locate the "CRT Intensity" slider control
+
+**Expected UI Elements:**
+- Label: "CRT INTENSITY"
+- Slider: Native input[type=range] with 0%-100% labels
+- Status text: "CRT intensity: X%" (below slider)
+- CRT Filter toggle button: "CRT Filter: On/Off"
+
+---
+
+#### Test 1: Visual Adjustment
+
+**Procedure:**
+1. Enable CRT Filter (click "CRT Filter" button to turn On)
+2. Move slider from 50% to 0%
+3. Move slider from 0% to 50%
+4. Move slider from 50% to 100%
+
+**Expected Results:**
+- [ ] At 0%: CRT scanlines and vignette are invisible (no effect)
+- [ ] At 50%: CRT scanlines and vignette are subtle (default behavior)
+- [ ] At 100%: CRT scanlines and vignette are maximum intensity but still readable
+- [ ] Visual changes happen **instantly** as you drag (real-time preview)
+- [ ] Text remains readable at all intensity levels (WCAG AA compliant)
+
+**Notes:**
+- 0-100% user-facing maps to 0-20% actual opacity
+- Vignette is 3x stronger than scanlines (capped at 50% opacity)
+- Effects should NOT reduce text contrast below WCAG AA 4.5:1
+
+---
+
+#### Test 2: Persistence
+
+**Procedure:**
+1. Set slider to 75%
+2. Refresh the page (F5 or Ctrl+R)
+3. Open main menu
+4. Check slider position
+
+**Expected Results:**
+- [ ] Slider remains at 75% after page refresh
+- [ ] Status text shows "CRT intensity: 75%"
+- [ ] CRT effect intensity matches saved value
+
+**Additional Tests:**
+- [ ] Set to 0%, refresh → slider at 0%
+- [ ] Set to 100%, refresh → slider at 100%
+- [ ] Clear browser data → slider resets to 50% (default)
+
+**Storage Verification:**
+- Open browser DevTools → Application → Local Storage
+- [ ] Key `understage_accessibility_crtIntensity` exists
+- [ ] Value is a number string ("0", "50", "75", "100")
+
+---
+
+#### Test 3: Keyboard Accessibility
+
+**Procedure:**
+1. Enable CRT Filter
+2. Tab to the slider (focus visible)
+3. Press Arrow keys (Left/Right, Up/Down)
+4. Press Home key (should go to 0%)
+5. Press End key (should go to 100%)
+6. Press Page Up/Page Down (larger increments)
+
+**Expected Results:**
+- [ ] Focus indicator visible (yellow outline per DOS theme)
+- [ ] Arrow keys change intensity by 1%
+- [ ] Home key sets to 0%
+- [ ] End key sets to 100%
+- [ ] Status text updates after **each** keypress (not debounced for keyboard)
+- [ ] Screen reader announces "CRT intensity: X%" on each keypress
+
+---
+
+#### Test 4: Screen Reader Announcements (Option A Pattern)
+
+**Procedure:**
+1. Enable screen reader (NVDA/JAWS on Windows, VoiceOver on Mac)
+2. Enable CRT Filter
+3. Focus the slider
+4. Drag slider with mouse/touch from 50% to 75%
+5. Release mouse/thumb
+6. Use arrow keys to adjust
+
+**Expected Results:**
+- [ ] On focus: Screen reader announces "CRT Intensity, slider, 50 percent"
+- [ ] During drag: **NO** announcement (silence during mouse drag)
+- [ ] On release: Screen reader announces "CRT intensity: 75%"
+- [ ] Arrow keys: Announcement after **each** keypress (not debounced)
+
+**ARIA Attributes Verification:**
+```
+<input
+  type="range"
+  aria-labelledby="crt-intensity-label"
+  aria-describedby="crt-intensity-status"
+  aria-valuenow="50"
+  aria-valuetext="50 percent"
+  min="0"
+  max="100"
+  step="1"
+>
+
+<div aria-live="polite" aria-atomic="true">
+  CRT intensity: 50%
+</div>
+```
+
+---
+
+#### Test 5: Touch Target Size (WCAG 2.5.5)
+
+**Procedure:**
+1. Open browser DevTools (F12)
+2. Enable device emulation (mobile viewport)
+3. Inspect slider thumb element
+4. Measure thumb dimensions
+
+**Expected Results:**
+- [ ] Slider thumb is 44x44px minimum (WCAG 2.5.5 requirement)
+- [ ] Touch area is not obscured by other elements
+- [ ] Slider is draggable with touch input
+
+**CSS Verification:**
+```css
+.crt-intensity-slider::-webkit-slider-thumb {
+  width: 44px;  /* WCAG 2.5.5 */
+  height: 44px; /* WCAG 2.5.5 */
+}
+```
+
+---
+
+#### Test 6: Reduced Motion Preference
+
+**Procedure:**
+1. Enable OS-level reduced motion preference:
+   - **Windows:** Settings → Ease of Access → Display → Show animations
+   - **macOS:** System Preferences → Accessibility → Display → Reduce motion
+   - **Linux:** Depends on desktop environment
+2. Refresh the page
+3. Enable CRT Filter
+4. Adjust slider from 0% to 100%
+
+**Expected Results:**
+- [ ] Static CRT effects (scanlines, vignette) **ARE** allowed
+- [ ] CRT filter may be disabled by viewport (< 768px) but NOT by reduced motion
+- [ ] Slider thumb transitions are **disabled** (instant state changes)
+
+**Note:** Per agent-e's perspective, `prefers-reduced-motion` only disables CRT **animations** (scrolling scanlines, flicker, phosphor decay). Static effects (scanlines, vignette) are allowed at user-selected intensity.
+
+---
+
+#### Test 7: Mobile Responsive
+
+**Procedure:**
+1. Open browser DevTools device emulation
+2. Test at 320px width (iPhone SE)
+3. Test at 375px width (iPhone 12)
+4. Test at 414px width (iPhone 14 Pro Max)
+5. Test at 768px width (iPad - desktop breakpoint)
+
+**Expected Results:**
+- [ ] Slider is visible and functional at all viewport sizes
+- [ ] Touch target remains 44x44px minimum
+- [ ] Labels are readable (no truncation)
+- [ ] Slider and labels stack vertically on small screens
+
+---
+
+#### Test 8: Error Handling (Storage Fallback)
+
+**Procedure:**
+1. Open browser DevTools → Console
+2. Set localStorage to quota-exceeded state:
+   ```javascript
+   // Simulate quota exceeded
+   Object.defineProperty(window, 'localStorage', {
+     setItem: () => { throw new DOMException('QuotaExceededError'); }
+   });
+   ```
+3. Adjust slider to 75%
+4. Check console for warnings
+
+**Expected Results:**
+- [ ] Console warning: "localStorage failed, falling back to sessionStorage"
+- [ ] Slider still works (sessionStorage fallback)
+- [ ] No JavaScript errors thrown
+- [ ] Status text updates correctly
+
+**Recovery Test:**
+- [ ] Reload page → Slider at 75% (sessionStorage persists)
+- [ ] Close tab, reopen → Slider at 50% (sessionStorage cleared, uses default)
+
+---
+
+#### Test 9: Integration with CRT Toggle
+
+**Procedure:**
+1. Start with CRT Filter Off, slider at 50%
+2. Enable CRT Filter
+3. Adjust slider to 25%
+4. Disable CRT Filter
+5. Adjust slider to 100%
+6. Enable CRT Filter
+
+**Expected Results:**
+- [ ] CRT Filter Off: No CRT effect visible (regardless of slider)
+- [ ] Enable CRT: CRT effect appears at 25% intensity
+- [ ] Disable CRT: CRT effect disappears
+- [ ] Adjust slider while disabled: Value saves, no visual change
+- [ ] Re-enable CRT: CRT effect appears at new intensity (100%)
+
+---
+
+#### Regression Prevention Checklist
+
+- [ ] PT-P4-ACC-001 (CRT Filter Desktop-Only) still passes
+- [ ] PT-A11Y-002 (Keyboard Navigation) still passes
+- [ ] Existing save/load functionality not affected
+- [ ] No new console errors or warnings
+
+---
+
+**Implementation Reference:**
+- `src/ui/settings/SettingsStorageProvider.ts` - Storage with fallback
+- `src/ui/crt-filter.ts` - setIntensity() method
+- `index.html` - Slider UI and wiring
+- `src/ui/phase11-styles.css` - Slider CSS with 44x44px touch targets
+
+**Per Agent Collaboration:**
+- agent-d (Presentation): Slider UI, DOS styling, intensity mapping
+- agent-e (Accessibility): ARIA Option A pattern, reduced-motion, WCAG validation
+- agent-a (Delivery): SettingsStorageProvider architecture, sessionStorage fallback
+
+---
+
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.12 | 2026-01-06 | **ADDED** PT-P11-ACC-001 (CRT Intensity Slider) - comprehensive accessibility test for Phase 11.1 CRT intensity slider feature. Tests visual adjustment (0-100% → 0-20% opacity), persistence (localStorage with sessionStorage fallback), keyboard accessibility (arrow keys, Home/End), screen reader announcements (Option A ARIA pattern), touch target size (44x44px WCAG 2.5.5), reduced motion preference, mobile responsive, error handling, and integration with CRT toggle. |
 | 1.11 | 2026-01-06 | **FIXED** PT-A11Y-002 code reference to match post-PR #424 state - updated code validation section to reference actual game-renderer.ts:806-807 comments ("display-only" not "Phase 10 infrastructure"), clarified Phase 10 Requirements as future work with no timeline, and added note about PR #424 removing accessibility attributes from display-only inventory items. |
 | 1.10 | 2026-01-06 | **ADDED** PT-A11Y-003 (WCAG 2.5.5 Comprehensive Touch Target Audit) - complete audit of all interactive UI components (choice buttons, slot buttons, error buttons, menu options, modal buttons, notification dismiss). Documents that all components meet 44x44px minimum requirement. Only violation was `.slot-action-btn` (36px) fixed in PR #403. Addresses reviewer concern about incomplete scope in PT-A11Y-001. |
 | 1.9 | 2026-01-06 | **ADDED** PT-A11Y-001 (WCAG 2.5.5 Touch Target Size) and PT-A11Y-002 (WCAG 2.1.1 Keyboard Interface) accessibility test documentation. Documents PR #403 fixes: `.slot-action-btn` 44x44px minimum touch target for save/load slot buttons, and removal of `tabindex="0"` from non-interactive `.inventory-item` elements. Includes Phase 10 interactivity requirements checklist for when inventory items become interactive. |

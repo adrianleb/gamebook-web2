@@ -24,6 +24,8 @@ interface CRTFilterConfig {
   minViewportWidth?: number;
   /** Whether to respect prefers-reduced-motion */
   respectReducedMotion?: boolean;
+  /** Initial intensity (0-100, maps to 0-20% actual opacity) */
+  initialIntensity?: number;
 }
 
 /**
@@ -67,6 +69,9 @@ export class CRTFilter {
   /** Reduced motion query listener */
   private reducedMotionQuery: MediaQueryList | null = null;
 
+  /** Intensity level (0-100 user-facing, maps to 0-20% actual opacity) */
+  private intensity: number;
+
   /**
    * Create a CRTFilter instance.
    *
@@ -75,6 +80,7 @@ export class CRTFilter {
   constructor(config: CRTFilterConfig = {}) {
     this.minViewportWidth = config.minViewportWidth ?? 768;
     this.respectReducedMotion = config.respectReducedMotion ?? true;
+    this.intensity = config.initialIntensity ?? 50; // Default 50% (10% actual opacity)
 
     // Check if we should enable by default
     let defaultEnabled = config.defaultEnabled ?? false;
@@ -163,6 +169,45 @@ export class CRTFilter {
   }
 
   /**
+   * Get the current CRT intensity level.
+   *
+   * @returns Intensity value (0-100)
+   */
+  getIntensity(): number {
+    return this.intensity;
+  }
+
+  /**
+   * Set the CRT intensity level.
+   *
+   * User-facing intensity (0-100) maps to actual opacity (0-20%):
+   * - 0% → 0% opacity (CRT effect disabled)
+   * - 50% → 10% opacity (default, subtle)
+   * - 100% → 20% opacity (maximum, maintains WCAG AA)
+   *
+   * @param intensity - Intensity value (0-100)
+   */
+  setIntensity(intensity: number): void {
+    // Clamp to valid range
+    this.intensity = Math.max(0, Math.min(100, intensity));
+
+    // Re-apply effect if currently enabled
+    if (this.enabled && this.isViewportAllowed()) {
+      this.apply();
+    }
+  }
+
+  /**
+   * Map user-facing intensity (0-100) to actual opacity (0-20%).
+   *
+   * @param intensity - User-facing intensity (0-100)
+   * @returns Actual opacity (0.0-0.2)
+   */
+  private intensityToOpacity(intensity: number): number {
+    return (intensity / 100) * 0.2; // 0-100 maps to 0-0.2 (0-20%)
+  }
+
+  /**
    * Check if current viewport allows CRT filter.
    *
    * Per agent-e: "Desktop-only with fallback detection."
@@ -215,6 +260,10 @@ export class CRTFilter {
       return;
     }
 
+    // Calculate opacity based on intensity (0-100 → 0-20%)
+    const scanlineOpacity = this.intensityToOpacity(this.intensity);
+    const vignetteOpacity = Math.min(scanlineOpacity * 3, 0.5); // Vignette slightly stronger but capped
+
     // Apply CRT effect via inline styles
     Object.assign(this.overlay.style, {
       opacity: '1',
@@ -223,16 +272,16 @@ export class CRTFilter {
         linear-gradient(
           to bottom,
           rgba(0, 0, 0, 0) 50%,
-          rgba(0, 0, 0, 0.1) 50%
+          rgba(0, 0, 0, ${scanlineOpacity}) 50%
         ),
         linear-gradient(
           to bottom,
           rgba(0, 0, 0, 0) 50%,
-          rgba(0, 0, 0, 0.1) 50%
+          rgba(0, 0, 0, ${scanlineOpacity}) 50%
         )
       `,
       backgroundSize: '4px 4px, 2px 2px',
-      boxShadow: 'inset 0 0 100px rgba(0, 0, 0, 0.3)',
+      boxShadow: `inset 0 0 100px rgba(0, 0, 0, ${vignetteOpacity})`,
     });
 
     // Add CRT class to body for additional CSS effects
