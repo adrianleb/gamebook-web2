@@ -650,7 +650,6 @@ body {
   padding: var(--space-1);
   background: var(--bg-tertiary);
   border: 1px solid var(--border-dim);
-  cursor: pointer;
   transition: border-color var(--transition-fast);
 }
 
@@ -711,15 +710,6 @@ body {
   font-size: var(--font-sm);
   font-weight: var(--font-bold);
   color: var(--bg-primary);
-}
-
-.inventory-item:hover {
-  border-color: var(--border-accent);
-}
-
-.inventory-item:focus {
-  outline: 2px solid var(--border-focus);
-  outline-offset: 2px;
 }
 
 .item-icon {
