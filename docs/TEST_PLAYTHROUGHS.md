@@ -1282,8 +1282,8 @@ npm run test tests/engine/accessibility.test.ts
 **Code Validation:**
 ```typescript
 // game-renderer.ts:806-807
-// Phase 10 infrastructure: Not yet interactive - remove tabindex until click handler is added
-// TODO: Add click handler, ARIA semantics (role="button"), aria-label, and tabindex="0" when Phase 10 is implemented
+// Note: Inventory items are display-only, not interactive
+// Future item inspection feature would require click handler, ARIA semantics
 ```
 
 **CSS Validation:**
@@ -1292,13 +1292,15 @@ npm run test tests/engine/accessibility.test.ts
 /* shell.css - NO :focus styles for .inventory-item */
 ```
 
-**Phase 10 Requirements:**
-When inventory items become interactive, developers MUST add:
+**Phase 10 Requirements (Future Work):**
+When inventory items become interactive (no timeline planned), developers MUST add:
 - [ ] Click handler (e.g., item inspection modal)
 - [ ] `tabindex="0"` for keyboard focus
 - [ ] `role="button"` or `role="option"` for ARIA semantics
 - [ ] `aria-label` with item name
 - [ ] `:hover` and `:focus` visual styles
+
+**Note:** PR #424 (2026-01-06) removed `tabindex`, `role`, and `aria-label` attributes from `.inventory-item` elements because they are currently display-only. Any future interactive item inspection feature must re-add these accessibility attributes.
 
 ---
 
@@ -1360,6 +1362,7 @@ When adding new interactive elements, developers MUST:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.11 | 2026-01-06 | **FIXED** PT-A11Y-002 code reference to match post-PR #424 state - updated code validation section to reference actual game-renderer.ts:806-807 comments ("display-only" not "Phase 10 infrastructure"), clarified Phase 10 Requirements as future work with no timeline, and added note about PR #424 removing accessibility attributes from display-only inventory items. |
 | 1.10 | 2026-01-06 | **ADDED** PT-A11Y-003 (WCAG 2.5.5 Comprehensive Touch Target Audit) - complete audit of all interactive UI components (choice buttons, slot buttons, error buttons, menu options, modal buttons, notification dismiss). Documents that all components meet 44x44px minimum requirement. Only violation was `.slot-action-btn` (36px) fixed in PR #403. Addresses reviewer concern about incomplete scope in PT-A11Y-001. |
 | 1.9 | 2026-01-06 | **ADDED** PT-A11Y-001 (WCAG 2.5.5 Touch Target Size) and PT-A11Y-002 (WCAG 2.1.1 Keyboard Interface) accessibility test documentation. Documents PR #403 fixes: `.slot-action-btn` 44x44px minimum touch target for save/load slot buttons, and removal of `tabindex="0"` from non-interactive `.inventory-item` elements. Includes Phase 10 interactivity requirements checklist for when inventory items become interactive. |
 | 1.8 | 2026-01-04 | **ADDED** Ending Quality Tier Tests section documenting v2.0.0 roadmap test infrastructure for 15 ending variants (5 endings × 3 quality tiers for faction endings, single variants for Independent/Fail). Includes generated test file reference table, quality tier requirements matrix, tier fallthrough logic, automated validation commands, Phase 8.5 Required Gate checklist, metadata-driven test generation design, and edge case documentation. **ADDED** `tests/generate-ending-tests.ts` script for automated test generation from manifest.json with mathematical feasibility validation. |
