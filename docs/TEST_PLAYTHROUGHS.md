@@ -1253,6 +1253,8 @@ npm run test tests/engine/accessibility.test.ts
 - Future CSS changes could reduce height below 44px
 - No automated test - manual QA or visual regression test required
 
+**Note:** This is a focused regression test for the `.slot-action-btn` fix in PR #403. For a comprehensive audit of ALL interactive elements (choice buttons, modal buttons, menu options, notification dismiss, inventory pagination), see **PT-A11Y-003: WCAG 2.5.5 Comprehensive Touch Target Audit**.
+
 ---
 
 ### PT-A11Y-002: WCAG 2.1.1 Keyboard Interface (No tabindex on Non-Interactive)
