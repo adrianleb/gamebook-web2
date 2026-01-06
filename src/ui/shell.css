@@ -647,11 +647,9 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  min-height: 44px; /* WCAG 2.5.5: 44x44px min touch target */
   padding: var(--space-1);
   background: var(--bg-tertiary);
   border: 1px solid var(--border-dim);
-  cursor: pointer;
   transition: border-color var(--transition-fast);
 }
 
@@ -716,11 +714,6 @@ body {
 
 .inventory-item:hover {
   border-color: var(--border-accent);
-}
-
-.inventory-item:focus {
-  outline: 2px solid var(--border-focus);
-  outline-offset: 2px;
 }
 
 .item-icon {

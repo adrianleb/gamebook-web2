@@ -803,7 +803,8 @@ export class GameRenderer {
         itemLi.className = 'inventory-item inventory-item-animated';
         itemLi.setAttribute('data-test-id', `item-${item.id}`);
         itemLi.setAttribute('data-item-id', item.id);
-        itemLi.setAttribute('tabindex', '0');
+        // Phase 10 infrastructure: Not yet interactive - remove tabindex until click handler is added
+        // TODO: Add click handler, ARIA semantics (role="button"), aria-label, and tabindex="0" when Phase 10 is implemented
 
         // Icon - use category icon or fallback
         const icon = document.createElement('span');
