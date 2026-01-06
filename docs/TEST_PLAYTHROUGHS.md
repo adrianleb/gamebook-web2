@@ -1219,10 +1219,149 @@ npm run test tests/engine/accessibility.test.ts
 
 ---
 
+### PT-A11Y-001: WCAG 2.5.5 Touch Target Size (44x44px Minimum)
+
+**Tests:** Touch targets meet WCAG 2.5.5 Success Criterion 2.5.5 (Target Size)
+
+**Reference:** PR #403 - `src/ui/shell.css` (`.slot-action-btn`)
+
+**UI Components:** Save/load slot action buttons (Save, Load, Delete)
+
+**WCAG Requirement:**
+- Touch targets must be at least 44x44px CSS pixels
+- Exception: inline controls, essential controls, or 24px spacing-equivalent separation
+
+**Test Procedure:**
+1. Open save/load menu
+2. Measure `.slot-action-btn` dimensions (Save, Load, Delete buttons)
+3. Expected: `min-height: 44px`, `min-width: 80px` (or implicit from layout)
+
+**Validation Points:**
+- [ ] `.slot-action-btn` has `min-height: 44px` (WCAG 2.5.5 compliance)
+- [ ] Button width is >=44px (explicit `min-width` or layout constraint)
+- [ ] Spacing between buttons <24px (spacing exception does NOT apply, full 44x44px required)
+
+**CSS Validation:**
+```css
+.slot-action-btn {
+  min-height: 44px; /* WCAG 2.5.5: 44x44px min touch target */
+  padding: var(--space-1) var(--space-2);
+}
+```
+
+**Regression Risk:**
+- Future CSS changes could reduce height below 44px
+- No automated test - manual QA or visual regression test required
+
+---
+
+### PT-A11Y-002: WCAG 2.1.1 Keyboard Interface (No tabindex on Non-Interactive)
+
+**Tests:** Non-interactive elements do not have keyboard focus
+
+**Reference:** PR #403 - `src/ui/game-renderer.ts` (inventory items), `src/ui/shell.css`
+
+**UI Components:** Inventory items (`.inventory-item`)
+
+**WCAG Requirement:**
+- WCAG 2.1.1 Success Criterion: All interactive functionality must be operable through a keyboard interface
+- **Corollary:** Non-interactive elements MUST NOT have `tabindex="0"` (creates keyboard trap)
+
+**Test Procedure:**
+1. Add items to inventory via console: `engine.state.inventory.set('wayfinder', 1)`
+2. Press Tab key to navigate interface
+3. Expected: Inventory items do NOT receive keyboard focus
+4. Verify: No `cursor: pointer` on inventory items
+
+**Validation Points:**
+- [ ] `.inventory-item` does NOT have `tabindex="0"` (non-interactive display-only)
+- [ ] `.inventory-item` does NOT have `cursor: pointer` (misleading for non-interactive)
+- [ ] `.inventory-item` does NOT have `:focus` styles (no keyboard focus without tabindex)
+- [ ] Tab order flows: Text → Choices → Stats → Save/Load buttons (skips inventory)
+
+**Code Validation:**
+```typescript
+// game-renderer.ts:806-807
+// Phase 10 infrastructure: Not yet interactive - remove tabindex until click handler is added
+// TODO: Add click handler, ARIA semantics (role="button"), aria-label, and tabindex="0" when Phase 10 is implemented
+```
+
+**CSS Validation:**
+```css
+/* shell.css - NO cursor: pointer on .inventory-item */
+/* shell.css - NO :focus styles for .inventory-item */
+```
+
+**Phase 10 Requirements:**
+When inventory items become interactive, developers MUST add:
+- [ ] Click handler (e.g., item inspection modal)
+- [ ] `tabindex="0"` for keyboard focus
+- [ ] `role="button"` or `role="option"` for ARIA semantics
+- [ ] `aria-label` with item name
+- [ ] `:hover` and `:focus` visual styles
+
+---
+
+### PT-A11Y-003: WCAG 2.5.5 Comprehensive Touch Target Audit
+
+**Tests:** ALL interactive elements meet WCAG 2.5.5 44x44px minimum touch target requirement
+
+**Scope:** Complete audit of all interactive UI components in the codebase
+
+**Audit Date:** 2026-01-06 (post-PR #403)
+
+**Reference:**
+- WCAG 2.5.5 Success Criterion: Touch targets must be at least 44x44px CSS pixels
+- Exception: Inline, essential, or spacing-equivalent (24px gap between targets)
+
+**Audit Results:**
+
+| Component | CSS Selector | Height | Width | Location | Status |
+|-----------|--------------|--------|-------|----------|--------|
+| Choice buttons | `.choice-button` | `min-height: 44px` | 100% | shell.css:405 | ✅ Compliant |
+| Save/load slot buttons | `.slot-action-btn` | `min-height: 44px` | implicit | shell.css:1067 | ✅ Compliant (fixed PR #403) |
+| Error buttons | `.error-button` | `min-height: 44px` | implicit | shell.css:779 | ✅ Compliant |
+| Menu option buttons | `.menu-option-btn` | `min-height: 48px` | implicit | shell.css:1144 | ✅ Compliant |
+| Modal close button | `.modal-close-btn` | `min-height: 44px` | `min-width: 100px` | shell.css:970 | ✅ Compliant |
+| Modal confirm button | `.modal-confirm-btn` | `min-height: 44px` | `min-width: 100px` | shell.css:970 | ✅ Compliant |
+| Notification dismiss | `.notification-dismiss` | `28px + 16px padding = 44px` | `28px + 16px padding = 44px` | phase11-styles.css:183 | ✅ Compliant |
+
+**Summary:** All interactive elements in the codebase meet WCAG 2.5.5 requirements. The only violation was `.slot-action-btn` (36px), which was fixed to 44px in PR #403.
+
+**Verification Procedure:**
+1. Open browser DevTools Inspector
+2. For each component above, inspect the computed `height` and `width`
+3. Verify: `height >= 44px` AND `width >= 44px` OR effective target size (element + padding) >= 44px
+4. For `.notification-dismiss`: Verify `28px` element + `8px` padding on all sides = `44px` effective
+
+**Spacing Exception Check:**
+WCAG 2.5.5 allows smaller targets if 24px spacing-equivalent separation exists. Audit findings:
+- `.slot-action-btn` gap: `var(--space-1) = 8px` ❌ Exception does NOT apply (needs 24px)
+- `.choice-button` gap: None (stacked vertically) ❌ Exception does NOT apply
+- `.menu-option-btn` gap: `var(--space-2) = 16px` ❌ Exception does NOT apply
+
+**Conclusion:** No components qualify for spacing exception. All must meet 44x44px minimum, which they do.
+
+**Regression Prevention:**
+- Manual QA: Re-run this audit after any CSS changes to button/interactive element sizing
+- Automated testing: See Intent #418 (blocked - requires browser-based testing for true regression prevention)
+- Developer checklist: Before merging UI changes, verify touch target sizes meet WCAG 2.5.5
+
+**Future Components:**
+When adding new interactive elements, developers MUST:
+- [ ] Set `min-height: 44px` OR ensure effective target size (element + padding) >= 44px
+- [ ] Set `min-width: 44px` OR ensure effective target size >= 44px
+- [ ] Add to this audit table with CSS selector and location
+- [ ] Run manual verification against PT-A11Y-001/003 validation points
+
+---
+
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.10 | 2026-01-06 | **ADDED** PT-A11Y-003 (WCAG 2.5.5 Comprehensive Touch Target Audit) - complete audit of all interactive UI components (choice buttons, slot buttons, error buttons, menu options, modal buttons, notification dismiss). Documents that all components meet 44x44px minimum requirement. Only violation was `.slot-action-btn` (36px) fixed in PR #403. Addresses reviewer concern about incomplete scope in PT-A11Y-001. |
+| 1.9 | 2026-01-06 | **ADDED** PT-A11Y-001 (WCAG 2.5.5 Touch Target Size) and PT-A11Y-002 (WCAG 2.1.1 Keyboard Interface) accessibility test documentation. Documents PR #403 fixes: `.slot-action-btn` 44x44px minimum touch target for save/load slot buttons, and removal of `tabindex="0"` from non-interactive `.inventory-item` elements. Includes Phase 10 interactivity requirements checklist for when inventory items become interactive. |
 | 1.8 | 2026-01-04 | **ADDED** Ending Quality Tier Tests section documenting v2.0.0 roadmap test infrastructure for 15 ending variants (5 endings × 3 quality tiers for faction endings, single variants for Independent/Fail). Includes generated test file reference table, quality tier requirements matrix, tier fallthrough logic, automated validation commands, Phase 8.5 Required Gate checklist, metadata-driven test generation design, and edge case documentation. **ADDED** `tests/generate-ending-tests.ts` script for automated test generation from manifest.json with mathematical feasibility validation. |
 | 1.7 | 2026-01-03 | **FIXED** YAML template example (line 32) to use canonical stats (script, stage_presence, improv with 1-4 range) instead of legacy stats (health, courage) for documentation consistency. |
 | 1.6 | 2026-01-02 | **FIXED** PT-END-001 through PT-END-005 ending gate documentation to match actual sc_3_4_098 implementation. Removed incorrect editorState enum requirements (defeated/persuaded) from faction endings. Changed PT-END-004 to use editorState_revealedTruth boolean flag instead of enum. Updated Ending Gate Validation Summary table and State Variable Reference with clarification that combined faction+editorState AND gates are DEFERRED per MILESTONES.md Issue #129. |
