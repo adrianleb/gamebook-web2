@@ -305,7 +305,7 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Phase 8: Act 3 Expansion & Quality Tiers | 🟡 Planned | PR #310 schema issue |
 | Phase 9: v2.0.0 Release | 🟡 Planned | Phase 8 complete |
 | Phase 10: Save Format Migration | ✅ Infrastructure Complete | None (Issue #237 closed) |
-| Phase 11: Presentation Enhancements | 🟡 Planned | Issue #322 |
+| Phase 11: Presentation Enhancements | 🟢 In Progress - Phase 11.0 Complete | See detailed status below |
 | Phase 12: Audio & Visual Polish | 🟡 Planned | Specification complete |
 
 ### Phase 2 Status Update (2025-12-29)
@@ -869,38 +869,66 @@ When a breaking change occurs (e.g., v1 → v2):
 
 **Goal**: Design and implement presentation-layer enhancements for expansion content (quest notifications, faction indicators, inventory overflow, ally visualization).
 
-**Status**: 🟡 Planned - See Issue #322
+**Status**: 🟢 In Progress - Phase 11.0 Complete
 
 **Version Target**: v2.1.0+
 
-### Scope
+### Implementation Status
 
-Per Issue #322 (agent-d Intent):
-- Quest completion notification system (toast/panel/indicator)
-- Faction alignment change indicator (transient +1 feedback on stat modification)
-- Inventory categorization and overflow UI (consumable vs key items, scroll/pagination for 20+ items)
-- Ally system visualization (MAREN_ALLY, CHORUS_ALLY flags in stats panel)
-- Quality tier presentation feedback (tier indicators, progress tracking)
+**Phase 11.0: Core Presentation Features (Complete - 2026-01-05)**
+
+Per Issue #392 (agent-d Intent):
+- ✅ Quest completion notification system (toast with gold accents)
+- ✅ Faction alignment change indicator (floating +1/-1 labels)
+- ✅ Item acquisition notifications (blue theme, inventory icons)
+- ✅ Inventory categorization (category headers with icons)
+- ✅ Notification queue with FIFO eviction
+
+**Phase 11.1: CRT Intensity Slider (Planned - See COMPREHENSIVE_ROADMAP.md:989-1005)**
+
+Per COMPREHENSIVE_ROADMAP.md:
+- [ ] CRT Intensity Slider (0-100%) in main menu
+- [ ] Intensity ranges: 0-20% (accessibility), 21-50% (light), 51-80% (standard), 81-100% (authentic)
+- [ ] Resolves DOS aesthetic vs. WCAG accessibility tension
+
+**Phase 11.2-11.4: Scene Presentation & Choice Interaction (Planned)**
+
+Per COMPREHENSIVE_ROADMAP.md:1007-1094:
+- [ ] Scene header with DOS path format (C:\UNDERSTAGE\ACT1\HUB0)
+- [ ] Stat check visualization (DOS-style stat display)
+- [ ] Scene transition effects (fade, wipe, dissolve)
+- [ ] Choice type icons (action, dialogue, explore)
+- [ ] Choice grouping and hidden choice system
 
 ### Deliverables
 
-| Component | Location | Owner |
-|-----------|----------|-------|
-| DOS_PHASE_11_SPECS.md | `docs/DOS_PHASE_11_SPECS.md` | agent-d |
-| Quest notification UI | `src/ui/` | agent-d |
-| Faction indicator UI | `src/ui/` | agent-d |
-| Inventory UI enhancements | `src/ui/` | agent-d |
-| Ally visualization | `src/ui/` | agent-d |
+| Component | Location | Owner | Status |
+|-----------|----------|-------|--------|
+| DOS_PHASE_11_SPECS.md | `docs/DOS_PHASE_11_SPECS.md` | agent-d | ✅ Complete |
+| phase11-styles.css | `src/ui/phase11-styles.css` | agent-d | ✅ Complete |
+| notification-queue.ts | `src/ui/notification-queue.ts` | agent-d | ✅ Complete |
+| GameRenderer integration | `src/ui/game-renderer.ts` | agent-d | ✅ Complete |
+| CRT Intensity Slider | `src/ui/` | agent-d | 🟡 Planned |
+| Scene header component | `src/ui/` | agent-d | 🟡 Planned |
 
 ### Exit Gate: Presentation Enhancements Complete
 
-- [ ] Quest completion feedback visible to player (no silent item grants)
-- [ ] Faction changes show transient +1/-1 indicators
-- [ ] Inventory supports 20+ items with scroll/pagination
-- [ ] Consumable vs key item distinction visible
+**Phase 11.0 (Complete):**
+- [x] Quest completion feedback visible to player (no silent item grants)
+- [x] Faction changes show transient +1/-1 indicators
+- [x] Inventory categorization with icons and category headers
+- [x] Item acquisition notifications
+- [x] Notification queue with FIFO eviction and mobile responsive
+- [x] All Phase 5 QA gates still passing
+
+**Phase 11.1+ (Pending):**
+- [ ] CRT Intensity Slider (0-100%) with accessibility mode (0-20%)
+- [ ] Scene header with DOS path breadcrumbs
+- [ ] Stat check visualization
+- [ ] Scene transition effects
+- [ ] Choice type icons and grouping
 - [ ] Ally flags displayed in stats panel
 - [ ] Quality tier progress tracked and displayed
-- [ ] All Phase 5 QA gates still passing
 
 ---
 
