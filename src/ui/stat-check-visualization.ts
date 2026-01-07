@@ -48,10 +48,11 @@ export interface StatCheckDisplay {
 export class StatCheckVisualization {
   /**
    * Create a stat check display element.
+   * Phase 11.2: Returns null if stat not acquired (per agent-c perspective).
    *
    * @param condition - Stat check condition
    * @param state - Current game state
-   * @returns DOM element or null if not a stat check
+   * @returns DOM element or null if not a stat check or stat not acquired
    */
   createDisplay(condition: Condition, state: ReadonlyState): HTMLElement | null {
     // Validate condition is a stat check
@@ -59,8 +60,13 @@ export class StatCheckVisualization {
       return null;
     }
 
-    // Build display data
+    // Build display data (returns null if stat not acquired)
     const display = this.buildDisplay(condition, state);
+
+    // Phase 11.2: Return null if stat doesn't exist in player state
+    if (!display) {
+      return null;
+    }
 
     // Create DOM element
     const element = document.createElement('span');
@@ -106,15 +112,24 @@ export class StatCheckVisualization {
 
   /**
    * Build stat check display data from condition and state.
+   * Phase 11.2: Added null handling for missing stats (per agent-c perspective).
+   * Returns null if stat doesn't exist in player state.
    *
    * @param condition - Stat check condition
    * @param state - Current game state
-   * @returns Stat check display data
+   * @returns Stat check display data or null if stat not acquired
    */
-  private buildDisplay(condition: Condition, state: ReadonlyState): StatCheckDisplay {
+  private buildDisplay(condition: Condition, state: ReadonlyState): StatCheckDisplay | null {
     const statId = condition.stat!;
     const requiredValue = condition.value!;
-    const currentValue = state.stats[statId] ?? 0;
+
+    // Phase 11.2: Check if stat exists in player's state (per agent-c perspective)
+    // If player hasn't acquired this stat yet, return null instead of showing 0
+    if (!(statId in state.stats)) {
+      return null;
+    }
+
+    const currentValue = state.stats[statId]!;
     const operator = condition.operator || 'gte';
 
     // Format stat name for display

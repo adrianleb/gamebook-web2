@@ -112,6 +112,7 @@ export class SceneHeader {
   /**
    * Build breadcrumb path from scene ID.
    * Parses sc_ACT_HUB_SEQ into DOS path segments.
+   * Phase 11.2: Added validation for special scenes (prologue, epilogue, endings).
    *
    * @param scene - Scene data
    * @returns Array of breadcrumb segments
@@ -125,8 +126,42 @@ export class SceneHeader {
     // Game folder: UNDERSTAGE
     segments.push({ label: 'UNDERSTAGE', ariaLabel: 'The Understage game' });
 
-    // Parse scene ID for act and hub
-    const match = scene.id.match(/^sc_(\d+)_(\d+)_/);
+    const sceneId = scene.id;
+
+    // Phase 11.2: Handle special scene types (per agent-c perspective)
+    // Prologue scenes: sc_prologue_*
+    if (sceneId.startsWith('sc_prologue_')) {
+      segments.push({
+        label: 'PROLOGUE',
+        ariaLabel: 'Prologue'
+      });
+      return segments;
+    }
+
+    // Epilogue scenes: sc_epilogue_*
+    if (sceneId.startsWith('sc_epilogue_')) {
+      segments.push({
+        label: 'EPILOGUE',
+        ariaLabel: 'Epilogue'
+      });
+      return segments;
+    }
+
+    // Ending scenes: sc_3_4_901-904, sc_3_4_999
+    if (sceneId.match(/^sc_3_4_9\d{2}$/)) {
+      segments.push({
+        label: 'ACT3',
+        ariaLabel: 'Act 3'
+      });
+      segments.push({
+        label: 'ENDING',
+        ariaLabel: 'Ending'
+      });
+      return segments;
+    }
+
+    // Parse scene ID for act and hub (standard format: sc_ACT_HUB_SEQ)
+    const match = sceneId.match(/^sc_(\d+)_(\d+)_/);
     if (match) {
       const act = match[1];
       const hub = match[2];

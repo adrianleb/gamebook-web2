@@ -501,8 +501,9 @@ export class GameRenderer {
     }
 
     // Phase 11.2: Apply scene transition using TransitionManager
-    // Use random transition type for variety (fade, wipe, dissolve, hwipe)
-    const transitionType = this.transitionManager.getRandomTransition();
+    // Per agent-b/agent-c feedback: Use consistent transition (fade) instead of random
+    // Random transitions break narrative coherence and make debugging harder
+    const transitionType: TransitionType = 'fade'; // Consistent transition for all scenes
     this.transitionManager.apply(transitionType, viewportEl, {
       duration: 500,
       onComplete: () => {
@@ -940,12 +941,20 @@ export class GameRenderer {
    * Triggers engine state transition with visual and audio feedback.
    *
    * Phase 4 Polish: Added choice-select SFX playback.
+   * Phase 11.2: Added input debouncing during scene transitions.
    *
    * @param choiceIndex - Index of selected choice
    */
   private async handleChoice(choiceIndex: number): Promise<void> {
     try {
       console.log('[GameRenderer] Choice selected:', choiceIndex);
+
+      // Phase 11.2: Debounce input during transitions (per agent-c perspective)
+      // Prevents state desync when user clicks during transition animation
+      if (this.transitionManager.isActive()) {
+        console.log('[GameRenderer] Transition active - ignoring choice');
+        return;
+      }
 
       // Phase 4 Polish: Play choice selection SFX
       this.audio.play('choice-select');

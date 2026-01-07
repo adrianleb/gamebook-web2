@@ -134,6 +134,91 @@ describe('SceneHeader - DOS Breadcrumb Path', () => {
     // Should still render with UNKNOWN fallback
     expect(breadcrumbText).toContain('UNKNOWN');
   });
+
+  // Phase 11.2: Tests for special scene ID formats (per agent-c perspective)
+  it('should render prologue scene breadcrumb correctly', () => {
+    const scene: SceneData = {
+      id: 'sc_prologue_001',
+      title: 'Prologue',
+      text: 'Scene text here.',
+      choices: [],
+      effects: []
+    };
+
+    sceneHeader.update(scene);
+
+    const breadcrumb = container.querySelector('[data-test-id="scene-breadcrumb"]');
+    const breadcrumbText = breadcrumb?.textContent || '';
+
+    expect(breadcrumbText).toContain('C:');
+    expect(breadcrumbText).toContain('UNDERSTAGE');
+    expect(breadcrumbText).toContain('PROLOGUE');
+    // Should NOT contain act/hub numbers
+    expect(breadcrumbText).not.toContain('ACT');
+    expect(breadcrumbText).not.toContain('HUB');
+  });
+
+  it('should render epilogue scene breadcrumb correctly', () => {
+    const scene: SceneData = {
+      id: 'sc_epilogue_002',
+      title: 'Epilogue',
+      text: 'Scene text here.',
+      choices: [],
+      effects: []
+    };
+
+    sceneHeader.update(scene);
+
+    const breadcrumb = container.querySelector('[data-test-id="scene-breadcrumb"]');
+    const breadcrumbText = breadcrumb?.textContent || '';
+
+    expect(breadcrumbText).toContain('C:');
+    expect(breadcrumbText).toContain('UNDERSTAGE');
+    expect(breadcrumbText).toContain('EPILOGUE');
+    expect(breadcrumbText).not.toContain('ACT');
+    expect(breadcrumbText).not.toContain('HUB');
+  });
+
+  it('should render ending scene breadcrumb correctly', () => {
+    const scene: SceneData = {
+      id: 'sc_3_4_901',
+      title: 'Ending 1',
+      text: 'Scene text here.',
+      choices: [],
+      effects: []
+    };
+
+    sceneHeader.update(scene);
+
+    const breadcrumb = container.querySelector('[data-test-id="scene-breadcrumb"]');
+    const breadcrumbText = breadcrumb?.textContent || '';
+
+    expect(breadcrumbText).toContain('C:');
+    expect(breadcrumbText).toContain('UNDERSTAGE');
+    expect(breadcrumbText).toContain('ACT3');
+    expect(breadcrumbText).toContain('ENDING');
+    expect(breadcrumbText).not.toContain('HUB');
+  });
+
+  it('should render final ending scene breadcrumb correctly', () => {
+    const scene: SceneData = {
+      id: 'sc_3_4_999',
+      title: 'True Ending',
+      text: 'Scene text here.',
+      choices: [],
+      effects: []
+    };
+
+    sceneHeader.update(scene);
+
+    const breadcrumb = container.querySelector('[data-test-id="scene-breadcrumb"]');
+    const breadcrumbText = breadcrumb?.textContent || '';
+
+    expect(breadcrumbText).toContain('C:');
+    expect(breadcrumbText).toContain('UNDERSTAGE');
+    expect(breadcrumbText).toContain('ACT3');
+    expect(breadcrumbText).toContain('ENDING');
+  });
 });
 
 describe('StatCheckVisualization - Stat Check Display', () => {
@@ -301,6 +386,56 @@ describe('StatCheckVisualization - Stat Check Display', () => {
     expect(element?.getAttribute('aria-label')).toContain('Script');
     expect(element?.getAttribute('aria-label')).toContain('check');
   });
+
+  // Phase 11.2: Tests for missing stat handling (per agent-c perspective)
+  it('should return null for stat check when stat not acquired', () => {
+    const condition: Condition = {
+      type: 'stat',
+      stat: 'courage', // Stat not in player's state
+      operator: 'gte',
+      value: 3
+    };
+
+    const state: ReadonlyState = {
+      version: 1,
+      contentVersion: '1.0.0',
+      timestamp: Date.now(),
+      currentSceneId: 'sc_1_0_001',
+      history: [],
+      stats: { script: 4, stagePresence: 2, improv: 3 }, // No 'courage' stat
+      flags: new Set(),
+      inventory: new Map(),
+      factions: {}
+    };
+
+    const element = viz.createDisplay(condition, state);
+    // Should return null instead of showing misleading "0" value
+    expect(element).toBeNull();
+  });
+
+  it('should return null for completely empty stats object', () => {
+    const condition: Condition = {
+      type: 'stat',
+      stat: 'script',
+      operator: 'gte',
+      value: 3
+    };
+
+    const state: ReadonlyState = {
+      version: 1,
+      contentVersion: '1.0.0',
+      timestamp: Date.now(),
+      currentSceneId: 'sc_1_0_001',
+      history: [],
+      stats: {}, // Empty stats object
+      flags: new Set(),
+      inventory: new Map(),
+      factions: {}
+    };
+
+    const element = viz.createDisplay(condition, state);
+    expect(element).toBeNull();
+  });
 });
 
 describe('TransitionManager - Scene Transitions', () => {
@@ -424,6 +559,20 @@ describe('TransitionManager - Scene Transitions', () => {
 
     // Note: The long-running promise may still be pending, but manager reports inactive
     // We don't await the long promise to avoid test timeout
+  });
+
+  // Phase 11.2: Test for reduced motion 0ms duration (per agent-e perspective)
+  it('should set transition duration to 0 when reduced motion enabled', () => {
+    // Create new manager with reduced motion ON
+    const reducedMotionManager = new TransitionManager();
+
+    // Apply transition - should resolve immediately (0ms duration)
+    const startTime = performance.now();
+    const promise = reducedMotionManager.apply('fade', testElement);
+    const endTime = performance.now();
+
+    // Promise should resolve immediately (within 5ms tolerance)
+    expect(endTime - startTime).toBeLessThan(5);
   });
 });
 
