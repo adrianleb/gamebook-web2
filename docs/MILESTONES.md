@@ -305,7 +305,7 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Phase 8: Act 3 Expansion & Quality Tiers | 🟡 Planned | PR #310 schema issue |
 | Phase 9: v2.0.0 Release | 🟡 Planned | Phase 8 complete |
 | Phase 10: Save Format Migration | ✅ Infrastructure Complete | None (Issue #237 closed) |
-| Phase 11: Presentation Enhancements | 🟢 In Progress - Phase 11.0 Complete | See detailed status below |
+| Phase 11: Presentation Enhancements | 🟢 In Progress - Phase 11.1 Complete | See detailed status below |
 | Phase 12: Audio & Visual Polish | 🟡 Planned | Specification complete |
 
 ### Phase 2 Status Update (2025-12-29)
@@ -896,13 +896,21 @@ Per Issue #392 (agent-d Intent):
 
 **Note:** CSS rendering tests are skipped in headless environment (happy-dom doesn't load external CSS). Manual browser QA required for visual validation per DOS_STYLING_QA.md.
 
-**Phase 11.1: CRT Intensity Slider (Planned - See COMPREHENSIVE_ROADMAP.md:989-1005)**
+**Phase 11.1: CRT Intensity Slider (Complete - 2026-01-06)**
 
 Per COMPREHENSIVE_ROADMAP.md and Intent #429:
-- [ ] CRT Intensity Slider (0-100%) in main menu
-- [ ] Intensity ranges: 0-20% (accessibility), 21-50% (light), 51-80% (standard), 81-100% (authentic)
-- [ ] Resolves DOS aesthetic vs. WCAG accessibility tension
-- [ ] Implementation intent: [agent-d] Issue #429 - CRT Intensity Slider (0-100% → 0-20% actual)
+- [x] CRT Intensity Slider (0-100%) in main menu
+- [x] Intensity ranges: 0-20% (accessibility), 21-50% (light), 51-80% (standard), 81-100% (authentic)
+- [x] Resolves DOS aesthetic vs. WCAG accessibility tension
+- [x] Implementation delivered: PR #434 (merged 2026-01-06)
+
+**Delivered Features:**
+- CRT Intensity Slider UI in main menu (0-100% user-facing → 0-20% actual opacity)
+- SettingsStorageProvider with localStorage → sessionStorage fallback
+- ARIA Option A pattern for screen reader accessibility (announces on change, not drag)
+- 44x44px touch targets (WCAG 2.5.5 compliant)
+- 24 automated regression tests (CRT intensity persistence, SettingsStorageProvider fallback, CRT toggle + slider state sync, integration)
+- PT-P11-ACC-001 comprehensive manual test procedure
 
 **Phase 11.2-11.4: Scene Presentation & Choice Interaction (Planned)**
 
@@ -921,7 +929,7 @@ Per COMPREHENSIVE_ROADMAP.md:1007-1094:
 | phase11-styles.css | `src/ui/phase11-styles.css` | agent-d | ✅ Complete |
 | notification-queue.ts | `src/ui/notification-queue.ts` | agent-d | ✅ Complete |
 | GameRenderer integration | `src/ui/game-renderer.ts` | agent-d | ✅ Complete |
-| CRT Intensity Slider | `src/ui/` | agent-d | 🟡 Planned |
+| CRT Intensity Slider | `src/ui/` | agent-d | ✅ Complete |
 | Scene header component | `src/ui/` | agent-d | 🟡 Planned |
 
 ### Exit Gate: Presentation Enhancements Complete
@@ -934,8 +942,14 @@ Per COMPREHENSIVE_ROADMAP.md:1007-1094:
 - [x] Notification queue with FIFO eviction and mobile responsive
 - [x] All Phase 5 QA gates still passing
 
-**Phase 11.1+ (Pending):**
-- [ ] CRT Intensity Slider (0-100%) with accessibility mode (0-20%)
+**Phase 11.1 (Complete - 2026-01-06):**
+- [x] CRT Intensity Slider (0-100%) with accessibility mode (0-20%)
+- [x] SettingsStorageProvider with localStorage → sessionStorage fallback
+- [x] 24 automated regression tests for CRT intensity persistence
+- [x] ARIA Option A pattern for screen reader accessibility
+- [x] All Phase 5 QA gates still passing
+
+**Phase 11.2+ (Pending):**
 - [ ] Scene header with DOS path breadcrumbs
 - [ ] Stat check visualization
 - [ ] Scene transition effects
