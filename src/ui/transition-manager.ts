@@ -102,6 +102,7 @@ export class TransitionManager {
       return Promise.resolve();
     }
 
+    // Set active flag immediately (before Promise creation)
     this.transitioning = true;
 
     return new Promise((resolve) => {
