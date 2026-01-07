@@ -141,8 +141,8 @@
 
 .stat-check-value.failure {
   background: rgba(255, 71, 87, 0.2);
-  color: var(--text-danger, #ff4757);
-  border-color: var(--text-danger, #ff4757);
+  color: var(--text-danger, #d63031);
+  border-color: var(--text-danger, #d63031);
 }
 
 /* Stat check operator */
