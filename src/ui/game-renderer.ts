@@ -27,6 +27,9 @@ import type {
 } from '../engine/types.js';
 import { getAudioManager } from './audio-manager.js';
 import { getNotificationQueue, type NotificationQueue } from './notification-queue.js';
+import { getTransitionManager, type TransitionManager, type TransitionType } from './transition-manager.js';
+import { SceneHeader } from './scene-header.js';
+import { StatCheckVisualization } from './stat-check-visualization.js';
 
 /**
  * Item metadata from content/items.json
@@ -158,6 +161,15 @@ export class GameRenderer {
   /** Notification queue for Phase 11 presentation enhancements */
   private notificationQueue: NotificationQueue;
 
+  /** Phase 11.2: Transition manager for scene transitions */
+  private transitionManager: TransitionManager;
+
+  /** Phase 11.2: Scene header component for DOS breadcrumb path */
+  private sceneHeader: SceneHeader | null = null;
+
+  /** Phase 11.2: Stat check visualization component */
+  private statCheckViz: StatCheckVisualization;
+
   /** Track previous flags state for quest completion detection (per agent-c perspective) */
   private previousFlags: Set<string> = new Set();
 
@@ -185,6 +197,8 @@ export class GameRenderer {
     this.engine = engine;
     this.audio = getAudioManager();
     this.notificationQueue = getNotificationQueue();
+    this.transitionManager = getTransitionManager();
+    this.statCheckViz = new StatCheckVisualization();
     this.unsubscribers = [];
     this.itemCatalog = {};
     this.statMetadata = [];
@@ -223,6 +237,16 @@ export class GameRenderer {
       // Phase 11: Initialize previous flags state for quest completion detection
       const initialState = this.engine.getState();
       this.previousFlags = new Set(initialState.flags);
+
+      // Phase 11.2: Initialize scene header component
+      const viewportEl = this.elements.viewport;
+      if (viewportEl) {
+        this.sceneHeader = new SceneHeader(viewportEl);
+        const headerElement = this.sceneHeader.getElement();
+        if (headerElement) {
+          viewportEl.insertBefore(headerElement, viewportEl.firstChild);
+        }
+      }
 
       // Subscribe to engine state changes
       const unsubscribe = this.engine.onStateChange(
@@ -274,10 +298,17 @@ export class GameRenderer {
    * Cleanup subscriptions to prevent memory leaks.
    * Per agent-c's recommendation for long-running subscriptions.
    * Phase 11: Also cleanup notification queue.
+   * Phase 11.2: Also cleanup scene header.
    *
    * Call this before destroying the renderer (e.g., SPA navigation).
    */
   destroy(): void {
+    // Phase 11.2: Cleanup scene header
+    if (this.sceneHeader) {
+      this.sceneHeader.destroy();
+      this.sceneHeader = null;
+    }
+
     // Phase 11: Cleanup notification queue
     this.notificationQueue.destroy();
 
@@ -440,6 +471,7 @@ export class GameRenderer {
    *
    * Per agent-e: performance target <5ms per render.
    * Phase 4 Polish: Added audio SFX on scene load.
+   * Phase 11.2: Scene header and transition manager integration.
    */
   private renderScene(): void {
     const startTime = performance.now();
@@ -463,24 +495,27 @@ export class GameRenderer {
     // Phase 4 Polish: Play scene load SFX
     this.audio.play('scene-load');
 
-    // Add transition class for DOS-style fade
-    viewportEl.classList.add('transitioning');
-
-    // Update text at midpoint of transition
-    setTimeout(() => {
-      // Parse scene text for formatting (support paragraphs, bold, italic)
-      sceneTextEl.innerHTML = this.parseSceneText(scene.text, scene.title);
-    }, 250);
-
-    // Remove transition class
-    setTimeout(() => {
-      viewportEl.classList.remove('transitioning');
-    }, 500);
-
-    const elapsed = performance.now() - startTime;
-    if (elapsed > 5) {
-      console.warn('[GameRenderer] renderScene exceeded 5ms target:', elapsed);
+    // Phase 11.2: Update scene header with DOS breadcrumb path
+    if (this.sceneHeader) {
+      this.sceneHeader.update(scene);
     }
+
+    // Phase 11.2: Apply scene transition using TransitionManager
+    // Per agent-b/agent-c feedback: Use consistent transition (fade) instead of random
+    // Random transitions break narrative coherence and make debugging harder
+    const transitionType: TransitionType = 'fade'; // Consistent transition for all scenes
+    this.transitionManager.apply(transitionType, viewportEl, {
+      duration: 500,
+      onComplete: () => {
+        // Parse scene text for formatting (support paragraphs, bold, italic)
+        sceneTextEl.innerHTML = this.parseSceneText(scene.text, scene.title);
+
+        const elapsed = performance.now() - startTime;
+        if (elapsed > 5) {
+          console.warn('[GameRenderer] renderScene exceeded 5ms target:', elapsed);
+        }
+      }
+    });
   }
 
   /**
@@ -555,6 +590,7 @@ export class GameRenderer {
   /**
    * Render choices panel with disabled styling.
    * Per agent-b's perspective: disabledHint shows for gated choices.
+   * Phase 11.2: Stat check visualization for risky choices.
    *
    * Per agent-e: performance target <5ms per render.
    */
@@ -563,6 +599,8 @@ export class GameRenderer {
 
     const choices = this.engine.getAvailableChoices();
     const listEl = this.elements.choicesList;
+    const scene = this.engine.getCurrentScene();
+    const currentState = this.engine.getState();
 
     if (!listEl) {
       console.error('[GameRenderer] renderChoices: Missing choices list element');
@@ -584,11 +622,30 @@ export class GameRenderer {
       button.setAttribute('data-test-id', `choice-button-${index}`);
 
       // Set choice text
-      button.textContent = choice.choice.label;
+      const labelSpan = document.createElement('span');
+      labelSpan.className = 'choice-label';
+      labelSpan.textContent = choice.choice.label;
+      button.appendChild(labelSpan);
 
       if (choice.state === 'enabled' || choice.state === 'risky') {
         button.setAttribute('aria-label', `Choice ${index + 1}: ${choice.choice.label}`);
         button.addEventListener('click', () => this.handleChoice(choice.index));
+
+        // Phase 11.2: Add stat check visualization for risky choices
+        if (choice.state === 'risky' && scene && choice.statCheck) {
+          // Get the choice from scene data to access conditions
+          const sceneChoice = scene.choices[index];
+          if (sceneChoice?.conditions) {
+            // Find the stat check condition
+            const statCheckCondition = this.findStatCheckCondition(sceneChoice.conditions);
+            if (statCheckCondition) {
+              const statCheckElement = this.statCheckViz.createDisplay(statCheckCondition, currentState);
+              if (statCheckElement) {
+                button.appendChild(statCheckElement);
+              }
+            }
+          }
+        }
       } else {
         // Disabled choice with hint
         button.disabled = true;
@@ -619,6 +676,26 @@ export class GameRenderer {
     if (elapsed > 5) {
       console.warn('[GameRenderer] renderChoices exceeded 5ms target:', elapsed);
     }
+  }
+
+  /**
+   * Phase 11.2: Find stat check condition in conditions array.
+   * Recursively searches nested conditions.
+   *
+   * @param conditions - Conditions array to search
+   * @returns Stat check condition or null
+   */
+  private findStatCheckCondition(conditions: any[]): any | null {
+    for (const condition of conditions) {
+      if (condition.type === 'stat') {
+        return condition;
+      }
+      if (condition.conditions) {
+        const found = this.findStatCheckCondition(condition.conditions);
+        if (found) return found;
+      }
+    }
+    return null;
   }
 
   /**
@@ -864,12 +941,20 @@ export class GameRenderer {
    * Triggers engine state transition with visual and audio feedback.
    *
    * Phase 4 Polish: Added choice-select SFX playback.
+   * Phase 11.2: Added input debouncing during scene transitions.
    *
    * @param choiceIndex - Index of selected choice
    */
   private async handleChoice(choiceIndex: number): Promise<void> {
     try {
       console.log('[GameRenderer] Choice selected:', choiceIndex);
+
+      // Phase 11.2: Debounce input during transitions (per agent-c perspective)
+      // Prevents state desync when user clicks during transition animation
+      if (this.transitionManager.isActive()) {
+        console.log('[GameRenderer] Transition active - ignoring choice');
+        return;
+      }
 
       // Phase 4 Polish: Play choice selection SFX
       this.audio.play('choice-select');

@@ -1,0 +1,377 @@
+/**
+ * Phase 11.2 Scene Presentation Enhancements - DOS-Era Styling
+ *
+ * Per agent-d (Intent #af3d7379):
+ * - DOS path breadcrumb header (C:\UNDERSTAGE\ACT1\HUB0)
+ * - Stat check visualization (required vs current)
+ * - Scene transition effects (fade, wipe, dissolve)
+ * - Progressive breadcrumb disclosure (per agent-b perspective)
+ *
+ * Accessibility: WCAG AA 4.5:1 contrast, 44x44px touch targets
+ *
+ * @module ui/phase112-styles
+ */
+
+/* ============================================
+   SCENE HEADER (DOS Breadcrumb Path)
+   ============================================ */
+
+.scene-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-1) var(--space-2);
+  background: var(--bg-primary, #000000);
+  border: 2px solid var(--border-primary, #4a4a4a);
+  border-bottom: none;
+  margin-bottom: 0;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: var(--font-base, 20px);
+  line-height: 1.4;
+}
+
+/* Breadcrumb path - DOS style */
+.scene-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary, #a0a0a0);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.breadcrumb-segment {
+  display: inline-flex;
+  align-items: center;
+  transition: color 150ms ease;
+}
+
+.breadcrumb-segment:hover {
+  color: var(--text-accent, #ffd700);
+}
+
+/* Backslash separator */
+.breadcrumb-separator {
+  color: var(--border-dim, #2a2a2a);
+  margin: 0 2px;
+}
+
+/* Progressive disclosure - fade out segments beyond viewport */
+.breadcrumb-segment.progressive-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+.breadcrumb-segment.progressive-visible {
+  opacity: 1;
+}
+
+/* Scene title in header */
+.scene-header-title {
+  color: var(--text-accent, #ffd700);
+  font-weight: var(--font-bold, 700);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 50%;
+}
+
+/* ============================================
+   STAT CHECK VISUALIZATION
+   ============================================ */
+
+.stat-check-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  background: var(--bg-highlight, #0f3460);
+  border: 1px solid var(--border-accent, #ffd700);
+  border-radius: 0;
+  font-family: 'VT323', 'Courier New', monospace;
+  font-size: var(--font-sm, 17px);
+  margin-left: var(--space-1);
+}
+
+/* Stat check icon */
+.stat-check-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--text-accent, #ffd700);
+  font-weight: var(--font-bold, 700);
+}
+
+/* Stat check comparison */
+.stat-check-comparison {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-check-value {
+  font-weight: var(--font-bold, 700);
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.stat-check-value.required {
+  background: var(--bg-tertiary, #16213e);
+  color: var(--text-secondary, #a0a0a0);
+  border: 1px solid var(--border-dim, #2a2a2a);
+}
+
+.stat-check-value.current {
+  background: var(--bg-secondary, #1a1a2e);
+  color: var(--text-primary, #e8e8e8);
+  border: 1px solid var(--border-primary, #4a4a4a);
+}
+
+.stat-check-value.success {
+  background: rgba(0, 200, 100, 0.2);
+  color: #00c864;
+  border-color: #00c864;
+}
+
+.stat-check-value.failure {
+  background: rgba(255, 71, 87, 0.2);
+  color: var(--text-danger, #ff4757);
+  border-color: var(--text-danger, #ff4757);
+}
+
+/* Stat check operator */
+.stat-check-operator {
+  color: var(--text-secondary, #a0a0a0);
+  font-size: var(--font-sm, 17px);
+}
+
+/* Inline stat check in choice buttons */
+.choice-button .stat-check-display {
+  padding: 2px 8px;
+  font-size: var(--font-xs, 14px);
+  margin-left: auto;
+}
+
+.choice-button .stat-check-value {
+  padding: 1px 4px;
+}
+
+/* ============================================
+   SCENE TRANSITION EFFECTS
+   ============================================ */
+
+/* Transition overlay container */
+.transition-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Fade transition */
+.transition-fade {
+  animation: scene-fade 500ms ease-in-out;
+}
+
+@keyframes scene-fade {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Wipe transition */
+.transition-wipe {
+  animation: scene-wipe 600ms ease-in-out;
+}
+
+@keyframes scene-wipe {
+  0% {
+    clip-path: inset(0 0 0 0);
+  }
+  50% {
+    clip-path: inset(0 0 100% 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Dissolve transition */
+.transition-dissolve {
+  animation: scene-dissolve 700ms ease-in-out;
+}
+
+@keyframes scene-dissolve {
+  0% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+  50% {
+    opacity: 0.3;
+    filter: brightness(2) blur(2px);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+/* CRT-style horizontal wipe */
+.transition-hwipe {
+  animation: scene-hwipe 500ms ease-in-out;
+}
+
+@keyframes scene-hwipe {
+  0% {
+    clip-path: inset(50% 0 50% 0);
+  }
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    clip-path: inset(50% 0 50% 0);
+  }
+}
+
+/* Transition active state on viewport */
+.text-viewport.transition-active {
+  position: relative;
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .transition-fade,
+  .transition-wipe,
+  .transition-dissolve,
+  .transition-hwipe {
+    animation: none !important;
+  }
+
+  .breadcrumb-segment {
+    transition: none;
+  }
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+
+/* Small mobile (320px - iPhone SE) */
+@media (max-width: 374px) {
+  .scene-header {
+    padding: 6px var(--space-1);
+    font-size: var(--font-sm, 17px);
+  }
+
+  .scene-breadcrumb {
+    gap: 2px;
+  }
+
+  .breadcrumb-separator {
+    margin: 0 1px;
+  }
+
+  .scene-header-title {
+    max-width: 40%;
+    font-size: var(--font-sm, 17px);
+  }
+
+  .stat-check-display {
+    padding: 2px 6px;
+    font-size: var(--font-xs, 14px);
+    gap: 4px;
+  }
+
+  .stat-check-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Medium mobile (375px - iPhone 12/13) */
+@media (min-width: 375px) and (max-width: 413px) {
+  .scene-header {
+    padding: 8px var(--space-1);
+    font-size: var(--font-base, 18px);
+  }
+
+  .scene-header-title {
+    max-width: 45%;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .scene-header {
+    border-color: var(--text-primary, #e8e8e8);
+  }
+
+  .breadcrumb-separator {
+    color: var(--text-primary, #e8e8e8);
+  }
+
+  .stat-check-display {
+    border-width: 2px;
+  }
+}
+
+/* Focus visible for breadcrumb segments */
+.breadcrumb-segment:focus-visible {
+  outline: 2px solid var(--border-focus, #ffff00);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* ============================================
+   TEST MODE VARIANTS
+   ============================================ */
+
+body.test-mode .scene-header::before {
+  content: "[SCENE-HEADER]";
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font-size: 10px;
+  color: var(--border-focus, #ffff00);
+  background: var(--bg-primary, #000000);
+  padding: 2px 4px;
+}
+
+body.test-mode .stat-check-display::before {
+  content: "[STAT-CHECK]";
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font-size: 10px;
+  color: var(--border-focus, #ffff00);
+  background: var(--bg-primary, #000000);
+  padding: 2px 4px;
+}
