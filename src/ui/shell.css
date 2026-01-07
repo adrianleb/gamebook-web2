@@ -22,7 +22,7 @@
   --text-primary: #e8e8e8;
   --text-secondary: #a0a0a0;
   --text-accent: #ffd700;
-  --text-danger: #ff4757;
+  --text-danger: #d63031;
   --text-info: #5dade2;
 
   /* Colors - Borders */
@@ -453,6 +453,7 @@ body {
 .choice-button:disabled[data-disabled-hint]::after {
   content: " — " attr(data-disabled-hint);
   font-size: var(--font-sm);
+  font-weight: var(--font-bold);
   color: var(--text-danger);
   font-style: italic;
   max-width: 300px;
@@ -491,6 +492,7 @@ body {
 .choice-button.locked::after {
   content: " [LOCKED]";
   font-size: var(--font-sm);
+  font-weight: var(--font-bold);
   color: var(--text-danger);
 }
 

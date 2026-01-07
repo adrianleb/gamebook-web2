@@ -66,7 +66,7 @@ The UI evokes classic adventure games like:
 --text-primary: #e8e8e8;    /* Primary text - off-white for readability */
 --text-secondary: #a0a0a0;  /* Secondary text - muted gray */
 --text-accent: #ffd700;     /* Gold - Preservationist faction, highlights */
---text-danger: #ff4757;     /* Red - Revisor faction, errors */
+--text-danger: #d63031;     /* Dark red - Revisor faction, errors (WCAG AA compliant on --bg-highlight) */
 --text-info: #5dade2;       /* Blue - information, neutral */
 ```
 
@@ -748,7 +748,7 @@ body.test-mode .stat-bar::before {
   --text-primary: #e8e8e8;
   --text-secondary: #a0a0a0;
   --text-accent: #ffd700;
-  --text-danger: #ff4757;
+  --text-danger: #d63031;
   --text-info: #5dade2;
 
   /* Colors - Borders */
