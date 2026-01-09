@@ -19,24 +19,7 @@
  */
 
 import { describe, it, expect } from 'bun:test';
-
-/**
- * WCAG AA contrast thresholds.
- */
-const WCAG_AA = {
-  NORMAL_TEXT: 4.5,
-  LARGE_TEXT: 3.0,
-  GRAPHICS: 3.0,
-};
-
-/**
- * RGB color interface.
- */
-interface RGB {
-  r: number;
-  g: number;
-  b: number;
-}
+import { contrastRatio, parseHex, relativeLuminance, WCAG_AA, type RGB } from '../../src/ui/utils/contrast';
 
 /**
  * Color pair for contrast validation.
@@ -46,65 +29,6 @@ interface ColorPair {
   background: string;
   context: string; // Where this color pair is used
   textType?: 'normal' | 'large'; // Normal vs large text
-}
-
-/**
- * Parse hex color to RGB.
- */
-function parseHex(hex: string): RGB {
-  const clean = hex.replace('#', '');
-  if (clean.length === 3) {
-    return {
-      r: parseInt(clean[0] + clean[0], 16),
-      g: parseInt(clean[1] + clean[1], 16),
-      b: parseInt(clean[2] + clean[2], 16),
-    };
-  }
-  return {
-    r: parseInt(clean.substring(0, 2), 16),
-    g: parseInt(clean.substring(2, 4), 16),
-    b: parseInt(clean.substring(4, 6), 16),
-  };
-}
-
-/**
- * Calculate relative luminance (WCAG 2.0 definition).
- *
- * @see https://www.w3.org/TR/WCAG20/#relativeluminancedef
- */
-function relativeLuminance(rgb: RGB): number {
-  const { r, g, b } = rgb;
-
-  // Normalize to 0-1 range
-  const rsRGB = r / 255;
-  const gsRGB = g / 255;
-  const bsRGB = b / 255;
-
-  // Apply gamma correction
-  const rLinear = rsRGB <= 0.03928 ? rsRGB / 12.92 : Math.pow((rsRGB + 0.055) / 1.055, 2.4);
-  const gLinear = gsRGB <= 0.03928 ? gsRGB / 12.92 : Math.pow((gsRGB + 0.055) / 1.055, 2.4);
-  const bLinear = bsRGB <= 0.03928 ? bsRGB / 12.92 : Math.pow((bsRGB + 0.055) / 1.055, 2.4);
-
-  // Calculate luminance
-  return 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
-}
-
-/**
- * Calculate contrast ratio between two colors.
- *
- * @see https://www.w3.org/TR/WCAG20/#contrast-ratiodef
- */
-function contrastRatio(foreground: string, background: string): number {
-  const fg = parseHex(foreground);
-  const bg = parseHex(background);
-
-  const fgLum = relativeLuminance(fg);
-  const bgLum = relativeLuminance(bg);
-
-  const lighter = Math.max(fgLum, bgLum);
-  const darker = Math.min(fgLum, bgLum);
-
-  return (lighter + 0.05) / (darker + 0.05);
 }
 
 /**
