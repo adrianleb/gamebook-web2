@@ -148,6 +148,18 @@ export class ContentValidator {
           });
         }
 
+        // Validate choiceType enum (Phase 11.3)
+        if (choice.choiceType !== undefined) {
+          const validChoiceTypes = ['action', 'dialogue', 'explore'];
+          if (!validChoiceTypes.includes(choice.choiceType)) {
+            errors.push({
+              type: 'schema-error',
+              sceneId: scene.id,
+              message: `${choicePrefix}: Invalid choiceType "${choice.choiceType}" (must be: ${validChoiceTypes.join(', ')})`,
+            });
+          }
+        }
+
         // Check if this is an attemptable stat check (has onSuccess/onFailure)
         const isAttemptable = choice.onSuccess || choice.onFailure;
 
