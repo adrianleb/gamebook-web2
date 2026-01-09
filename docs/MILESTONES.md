@@ -869,7 +869,7 @@ When a breaking change occurs (e.g., v1 → v2):
 
 **Goal**: Design and implement presentation-layer enhancements for expansion content (quest notifications, faction indicators, inventory overflow, ally visualization).
 
-**Status**: 🟢 In Progress - Phase 11.0 Complete
+**Status**: 🟢 In Progress - Phase 11.3 Complete
 
 **Version Target**: v2.1.0+
 
@@ -912,14 +912,53 @@ Per COMPREHENSIVE_ROADMAP.md and Intent #429:
 - 24 automated regression tests (CRT intensity persistence, SettingsStorageProvider fallback, CRT toggle + slider state sync, integration)
 - PT-P11-ACC-001 comprehensive manual test procedure
 
-**Phase 11.2-11.4: Scene Presentation & Choice Interaction (Planned)**
+**Phase 11.2: Scene Presentation Enhancements (Complete - 2026-01-07)**
 
-Per COMPREHENSIVE_ROADMAP.md:1007-1094:
-- [ ] Scene header with DOS path format (C:\UNDERSTAGE\ACT1\HUB0)
-- [ ] Stat check visualization (DOS-style stat display)
-- [ ] Scene transition effects (fade, wipe, dissolve)
-- [ ] Choice type icons (action, dialogue, explore)
-- [ ] Choice grouping and hidden choice system
+Per PR #440 and PR #443:
+- ✅ Scene header with DOS path format (C:\UNDERSTAGE\ACT1\HUB0)
+- ✅ Stat check visualization (DOS-style stat display with success/failure states)
+- ✅ Scene transition effects (fade, wipe, dissolve, hwipe with reduced-motion support)
+- ✅ Progressive breadcrumb disclosure (max 4 segments to avoid spoilers)
+- ✅ CRT integration tests for intensity levels 0,1,5,7,8,10
+- ✅ WCAG AA compliance validated via automated CSS token tests
+
+**Delivered Features (PR #440, 2211 lines):**
+- DOS breadcrumb path scene header (`src/ui/scene-header.ts`)
+- Stat check visualization (`src/ui/stat-check-visualization.ts`)
+- Transition manager with multiple effect types (`src/ui/transition-manager.ts`)
+- Phase 11.2 styles (`src/ui/phase112-styles.css`, 377 lines)
+- GameRenderer integration with new components
+- 403 automated tests (`tests/ui/phase112-scene-presentation.test.ts`)
+
+**Definition-of-Done Test Coverage (PR #443, 1238 lines):**
+- CSS token WCAG AA validation (34 tests)
+- Save game backward compatibility (14 tests, 1 skip)
+- Manual WCAG audit documentation (`docs/WCAG_AUDIT_PHASE11.md`)
+
+**Phase 11.3: Choice Interaction Enhancements (Complete - 2026-01-09)**
+
+Per PR #458:
+- ✅ Choice type icons (mandatory [A]/[D]/[E] badges in DOS aesthetic)
+- ✅ WCAG 2.1 AA compliance (aria-label suffixes, mandatory badges, color contrast, touch support)
+- ✅ Backward compatible design (choiceType optional, defaults to 'explore')
+- ✅ ContentValidator validation for choiceType enum values
+- ✅ Targeted migration approach (18% non-explore choices, focused on climax scenes)
+
+**Delivered Features (PR #458):**
+- Scene schema with choiceType field (`content/schemas/scene-schema.json`)
+- ChoiceType type definition (`src/engine/types.ts`)
+- GameRenderer integration with WCAG-compliant choice rendering
+- Phase 11.3 styles with touch device support (`src/ui/phase113-styles.css`)
+- 25 new accessibility tests (`tests/ui/phase113-choice-interaction.test.ts`)
+- 498 tests passing (25 new Phase 11.3 tests)
+
+**Phase 11.4+: Advanced Choice Features (Planned)**
+
+Per COMPREHENSIVE_ROADMAP.md:
+- [ ] Choice grouping (related choices visually grouped)
+- [ ] Hidden choices (reveal on condition)
+- [ ] Timed choices (optional pressure mechanic)
+- [ ] Choice confirmation (critical choices)
 
 ### Deliverables
 
@@ -930,7 +969,11 @@ Per COMPREHENSIVE_ROADMAP.md:1007-1094:
 | notification-queue.ts | `src/ui/notification-queue.ts` | agent-d | ✅ Complete |
 | GameRenderer integration | `src/ui/game-renderer.ts` | agent-d | ✅ Complete |
 | CRT Intensity Slider | `src/ui/` | agent-d | ✅ Complete |
-| Scene header component | `src/ui/` | agent-d | 🟡 Planned |
+| Scene header component | `src/ui/scene-header.ts` | agent-d | ✅ Complete |
+| Stat check visualization | `src/ui/stat-check-visualization.ts` | agent-d | ✅ Complete |
+| Transition manager | `src/ui/transition-manager.ts` | agent-d | ✅ Complete |
+| Phase 11.3 styles | `src/ui/phase113-styles.css` | agent-d | ✅ Complete |
+| Choice type icons | GameRenderer | agent-d | ✅ Complete |
 
 ### Exit Gate: Presentation Enhancements Complete
 
@@ -949,13 +992,30 @@ Per COMPREHENSIVE_ROADMAP.md:1007-1094:
 - [x] ARIA Option A pattern for screen reader accessibility
 - [x] All Phase 5 QA gates still passing
 
-**Phase 11.2+ (Pending):**
-- [ ] Scene header with DOS path breadcrumbs
-- [ ] Stat check visualization
-- [ ] Scene transition effects
-- [ ] Choice type icons and grouping
-- [ ] Ally flags displayed in stats panel
-- [ ] Quality tier progress tracked and displayed
+**Phase 11.2 (Complete - 2026-01-07):**
+- [x] Scene header with DOS path breadcrumbs (C:\UNDERSTAGE\ACT1\HUB0)
+- [x] Stat check visualization (required vs current display with success/failure states)
+- [x] Scene transition effects (fade, wipe, dissolve, hwipe with reduced-motion support)
+- [x] Progressive breadcrumb disclosure (mobile responsive)
+- [x] CRT integration tests for intensity levels 0,1,5,7,8,10
+- [x] WCAG AA compliance validated via automated CSS token tests (34 tests)
+- [x] All Phase 5 QA gates still passing
+
+**Phase 11.3 (Complete - 2026-01-09):**
+- [x] Choice type icons (mandatory [A]/[D]/[E] badges in DOS aesthetic)
+- [x] WCAG 2.1 AA compliance (aria-label suffixes, mandatory badges, color contrast, touch support)
+- [x] Backward compatible design (choiceType optional, defaults to 'explore')
+- [x] ContentValidator validation for choiceType enum values
+- [x] 25 new accessibility tests for screen readers, keyboard navigation, touch devices
+- [x] All Phase 5 QA gates still passing (498 tests passing)
+
+**Phase 11.4+ (Pending):**
+- [ ] Choice grouping (related choices visually grouped)
+- [ ] Hidden choices (reveal on condition)
+- [ ] Timed choices (optional pressure mechanic)
+- [ ] Choice confirmation (critical choices)
+- [ ] Ally flags displayed in stats panel (requires ally content)
+- [ ] Quality tier progress tracked and displayed (requires tier system)
 
 ---
 
