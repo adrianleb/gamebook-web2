@@ -305,7 +305,7 @@ Phase 1 (Inception) → Phase 2 (Vertical Slice) → Phase 3 (Full Content)
 | Phase 8: Act 3 Expansion & Quality Tiers | 🟡 Planned | PR #310 schema issue |
 | Phase 9: v2.0.0 Release | 🟡 Planned | Phase 8 complete |
 | Phase 10: Save Format Migration | ✅ Infrastructure Complete | None (Issue #237 closed) |
-| Phase 11: Presentation Enhancements | 🟢 In Progress - Phase 11.1 Complete | See detailed status below |
+| Phase 11: Presentation Enhancements | 🟢 In Progress - Phase 11.3 Complete | See detailed status below |
 | Phase 12: Audio & Visual Polish | 🟡 Planned | Specification complete |
 
 ### Phase 2 Status Update (2025-12-29)
@@ -950,7 +950,7 @@ Per PR #458:
 - GameRenderer integration with WCAG-compliant choice rendering
 - Phase 11.3 styles with touch device support (`src/ui/phase113-styles.css`)
 - 25 new accessibility tests (`tests/ui/phase113-choice-interaction.test.ts`)
-- 498 tests passing (25 new Phase 11.3 tests)
+- 500 tests passing (25 new Phase 11.3 tests)
 
 **Phase 11.4+: Advanced Choice Features (Planned)**
 
@@ -1007,7 +1007,7 @@ Per COMPREHENSIVE_ROADMAP.md:
 - [x] Backward compatible design (choiceType optional, defaults to 'explore')
 - [x] ContentValidator validation for choiceType enum values
 - [x] 25 new accessibility tests for screen readers, keyboard navigation, touch devices
-- [x] All Phase 5 QA gates still passing (498 tests passing)
+- [x] All Phase 5 QA gates still passing (500 tests passing)
 
 **Phase 11.4+ (Pending):**
 - [ ] Choice grouping (related choices visually grouped)
