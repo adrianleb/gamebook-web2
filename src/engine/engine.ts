@@ -37,7 +37,7 @@ import type {
 import { ConditionEvaluator } from './condition-evaluator.js';
 import { EffectApplier } from './effect-applier.js';
 import { SceneLoader } from './scene-loader.js';
-import { ENGINE_VERSION } from './types.js';
+import { ENGINE_VERSION, type ChoiceType } from './types.js';
 import type { SaveManager } from './save-manager.js';
 
 /**
@@ -84,12 +84,14 @@ export type ChoiceState = 'enabled' | 'risky' | 'disabled';
 /**
  * Available choices for current scene.
  * Per Intent #155: state indicates enabled/risky/disabled for UI rendering.
+ * Per Phase 11.3: choiceType included for DOS-style [A]/[D]/[E] badges.
  */
 export interface AvailableChoice {
   /** Original choice data */
   choice: {
     label: string;
     to?: SceneId;
+    choiceType?: ChoiceType;
   };
   /** Choice index in scene */
   index: number;
