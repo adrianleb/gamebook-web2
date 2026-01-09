@@ -869,7 +869,7 @@ When a breaking change occurs (e.g., v1 → v2):
 
 **Goal**: Design and implement presentation-layer enhancements for expansion content (quest notifications, faction indicators, inventory overflow, ally visualization).
 
-**Status**: 🟢 In Progress - Phase 11.0 Complete
+**Status**: 🟢 In Progress - Phase 11.2 Complete
 
 **Version Target**: v2.1.0+
 
@@ -912,14 +912,29 @@ Per COMPREHENSIVE_ROADMAP.md and Intent #429:
 - 24 automated regression tests (CRT intensity persistence, SettingsStorageProvider fallback, CRT toggle + slider state sync, integration)
 - PT-P11-ACC-001 comprehensive manual test procedure
 
-**Phase 11.2-11.4: Scene Presentation & Choice Interaction (Planned)**
+**Phase 11.2: Scene Presentation Enhancements (Complete - 2026-01-07)**
 
-Per COMPREHENSIVE_ROADMAP.md:1007-1094:
-- [ ] Scene header with DOS path format (C:\UNDERSTAGE\ACT1\HUB0)
-- [ ] Stat check visualization (DOS-style stat display)
-- [ ] Scene transition effects (fade, wipe, dissolve)
+Per COMPREHENSIVE_ROADMAP.md:1007-1094 and Intent #af3d7379:
+- [x] Scene header with DOS path format (C:\UNDERSTAGE\ACT1\HUB0)
+- [x] Stat check visualization (DOS-style stat display with required vs current)
+- [x] Scene transition effects (consistent fade with input debouncing)
+- [x] Progressive breadcrumb disclosure (mobile responsive)
+
+**Delivered Features:**
+- DOS breadcrumb path scene header (`src/ui/scene-header.ts`)
+- Stat check visualization (`src/ui/stat-check-visualization.ts`)
+- Transition manager with fade effects (`src/ui/transition-manager.ts`)
+- Phase 11.2 styles (`src/ui/phase112-styles.css`)
+- CRT integration tests for intensity levels 0,1,5,7,8,10
+- Definition-of-done test coverage (Intent #442)
+
+**Phase 11.3-11.4: Choice Interaction (Planned)**
+
+Per COMPREHENSIVE_ROADMAP.md:1050-1071:
 - [ ] Choice type icons (action, dialogue, explore)
 - [ ] Choice grouping and hidden choice system
+- [ ] Timed choices (optional pressure mechanic)
+- [ ] Choice confirmation (critical choices)
 
 ### Deliverables
 
@@ -930,7 +945,9 @@ Per COMPREHENSIVE_ROADMAP.md:1007-1094:
 | notification-queue.ts | `src/ui/notification-queue.ts` | agent-d | ✅ Complete |
 | GameRenderer integration | `src/ui/game-renderer.ts` | agent-d | ✅ Complete |
 | CRT Intensity Slider | `src/ui/` | agent-d | ✅ Complete |
-| Scene header component | `src/ui/` | agent-d | 🟡 Planned |
+| Scene header component | `src/ui/scene-header.ts` | agent-d | ✅ Complete |
+| Stat check visualization | `src/ui/stat-check-visualization.ts` | agent-d | ✅ Complete |
+| Transition manager | `src/ui/transition-manager.ts` | agent-d | ✅ Complete |
 
 ### Exit Gate: Presentation Enhancements Complete
 
@@ -949,13 +966,18 @@ Per COMPREHENSIVE_ROADMAP.md:1007-1094:
 - [x] ARIA Option A pattern for screen reader accessibility
 - [x] All Phase 5 QA gates still passing
 
-**Phase 11.2+ (Pending):**
-- [ ] Scene header with DOS path breadcrumbs
-- [ ] Stat check visualization
-- [ ] Scene transition effects
+**Phase 11.2 (Complete - 2026-01-07):**
+- [x] Scene header with DOS path breadcrumbs
+- [x] Stat check visualization (required vs current display)
+- [x] Scene transition effects (fade with input debouncing)
+- [x] Progressive breadcrumb disclosure (mobile responsive)
+- [x] CRT integration tests for intensity levels 0,1,5,7,8,10
+- [x] All Phase 5 QA gates still passing
+
+**Phase 11.3-11.4+ (Pending):**
 - [ ] Choice type icons and grouping
-- [ ] Ally flags displayed in stats panel
-- [ ] Quality tier progress tracked and displayed
+- [ ] Ally flags displayed in stats panel (requires ally content)
+- [ ] Quality tier progress tracked and displayed (requires tier system)
 
 ---
 
