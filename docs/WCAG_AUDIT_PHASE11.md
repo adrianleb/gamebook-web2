@@ -292,7 +292,7 @@ Extracted WCAG contrast calculation functions for reuse across:
   foreground: '--text-new',
   background: '--bg-highlight',
   context: '.new-component (description)',
-  textType: 'normal', // or 'large' for UI components
+  thresholdType: 'normal', // or 'large' for UI components
   // ignore: true, // Set only if tracked as accessibility debt
 }
 ```
