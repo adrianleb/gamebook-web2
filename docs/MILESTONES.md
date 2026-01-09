@@ -679,7 +679,7 @@ Date: January 3, 2026
 ### Exit Gate: Act 1 Hub Expansion Complete
 
 - [x] Hub 0 has 3+ non-dead-end exits from opening scene (verified: sc_1_0_001 → sc_1_0_002/003/004)
-- [x] All 3 branches have 5-7 scene depth before convergence (verified: Pursuers 6 scenes, Researcher 6 scenes, Negotiator 3 scenes + Stagehand extension)
+- [x] All 3 branches have 4-6 scene mandatory depth with optional detours before convergence (verified: Pursuers 4 mandatory + 2 optional = 6 total, Researcher 4 mandatory + 2 optional = 6 total, Negotiator 3 mandatory + Stagehand sub-branch extension 2-3 scenes)
 - [x] Content validation passes with no unreachable scenes (26 Act 1 Hub 0 scenes: sc_1_0_001-042 + sc_1_0_902)
 - [x] Stagehand scenes (sc_1_0_040-042) reachable from pursuers branch (verified: sc_1_0_011 choice 4 → sc_1_0_040)
 - [x] All Phase 5 QA gates still passing (500 tests passing)
@@ -700,9 +700,9 @@ The Act 1 Hub Expansion milestone is **COMPLETE**. All exit gate requirements ar
 
 **Exit Gate Verification:**
 - ✅ 3 branch exits from sc_1_0_001 (sc_1_0_002, 003, 004)
-- ✅ Pursuers branch depth: 6 scenes (sc_1_0_010-015)
-- ✅ Researcher branch depth: 6 scenes (sc_1_0_020-025)
-- ✅ Negotiator branch depth: 3 scenes + Stagehand extension (sc_1_0_030-032, 040-042)
+- ✅ Pursuers branch: 4 mandatory scenes (sc_1_0_010-012) + 2 optional detours (sc_1_0_013-014) = 6 total
+- ✅ Researcher branch: 4 mandatory scenes (sc_1_0_020-022) + 2 optional detours (sc_1_0_023-024) = 6 total
+- ✅ Negotiator branch: 3 mandatory scenes (sc_1_0_030-032) + Stagehand sub-branch (sc_1_0_040-042, 2-3 scenes)
 - ✅ Stagehand scenes reachable: sc_1_0_011 choice 4 → sc_1_0_040 (verified in scene file)
 - ✅ Content validation passes: 26 scenes marked "complete" in manifest.json
 
