@@ -115,6 +115,11 @@
             "type": "string",
             "minLength": 1
           },
+          "choiceType": {
+            "type": "string",
+            "enum": ["action", "dialogue", "explore"],
+            "description": "Phase 11.3: Choice type classification for UI badges (optional, defaults to 'explore')"
+          },
           "to": {
             "type": "string",
             "pattern": "^(sc_|bk_)[a-z0-9_-]+$"

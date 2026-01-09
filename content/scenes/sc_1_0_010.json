@@ -53,6 +53,7 @@
     {
       "id": "choice_1",
       "label": "Chase after the figure",
+      "choiceType": "action",
       "to": "sc_1_0_011",
       "conditions": null,
       "onChoose": [],
@@ -61,6 +62,7 @@
     {
       "id": "choice_2",
       "label": "Return to the Prompter's Booth",
+      "choiceType": "explore",
       "to": "sc_1_0_001",
       "conditions": null,
       "onChoose": [],

@@ -43,6 +43,7 @@
     {
       "id": "choice_1",
       "label": "Continue toward the light",
+      "choiceType": "explore",
       "to": "sc_1_1_099",
       "conditions": null,
       "onChoose": [],
@@ -51,6 +52,7 @@
     {
       "id": "choice_2",
       "label": "Investigate the sound of running footsteps",
+      "choiceType": "action",
       "to": "sc_1_0_010",
       "conditions": null,
       "onChoose": [],
@@ -59,6 +61,7 @@
     {
       "id": "choice_3",
       "label": "Explore deeper into the Wings",
+      "choiceType": "explore",
       "to": "sc_1_0_013",
       "conditions": null,
       "onChoose": [],
