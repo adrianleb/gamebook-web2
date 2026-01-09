@@ -19,24 +19,7 @@
  */
 
 import { describe, it, expect } from 'bun:test';
-
-/**
- * WCAG AA contrast thresholds.
- */
-const WCAG_AA = {
-  NORMAL_TEXT: 4.5,
-  LARGE_TEXT: 3.0,
-  GRAPHICS: 3.0,
-};
-
-/**
- * RGB color interface.
- */
-interface RGB {
-  r: number;
-  g: number;
-  b: number;
-}
+import { contrastRatio, parseHex, relativeLuminance, WCAG_AA, CSS_TOKENS, type RGB } from '../../src/ui/utils/contrast';
 
 /**
  * Color pair for contrast validation.
@@ -49,96 +32,6 @@ interface ColorPair {
 }
 
 /**
- * Parse hex color to RGB.
- */
-function parseHex(hex: string): RGB {
-  const clean = hex.replace('#', '');
-  if (clean.length === 3) {
-    return {
-      r: parseInt(clean[0] + clean[0], 16),
-      g: parseInt(clean[1] + clean[1], 16),
-      b: parseInt(clean[2] + clean[2], 16),
-    };
-  }
-  return {
-    r: parseInt(clean.substring(0, 2), 16),
-    g: parseInt(clean.substring(2, 4), 16),
-    b: parseInt(clean.substring(4, 6), 16),
-  };
-}
-
-/**
- * Calculate relative luminance (WCAG 2.0 definition).
- *
- * @see https://www.w3.org/TR/WCAG20/#relativeluminancedef
- */
-function relativeLuminance(rgb: RGB): number {
-  const { r, g, b } = rgb;
-
-  // Normalize to 0-1 range
-  const rsRGB = r / 255;
-  const gsRGB = g / 255;
-  const bsRGB = b / 255;
-
-  // Apply gamma correction
-  const rLinear = rsRGB <= 0.03928 ? rsRGB / 12.92 : Math.pow((rsRGB + 0.055) / 1.055, 2.4);
-  const gLinear = gsRGB <= 0.03928 ? gsRGB / 12.92 : Math.pow((gsRGB + 0.055) / 1.055, 2.4);
-  const bLinear = bsRGB <= 0.03928 ? bsRGB / 12.92 : Math.pow((bsRGB + 0.055) / 1.055, 2.4);
-
-  // Calculate luminance
-  return 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
-}
-
-/**
- * Calculate contrast ratio between two colors.
- *
- * @see https://www.w3.org/TR/WCAG20/#contrast-ratiodef
- */
-function contrastRatio(foreground: string, background: string): number {
-  const fg = parseHex(foreground);
-  const bg = parseHex(background);
-
-  const fgLum = relativeLuminance(fg);
-  const bgLum = relativeLuminance(bg);
-
-  const lighter = Math.max(fgLum, bgLum);
-  const darker = Math.min(fgLum, bgLum);
-
-  return (lighter + 0.05) / (darker + 0.05);
-}
-
-/**
- * CSS Color Tokens from shell.css and phase112-styles.css.
- *
- * These are the canonical color values used throughout the UI.
- */
-const CSS_TOKENS = {
-  // Background colors
-  '--bg-primary': '#000000',
-  '--bg-secondary': '#1a1a2e',
-  '--bg-tertiary': '#16213e',
-  '--bg-highlight': '#0f3460',
-
-  // Text colors
-  '--text-primary': '#e8e8e8',
-  '--text-secondary': '#a0a0a0',
-  '--text-accent': '#ffd700',
-  '--text-danger': '#ff6b6b',
-  '--text-info': '#5dade2',
-
-  // Border colors
-  '--border-primary': '#4a4a4a',
-  '--border-accent': '#ffd700',
-  '--border-dim': '#2a2a2a',
-  '--border-focus': '#ffff00',
-
-  // Faction colors
-  '--faction-preservationist': '#ffd700',
-  '--faction-revisor': '#ff4757',
-  '--faction-neutral': '#e8e8e8',
-};
-
-/**
  * Phase 11.2 Color Usage Matrix.
  *
  * Defines which foreground colors are used on which backgrounds,
@@ -147,6 +40,8 @@ const CSS_TOKENS = {
  * Note: Decorative elements (separators, borders) are marked with
  * textType: 'large' to use 3:1 threshold (graphics/components standard).
  * Text content uses 4.5:1 (normal) or 3:1 (large text) thresholds.
+ *
+ * CSS_TOKENS is now imported from src/ui/utils/contrast.ts (single source of truth).
  */
 const PHASE112_COLOR_PAIRS: ColorPair[] = [
   // Scene header

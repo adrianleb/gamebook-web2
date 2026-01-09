@@ -195,13 +195,151 @@ bun test tests/phase11/wcag-css-token-validation.test.ts
    - Compare against baseline images
    - Run in CI/CD pipeline
 
-2. **Implement CSS token validation in CI**
-   - Fail build if new tokens fall below WCAG AA thresholds
-   - Pre-commit hook for CSS changes
+2. ~~**Implement CSS token validation in CI**~~ ✅ **COMPLETE**
+   - ~~Fail build if new tokens fall below WCAG AA thresholds~~
+   - ~~Pre-commit hook for CSS changes~~
 
 3. **Add user preference for high contrast mode**
    - Respects `prefers-contrast: high` media query (already in CSS)
    - Consider adding a toggle for users who need higher contrast
+
+---
+
+## CI-Level WCAG Contrast Validation
+
+**Status:** ✅ **IMPLEMENTED** (Intent #451)
+
+### Overview
+
+Automated WCAG contrast validation now runs in CI to prevent accessibility regressions. This addresses the learning from PR #447 where a contrast regression was accidentally approved.
+
+### CI Workflow
+
+**File:** `.github/workflows/wcag-contrast.yml`
+
+**Triggers:**
+- Pull requests that modify UI files, CSS, or the validation script
+- Manual trigger via `workflow_dispatch`
+- Daily scheduled run at 00:00 UTC
+
+### Validation Script
+
+**File:** `scripts/validate-wcag-contrast.ts`
+
+**Usage:**
+```bash
+bun run scripts/validate-wcag-contrast.ts
+```
+
+**Exit Codes:**
+- `0` - All checks passed
+- `1` - WCAG AA violations found (CI fails)
+
+### What Gets Validated
+
+The script validates all Phase 11.2 color pairs from `PHASE112_COLOR_PAIRS`:
+
+1. **Scene header colors** - Breadcrumb path, titles, hover states
+2. **Stat check visualization** - Required values, current values, success/failure states
+3. **Border and UI components** - Focus outlines, decorative borders
+
+**Known Debt Handling:**
+
+### Ignored Color Pairs (Accessibility Debt)
+
+The following color pairs are marked with `ignore: true` in the CI validation script. These are tracked as known accessibility debt and documented here for transparency:
+
+| Color Pair | Context | Current Ratio | Required Ratio | Why Ignored | Tracking Issue |
+|------------|---------|---------------|----------------|-------------|----------------|
+| `--border-primary` on `--bg-primary` | `.scene-header` border | 2.37:1 | 3:1 (UI components) | Decorative border - content inside meets WCAG AA | See "Known WCAG AA Violations" section above |
+
+**Why This Is Accepted:**
+- The border is decorative and does not convey critical information
+- The content within the header (breadcrumb text, scene title) meets WCAG AA requirements
+- Per WCAG 2, decorative elements are not subject to contrast requirements if they don't convey information
+
+**Process for Adding New Ignored Pairs:**
+1. Document the violation in the "Known WCAG AA Violations" section above
+2. Mark with `ignore: true` in `scripts/validate-wcag-contrast.ts`
+3. Add entry to this table with justification
+4. Create a tracking issue for resolution (if applicable)
+
+**New violations will fail CI** unless documented here with clear justification.
+
+### Shared Utility Module
+
+**File:** `src/ui/utils/contrast.ts`
+
+Extracted WCAG contrast calculation functions for reuse across:
+- Runtime display code (potential future use)
+- Test suites (`tests/phase11/wcag-css-token-validation.test.ts`)
+- CI validation (`scripts/validate-wcag-contrast.ts`)
+
+**Exports:**
+- `parseHex()` - Parse hex colors to RGB
+- `relativeLuminance()` - Calculate WCAG relative luminance
+- `contrastRatio()` - Calculate contrast ratio between two colors
+- `meetsWCAG_AA()` - Check if color pair meets threshold
+- `getWCAGCompliance()` - Get full compliance status
+- `WCAG_AA` - Threshold constants (NORMAL_TEXT: 4.5, LARGE_TEXT: 3.0, GRAPHICS: 3.0)
+
+### How to Add New Color Pairs
+
+1. **Add the color pair** to `COLOR_PAIRS` in `scripts/validate-wcag-contrast.ts`:
+
+```typescript
+{
+  foreground: '--text-new',
+  background: '--bg-highlight',
+  context: '.new-component (description)',
+  thresholdType: 'normal', // or 'large' for UI components
+  // ignore: true, // Set only if tracked as accessibility debt
+}
+```
+
+2. **Add the token value** to `CSS_TOKENS` in both:
+   - `scripts/validate-wcag-contrast.ts`
+   - `tests/phase11/wcag-css-token-validation.test.ts`
+
+3. **Run the CI script locally** to verify:
+   ```bash
+   bun run scripts/validate-wcag-contrast.ts
+   ```
+
+4. **Run the test suite** to ensure test coverage:
+   ```bash
+   bun test tests/phase11/wcag-css-token-validation.test.ts
+   ```
+
+### Regression Prevention
+
+This CI validation prevents regressions like PR #447:
+- **Before:** Manual review of contrast claims (error-prone)
+- **After:** Automated CI check fails on violations (foolproof)
+
+The CI workflow runs on every PR that touches:
+- `src/ui/**`
+- `shell.css`
+- `phase112-styles.css`
+- The validation script itself
+- The CI workflow file
+
+### Running Locally
+
+**Validate contrast only:**
+```bash
+bun run scripts/validate-wcag-contrast.ts
+```
+
+**Run full WCAG test suite:**
+```bash
+bun test tests/phase11/wcag-css-token-validation.test.ts
+```
+
+**Run all tests:**
+```bash
+bun test
+```
 
 ---
 

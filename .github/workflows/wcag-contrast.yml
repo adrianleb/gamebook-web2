@@ -1,0 +1,41 @@
+name: WCAG Contrast Validation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/ui/**'
+      - 'scripts/validate-wcag-contrast.ts'
+      - '.github/workflows/wcag-contrast.yml'
+      - 'docs/WCAG_AUDIT_PHASE11.md'
+  workflow_dispatch: # Allow manual trigger
+  schedule:
+    # Run daily at 00:00 UTC to catch regressions
+    - cron: '0 0 * * *'
+
+jobs:
+  wcag-contrast-check:
+    name: WCAG AA Contrast Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run WCAG contrast validation
+        run: bun run scripts/validate-wcag-contrast.ts
+
+      - name: Upload results as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wcag-contrast-results
+          path: |
+            wcag-contrast-report.txt
+          if-no-files-found: ignore
