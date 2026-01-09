@@ -346,8 +346,8 @@ describe('Phase 11.2: WCAG AA CSS Token Validation', () => {
      * Documents known WCAG AA violations that are tracked as
      * accessibility debt.
      *
-     * Note: --text-danger on --bg-highlight was FIXED in PR #447.
-     * The color was changed from #ff4757 to #d63031, achieving ~5.2:1 contrast.
+     * Note: --text-danger on --bg-highlight was FIXED.
+     * The color was changed from #ff4757 to #ff6b6b, achieving 4.50:1 contrast.
      */
     it('should document --border-primary on --bg-primary violation', () => {
       const ratio = contrastRatio(CSS_TOKENS['--border-primary'], CSS_TOKENS['--bg-primary']);
