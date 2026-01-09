@@ -244,9 +244,27 @@ The script validates all Phase 11.2 color pairs from `PHASE112_COLOR_PAIRS`:
 3. **Border and UI components** - Focus outlines, decorative borders
 
 **Known Debt Handling:**
-- `--border-primary` on `--bg-primary` (2.37:1) is marked as `ignore: true`
-- This allows documented accessibility debt to exist without blocking CI
-- New violations will fail CI
+
+### Ignored Color Pairs (Accessibility Debt)
+
+The following color pairs are marked with `ignore: true` in the CI validation script. These are tracked as known accessibility debt and documented here for transparency:
+
+| Color Pair | Context | Current Ratio | Required Ratio | Why Ignored | Tracking Issue |
+|------------|---------|---------------|----------------|-------------|----------------|
+| `--border-primary` on `--bg-primary` | `.scene-header` border | 2.37:1 | 3:1 (UI components) | Decorative border - content inside meets WCAG AA | See "Known WCAG AA Violations" section above |
+
+**Why This Is Accepted:**
+- The border is decorative and does not convey critical information
+- The content within the header (breadcrumb text, scene title) meets WCAG AA requirements
+- Per WCAG 2, decorative elements are not subject to contrast requirements if they don't convey information
+
+**Process for Adding New Ignored Pairs:**
+1. Document the violation in the "Known WCAG AA Violations" section above
+2. Mark with `ignore: true` in `scripts/validate-wcag-contrast.ts`
+3. Add entry to this table with justification
+4. Create a tracking issue for resolution (if applicable)
+
+**New violations will fail CI** unless documented here with clear justification.
 
 ### Shared Utility Module
 

@@ -5,11 +5,9 @@ on:
     branches: [main]
     paths:
       - 'src/ui/**'
-      - 'src/ui/utils/contrast.ts'
-      - 'shell.css'
-      - 'phase112-styles.css'
       - 'scripts/validate-wcag-contrast.ts'
       - '.github/workflows/wcag-contrast.yml'
+      - 'docs/WCAG_AUDIT_PHASE11.md'
   workflow_dispatch: # Allow manual trigger
   schedule:
     # Run daily at 00:00 UTC to catch regressions
