@@ -1038,6 +1038,212 @@ Enhanced visual feedback for choice interactions:
 
 ---
 
+## Phase 11.3 Choice Interaction DOM Contract
+
+**Purpose:** Enable parallel development of Phase 11.3 choice interaction features (choice type icons, grouping, hover effects) and accessibility tests.
+
+### Choice Button Structure
+
+```html
+<li role="option" aria-selected="false" class="game-choice choice-type-action choice-group-interrogate">
+  <button
+    aria-label="Action choice: Examine the prop table"
+    class="choice-button choice-button--action"
+    type="button"
+  >
+    <!-- Decorative icon (hidden from screen readers) -->
+    <span class="choice-icon" aria-hidden="true">⚔</span>
+
+    <!-- Primary text label -->
+    <span class="choice-text">Examine the prop table</span>
+
+    <!-- Optional type badge (redundant semantic indicator) -->
+    <span class="choice-type-badge" aria-hidden="true">Action</span>
+  </button>
+</li>
+```
+
+### CSS Class Names
+
+| Class | Purpose | Values |
+|-------|---------|--------|
+| `game-choice` | Container for each choice | Always present |
+| `choice-type-{type}` | Type modifier on container | `choice-type-action`, `choice-type-dialogue`, `choice-type-explore` |
+| `choice-group-{id}` | Group identifier on container | Optional, kebab-case groupId |
+| `choice-button` | Button element | Always present |
+| `choice-button--{type}` | Type modifier on button | `choice-button--action`, `choice-button--dialogue`, `choice-button--explore` |
+| `choice-icon` | Icon span | Always present, aria-hidden="true" |
+| `choice-text` | Primary label text | Always present |
+| `choice-type-badge` | Type badge span | Optional, aria-hidden="true" |
+
+### ARIA Attributes
+
+| Attribute | Format | Example |
+|-----------|--------|---------|
+| `aria-label` on button | `"{Type} choice: {label}"` | `"Action choice: Examine the prop table"` |
+| `aria-hidden` on icon | `"true"` (decorative) | Always |
+| `aria-hidden` on badge | `"true"` (redundant) | Always |
+| `role` on li | `"option"` | Always |
+| `aria-selected` on li | `"false"` | Always (choices are selectable options) |
+
+### Icon Characters
+
+| Type | Icon | Unicode | CSS Fallback |
+|------|------|---------|--------------|
+| action | ⚔ | U+2694 | `[ACT]` |
+| dialogue | 💬 | U+1F4AC | `[TALK]` |
+| explore | 🔍 | U+1F50D | `[LOOK]` |
+
+**Fallback:** If Unicode doesn't render, CSS `::before` with ASCII text: `[ACT]`, `[TALK]`, `[LOOK]`
+
+### Choice Group Container Structure
+
+```html
+<div class="choice-group choice-group--interrogate">
+  <div class="choice-group__separator"></div>
+  <!-- Choices with matching groupId render here -->
+  <li role="option" class="game-choice choice-group-interrogate">...</li>
+  <li role="option" class="game-choice choice-group-interrogate">...</li>
+</div>
+```
+
+**CSS for separator:**
+```css
+.choice-group__separator {
+  border-top: 1px solid var(--border-dim);
+  margin: var(--spacing-sm) 0;
+}
+```
+
+### Media Query Behavior
+
+**Desktop (hover: hover) - Fine pointer devices:**
+```css
+@media (hover: hover) and (pointer: fine) {
+  .choice-button:hover .choice-icon {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  .choice-button:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--border-accent);
+  }
+}
+```
+
+**Touch (hover: none) - Coarse pointer devices:**
+```css
+@media (hover: none) and (pointer: coarse) {
+  .choice-button .choice-icon {
+    opacity: 0.7; /* Always visible but subtle */
+  }
+  .choice-button:active .choice-icon {
+    opacity: 1;
+    transform: scale(0.95); /* Press effect */
+  }
+  .choice-button:active {
+    box-shadow: var(--shadow-pressed);
+    transform: translate(2px, 2px);
+  }
+}
+```
+
+### Error Handling (Graceful Degradation)
+
+| Scenario | Behavior |
+|----------|----------|
+| Missing `choiceType` | Defaults to `choice-type-explore` |
+| Invalid `choiceType` value | Falls back to `choice-type-explore`, logs warning |
+| Missing `groupId` | No grouping applied (no `choice-group` container) |
+| Missing icon character | Uses CSS fallback text: `[?]` |
+
+**JavaScript error handling pattern:**
+```typescript
+function getChoiceIcon(choiceType?: string): string {
+  const icons = { action: '⚔', dialogue: '💬', explore: '🔍' };
+  if (!choiceType || !icons[choiceType]) {
+    console.warn(`Invalid choiceType: ${choiceType}, defaulting to explore`);
+    return icons.explore;
+  }
+  return icons[choiceType];
+}
+```
+
+### Touch Target Sizing
+
+- Button minimum size: 44x44px (WCAG 2.5.5)
+- Icon + text padding: 8px minimum
+- Badge padding: 4px minimum
+
+```css
+.choice-button {
+  min-height: 44px;
+  padding: var(--padding-sm);
+  /* Ensure touch target is met even with small content */
+  min-width: 44px;
+}
+```
+
+### Color Contrast (WCAG AA Compliance)
+
+| Element | Property | Min Ratio | CSS Variables |
+|---------|----------|-----------|---------------|
+| Icon on background | `--text-secondary` on `--bg-secondary` | 3:1 | Graphics |
+| Badge text on badge bg | `--text-primary` on `--bg-tertiary` | 4.5:1 | Text |
+| Primary text on button | `--text-primary` on `--bg-secondary` | 4.5:1 | Text |
+
+**Badge styling:**
+```css
+.choice-type-badge {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 2px 6px;
+  font-size: 0.875em;
+  border-radius: 0; /* Sharp corners */
+}
+```
+
+### Schema Extension (v1.0 → v1.1)
+
+```typescript
+export interface Choice {
+  label: string;
+  to?: SceneId;
+  conditions?: Condition[];
+  effects?: Effect[];
+  choiceType?: 'action' | 'dialogue' | 'explore'; // NEW: optional, defaults to 'explore'
+  groupId?: string; // NEW: optional, groups related choices
+  disabledHint?: string;
+}
+```
+
+### Test Requirements
+
+Automated tests must validate:
+1. **Screen Reader:** `aria-label` format with semantic prefix
+2. **Icon Accessibility:** `aria-hidden="true"` on decorative icons
+3. **Touch Targets:** 44x44px minimum button size
+4. **Keyboard:** Tab order matches visual order, visible focus indicator
+5. **Color Contrast:** Icon (3:1), text (4.5:1)
+6. **Media Queries:** Correct styles applied for hover vs touch devices
+7. **Error Handling:** Missing/invalid choiceType defaults to explore
+
+### Integration Points
+
+**GameRenderer.renderChoices():**
+- Apply `choice-type-{type}` class based on `choice.choiceType`
+- Group choices by matching `groupId` with separator
+- Render `aria-label` with semantic prefix
+- Ensure `aria-hidden` on decorative elements
+
+**ContentValidator:**
+- Accept `choiceType` and `groupId` fields
+- Validate `choiceType` enum values
+- Default to `'explore'` when missing
+
+---
+
 **Version History:**
+- v1.2 (2026-01-09) — Phase 11.3 Choice Interaction DOM Contract specification
 - v1.1 (2025-12-30) — Phase 4 Polish additions: audio SFX, CRT filter, enhanced transitions
 - v1.0 (2025-12-29) — Initial DOS aesthetic system definition
