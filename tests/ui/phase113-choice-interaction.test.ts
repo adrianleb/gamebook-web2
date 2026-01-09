@@ -108,7 +108,7 @@ describe('Phase 11.3 DOM Contract v1.3 Compliance', () => {
 
       const badge = document.createElement('span');
       badge.className = 'choice-type-badge';
-      badge.setAttribute('aria-hidden', 'true');
+      badge.textContent = '[E]';  // Badge text set in JS for screen reader accessibility
 
       const label = document.createElement('span');
       label.className = 'choice-label';
@@ -123,8 +123,11 @@ describe('Phase 11.3 DOM Contract v1.3 Compliance', () => {
       const renderedBadge = li.querySelector('.choice-type-badge');
       expect(renderedBadge).toBeTruthy();
 
-      // Verify badge has aria-hidden (decorative, aria-label provides semantic)
-      expect(renderedBadge?.getAttribute('aria-hidden')).toBe('true');
+      // Verify badge has text content (JS-set, not CSS-only)
+      expect(renderedBadge?.textContent).toBe('[E]');
+
+      // Verify badge does NOT have aria-hidden (screen readers announce badge)
+      expect(renderedBadge?.getAttribute('aria-hidden')).toBeNull();
     });
 
     it('should render mandatory [A] badge for action choices', () => {
@@ -136,7 +139,7 @@ describe('Phase 11.3 DOM Contract v1.3 Compliance', () => {
 
       const badge = document.createElement('span');
       badge.className = 'choice-type-badge';
-      badge.setAttribute('aria-hidden', 'true');
+      badge.textContent = '[A]';  // Badge text set in JS for screen reader accessibility
 
       button.appendChild(badge);
       li.appendChild(button);
@@ -144,6 +147,7 @@ describe('Phase 11.3 DOM Contract v1.3 Compliance', () => {
 
       const renderedBadge = li.querySelector('.choice-type-badge');
       expect(renderedBadge).toBeTruthy();
+      expect(renderedBadge?.textContent).toBe('[A]');
     });
 
     it('should render mandatory [D] badge for dialogue choices', () => {
@@ -155,7 +159,7 @@ describe('Phase 11.3 DOM Contract v1.3 Compliance', () => {
 
       const badge = document.createElement('span');
       badge.className = 'choice-type-badge';
-      badge.setAttribute('aria-hidden', 'true');
+      badge.textContent = '[D]';  // Badge text set in JS for screen reader accessibility
 
       button.appendChild(badge);
       li.appendChild(button);
@@ -163,6 +167,7 @@ describe('Phase 11.3 DOM Contract v1.3 Compliance', () => {
 
       const renderedBadge = li.querySelector('.choice-type-badge');
       expect(renderedBadge).toBeTruthy();
+      expect(renderedBadge?.textContent).toBe('[D]');
     });
 
     it('should render badge before choice label (DOM order)', () => {
@@ -397,7 +402,7 @@ describe('Phase 11.3 Integration - End-to-End', () => {
 
     const badge = document.createElement('span');
     badge.className = 'choice-type-badge';
-    badge.setAttribute('aria-hidden', 'true');
+    badge.textContent = '[A]';  // Badge text set in JS for screen reader accessibility
 
     const label = document.createElement('span');
     label.className = 'choice-label';
@@ -420,7 +425,8 @@ describe('Phase 11.3 Integration - End-to-End', () => {
 
     const choiceBadge = choiceButton?.querySelector('.choice-type-badge');
     expect(choiceBadge).toBeTruthy();
-    expect(choiceBadge?.getAttribute('aria-hidden')).toBe('true');
+    expect(choiceBadge?.textContent).toBe('[A]');
+    expect(choiceBadge?.getAttribute('aria-hidden')).toBeNull();  // NOT aria-hidden
 
     const ariaLabel = choiceButton?.getAttribute('aria-label');
     expect(ariaLabel).toBe('Attack the guard (Action choice)');

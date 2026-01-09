@@ -629,9 +629,10 @@ export class GameRenderer {
       button.setAttribute('data-test-id', `choice-button-${index}`);
 
       // Phase 11.3: Add mandatory choice type badge (WCAG 2.5.3 compliance)
+      // Badge text is set in JS (not CSS) for screen reader accessibility
       const badgeSpan = document.createElement('span');
       badgeSpan.className = 'choice-type-badge';
-      badgeSpan.setAttribute('aria-hidden', 'true');  // Decorative, aria-label provides semantic
+      badgeSpan.textContent = this.getBadgeText(choiceType);
       button.appendChild(badgeSpan);
 
       // Set choice text
@@ -724,6 +725,29 @@ export class GameRenderer {
         return 'Dialogue';
       case 'explore':
         return 'Explore';
+      default:
+        // TypeScript exhaustive check - should never reach here
+        const exhaustiveCheck: never = type;
+        return exhaustiveCheck;
+    }
+  }
+
+  /**
+   * Phase 11.3: Get DOS-aesthetic badge text for choice type.
+   * Bracketed compact format [A]/[D]/[E] for visual clarity.
+   * Badge text is set in JS (not CSS) for screen reader accessibility.
+   *
+   * @param type - Choice type enum value
+   * @returns Badge text string
+   */
+  private getBadgeText(type: ChoiceType): string {
+    switch (type) {
+      case 'action':
+        return '[A]';
+      case 'dialogue':
+        return '[D]';
+      case 'explore':
+        return '[E]';
       default:
         // TypeScript exhaustive check - should never reach here
         const exhaustiveCheck: never = type;
