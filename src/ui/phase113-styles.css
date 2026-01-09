@@ -28,6 +28,16 @@
  * Per agent-e perspective: Mandatory badge provides screen reader backup
  * Per agent-c perspective: Badge text in JS prevents CSS-only rendering issues
  */
+
+/**
+ * WCAG 2.5.8: Spacing between adjacent touch targets
+ * Requires 8px minimum spacing between adjacent choice buttons
+ * Applied to parent <li> elements in choices list
+ */
+.choices-list li {
+  margin-bottom: 8px;  /* WCAG 2.5.8 - spacing between adjacent touch targets */
+}
+
 .choice-type-badge {
   /* Typography - VT323 monospace for DOS aesthetic */
   font-family: 'VT323', monospace;
