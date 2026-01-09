@@ -12,11 +12,15 @@
  *   0 - All checks passed
  *   1 - WCAG AA violations found
  *
+ * Scope: Base CSS color validation (no CRT filter effects)
+ * - This script validates BASE color contrast ratios (without CRT filter)
+ * - CRT filter opacity (0-20%) may reduce contrast at higher intensities
+ * - Manual audit required for CRT-aware validation (see WCAG_AUDIT_PHASE11.md)
+ *
  * @module scripts/validate-wcag-contrast
  */
 
-import { contrastRatio, WCAG_AA } from '../src/ui/utils/contrast';
-import { readFileSync } from 'fs';
+import { contrastRatio, WCAG_AA, CSS_TOKENS } from '../src/ui/utils/contrast';
 
 /**
  * Color pair for contrast validation.
@@ -25,47 +29,19 @@ interface ColorPair {
   foreground: string;
   background: string;
   context: string;
-  textType: 'normal' | 'large';
+  thresholdType: 'normal' | 'large';  // 4.5:1 for normal text, 3:1 for large/UI
   ignore?: boolean; // Set to true to skip validation (for known debt)
 }
-
-/**
- * CSS Color Tokens from shell.css and phase112-styles.css.
- *
- * These are the canonical color values used throughout the UI.
- * This should match the CSS_TOKENS constant in wcag-css-token-validation.test.ts.
- */
-const CSS_TOKENS: Record<string, string> = {
-  // Background colors
-  '--bg-primary': '#000000',
-  '--bg-secondary': '#1a1a2e',
-  '--bg-tertiary': '#16213e',
-  '--bg-highlight': '#0f3460',
-
-  // Text colors
-  '--text-primary': '#e8e8e8',
-  '--text-secondary': '#a0a0a0',
-  '--text-accent': '#ffd700',
-  '--text-danger': '#ff6b6b',
-  '--text-info': '#5dade2',
-
-  // Border colors
-  '--border-primary': '#4a4a4a',
-  '--border-accent': '#ffd700',
-  '--border-dim': '#2a2a2a',
-  '--border-focus': '#ffff00',
-
-  // Faction colors
-  '--faction-preservationist': '#ffd700',
-  '--faction-revisor': '#ff4757',
-  '--faction-neutral': '#e8e8e8',
-};
 
 /**
  * Color Usage Matrix.
  *
  * Defines which foreground colors are used on which backgrounds,
- * and the text size context for WCAG AA validation.
+ * and the WCAG AA threshold type for validation.
+ *
+ * Note: Uses 'thresholdType' instead of 'textType' for clarity.
+ * - 'normal' = 4.5:1 (normal text)
+ * - 'large' = 3:1 (large text, UI components, graphics)
  */
 const COLOR_PAIRS: ColorPair[] = [
   // Scene header
@@ -73,13 +49,13 @@ const COLOR_PAIRS: ColorPair[] = [
     foreground: '--text-secondary',
     background: '--bg-primary',
     context: '.scene-breadcrumb (breadcrumb path)',
-    textType: 'normal',
+    thresholdType: 'normal',
   },
   {
     foreground: '--text-accent',
     background: '--bg-primary',
     context: '.breadcrumb-segment:hover, .scene-header-title',
-    textType: 'large', // 20px font-size
+    thresholdType: 'large', // 20px font-size
   },
   // Note: .breadcrumb-separator (#2a2a2a on #000000 = 1.46:1) is decorative
   // Visual separator not subject to text contrast requirements per WCAG 2
@@ -89,37 +65,37 @@ const COLOR_PAIRS: ColorPair[] = [
     foreground: '--text-accent',
     background: '--bg-highlight',
     context: '.stat-check-icon',
-    textType: 'normal',
+    thresholdType: 'normal',
   },
   {
     foreground: '--text-secondary',
     background: '--bg-tertiary',
     context: '.stat-check-value.required',
-    textType: 'normal',
+    thresholdType: 'normal',
   },
   {
     foreground: '--text-primary',
     background: '--bg-secondary',
     context: '.stat-check-value.current',
-    textType: 'normal',
+    thresholdType: 'normal',
   },
   {
     foreground: '#00c864', // Success green (inline in CSS)
     background: '--bg-highlight',
     context: '.stat-check-value.success',
-    textType: 'normal',
+    thresholdType: 'normal',
   },
   {
     foreground: '--text-danger',
     background: '--bg-highlight',
     context: '.stat-check-value.failure',
-    textType: 'normal',
+    thresholdType: 'normal',
   },
   {
     foreground: '--text-secondary',
     background: '--bg-highlight',
     context: '.stat-check-operator',
-    textType: 'normal',
+    thresholdType: 'normal',
   },
 
   // Border contrast (UI components - 3:1 threshold)
@@ -127,20 +103,20 @@ const COLOR_PAIRS: ColorPair[] = [
     foreground: '--border-primary',
     background: '--bg-primary',
     context: '.scene-header border',
-    textType: 'large',
+    thresholdType: 'large',
     ignore: true, // Known WCAG AA violation (2.37:1) - tracked as debt
   },
   {
     foreground: '--border-accent',
     background: '--bg-highlight',
     context: '.stat-check-display border',
-    textType: 'large',
+    thresholdType: 'large',
   },
   {
     foreground: '--border-focus',
     background: '--bg-primary',
     context: '.breadcrumb-segment:focus-visible outline',
-    textType: 'large',
+    thresholdType: 'large',
   },
 ];
 
@@ -163,7 +139,7 @@ interface ValidationResult {
 function validatePair(pair: ColorPair): ValidationResult {
   const fgColor = CSS_TOKENS[pair.foreground] || pair.foreground;
   const bgColor = CSS_TOKENS[pair.background];
-  const threshold = pair.textType === 'normal' ? WCAG_AA.NORMAL_TEXT : WCAG_AA.LARGE_TEXT;
+  const threshold = pair.thresholdType === 'normal' ? WCAG_AA.NORMAL_TEXT : WCAG_AA.LARGE_TEXT;
 
   const ratio = contrastRatio(fgColor, bgColor);
   const passed = ratio >= threshold;

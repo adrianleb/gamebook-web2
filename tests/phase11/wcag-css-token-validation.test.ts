@@ -19,7 +19,7 @@
  */
 
 import { describe, it, expect } from 'bun:test';
-import { contrastRatio, parseHex, relativeLuminance, WCAG_AA, type RGB } from '../../src/ui/utils/contrast';
+import { contrastRatio, parseHex, relativeLuminance, WCAG_AA, CSS_TOKENS, type RGB } from '../../src/ui/utils/contrast';
 
 /**
  * Color pair for contrast validation.
@@ -32,37 +32,6 @@ interface ColorPair {
 }
 
 /**
- * CSS Color Tokens from shell.css and phase112-styles.css.
- *
- * These are the canonical color values used throughout the UI.
- */
-const CSS_TOKENS = {
-  // Background colors
-  '--bg-primary': '#000000',
-  '--bg-secondary': '#1a1a2e',
-  '--bg-tertiary': '#16213e',
-  '--bg-highlight': '#0f3460',
-
-  // Text colors
-  '--text-primary': '#e8e8e8',
-  '--text-secondary': '#a0a0a0',
-  '--text-accent': '#ffd700',
-  '--text-danger': '#ff6b6b',
-  '--text-info': '#5dade2',
-
-  // Border colors
-  '--border-primary': '#4a4a4a',
-  '--border-accent': '#ffd700',
-  '--border-dim': '#2a2a2a',
-  '--border-focus': '#ffff00',
-
-  // Faction colors
-  '--faction-preservationist': '#ffd700',
-  '--faction-revisor': '#ff4757',
-  '--faction-neutral': '#e8e8e8',
-};
-
-/**
  * Phase 11.2 Color Usage Matrix.
  *
  * Defines which foreground colors are used on which backgrounds,
@@ -71,6 +40,8 @@ const CSS_TOKENS = {
  * Note: Decorative elements (separators, borders) are marked with
  * textType: 'large' to use 3:1 threshold (graphics/components standard).
  * Text content uses 4.5:1 (normal) or 3:1 (large text) thresholds.
+ *
+ * CSS_TOKENS is now imported from src/ui/utils/contrast.ts (single source of truth).
  */
 const PHASE112_COLOR_PAIRS: ColorPair[] = [
   // Scene header

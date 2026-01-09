@@ -21,6 +21,44 @@ export interface RGB {
 }
 
 /**
+ * CSS Color Tokens from shell.css and phase112-styles.css.
+ *
+ * This is the SINGLE SOURCE OF TRUTH for color values used in:
+ * - CI validation (scripts/validate-wcag-contrast.ts)
+ * - Test suites (tests/phase11/wcag-css-token-validation.test.ts)
+ *
+ * IMPORTANT: When adding new CSS color tokens, update this constant.
+ * Do NOT duplicate these values elsewhere - import from here instead.
+ *
+ * Source of truth: src/ui/shell.css:25-39
+ */
+export const CSS_TOKENS: Record<string, string> = {
+  // Background colors
+  '--bg-primary': '#000000',
+  '--bg-secondary': '#1a1a2e',
+  '--bg-tertiary': '#16213e',
+  '--bg-highlight': '#0f3460',
+
+  // Text colors
+  '--text-primary': '#e8e8e8',
+  '--text-secondary': '#a0a0a0',
+  '--text-accent': '#ffd700',
+  '--text-danger': '#ff6b6b',  // ✅ FIXED - Now passes WCAG AA (4.50:1 on --bg-highlight)
+  '--text-info': '#5dade2',
+
+  // Border colors
+  '--border-primary': '#4a4a4a',
+  '--border-accent': '#ffd700',
+  '--border-dim': '#2a2a2a',
+  '--border-focus': '#ffff00',
+
+  // Faction colors
+  '--faction-preservationist': '#ffd700',
+  '--faction-revisor': '#ff4757',
+  '--faction-neutral': '#e8e8e8',
+} as const;
+
+/**
  * WCAG AA contrast thresholds.
  */
 export const WCAG_AA = {
