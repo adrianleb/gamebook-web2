@@ -113,7 +113,7 @@ The following Phase 11.2 color combinations meet or exceed WCAG AA requirements:
 
 2. **Test danger text contrast**
    - Trigger a stat check failure (use console to modify stats)
-   - Use browser DevTools color picker to sample `#ff4757` on `#0f3460`
+   - Use browser DevTools color picker to sample `#ff6b6b` on `#0f3460`
    - Verify contrast ratio is at least 4.5:1
 
 3. **Test border visibility**
