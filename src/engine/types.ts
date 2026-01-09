@@ -23,6 +23,18 @@ export const ENGINE_VERSION = 1;
 export type ContentVersion = string;
 
 /**
+ * Choice type classification for Phase 11.3 choice interaction enhancements.
+ * Per DOM Contract v1.3: Mandatory [A]/[D]/[E] badges with DOS aesthetic.
+ *
+ * - action: Physical acts, combat, stat checks (e.g., "Attack the guard")
+ * - dialogue: Speech acts, conversation, negotiation (e.g., "Ask about rumors")
+ * - explore: Investigation, examination, navigation (e.g., "Examine the paintings")
+ *
+ * Defaults to 'explore' for backward compatibility with existing scenes.
+ */
+export type ChoiceType = 'action' | 'dialogue' | 'explore';
+
+/**
  * Unique scene identifier following convention: sc_ACT_HUB_SEQ
  * e.g., sc_1_0_001, sc_2_2_015
  */
@@ -246,12 +258,18 @@ export type EffectType =
  *
  * Per Intent #155: Attemptable stat checks support onSuccess/onFailure branching
  * for choices that can be tried but may fail based on condition evaluation.
+ *
+ * Per Phase 11.3: choiceType adds semantic classification for UI badges ([A]/[D]/[E]).
  */
 export interface Choice {
   label: string;
   to?: SceneId;  // Optional when using conditional branches
   conditions?: Condition[];
   effects?: Effect[];
+
+  // Phase 11.3: Choice type classification for DOS-style badges
+  // Optional field - defaults to 'explore' for backward compatibility
+  choiceType?: ChoiceType;
 
   // Attemptable branching: when conditions contain attemptable: true,
   // the engine evaluates the check and branches to onSuccess or onFailure
@@ -287,6 +305,7 @@ export interface SceneTextObject {
  * May use 'onChoose' instead of 'effects' for backwards compatibility.
  *
  * Per Intent #155: Supports onSuccess/onFailure for attemptable stat checks.
+ * Per Phase 11.3: Supports choiceType for DOS-style badges.
  */
 export interface RawChoice {
   label: string;
@@ -294,6 +313,9 @@ export interface RawChoice {
   conditions?: Condition[];
   effects?: Effect[];
   onChoose?: Effect[];  // Alias for effects
+
+  // Phase 11.3: Choice type classification for DOS-style badges
+  choiceType?: ChoiceType;
 
   // Attemptable branching
   onSuccess?: {

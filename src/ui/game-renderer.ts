@@ -24,6 +24,7 @@ import type {
   ItemId,
   StatId,
   ReadonlyState,
+  ChoiceType,
 } from '../engine/types.js';
 import { getAudioManager } from './audio-manager.js';
 import { getNotificationQueue, type NotificationQueue } from './notification-queue.js';
@@ -591,6 +592,7 @@ export class GameRenderer {
    * Render choices panel with disabled styling.
    * Per agent-b's perspective: disabledHint shows for gated choices.
    * Phase 11.2: Stat check visualization for risky choices.
+   * Phase 11.3: Choice type badges [A]/[D]/[E] for decision clarity.
    *
    * Per agent-e: performance target <5ms per render.
    */
@@ -615,11 +617,22 @@ export class GameRenderer {
       li.setAttribute('data-test-id', `choice-${index}`);
       li.setAttribute('data-choice-index', String(index));
 
+      // Phase 11.3: Add choice type class to parent <li> for CSS targeting
+      const choiceType = this.getChoiceType(choice.choice);
+      const typeClass = `choice-type-${choiceType}`;
+      li.classList.add(typeClass);
+
       const button = document.createElement('button');
       button.className = 'choice-button';
       button.setAttribute('data-choice-number', String(index + 1));
       button.setAttribute('data-choice-index', String(index));
       button.setAttribute('data-test-id', `choice-button-${index}`);
+
+      // Phase 11.3: Add mandatory choice type badge (WCAG 2.5.3 compliance)
+      const badgeSpan = document.createElement('span');
+      badgeSpan.className = 'choice-type-badge';
+      badgeSpan.setAttribute('aria-hidden', 'true');  // Decorative, aria-label provides semantic
+      button.appendChild(badgeSpan);
 
       // Set choice text
       const labelSpan = document.createElement('span');
@@ -628,7 +641,10 @@ export class GameRenderer {
       button.appendChild(labelSpan);
 
       if (choice.state === 'enabled' || choice.state === 'risky') {
-        button.setAttribute('aria-label', `Choice ${index + 1}: ${choice.choice.label}`);
+        // Phase 11.3: WCAG-compliant aria-label with type suffix
+        // Format: "{label} ({Type} choice)" for screen reader clarity
+        const typeLabel = this.getTypeLabel(choiceType);
+        button.setAttribute('aria-label', `${choice.choice.label} (${typeLabel} choice)`);
         button.addEventListener('click', () => this.handleChoice(choice.index));
 
         // Phase 11.2: Add stat check visualization for risky choices
@@ -653,9 +669,12 @@ export class GameRenderer {
 
         const hint = choice.disabledHint || 'Locked';
         button.setAttribute('data-disabled-hint', hint);
+
+        // Phase 11.3: Include type in disabled choice aria-label
+        const typeLabel = this.getTypeLabel(choiceType);
         button.setAttribute(
           'aria-label',
-          `Choice ${index + 1}: ${choice.choice.label} — ${hint}`
+          `${choice.choice.label} (${typeLabel} choice) — ${hint}`
         );
 
         // Add sr-only text for screen readers
@@ -675,6 +694,40 @@ export class GameRenderer {
     const elapsed = performance.now() - startTime;
     if (elapsed > 5) {
       console.warn('[GameRenderer] renderChoices exceeded 5ms target:', elapsed);
+    }
+  }
+
+  /**
+   * Phase 11.3: Get choice type from choice data with fallback.
+   * Defaults to 'explore' for backward compatibility with existing scenes.
+   *
+   * @param choice - Choice object from scene data
+   * @returns Choice type (action|dialogue|explore)
+   */
+  private getChoiceType(choice: { choiceType?: ChoiceType }): ChoiceType {
+    // Return explicit choiceType if present, otherwise default to 'explore'
+    return choice.choiceType ?? 'explore';
+  }
+
+  /**
+   * Phase 11.3: Get human-readable type label for aria announcements.
+   * Capitalized for screen reader clarity.
+   *
+   * @param type - Choice type enum value
+   * @returns Human-readable label
+   */
+  private getTypeLabel(type: ChoiceType): string {
+    switch (type) {
+      case 'action':
+        return 'Action';
+      case 'dialogue':
+        return 'Dialogue';
+      case 'explore':
+        return 'Explore';
+      default:
+        // TypeScript exhaustive check - should never reach here
+        const exhaustiveCheck: never = type;
+        return exhaustiveCheck;
     }
   }
 
