@@ -1818,7 +1818,7 @@ The following tests validate Phase 6 (Act 1 Hub Expansion) content - the three m
 
 | Step | Scene | Action | Checkpoint | Expected State |
 |------|-------|--------|------------|----------------|
-| 1 | sc_1_0_011 | Choose "Hear the Stagehand's offer" (choice_3) | ✅ softlock_check | Choice enabled (optional detour) |
+| 1 | sc_1_0_011 | Choose "Hear the Stagehand's offer" (choice_4) | ✅ softlock_check | Choice enabled (optional detour) |
 | 2 | sc_1_0_040 | Arrived at The Stagehand's Offer | ✅ save_point | `stagehand_intervention=true`, `met_stagehand=true`, Stagehand disposition=5 |
 | 3 | sc_1_0_040 | Choose "Accept the Stagehand's deal" (choice_0) | ✅ softlock_check | Choice enabled (no requirements) |
 | 4 | sc_1_0_041 | Arrived at The Stagehand's Price | ✅ save_point | `stagehand_offer_understood=true`, Stagehand disposition=6 |
@@ -1835,7 +1835,7 @@ The following tests validate Phase 6 (Act 1 Hub Expansion) content - the three m
 - `game_started` ✓ (retained from sc_1_0_001)
 - `path_direct` ✓ (retained from sc_1_0_002)
 - `branch_pursuers` ✓ (retained from sc_1_0_010)
-- `stagehand_intervention` ✓ (sc_1_0_011 choice_3)
+- `stagehand_intervention` ✓ (sc_1_0_011 choice_4)
 - `met_stagehand` ✓ (sc_1_0_040)
 - `stagehand_offer_understood` ✓ (sc_1_0_041)
 - `stagehand_secret_learned` ✓ (sc_1_0_042)
@@ -1862,7 +1862,7 @@ The following tests validate Phase 6 (Act 1 Hub Expansion) content - the three m
 
 #### Critical Mechanics Validated
 
-1. **Optional Detour Entry:** sc_1_0_011 choice_3 offers Stagehand intervention
+1. **Optional Detour Entry:** sc_1_0_011 choice_4 offers Stagehand intervention
    - Scene file: `content/scenes/sc_1_0_011.json` lines 135-146
    - No gating requirements (always available)
    - Player can choose to ignore and continue main Pursuers path
