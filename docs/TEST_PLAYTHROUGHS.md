@@ -1263,6 +1263,17 @@ The following tests validate Phase 6 (Act 1 Hub Expansion) content - the three m
 
 **Scene Coverage:** sc_1_0_001-042, sc_1_0_902 (26 scenes total). See `content/manifest.json` sceneIndex for full Act 1 Hub 0 scene listing.
 
+### Phase 6 Test Summary
+
+| Test ID | Test Name | Scenes | Mandatory Depth | Optional Depth | Key Mechanics |
+|---------|-----------|--------|-----------------|----------------|---------------|
+| PT-ACT1-HUB0-PURSUERS-BRANCH | Pursuers Branch | 001,002,010,011,012→099 | 5 scenes (4 transitions) | +2 scenes (013-014) | stage_presence >= 3 check, Exiter faction (+3) |
+| PT-ACT1-HUB0-RESEARCHER-BRANCH | Researcher Branch | 001,003,020,021,022→099 | 5 scenes (4 transitions) | +2 scenes (023-024) | booth_key gate, script >= 3 check, Revisionist faction (+3) |
+| PT-ACT1-HUB0-NEGOTIATOR-BRANCH | Negotiator Branch | 001,004,030,031,032→099 | 5 scenes (4 transitions) | +Stagehand (040-042) | 4 faction preview choices, NPC introduction |
+| PT-ACT1-HUB0-STAGEHAND-SUB-BRANCH | Stagehand Detour | 011→040→041→042→011 | N/A (optional) | 3 scenes | New NPC (The Stagehand), stagehand_favor item, +1 script |
+
+**Note:** "Mandatory Depth" counts scenes visited on the shortest path to convergence (sc_1_1_099). Scene counts include the starting scene (sc_1_0_001) but exclude the convergence scene for depth calculations.
+
 ### PT-ACT1-HUB0-PURSUERS-BRANCH: Pursuers Branch Path
 
 **Tests:** Complete Pursuers branch narrative flow from sc_1_0_001 → sc_1_1_099 First Crossing
@@ -1270,6 +1281,8 @@ The following tests validate Phase 6 (Act 1 Hub Expansion) content - the three m
 **Purpose:** Validates stat check (stage_presence >= 3), Exiter faction preview (+2 exiter), and state flag propagation (branch_pursuers, pursuers_escaped_trusted, pursuers_path_complete, act1_complete, first_crossing_reached)
 
 **Test File:** `tests/playthroughs/pt-act1-hub0-pursuers-branch.json`
+
+**Scene Files:** `content/scenes/sc_1_0_001.json`, `sc_1_0_002.json`, `sc_1_0_010.json`, `sc_1_0_011.json`, `sc_1_0_012.json`, `sc_1_1_099.json`
 
 **Validation Status:** ⚠️ Tests exist, CI failing (pre-existing snapshot issue - unrelated to Phase 6 content)
 
@@ -1367,6 +1380,8 @@ The following tests validate Phase 6 (Act 1 Hub Expansion) content - the three m
 **Purpose:** Validates inventory gate (booth_key), stat check (script >= 3), Revisionist faction preview (+2 revisionist), and state flag propagation (branch_researcher, researcher_drafts_promised, researcher_path_complete, act1_complete, first_crossing_reached)
 
 **Test File:** `tests/playthroughs/pt-act1-hub0-researcher-branch.json`
+
+**Scene Files:** `content/scenes/sc_1_0_001.json`, `sc_1_0_003.json`, `sc_1_0_020.json`, `sc_1_0_021.json`, `sc_1_0_022.json`, `sc_1_1_099.json`
 
 **Validation Status:** ⚠️ Tests exist, CI failing (pre-existing snapshot issue - unrelated to Phase 6 content)
 
@@ -1472,6 +1487,8 @@ The following tests validate Phase 6 (Act 1 Hub Expansion) content - the three m
 **Purpose:** Validates NPC introduction (Maren), faction preview choices (4 paths: Preservationist +2, Revisionist +2, Exiter +2, Independent +1 script), and state flag propagation (branch_negotiator, negotiator_*, negotiator_path_complete, act1_complete, first_crossing_reached)
 
 **Test File:** `tests/playthroughs/pt-act1-hub0-negotiator-branch.json`
+
+**Scene Files:** `content/scenes/sc_1_0_001.json`, `sc_1_0_004.json`, `sc_1_0_030.json`, `sc_1_0_031.json`, `sc_1_0_032.json`, `sc_1_1_099.json`
 
 **Validation Status:** ⚠️ Tests exist, CI failing (pre-existing snapshot issue - unrelated to Phase 6 content)
 
@@ -1587,6 +1604,8 @@ The following tests validate Phase 6 (Act 1 Hub Expansion) content - the three m
 **Purpose:** Validates unique flag propagation (stagehand_intervention, met_stagehand, stagehand_offer_understood, stagehand_secret_learned, stagehand_deal_made), item acquisition (stagehand_favor), stat changes (+1 script), NPC disposition progression (The Stagehand: 5→6→7), and return path to main Pursuers flow
 
 **Test File:** `tests/playthroughs/pt-act1-hub0-stagehand-sub-branch.json`
+
+**Scene Files:** `content/scenes/sc_1_0_011.json`, `sc_1_0_040.json`, `sc_1_0_041.json`, `sc_1_0_042.json`
 
 **Validation Status:** ⚠️ Tests exist, CI failing (pre-existing snapshot issue - unrelated to Phase 6 content)
 
@@ -2107,7 +2126,7 @@ When adding new interactive elements, developers MUST:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.13 | 2026-01-09 | **ADDED** Phase 6 Tests section documenting Act 1 Hub Expansion content - 4 branch path playthrough tests (PT-ACT1-HUB0-PURSUERS-BRANCH, PT-ACT1-HUB0-RESEARCHER-BRANCH, PT-ACT1-HUB0-NEGOTIATOR-BRANCH, PT-ACT1-HUB0-STAGEHAND-SUB-BRANCH). Tests validate stat checks, faction previews, inventory gating, state flag propagation, and scene depth for all 3 main branches plus optional Stagehand detour. Includes Phase 6 Exit Gaps subsection documenting structural issues (Negotiator depth variance, Stagehand payoff, CI status, agent signoff) for transparency. **FIXED** Merge conflict markers and removed duplicate PT-A11Y-003 section. |
+| 1.13 | 2026-01-09 | **ADDED** Phase 6 Tests section documenting Act 1 Hub Expansion content - 4 branch path playthrough tests (PT-ACT1-HUB0-PURSUERS-BRANCH, PT-ACT1-HUB0-RESEARCHER-BRANCH, PT-ACT1-HUB0-NEGOTIATOR-BRANCH, PT-ACT1-HUB0-STAGEHAND-SUB-BRANCH). Tests validate stat checks, faction previews, inventory gating, state flag propagation, and scene depth for all 3 main branches plus optional Stagehand detour. Includes Phase 6 Exit Gaps subsection documenting structural issues (Negotiator depth variance, Stagehand payoff, CI status, agent signoff) for transparency. **FIXED** Merge conflict markers and removed duplicate PT-A11Y-003 section. **ENHANCED** Added Phase 6 Test Summary table and explicit "Scene Files" subsection for each test per reviewer feedback. |
 | 1.12 | 2026-01-06 | **ADDED** PT-P11-ACC-001 (CRT Intensity Slider) - comprehensive accessibility test for Phase 11.1 CRT intensity slider feature. Tests visual adjustment (0-100% → 0-20% opacity), persistence (localStorage with sessionStorage fallback), keyboard accessibility (arrow keys, Home/End), screen reader announcements (Option A ARIA pattern), touch target size (44x44px WCAG 2.5.5), reduced motion preference, mobile responsive, error handling, and integration with CRT toggle. |
 | 1.11 | 2026-01-06 | **FIXED** PT-A11Y-002 code reference to match post-PR #424 state - updated code validation section to reference actual game-renderer.ts:806-807 comments ("display-only" not "Phase 10 infrastructure"), clarified Phase 10 Requirements as future work with no timeline, and added note about PR #424 removing accessibility attributes from display-only inventory items. |
 | 1.10 | 2026-01-06 | **ADDED** PT-A11Y-003 (WCAG 2.5.5 Comprehensive Touch Target Audit) - complete audit of all interactive UI components (choice buttons, slot buttons, error buttons, menu options, modal buttons, notification dismiss, inventory pagination buttons). Documents that all components meet 44x44px minimum requirement. Only violation was `.slot-action-btn` (36px) fixed in PR #403. Addresses reviewer concern about incomplete scope in PT-A11Y-001. |
