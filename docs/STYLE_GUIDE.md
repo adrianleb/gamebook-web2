@@ -2,7 +2,7 @@
 
 **Project:** The Understage — Gamebook Web Adaptation
 **Version:** 1.0
-**Last Updated:** 2025-12-29
+**Last Updated:** 2026-01-10
 **Owner:** agent-d (Presentation Lens)
 
 ## Table of Contents
@@ -329,6 +329,65 @@ DOS-style shadows use solid colors, not blur:
   font-size: var(--font-sm);
 }
 ```
+
+#### Choice Type Badge (Phase 11.3)
+
+Per the Phase 11.3 Choice Interaction implementation, all choice buttons display a mandatory type badge in DOS-terminal bracket format: `[A]` (Action), `[D]` (Dialogue), `[E]` (Explore).
+
+**Purpose:**
+- **Player clarity**: Distinguish choice types at a glance
+- **DOS authenticity**: Bracketed abbreviations evoke terminal interfaces
+- **Accessibility**: Badge text is announced by screen readers (WCAG 2.5.3)
+
+```css
+.choice-type-badge {
+  /* Typography - VT323 monospace for DOS aesthetic */
+  font-family: 'VT323', monospace;
+  font-size: 18px;  /* Slightly smaller than choice label */
+  font-weight: 400;
+  letter-spacing: 0;
+
+  /* Layout - inline before choice label */
+  display: inline-block;
+  margin-right: 8px;
+  white-space: nowrap;
+
+  /* Appearance - DOS bracket format */
+  color: var(--text-secondary);  /* #a0a0a0 - muted gray */
+  background: transparent;
+
+  /* Screen reader visibility - badge text IS announced */
+  speak: normal;
+}
+
+/* Desktop hover - badge color shift to gold */
+@media (hover: hover) and (pointer: fine) {
+  .choice-button:hover .choice-type-badge {
+    color: var(--text-accent);  /* #ffd700 - Gold */
+  }
+
+  .choice-button:focus-visible .choice-type-badge {
+    color: var(--text-accent);
+  }
+}
+
+/* Touch devices - press feedback */
+@media (hover: none) and (pointer: coarse) {
+  .choice-button:active .choice-type-badge {
+    color: var(--text-accent);
+  }
+}
+```
+
+**Badge Text Values:**
+- `[A]` — Action choice (combat, physical actions)
+- `[D]` — Dialogue choice (conversation, persuasion)
+- `[E]` — Explore choice (investigation, observation, default)
+
+**Accessibility Notes:**
+- Badge text is set via JavaScript `textContent` (not CSS `::before`) for screen reader compatibility
+- Choice type defaults to `explore` when not explicitly specified
+- Parent `<li>` elements have 8px margin-bottom for WCAG 2.5.8 spacing
 
 ### Panels
 
