@@ -70,7 +70,22 @@
       "sequence": 4,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Continue to the First Crossing - navigate to sc_1_1_099 The First Crossing (convergence scene)",
+      "description": "Offer to help them cross (stat check passes) - navigate to sc_1_0_012 The Pursuers' Crossing (convergence scene), set pursuers_path_complete flag",
+      "expectedScene": "sc_1_0_012",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "path_direct", "branch_pursuers", "pursuers_escaped_trusted", "pursuers_path_complete"],
+        "currentScene": "sc_1_0_012",
+        "factions": {
+          "exiter": 3
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Continue to the First Crossing - navigate to sc_1_1_099 The First Crossing (final convergence)",
       "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {
