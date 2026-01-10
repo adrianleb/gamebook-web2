@@ -314,10 +314,10 @@ The following playthroughs test the Phase 6 Act 1 Hub Expansion content (branch 
 
 **Path:**
 ```
-sc_1_0_001 ─[Go to wings]──> sc_1_0_002 ─[Investigate footsteps]──> sc_1_0_010 ─[Chase after]──> sc_1_0_011 ─[Continue]──> sc_1_1_099
+sc_1_0_001 ─[Go to wings]──> sc_1_0_002 ─[Investigate footsteps]──> sc_1_0_010 ─[Chase after]──> sc_1_0_011 ─[Any Pursuers response]──> sc_1_0_012 ─[Continue]──> sc_1_1_099
 ```
 
-**Scenes:** 5 scenes (001, 002, 010, 011, 099) + optional atmospheric scenes (005-007, 013-015) = 6 total
+**Scenes:** 6 scenes (001, 002, 010, 011, 012, 099) + optional atmospheric scenes (005-007, 013-015) = 7 total accessible
 
 **Steps:**
 
@@ -326,8 +326,9 @@ sc_1_0_001 ─[Go to wings]──> sc_1_0_002 ─[Investigate footsteps]──> 
 | 1 | sc_1_0_001 | Choose "Go to the wings" | `path_direct=true`, has "wings_pass" |
 | 2 | sc_1_0_002 | Choose "Investigate the sound of running footsteps" | `branch_pursuers=true`, stage_presence+1 |
 | 3 | sc_1_0_010 | Choose "Chase after the figure" | `pursuers_escaped_trusted=true`, exiter+2 |
-| 4 | sc_1_0_011 | Choose "Continue to the First Crossing" | `pursuers_path_complete=true`, `act1_complete=true` |
-| 5 | sc_1_1_099 | Arrived at convergence | `first_crossing_reached=true` |
+| 4 | sc_1_0_011 | Choose any Pursuers response (choice_1/2/3) | Based on choice: trust/reject/authority flag set |
+| 5 | sc_1_0_012 | Choose "Continue to the First Crossing" | `pursuers_path_complete=true`, `act1_complete=true` |
+| 6 | sc_1_1_099 | Arrived at convergence | `first_crossing_reached=true` |
 
 **Final State Assertions:**
 ```json
@@ -359,10 +360,10 @@ sc_1_0_001 ─[Go to wings]──> sc_1_0_002 ─[Investigate footsteps]──> 
 
 **Path:**
 ```
-sc_1_0_001 ─[Unlock door]──> sc_1_0_003 ─[Study mirrors]──> sc_1_0_020 ─[Study inscriptions]──> sc_1_0_021 ─[Continue]──> sc_1_1_099
+sc_1_0_001 ─[Unlock door]──> sc_1_0_003 ─[Study mirrors]──> sc_1_0_020 ─[Study inscriptions]──> sc_1_0_021 ─[Any response]──> sc_1_0_022 ─[Continue]──> sc_1_1_099
 ```
 
-**Scenes:** 5 scenes (001, 003, 020, 021, 099) + optional atmospheric scenes (005-007, 013-015) = 6 total
+**Scenes:** 6 scenes (001, 003, 020, 021, 022, 099) + optional atmospheric scenes (005-007, 013-015) = 7 total accessible
 
 **Steps:**
 
@@ -371,8 +372,9 @@ sc_1_0_001 ─[Unlock door]──> sc_1_0_003 ─[Study mirrors]──> sc_1_0_0
 | 1 | sc_1_0_001 | Choose "Unlock the door" (requires booth_key) | Has booth_key, at sc_1_0_003 |
 | 2 | sc_1_0_003 | Choose "Study the mirror corridor before crossing" | `branch_researcher=true`, script+1 |
 | 3 | sc_1_0_020 | Choose "Study the mirror inscriptions" | `researcher_drafts_promised=true`, revisionist+2 |
-| 4 | sc_1_0_021 | Choose "Continue to the First Crossing" | `researcher_path_complete=true`, `act1_complete=true` |
-| 5 | sc_1_1_099 | Arrived at convergence | `first_crossing_reached=true` |
+| 4 | sc_1_0_021 | Choose any response (choice_1/2/3) | Based on choice: drafts/doubt/pragmatic flag set |
+| 5 | sc_1_0_022 | Choose "Continue to the First Crossing" | `researcher_path_complete=true`, `act1_complete=true` |
+| 6 | sc_1_1_099 | Arrived at convergence | `first_crossing_reached=true` |
 
 **Final State Assertions:**
 ```json
@@ -451,7 +453,7 @@ sc_1_0_001 ─[Speak with figure]──> sc_1_0_004 ─[Ask Maren]──> sc_1_0
 
 **Path:**
 ```
-sc_1_0_011 ─[choice 3: "Take the deal"]──> sc_1_0_040 ─[Listen to offer]──> sc_1_0_041 ─[Accept deal]──> sc_1_0_042 ─[Return]──> sc_1_0_011
+sc_1_0_011 ─[choice_4: "Hear the Stagehand's offer"]──> sc_1_0_040 ─[Listen to offer]──> sc_1_0_041 ─[Accept deal]──> sc_1_0_042 ─[Return]──> sc_1_0_011
 ```
 
 **Scenes:** 4 scenes (011, 040, 041, 042)
@@ -460,7 +462,7 @@ sc_1_0_011 ─[choice 3: "Take the deal"]──> sc_1_0_040 ─[Listen to offer]
 
 | Step | Scene | Action | Expected State |
 |------|-------|--------|----------------|
-| 1 | sc_1_0_011 | Choose "Take the deal" (choice 3) | `stagehand_intervention=true`, `met_stagehand=true` |
+| 1 | sc_1_0_011 | Choose "Hear the Stagehand's offer" (choice_4) | `stagehand_intervention=true`, `met_stagehand=true` |
 | 2 | sc_1_0_040 | Listen to Stagehand's offer | `stagehand_offer_understood=true` |
 | 3 | sc_1_0_041 | Choose "Accept the deal" | `stagehand_secret_learned=true`, `stagehand_deal_made=true`, has "stagehand_favor", script+1 |
 | 4 | sc_1_0_042 | Return to main Pursuers flow | All Stagehand flags persist, at sc_1_0_011 |
