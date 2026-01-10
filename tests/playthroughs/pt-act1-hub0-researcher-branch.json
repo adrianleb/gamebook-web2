@@ -70,7 +70,22 @@
       "sequence": 4,
       "action": "choose",
       "choiceIndex": 0,
-      "description": "Continue to the First Crossing - navigate to sc_1_1_099 The First Crossing (convergence scene)",
+      "description": "Promise to find the drafts' origins - navigate to sc_1_0_022 The Researcher's Crossing (convergence scene), set researcher_path_complete flag",
+      "expectedScene": "sc_1_0_022",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "met_maren", "branch_researcher", "researcher_drafts_promised", "researcher_path_complete"],
+        "currentScene": "sc_1_0_022",
+        "factions": {
+          "revisionist": 3
+        }
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "choose",
+      "choiceIndex": 0,
+      "description": "Continue to the First Crossing - navigate to sc_1_1_099 The First Crossing (final convergence)",
       "expectedScene": "sc_1_1_099",
       "checkpoint": true,
       "assertions": {
