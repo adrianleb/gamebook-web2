@@ -70,6 +70,18 @@
       "sequence": 4,
       "action": "choose",
       "choiceIndex": 0,
+      "description": "Offer to help them cross - navigate to sc_1_0_012 The Pursuers' Crossing",
+      "expectedScene": "sc_1_0_012",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "path_direct", "branch_pursuers", "pursuers_escaped_trusted", "pursuers_path_complete"],
+        "currentScene": "sc_1_0_012"
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "choose",
+      "choiceIndex": 0,
       "description": "Continue to the First Crossing - navigate to sc_1_1_099 The First Crossing (convergence scene)",
       "expectedScene": "sc_1_1_099",
       "checkpoint": true,
@@ -81,6 +93,7 @@
   ],
   "endingCriteria": {
     "sceneId": "sc_1_1_099",
+    "sequence": 5,
     "flagsRequired": ["branch_pursuers", "pursuers_path_complete", "act1_complete", "first_crossing_reached"]
   },
   "softlockDetection": {
