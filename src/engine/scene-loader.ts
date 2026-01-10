@@ -529,9 +529,18 @@ export class SceneLoader {
 
     // Transform choices: normalize conditions, normalize effects, preserve attemptable structure
     const choices: Choice[] = raw.choices.map(choice => {
+      // Determine if this is an attemptable choice (has both success and failure paths)
+      const isAttemptable = choice.onSuccess && choice.onFailure;
+
+      // For attemptable choices, the top-level 'to' field is redundant and should be removed.
+      // Attemptable choices use onSuccess.to and onFailure.to for their respective paths.
+      // The top-level 'to' is a content authoring artifact that should not reach runtime.
+      // See: https://github.com/adrianleb/gamebook-web2/issues/470
+      const to = isAttemptable ? undefined : choice.to;
+
       const baseChoice = {
         label: choice.label,
-        to: choice.to,
+        to,
         conditions: this.normalizeConditions(choice.conditions),
         effects: this.normalizeEffects(choice.effects ?? choice.onChoose),
         disabledHint: choice.disabledHint,
