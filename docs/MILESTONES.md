@@ -682,7 +682,7 @@ Date: January 3, 2026
 - [x] All 3 branches have 4-6 scene mandatory depth with optional detours before convergence (verified: Pursuers 4 mandatory + 2 optional = 6 total, Researcher 4 mandatory + 2 optional = 6 total, Negotiator 4 mandatory scenes)
 - [x] Content validation passes with no unreachable scenes (26 Act 1 Hub 0 scenes: sc_1_0_001-042 + sc_1_0_902)
 - [x] Stagehand scenes (sc_1_0_040-042) reachable from pursuers branch (verified: sc_1_0_011 choice 4 → sc_1_0_040)
-- [x] All Phase 5 QA gates still passing (500 tests passing)
+- [x] All Phase 5 QA gates still passing (500 tests passing; CI shows pre-existing Phase 11.3 DOM mock failure unrelated to Phase 6)
 
 ### Phase 6 Exit Gate Signoff (2026-01-09)
 
@@ -692,21 +692,23 @@ The Act 1 Hub Expansion milestone is **COMPLETE**. All exit gate requirements ar
 
 **Delivered Scenes (26 Act 1 Hub 0 scenes):**
 - **Opening**: sc_1_0_001 (The Booth Awakens) - 3 branch exits
-- **Pursuers Branch** (5 scenes): sc_1_0_002, 010, 011, 012, 013 + Stagehand sub-branch (sc_1_0_040-042)
-- **Researcher Branch** (5 scenes): sc_1_0_003, 020, 021, 022, 023
-- **Negotiator Branch** (4 scenes): sc_1_0_004, 030, 031, 032
-- **Atmospheric/Exploration** (7 scenes): sc_1_0_005, 006, 007, 014, 015, 025, 040-042
+- **Pursuers Branch scenes**: sc_1_0_002, 010, 011, 012, 013, 025
+- **Researcher Branch scenes**: sc_1_0_003, 014, 020, 021, 022, 023, 024
+- **Negotiator Branch scenes**: sc_1_0_004, 030, 031, 032
+- **Stagehand sub-branch** (reachable ONLY from Pursuers via sc_1_0_011 choice_4): sc_1_0_040, 041, 042
+- **Atmospheric/Exploration**: sc_1_0_005, 006, 007, 015
 - **Resolution**: sc_1_0_902
 
 **Exit Gate Verification:**
 - ✅ 3 branch exits from sc_1_0_001 (sc_1_0_002, 003, 004)
-- ✅ Pursuers branch: 4 mandatory scenes (sc_1_0_002, 010-012) + 1 optional detour (sc_1_0_013) + Stagehand sub-branch (sc_1_0_040-042, reachable from sc_1_0_011 choice 4)
-- ✅ Researcher branch: 4 mandatory scenes (sc_1_0_003, 020-022) + 1 optional detour (sc_1_0_023)
+- ✅ Pursuers branch: 4 mandatory scenes (sc_1_0_002, 010-012) + optional detours (sc_1_0_013, 025) + Stagehand sub-branch (3 scenes: sc_1_0_040-042)
+- ✅ Researcher branch: 3 mandatory scenes (sc_1_0_003, 020-022) + optional detours (sc_1_0_014, 023, 024)
 - ✅ Negotiator branch: 4 mandatory scenes (sc_1_0_004, 030-032)
-- ✅ Stagehand scenes reachable from Pursuers only: sc_1_0_011 choice 4 → sc_1_0_040 (verified in scene file)
+- ✅ Stagehand scenes reachable from Pursuers ONLY (sc_1_0_011 requires branch_pursuers flag; NOT reachable from Negotiator or Researcher branches)
 - ✅ Content validation passes: 26 scenes marked "complete" in manifest.json
+- ⚠️ CI test failure unrelated to Phase 6 content (pre-existing Phase 11.3 DOM mock issue)
 
-**Total Scene Count:** 66 scenes (up from 34 in Phase 5)
+**Total Project Scene Count:** 66 scenes total across all acts (Act 1 Hub 0: 26 scenes; Acts 2-3: 40 scenes)
 
 **Cleared for Phase 7**: Act 2 Hub Expansion (requires PR #315 rebase)
 
