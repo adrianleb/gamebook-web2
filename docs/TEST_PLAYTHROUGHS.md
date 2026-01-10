@@ -300,6 +300,192 @@ sc_1_1_099 ─[Choose: "Cross into the Understage"]──> sc_2_2_001
 
 ---
 
+## Phase 6: Act 1 Hub Expansion Playthroughs
+
+The following playthroughs test the Phase 6 Act 1 Hub Expansion content (branch density for replayability through Pursuers, Researcher, and Negotiator paths).
+
+### PT-ACT1-HUB0-PURSUERS-BRANCH: Pursuers Path
+
+**Tests:** Complete Pursuers branch flow from sc_1_0_001 through convergence at sc_1_1_099
+
+**Entry Point:** `sc_1_0_001` (The Booth Awakens)
+
+**Prerequisites:** Starting state with `game_started` flag
+
+**Path:**
+```
+sc_1_0_001 ─[Go to wings]──> sc_1_0_002 ─[Investigate footsteps]──> sc_1_0_010 ─[Chase after]──> sc_1_0_011 ─[Continue]──> sc_1_1_099
+```
+
+**Scenes:** 5 scenes (001, 002, 010, 011, 099) + optional atmospheric scenes (005-007, 013-015) = 6 total
+
+**Steps:**
+
+| Step | Scene | Action | Expected State |
+|------|-------|--------|----------------|
+| 1 | sc_1_0_001 | Choose "Go to the wings" | `path_direct=true`, has "wings_pass" |
+| 2 | sc_1_0_002 | Choose "Investigate the sound of running footsteps" | `branch_pursuers=true`, stage_presence+1 |
+| 3 | sc_1_0_010 | Choose "Chase after the figure" | `pursuers_escaped_trusted=true`, exiter+2 |
+| 4 | sc_1_0_011 | Choose "Continue to the First Crossing" | `pursuers_path_complete=true`, `act1_complete=true` |
+| 5 | sc_1_1_099 | Arrived at convergence | `first_crossing_reached=true` |
+
+**Final State Assertions:**
+```json
+{
+  "flags": {
+    "game_started": true,
+    "path_direct": true,
+    "branch_pursuers": true,
+    "pursuers_escaped_trusted": true,
+    "pursuers_path_complete": true,
+    "act1_complete": true,
+    "first_crossing_reached": true
+  },
+  "factions": { "exiter": 2 }
+}
+```
+
+**Test File:** `tests/playthroughs/pt-act1-hub0-pursuers-branch.json`
+
+---
+
+### PT-ACT1-HUB0-RESEARCHER-BRANCH: Researcher Path
+
+**Tests:** Complete Researcher branch flow from sc_1_0_001 through convergence at sc_1_1_099
+
+**Entry Point:** `sc_1_0_001` (The Booth Awakens)
+
+**Prerequisites:** Has `booth_key` item, `met_maren` flag
+
+**Path:**
+```
+sc_1_0_001 ─[Unlock door]──> sc_1_0_003 ─[Study mirrors]──> sc_1_0_020 ─[Study inscriptions]──> sc_1_0_021 ─[Continue]──> sc_1_1_099
+```
+
+**Scenes:** 5 scenes (001, 003, 020, 021, 099) + optional atmospheric scenes (005-007, 013-015) = 6 total
+
+**Steps:**
+
+| Step | Scene | Action | Expected State |
+|------|-------|--------|----------------|
+| 1 | sc_1_0_001 | Choose "Unlock the door" (requires booth_key) | Has booth_key, at sc_1_0_003 |
+| 2 | sc_1_0_003 | Choose "Study the mirror corridor before crossing" | `branch_researcher=true`, script+1 |
+| 3 | sc_1_0_020 | Choose "Study the mirror inscriptions" | `researcher_drafts_promised=true`, revisionist+2 |
+| 4 | sc_1_0_021 | Choose "Continue to the First Crossing" | `researcher_path_complete=true`, `act1_complete=true` |
+| 5 | sc_1_1_099 | Arrived at convergence | `first_crossing_reached=true` |
+
+**Final State Assertions:**
+```json
+{
+  "flags": {
+    "game_started": true,
+    "met_maren": true,
+    "branch_researcher": true,
+    "researcher_drafts_promised": true,
+    "researcher_path_complete": true,
+    "act1_complete": true,
+    "first_crossing_reached": true
+  },
+  "factions": { "revisionist": 2 }
+}
+```
+
+**Test File:** `tests/playthroughs/pt-act1-hub0-researcher-branch.json`
+
+---
+
+### PT-ACT1-HUB0-NEGOTIATOR-BRANCH: Negotiator Path
+
+**Tests:** Complete Negotiator branch flow from sc_1_0_001 through convergence at sc_1_1_099
+
+**Entry Point:** `sc_1_0_001` (The Booth Awakens)
+
+**Prerequisites:** Starting state with `game_started` flag
+
+**Path:**
+```
+sc_1_0_001 ─[Speak with figure]──> sc_1_0_004 ─[Ask Maren]──> sc_1_0_030 ─[Choose path]──> sc_1_0_031 ─[Want to understand]──> sc_1_0_032 ─[Continue]──> sc_1_1_099
+```
+
+**Scenes:** 6 scenes (001, 004, 030, 031, 032, 099) = 3 mandatory path scenes + optional Stagehand extension (sc_1_0_040-042)
+
+**Steps:**
+
+| Step | Scene | Action | Expected State |
+|------|-------|--------|----------------|
+| 1 | sc_1_0_001 | Choose "Speak with the figure in shadow" | `met_maren=true`, has "booth_key" |
+| 2 | sc_1_0_004 | Choose "Ask Maren about what kind of Prompter you should be" | `branch_negotiator=true`, script+1 |
+| 3 | sc_1_0_030 | Choose faction path (Revisionist/Preservationist/Exiter/Independent) | Corresponding faction+2, corresponding flag set |
+| 4 | sc_1_0_031 | Choose "I want to understand" | `negotiator_goal_understanding=true`, script+2 |
+| 5 | sc_1_0_032 | Choose "Continue to the First Crossing" | `negotiator_path_complete=true`, `act1_complete=true` |
+| 6 | sc_1_1_099 | Arrived at convergence | `first_crossing_reached=true` |
+
+**Final State Assertions:**
+```json
+{
+  "flags": {
+    "game_started": true,
+    "met_maren": true,
+    "branch_negotiator": true,
+    "negotiator_revisionist": true,
+    "negotiator_goal_understanding": true,
+    "negotiator_path_complete": true,
+    "act1_complete": true,
+    "first_crossing_reached": true
+  },
+  "factions": { "revisionist": 2 }
+}
+```
+
+**Test File:** `tests/playthroughs/pt-act1-hub0-negotiator-branch.json`
+
+---
+
+### PT-ACT1-HUB0-STAGEHAND-SUB-BRANCH: Stagehand Optional Detour
+
+**Tests:** Optional Stagehand detour from Pursuers branch (sc_1_0_011 → sc_1_0_040 → sc_1_0_041 → sc_1_0_042 → back to main flow)
+
+**Entry Point:** `sc_1_0_011` (The Trap)
+
+**Prerequisites:** `branch_pursuers` flag set, arrived at sc_1_0_011
+
+**Path:**
+```
+sc_1_0_011 ─[choice 3: "Take the deal"]──> sc_1_0_040 ─[Listen to offer]──> sc_1_0_041 ─[Accept deal]──> sc_1_0_042 ─[Return]──> sc_1_0_011
+```
+
+**Scenes:** 4 scenes (011, 040, 041, 042)
+
+**Steps:**
+
+| Step | Scene | Action | Expected State |
+|------|-------|--------|----------------|
+| 1 | sc_1_0_011 | Choose "Take the deal" (choice 3) | `stagehand_intervention=true`, `met_stagehand=true` |
+| 2 | sc_1_0_040 | Listen to Stagehand's offer | `stagehand_offer_understood=true` |
+| 3 | sc_1_0_041 | Choose "Accept the deal" | `stagehand_secret_learned=true`, `stagehand_deal_made=true`, has "stagehand_favor", script+1 |
+| 4 | sc_1_0_042 | Return to main Pursuers flow | All Stagehand flags persist, at sc_1_0_011 |
+
+**Final State Assertions:**
+```json
+{
+  "flags": {
+    "stagehand_intervention": true,
+    "met_stagehand": true,
+    "stagehand_offer_understood": true,
+    "stagehand_secret_learned": true,
+    "stagehand_deal_made": true
+  },
+  "inventory": ["stagehand_favor"],
+  "stats": { "script": 1 }
+}
+```
+
+**Test File:** `tests/playthroughs/pt-act1-hub0-stagehand-sub-branch.json`
+
+**Note:** This is an optional detour from the Pursuers branch that unlocks unique content (Stagehand interaction, special item, stat bonus) before returning to the main flow.
+
+---
+
 ## Save/Load Regression Tests
 
 These playthroughs specifically test state persistence across save/load operations.
