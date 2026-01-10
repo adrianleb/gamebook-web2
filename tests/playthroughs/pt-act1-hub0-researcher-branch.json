@@ -70,6 +70,18 @@
       "sequence": 4,
       "action": "choose",
       "choiceIndex": 0,
+      "description": "Study the mirror inscriptions - navigate to sc_1_0_022 The Researcher's Reflection",
+      "expectedScene": "sc_1_0_022",
+      "checkpoint": true,
+      "assertions": {
+        "flagsSet": ["game_started", "met_maren", "branch_researcher", "researcher_drafts_promised", "researcher_path_complete"],
+        "currentScene": "sc_1_0_022"
+      }
+    },
+    {
+      "sequence": 5,
+      "action": "choose",
+      "choiceIndex": 0,
       "description": "Continue to the First Crossing - navigate to sc_1_1_099 The First Crossing (convergence scene)",
       "expectedScene": "sc_1_1_099",
       "checkpoint": true,
@@ -81,6 +93,7 @@
   ],
   "endingCriteria": {
     "sceneId": "sc_1_1_099",
+    "sequence": 5,
     "flagsRequired": ["branch_researcher", "researcher_path_complete", "act1_complete", "first_crossing_reached"]
   },
   "softlockDetection": {
