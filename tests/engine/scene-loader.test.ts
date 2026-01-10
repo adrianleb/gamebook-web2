@@ -1214,4 +1214,118 @@ describe('SceneLoader', () => {
       }
     });
   });
+
+  describe('Attemptable Choice Top-Level "to" Field Stripping', () => {
+    it('should strip redundant top-level "to" field for attemptable choices (has both onSuccess and onFailure)', async () => {
+      const manifest: GameManifest = {
+        gamebook: {
+          title: 'Test Gamebook',
+          source: 'test',
+          version: '1.0.0',
+          adaptationVersion: '1.0.0',
+        },
+        structure: {
+          acts: 1,
+          totalNodesEstimated: 3,
+          endings: 0,
+        },
+        startingScene: 'sc_test_to_strip_001',
+        acts: [],
+        endings: [],
+        sceneIndex: {
+          'sc_test_to_strip_001': {
+            title: 'Attemptable "to" Strip Test',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+          'sc_test_success': {
+            title: 'Success Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+          'sc_test_failure': {
+            title: 'Failure Scene',
+            location: 'Test',
+            act: 1,
+            hub: 0,
+            status: 'complete',
+          },
+        },
+        implementationStatus: {
+          totalScenes: 1,
+          pending: 0,
+          draft: 0,
+          complete: 1,
+          reviewed: 0,
+        },
+      };
+
+      // Scene with attemptable choice that has redundant top-level 'to' field
+      // This is the pattern found in Phase 6 content (sc_1_0_003, sc_1_0_011)
+      // The top-level 'to' is a copy-paste artifact and should be stripped
+      const rawScene: RawSceneData = {
+        id: 'sc_test_to_strip_001',
+        title: 'Attemptable "to" Strip Test',
+        text: 'Test text',
+        effects: [],
+        choices: [
+          {
+            id: 'choice_1',
+            label: 'Attempt with redundant "to" field',
+            to: 'sc_test_success', // This should be STRIPPED (redundant)
+            conditions: {
+              type: 'stat_check',
+              stat: 'stage_presence',
+              op: 'gte',
+              value: 5,
+              attemptable: true,
+            },
+            onSuccess: {
+              to: 'sc_test_success', // Only onSuccess.to should be used
+            },
+            onFailure: {
+              to: 'sc_test_failure', // Only onFailure.to should be used
+            },
+          },
+          {
+            id: 'choice_2',
+            label: 'Non-attemptable with "to" field',
+            to: 'sc_test_success', // This should be PRESERVED (not attemptable)
+            conditions: {
+              type: 'stat_check',
+              stat: 'stage_presence',
+              op: 'gte',
+              value: 10,
+            },
+          },
+        ],
+      };
+
+      setupTestContent({ 'sc_test_to_strip_001.json': rawScene });
+
+      try {
+        const loader = new SceneLoader({ contentPath: testContentPath, cache: false, manifest });
+        await loader.initialize();
+        const sceneData = await loader.loadScene('sc_test_to_strip_001');
+
+        // Attemptable choice (has both onSuccess and onFailure) should have 'to' stripped
+        expect(sceneData.choices[0].to).toBeUndefined();
+        expect(sceneData.choices[0].onSuccess).toBeDefined();
+        expect(sceneData.choices[0].onSuccess?.to).toBe('sc_test_success');
+        expect(sceneData.choices[0].onFailure).toBeDefined();
+        expect(sceneData.choices[0].onFailure?.to).toBe('sc_test_failure');
+
+        // Non-attemptable choice should preserve 'to' field
+        expect(sceneData.choices[1].to).toBe('sc_test_success');
+        expect(sceneData.choices[1].onSuccess).toBeUndefined();
+        expect(sceneData.choices[1].onFailure).toBeUndefined();
+      } finally {
+        cleanupTestContent(['sc_test_to_strip_001.json']);
+      }
+    });
+  });
 });

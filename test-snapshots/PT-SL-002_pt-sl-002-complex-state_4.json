@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-05T10:54:25.350Z",
+  "timestamp": "2026-01-10T02:40:41.967Z",
   "playthrough": "pt-sl-002-complex-state",
   "step": 4,
   "name": "pt-sl-002-complex-state",
@@ -8,23 +8,23 @@
   "state": {
     "version": 1,
     "contentVersion": "0.0.1",
-    "timestamp": 1767610465349,
+    "timestamp": 1768012841965,
     "currentSceneId": "sc_1_0_902",
     "history": [
       {
         "sceneId": "sc_1_0_001",
-        "timestamp": 1767610465349,
+        "timestamp": 1768012841966,
         "visitedCount": 2
       },
       {
         "sceneId": "sc_1_0_003",
-        "timestamp": 1767610465349,
+        "timestamp": 1768012841966,
         "choiceLabel": "Attempt the iron door",
         "visitedCount": 1
       },
       {
         "sceneId": "sc_1_0_902",
-        "timestamp": 1767610465349,
+        "timestamp": 1768012841966,
         "choiceLabel": "Step into the darkness",
         "visitedCount": 1
       }
